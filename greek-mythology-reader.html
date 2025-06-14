@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ギリシア神話大全 - Greek Mythology Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .reader-header {
+            background: linear-gradient(to right, #5f27cd, #7f39fb);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .main-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(95, 39, 205, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(95, 39, 205, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #fff;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(127, 57, 251, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(95, 39, 205, 0.6);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+
+        /* Container */
+        .reader-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            max-height: calc(100vh - 240px);
+        }
+
+        .sidebar h2 {
+            color: #5f27cd;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #5f27cd;
+        }
+
+        .volume-section {
+            margin-bottom: 20px;
+        }
+
+        .volume-title {
+            background: #5f27cd;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .volume-title:hover {
+            background: #7f39fb;
+            transform: translateX(5px);
+        }
+
+        .chapter-list {
+            display: none;
+            margin-left: 10px;
+        }
+
+        .chapter-list.active {
+            display: block;
+        }
+
+        .chapter-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .chapter-item:hover {
+            background: #f0f0f0;
+            border-left-color: #5f27cd;
+        }
+
+        .chapter-item.active {
+            background: #e8deff;
+            border-left-color: #5f27cd;
+            font-weight: bold;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            max-height: calc(100vh - 240px);
+        }
+
+        .content-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .content-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #5f27cd;
+            margin-bottom: 10px;
+        }
+
+        .content-subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .text-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #5f27cd;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #5f27cd;
+        }
+
+        .original-text {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 5px;
+            font-style: italic;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .translation {
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .deity-card {
+            background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .deity-name {
+            font-size: 1.5em;
+            color: #5f27cd;
+            margin-bottom: 10px;
+        }
+
+        .deity-title {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .deity-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .attribute-tag {
+            background: #5f27cd;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Search */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #5f27cd;
+        }
+
+        /* Language Selector */
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            padding: 5px 15px;
+            margin: 0 5px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #5f27cd;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .reader-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="zh">中文</button>
+        <button class="lang-btn active" data-lang="ja">日本語</button>
+    </div>
+
+    <!-- Header -->
+    <header class="reader-header">
+        <h1 class="main-title">ギリシア神話大全</h1>
+        <p class="subtitle">オリンポスの神々と英雄たちの物語</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="reader-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>目次</h2>
+            
+            <!-- Search -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="神話を検索..." />
+            </div>
+
+            <!-- Volumes -->
+            <div id="navigation-menu">
+                <!-- Content will be dynamically generated -->
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <div id="content-display">
+                <!-- Content will be dynamically displayed here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Greek Mythology Data
+        const GREEK_MYTHOLOGY = {
+            olympianGods: {
+                title: 'オリンポスの神々',
+                titleEn: 'Olympian Gods',
+                titleZh: '奥林匹斯众神',
+                chapters: [
+                    {
+                        id: 'zeus',
+                        title: 'ゼウス - 神々の王',
+                        titleEn: 'Zeus - King of the Gods',
+                        titleZh: '宙斯 - 众神之王',
+                        originalName: 'Ζεύς',
+                        romanName: 'Jupiter',
+                        domain: '天空と雷の神',
+                        symbols: ['雷霆', '鷲', '樫の木'],
+                        content: {
+                            ja: 'ゼウスは、オリンポス山の神々の王であり、天空と雷を司る最高神です。クロノスとレアの息子として生まれ、父親に飲み込まれる運命から逃れ、後に父を倒して神々の支配者となりました。',
+                            en: 'Zeus is the king of the gods of Mount Olympus and the god of the sky and thunder. Born as the son of Cronus and Rhea, he escaped being swallowed by his father and later overthrew him to become the ruler of the gods.',
+                            zh: '宙斯是奥林匹斯山众神之王，掌管天空和雷电的最高神。作为克洛诺斯和瑞亚的儿子，他逃脱了被父亲吞噬的命运，后来推翻了父亲成为众神的统治者。'
+                        },
+                        myths: [
+                            '父クロノスからの解放',
+                            'ティタノマキア（巨神族との戦争）',
+                            '人類への火の授与'
+                        ]
+                    },
+                    {
+                        id: 'hera',
+                        title: 'ヘラ - 神々の女王',
+                        titleEn: 'Hera - Queen of the Gods',
+                        titleZh: '赫拉 - 众神之后',
+                        originalName: 'Ἥρα',
+                        romanName: 'Juno',
+                        domain: '結婚と家庭の女神',
+                        symbols: ['孔雀', '王冠', 'ザクロ'],
+                        content: {
+                            ja: 'ヘラは、ゼウスの妻であり姉でもある、結婚と家庭を司る女神です。嫉妬深い性格で知られ、ゼウスの浮気相手やその子供たちに対して厳しい罰を与えることで有名です。',
+                            en: 'Hera is the wife and sister of Zeus, goddess of marriage and family. Known for her jealous nature, she is famous for severely punishing Zeus\'s lovers and their children.',
+                            zh: '赫拉是宙斯的妻子和姐姐，掌管婚姻和家庭的女神。她以嫉妒的性格著称，因对宙斯的情人及其子女施加严厉惩罚而闻名。'
+                        },
+                        myths: [
+                            'ヘラクレスへの試練',
+                            'イオの変身',
+                            'トロイア戦争での役割'
+                        ]
+                    },
+                    {
+                        id: 'poseidon',
+                        title: 'ポセイドン - 海の神',
+                        titleEn: 'Poseidon - God of the Sea',
+                        titleZh: '波塞冬 - 海神',
+                        originalName: 'Ποσειδῶν',
+                        romanName: 'Neptune',
+                        domain: '海と地震の神',
+                        symbols: ['三叉槍', '馬', 'イルカ'],
+                        content: {
+                            ja: 'ポセイドンは、ゼウスの兄弟で、海、地震、馬を司る神です。気性が荒く、怒ると大地震や津波を引き起こすとされています。アテナと都市の守護権を争った神話でも知られています。',
+                            en: 'Poseidon is Zeus\'s brother, god of the sea, earthquakes, and horses. Known for his tempestuous nature, he causes earthquakes and tsunamis when angered. He is also known for competing with Athena for patronage of cities.',
+                            zh: '波塞冬是宙斯的兄弟，掌管海洋、地震和马匹的神。他性情暴躁，生气时会引发大地震和海啸。他还因与雅典娜争夺城市守护权的神话而闻名。'
+                        },
+                        myths: [
+                            'アテネの守護権争い',
+                            'オデュッセウスへの怒り',
+                            'トロイの城壁建設'
+                        ]
+                    }
+                ]
+            },
+            heroes: {
+                title: '英雄たちの物語',
+                titleEn: 'Tales of Heroes',
+                titleZh: '英雄传说',
+                chapters: [
+                    {
+                        id: 'heracles',
+                        title: 'ヘラクレス - 最強の英雄',
+                        titleEn: 'Heracles - The Strongest Hero',
+                        titleZh: '赫拉克勒斯 - 最强英雄',
+                        originalName: 'Ἡρακλῆς',
+                        romanName: 'Hercules',
+                        parentage: 'ゼウスとアルクメネの子',
+                        content: {
+                            ja: 'ヘラクレスは、ゼウスと人間の女性アルクメネの間に生まれた半神の英雄です。超人的な力を持ち、ヘラの呪いによって狂気に陥り家族を殺してしまった罪を償うため、12の功業を成し遂げました。',
+                            en: 'Heracles is a demigod hero born between Zeus and the mortal woman Alcmene. Possessing superhuman strength, he completed twelve labors to atone for killing his family in a madness induced by Hera\'s curse.',
+                            zh: '赫拉克勒斯是宙斯与凡人女子阿尔克墨涅所生的半神英雄。他拥有超人的力量，因赫拉的诅咒而陷入疯狂杀死了家人，为赎罪完成了十二项功业。'
+                        },
+                        labors: [
+                            'ネメアの獅子退治',
+                            'ヒュドラ退治',
+                            'ケリュネイアの鹿捕獲',
+                            'エリュマントスの猪捕獲',
+                            'アウゲイアスの家畜小屋掃除',
+                            'ステュムパリデスの鳥退治',
+                            'クレタの牡牛捕獲',
+                            'ディオメデスの馬捕獲',
+                            'アマゾンの女王の帯取得',
+                            'ゲリュオンの牛捕獲',
+                            'ヘスペリデスの黄金の林檎取得',
+                            'ケルベロス捕獲'
+                        ]
+                    },
+                    {
+                        id: 'perseus',
+                        title: 'ペルセウス - メドゥーサを倒した英雄',
+                        titleEn: 'Perseus - Slayer of Medusa',
+                        titleZh: '珀尔修斯 - 美杜莎的征服者',
+                        originalName: 'Περσεύς',
+                        parentage: 'ゼウスとダナエの子',
+                        content: {
+                            ja: 'ペルセウスは、ゼウスと幽閉されていた王女ダナエの間に生まれた英雄です。見た者を石に変えるメドゥーサを退治し、その首を使って海の怪物から王女アンドロメダを救いました。',
+                            en: 'Perseus is a hero born between Zeus and the imprisoned princess Danae. He slayed Medusa who turned those who looked at her to stone, and used her head to save princess Andromeda from a sea monster.',
+                            zh: '珀尔修斯是宙斯与被囚禁的公主达那厄所生的英雄。他击败了能将注视者变成石头的美杜莎，并用她的头颅从海怪手中救出了公主安德洛墨达。'
+                        },
+                        feats: [
+                            'メドゥーサ退治',
+                            'アンドロメダの救出',
+                            'アトラスの石化'
+                        ]
+                    }
+                ]
+            },
+            creation: {
+                title: '創世神話',
+                titleEn: 'Creation Myths',
+                titleZh: '创世神话',
+                chapters: [
+                    {
+                        id: 'chaos',
+                        title: 'カオスから始まる世界',
+                        titleEn: 'The World Begins from Chaos',
+                        titleZh: '从混沌开始的世界',
+                        content: {
+                            ja: '初めに、カオス（混沌）があった。そこから、ガイア（大地）、タルタロス（奈落）、エロス（愛）が生まれました。ガイアは単独でウラノス（天空）を産み、ウラノスと結ばれてティタン神族を産みました。',
+                            en: 'In the beginning, there was Chaos. From it, Gaia (Earth), Tartarus (Abyss), and Eros (Love) were born. Gaia alone gave birth to Uranus (Sky), and together with Uranus, she bore the Titans.',
+                            zh: '起初，有混沌。从中诞生了盖亚（大地）、塔耳塔洛斯（深渊）和厄洛斯（爱）。盖亚独自生下了乌拉诺斯（天空），与乌拉诺斯结合生下了泰坦神族。'
+                        },
+                        sequence: [
+                            'カオス（混沌）',
+                            'ガイア（大地）の誕生',
+                            'ウラノス（天空）の誕生',
+                            'ティタン神族の誕生',
+                            'クロノスの反乱',
+                            'ゼウスの台頭'
+                        ]
+                    }
+                ]
+            },
+            trojanWar: {
+                title: 'トロイア戦争',
+                titleEn: 'The Trojan War',
+                titleZh: '特洛伊战争',
+                chapters: [
+                    {
+                        id: 'paris-judgment',
+                        title: 'パリスの審判',
+                        titleEn: 'The Judgment of Paris',
+                        titleZh: '帕里斯的审判',
+                        content: {
+                            ja: '不和の女神エリスが投げた黄金の林檎をめぐって、ヘラ、アテナ、アフロディテの三女神が美を競いました。トロイアの王子パリスが審判者となり、最も美しい女性ヘレネを約束したアフロディテを選びました。',
+                            en: 'Three goddesses - Hera, Athena, and Aphrodite - competed for beauty over a golden apple thrown by Eris, goddess of discord. Paris, prince of Troy, served as judge and chose Aphrodite who promised him Helen, the most beautiful woman.',
+                            zh: '赫拉、雅典娜和阿佛洛狄忒三位女神为不和女神厄里斯扔出的金苹果争夺美貌。特洛伊王子帕里斯作为裁判，选择了承诺给他最美女子海伦的阿佛洛狄忒。'
+                        },
+                        consequences: [
+                            'ヘレネの誘拐',
+                            'ギリシア軍の結集',
+                            '10年間の戦争'
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Current state
+        let currentLang = 'ja';
+        let currentVolume = null;
+        let currentChapter = null;
+
+        // Initialize the reader
+        function initializeReader() {
+            renderNavigation();
+            showWelcomeContent();
+            setupEventListeners();
+        }
+
+        // Render navigation menu
+        function renderNavigation() {
+            const navMenu = document.getElementById('navigation-menu');
+            navMenu.innerHTML = '';
+
+            Object.keys(GREEK_MYTHOLOGY).forEach(volumeKey => {
+                const volume = GREEK_MYTHOLOGY[volumeKey];
+                const volumeSection = document.createElement('div');
+                volumeSection.className = 'volume-section';
+
+                const volumeTitle = document.createElement('div');
+                volumeTitle.className = 'volume-title';
+                volumeTitle.textContent = getVolumeTitle(volume);
+                volumeTitle.onclick = () => toggleVolume(volumeKey);
+
+                const chapterList = document.createElement('div');
+                chapterList.className = 'chapter-list';
+                chapterList.id = `chapters-${volumeKey}`;
+
+                volume.chapters.forEach(chapter => {
+                    const chapterItem = document.createElement('div');
+                    chapterItem.className = 'chapter-item';
+                    chapterItem.textContent = getChapterTitle(chapter);
+                    chapterItem.onclick = () => showChapter(volumeKey, chapter.id);
+                    chapterList.appendChild(chapterItem);
+                });
+
+                volumeSection.appendChild(volumeTitle);
+                volumeSection.appendChild(chapterList);
+                navMenu.appendChild(volumeSection);
+            });
+        }
+
+        // Get volume title based on current language
+        function getVolumeTitle(volume) {
+            switch(currentLang) {
+                case 'en': return volume.titleEn || volume.title;
+                case 'zh': return volume.titleZh || volume.title;
+                default: return volume.title;
+            }
+        }
+
+        // Get chapter title based on current language
+        function getChapterTitle(chapter) {
+            switch(currentLang) {
+                case 'en': return chapter.titleEn || chapter.title;
+                case 'zh': return chapter.titleZh || chapter.title;
+                default: return chapter.title;
+            }
+        }
+
+        // Toggle volume expansion
+        function toggleVolume(volumeKey) {
+            const chapterList = document.getElementById(`chapters-${volumeKey}`);
+            chapterList.classList.toggle('active');
+        }
+
+        // Show chapter content
+        function showChapter(volumeKey, chapterId) {
+            currentVolume = volumeKey;
+            currentChapter = chapterId;
+
+            const volume = GREEK_MYTHOLOGY[volumeKey];
+            const chapter = volume.chapters.find(ch => ch.id === chapterId);
+
+            if (!chapter) return;
+
+            const contentDisplay = document.getElementById('content-display');
+            let html = '';
+
+            // Content header
+            html += `
+                <div class="content-header">
+                    <h1 class="content-title">${getChapterTitle(chapter)}</h1>
+                    <p class="content-subtitle">${getVolumeTitle(volume)}</p>
+                </div>
+            `;
+
+            // Deity/Hero card
+            if (volumeKey === 'olympianGods' || volumeKey === 'heroes') {
+                html += `
+                    <div class="deity-card">
+                        <h2 class="deity-name">${chapter.originalName || ''}</h2>
+                        <p class="deity-title">${chapter.domain || chapter.parentage || ''}</p>
+                        ${chapter.romanName ? `<p>ローマ名: ${chapter.romanName}</p>` : ''}
+                        ${renderAttributes(chapter)}
+                    </div>
+                `;
+            }
+
+            // Main content
+            html += `
+                <div class="text-section">
+                    <h3 class="section-title">説明</h3>
+                    <div class="translation">${chapter.content[currentLang] || chapter.content.ja}</div>
+                </div>
+            `;
+
+            // Additional sections
+            if (chapter.myths) {
+                html += renderList('関連神話', chapter.myths);
+            }
+            if (chapter.labors) {
+                html += renderList('12の功業', chapter.labors);
+            }
+            if (chapter.feats) {
+                html += renderList('主な功績', chapter.feats);
+            }
+            if (chapter.sequence) {
+                html += renderList('創世の順序', chapter.sequence);
+            }
+            if (chapter.consequences) {
+                html += renderList('結果', chapter.consequences);
+            }
+
+            contentDisplay.innerHTML = html;
+
+            // Update active states
+            updateActiveStates();
+        }
+
+        // Render attributes
+        function renderAttributes(chapter) {
+            if (!chapter.symbols) return '';
+            
+            return `
+                <div class="deity-attributes">
+                    ${chapter.symbols.map(symbol => 
+                        `<span class="attribute-tag">${symbol}</span>`
+                    ).join('')}
+                </div>
+            `;
+        }
+
+        // Render list
+        function renderList(title, items) {
+            return `
+                <div class="text-section">
+                    <h3 class="section-title">${title}</h3>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        ${items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Show welcome content
+        function showWelcomeContent() {
+            const contentDisplay = document.getElementById('content-display');
+            contentDisplay.innerHTML = `
+                <div class="content-header">
+                    <h1 class="content-title">ギリシア神話の世界へようこそ</h1>
+                    <p class="content-subtitle">古代ギリシアの神々と英雄たちの壮大な物語</p>
+                </div>
+                <div class="text-section">
+                    <p style="line-height: 1.8; margin-bottom: 20px;">
+                        ギリシア神話は、西洋文明の基盤となる物語群です。オリンポス山に住む神々、
+                        勇敢な英雄たち、そして人間の運命を巡る壮大な叙事詩が展開されます。
+                    </p>
+                    <p style="line-height: 1.8;">
+                        左側のメニューから、興味のある神話を選んでお楽しみください。
+                    </p>
+                </div>
+            `;
+        }
+
+        // Update active states in navigation
+        function updateActiveStates() {
+            // Clear all active states
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Set current active
+            if (currentVolume && currentChapter) {
+                const chapters = document.querySelectorAll(`#chapters-${currentVolume} .chapter-item`);
+                const volume = GREEK_MYTHOLOGY[currentVolume];
+                const chapterIndex = volume.chapters.findIndex(ch => ch.id === currentChapter);
+                
+                if (chapters[chapterIndex]) {
+                    chapters[chapterIndex].classList.add('active');
+                }
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Language selector
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentLang = this.dataset.lang;
+                    renderNavigation();
+                    if (currentVolume && currentChapter) {
+                        showChapter(currentVolume, currentChapter);
+                    } else {
+                        showWelcomeContent();
+                    }
+                    updateUILanguage();
+                });
+            });
+
+            // Search functionality
+            document.querySelector('.search-input').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterContent(searchTerm);
+            });
+        }
+
+        // Update UI language
+        function updateUILanguage() {
+            const translations = {
+                ja: {
+                    title: 'ギリシア神話大全',
+                    subtitle: 'オリンポスの神々と英雄たちの物語',
+                    search: '神話を検索...',
+                    toc: '目次'
+                },
+                en: {
+                    title: 'Greek Mythology Collection',
+                    subtitle: 'Tales of Olympian Gods and Heroes',
+                    search: 'Search myths...',
+                    toc: 'Table of Contents'
+                },
+                zh: {
+                    title: '希腊神话大全',
+                    subtitle: '奥林匹斯众神与英雄的故事',
+                    search: '搜索神话...',
+                    toc: '目录'
+                }
+            };
+
+            const trans = translations[currentLang];
+            document.querySelector('.main-title').textContent = trans.title;
+            document.querySelector('.subtitle').textContent = trans.subtitle;
+            document.querySelector('.search-input').placeholder = trans.search;
+            document.querySelector('.sidebar h2').textContent = trans.toc;
+        }
+
+        // Filter content based on search
+        function filterContent(searchTerm) {
+            Object.keys(GREEK_MYTHOLOGY).forEach(volumeKey => {
+                const volume = GREEK_MYTHOLOGY[volumeKey];
+                const volumeSection = document.querySelector(`#chapters-${volumeKey}`).parentElement;
+                let hasVisibleChapter = false;
+
+                volume.chapters.forEach((chapter, index) => {
+                    const chapterItem = document.querySelectorAll(`#chapters-${volumeKey} .chapter-item`)[index];
+                    const searchableText = [
+                        chapter.title,
+                        chapter.titleEn,
+                        chapter.titleZh,
+                        chapter.originalName,
+                        chapter.content.ja,
+                        chapter.content.en,
+                        chapter.content.zh
+                    ].filter(Boolean).join(' ').toLowerCase();
+
+                    if (searchableText.includes(searchTerm)) {
+                        chapterItem.style.display = 'block';
+                        hasVisibleChapter = true;
+                    } else {
+                        chapterItem.style.display = 'none';
+                    }
+                });
+
+                volumeSection.style.display = hasVisibleChapter ? 'block' : 'none';
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeReader);
+    </script>
+</body>
+</html>

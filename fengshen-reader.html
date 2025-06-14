@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封神演義 - 中華神話リーダー</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(to bottom, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 69, 19, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #FFD700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #FFD700;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(160, 82, 45, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-button {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            margin-top: 100px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 40px 20px;
+        }
+        
+        /* イントロセクション */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: rgba(139, 69, 19, 0.3);
+            border-radius: 20px;
+            border: 2px solid #8B4513;
+        }
+        
+        .intro-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 3em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .intro-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            margin-bottom: 30px;
+        }
+        
+        .intro-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #DAA520;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* チャプターグリッド */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .chapter-card {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.4) 0%, rgba(160, 82, 45, 0.3) 100%);
+            border: 2px solid #8B4513;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+        
+        .chapter-number {
+            font-size: 2em;
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.3em;
+            color: #F5E6D3;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-summary {
+            font-size: 0.9em;
+            color: #DAA520;
+            line-height: 1.6;
+        }
+        
+        /* リーダーセクション */
+        .reader-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .reader-section.active {
+            display: block;
+        }
+        
+        .reader-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .reader-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+        }
+        
+        .close-button {
+            background: transparent;
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-button:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+        
+        .reader-content {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #F5E6D3;
+        }
+        
+        .reader-content p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+        }
+        
+        /* キャラクターギャラリー */
+        .characters-section {
+            margin-top: 60px;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            text-align: center;
+            color: #FFD700;
+            margin-bottom: 40px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        
+        .character-card {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .character-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .character-name {
+            font-size: 1.2em;
+            color: #FFD700;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .character-role {
+            font-size: 0.9em;
+            color: #DAA520;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .intro-title {
+                font-size: 2em;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    <style>
+        .home-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 69, 19, 0.9);
+            border: 2px solid #D2691E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        .home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+            background: rgba(139, 69, 19, 1);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-button" title="ホームに戻る">🏠</a>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="chinese-mythology-index.html" class="logo">封神演義</a>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="window.location.href='chinese-mythology-index.html'">ホームに戻る</button>
+                <button class="nav-button" onclick="scrollToCharacters()">登場人物</button>
+                <button class="nav-button" onclick="scrollToTreasures()">法寶</button>
+                <button class="nav-button" onclick="scrollToFormations()">陣法</button>
+                <button class="nav-button" onclick="scrollToReligions()">三教</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+        <!-- イントロセクション -->
+        <section class="intro-section">
+            <h1 class="intro-title">封神演義</h1>
+            <p class="intro-subtitle">神々の戦いと封神の物語</p>
+            <p class="intro-description">
+                封神演義は、明代に成立した中国の長編神怪小説です。殷の紂王の暴政と、それを倒すために立ち上がった姜子牙（太公望）を中心に、
+                神仙と妖怪が入り乱れる壮大な戦いが描かれます。物語の最後には、戦死した英雄たちが神として封じられ、
+                天界の新たな秩序が形成されます。
+            </p>
+        </section>
+        
+        <!-- チャプターグリッド -->
+        <section class="chapters-grid">
+            <div class="chapter-card" onclick="openChapter(1)">
+                <div class="chapter-number">第一回</div>
+                <div class="chapter-title">紂王題詩</div>
+                <div class="chapter-summary">紂王が女媧宮を参拝し、女媧の美しさに心を奪われて不敬な詩を詠む。これが殷朝滅亡の始まりとなる。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(2)">
+                <div class="chapter-number">第二回</div>
+                <div class="chapter-title">妲己入宮</div>
+                <div class="chapter-summary">千年狐狸精が絶世の美女・妲己に化身し、紂王を惑わして暴政を行わせる。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(3)">
+                <div class="chapter-number">第三回</div>
+                <div class="chapter-title">比干剖心</div>
+                <div class="chapter-summary">忠臣・比干が紂王を諫めるも、妲己の讒言により七竅玲瓏心を抉り出される。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(4)">
+                <div class="chapter-number">第四回</div>
+                <div class="chapter-title">哪吒出世</div>
+                <div class="chapter-summary">陳塘関総兵・李靖の三男として哪吒が誕生。生まれながらにして神通力を持つ。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(5)">
+                <div class="chapter-number">第五回</div>
+                <div class="chapter-title">哪吒鬧海</div>
+                <div class="chapter-summary">哪吒が東海で龍王の三太子を打ち殺し、龍王と対立する。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(6)">
+                <div class="chapter-number">第六回</div>
+                <div class="chapter-title">姜子牙下山</div>
+                <div class="chapter-summary">崑崙山で四十年修行した姜子牙が、師の元始天尊の命により下山し、封神の大任を受ける。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(7)">
+                <div class="chapter-number">第七回</div>
+                <div class="chapter-title">武王伐紂</div>
+                <div class="chapter-summary">西岐の武王が姜子牙を軍師として、暴虐な紂王を討つため東征を開始する。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(8)">
+                <div class="chapter-number">第八回</div>
+                <div class="chapter-title">聞仲出征</div>
+                <div class="chapter-summary">殷朝の太師・聞仲が西岐討伐に出陣。雷部の神通力を駆使して戦う。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(9)">
+                <div class="chapter-number">第九回</div>
+                <div class="chapter-title">十絶陣</div>
+                <div class="chapter-summary">截教の十天君が恐るべき十絶陣を布き、闡教の仙人たちと激戦を繰り広げる。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(10)">
+                <div class="chapter-number">第十回</div>
+                <div class="chapter-title">萬仙陣</div>
+                <div class="chapter-summary">通天教主が萬仙陣を布き、闡教・人教・西方教の聖人たちとの最終決戦。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(11)">
+                <div class="chapter-number">第十一回</div>
+                <div class="chapter-title">誅仙陣</div>
+                <div class="chapter-summary">通天教主が誅仙四剣を用いて誅仙陣を布く。四聖人の連合でようやく破陣。</div>
+            </div>
+            
+            <div class="chapter-card" onclick="openChapter(12)">
+                <div class="chapter-number">第十二回</div>
+                <div class="chapter-title">封神台</div>
+                <div class="chapter-summary">戦いが終結し、姜子牙が封神台で戦死した英雄たちを神として封じる。新たな天界の秩序が確立される。</div>
+            </div>
+        </section>
+        
+        <!-- リーダーセクション -->
+        <section id="reader" class="reader-section">
+            <div class="reader-header">
+                <h2 class="reader-title" id="reader-title">第一回</h2>
+                <button class="close-button" onclick="closeReader()">閉じる</button>
+            </div>
+            <div class="reader-content" id="reader-content">
+                <!-- ここに章の内容が表示されます -->
+            </div>
+        </section>
+        
+        <!-- キャラクターギャラリー -->
+        <section id="characters" class="characters-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <div class="character-icon">🧙</div>
+                    <div class="character-name">姜子牙</div>
+                    <div class="character-role">太公望・封神執行者</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">👹</div>
+                    <div class="character-name">紂王</div>
+                    <div class="character-role">殷朝最後の皇帝</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🦊</div>
+                    <div class="character-name">妲己</div>
+                    <div class="character-role">千年狐狸精</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🔥</div>
+                    <div class="character-name">哪吒</div>
+                    <div class="character-role">蓮花化身・三太子</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">⚡</div>
+                    <div class="character-name">楊戩</div>
+                    <div class="character-role">二郎真君・変化の達人</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🗡️</div>
+                    <div class="character-name">李靖</div>
+                    <div class="character-role">托塔天王・哪吒の父</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌟</div>
+                    <div class="character-name">聞仲</div>
+                    <div class="character-role">殷朝太師・雷部正神</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🦅</div>
+                    <div class="character-name">雷震子</div>
+                    <div class="character-role">文王の第百子・風雷の翼</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌏</div>
+                    <div class="character-name">土行孫</div>
+                    <div class="character-role">地行術の達人</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🐎</div>
+                    <div class="character-name">黃飛虎</div>
+                    <div class="character-role">武成王・五色神牛の主</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🐍</div>
+                    <div class="character-name">申公豹</div>
+                    <div class="character-role">姜子牙の師弟・妨害者</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">💰</div>
+                    <div class="character-name">趙公明</div>
+                    <div class="character-role">財神・定海珠の主</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌙</div>
+                    <div class="character-name">三霄娘娘</div>
+                    <div class="character-role">雲霄・碧霄・瓊霄三姉妹</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🦴</div>
+                    <div class="character-name">比干</div>
+                    <div class="character-role">殷朝の忠臣・七竅玲瓏心</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌊</div>
+                    <div class="character-name">余化</div>
+                    <div class="character-role">汜水関の守将・化血神刀</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🦁</div>
+                    <div class="character-name">鄧嬋玉</div>
+                    <div class="character-role">土行孫の妻・五光石の使い手</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 法寶セクション -->
+        <section class="treasures-section" style="margin-top: 60px;">
+            <h2 class="section-title">法寶（神器）</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <div class="character-icon">⚔️</div>
+                    <div class="character-name">打神鞭</div>
+                    <div class="character-role">姜子牙の神器・封神専用</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">💍</div>
+                    <div class="character-name">乾坤圏</div>
+                    <div class="character-role">哪吒の法寶・無限の重さ</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🎀</div>
+                    <div class="character-name">混天綾</div>
+                    <div class="character-role">哪吒の法寶・海を揺るがす</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🔱</div>
+                    <div class="character-name">火尖槍</div>
+                    <div class="character-role">哪吒の武器・炎を纏う</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">⭕</div>
+                    <div class="character-name">風火輪</div>
+                    <div class="character-role">哪吒の法寶・空を飛ぶ</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">💎</div>
+                    <div class="character-name">定海珠</div>
+                    <div class="character-role">趙公明の至宝・二十四顆</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🗡️</div>
+                    <div class="character-name">誅仙四剣</div>
+                    <div class="character-role">通天教主の最強法寶</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌸</div>
+                    <div class="character-name">九龍神火罩</div>
+                    <div class="character-role">太乙真人の法寶</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 陣法セクション -->
+        <section class="formations-section" style="margin-top: 60px;">
+            <h2 class="section-title">陣法（Battle Formations）</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <div class="character-icon">🌪️</div>
+                    <div class="character-name">十絶陣</div>
+                    <div class="character-role">十天君の必殺陣法</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">☠️</div>
+                    <div class="character-name">誅仙陣</div>
+                    <div class="character-role">四聖人でなければ破れない</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🌌</div>
+                    <div class="character-name">萬仙陣</div>
+                    <div class="character-role">截教の最終決戦陣</div>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🔥</div>
+                    <div class="character-name">九曲黄河陣</div>
+                    <div class="character-role">三霄娘娘の絶技</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 三教セクション -->
+        <section class="religions-section" style="margin-top: 60px; margin-bottom: 60px;">
+            <h2 class="section-title">三教（Three Religions）</h2>
+            <div class="characters-grid">
+                <div class="character-card" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 223, 0, 0.1) 100%);">
+                    <div class="character-icon">☯️</div>
+                    <div class="character-name">闡教</div>
+                    <div class="character-role">元始天尊が率いる・姜子牙所属</div>
+                </div>
+                
+                <div class="character-card" style="background: linear-gradient(135deg, rgba(128, 0, 128, 0.2) 0%, rgba(75, 0, 130, 0.1) 100%);">
+                    <div class="character-icon">🌊</div>
+                    <div class="character-name">截教</div>
+                    <div class="character-role">通天教主が率いる・萬仙来朝</div>
+                </div>
+                
+                <div class="character-card" style="background: linear-gradient(135deg, rgba(0, 128, 0, 0.2) 0%, rgba(0, 100, 0, 0.1) 100%);">
+                    <div class="character-icon">🙏</div>
+                    <div class="character-name">人教</div>
+                    <div class="character-role">太上老君が率いる・無為自然</div>
+                </div>
+                
+                <div class="character-card" style="background: linear-gradient(135deg, rgba(255, 140, 0, 0.2) 0%, rgba(255, 165, 0, 0.1) 100%);">
+                    <div class="character-icon">🕉️</div>
+                    <div class="character-name">西方教</div>
+                    <div class="character-role">准提・接引の二聖人</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // サンプルの章内容
+        const chapters = {
+            1: {
+                title: "第一回：紂王題詩",
+                content: `
+                    <p>話説、殷朝の第三十代皇帝・紂王は、文武両道に優れ、力は千斤を挙げることができる英傑であった。しかし、その心には驕慢の気が芽生え始めていた。</p>
+                    <p>ある年の三月十五日、女媧聖母の誕生日に、紂王は群臣を従えて女媧宮に参拝した。女媧は天地開闢の時、五色の石を練って天の破れを補い、人類を創造した聖母である。</p>
+                    <p>紂王が宮殿に入ると、女媧の神像の美しさに心を奪われた。その姿は天女のように美しく、紂王の心に不敬な思いが生じた。</p>
+                    <p>紂王は筆を取り、宮殿の壁に詩を題した：「鳳鸞宝帳景非常、尽是泥金巧様粧。曲曲遠山飛翠色、翩翩舞袖映霞裳。梨花帯雨争嬌艶、芍薬籠煙騁媚粧。但得妖嬈能挙動、取回長楽侍君王。」</p>
+                    <p>この不敬な詩が、殷朝六百年の基業を滅ぼす原因となることを、紂王はまだ知らなかった...</p>
+                `
+            },
+            2: {
+                title: "第二回：妲己入宮",
+                content: `
+                    <p>女媧聖母は紂王の不敬な詩を知り、激怒した。彼女は軒轅墳の千年狐狸精、九頭雉鶏精、玉石琵琶精の三妖を召喚した。</p>
+                    <p>「紂王は無道にして、生霊を塗炭の苦しみに陥れている。汝ら三妖は人間界に下り、紂王を惑わして殷朝を滅ぼすがよい。ただし、無辜の民を害してはならぬ」</p>
+                    <p>千年狐狸精は冀州侯蘇護の娘・妲己に化身し、その美貌で紂王を魅了した。紂王は妲己を深く寵愛し、日夜酒色に溺れるようになった。</p>
+                    <p>妲己の進言により、紂王は炮烙の刑、蠆盆の刑などの残酷な刑罰を作り、忠臣を次々と処刑した。朝廷は乱れ、民は苦しみ、天下は大いに乱れた...</p>
+                `
+            },
+            3: {
+                title: "第三回：比干剖心",
+                content: `
+                    <p>殷朝の宰相・比干は、紂王の叔父にして忠臣中の忠臣であった。彼は紂王の暴政を見るに忍びなく、命を賭して諫言した。</p>
+                    <p>「陛下、妲己は妖怪です。国を滅ぼす前に、今すぐ処刑なさいませ！」比干の直言に、妲己は激怒した。</p>
+                    <p>妲己は病を装い、「七竅玲瓏心でなければ治らない」と言った。紂王は比干の心臓を取り出すよう命じた。</p>
+                    <p>比干は悲壮な覚悟で胸を開き、心臓を取り出した。姜子牙が予め与えた霊符により、比干は心臓なしでも歩くことができたが、城門で無心菜売りの老婆に「人に心なくば如何」と問われ、「人に心なくば死す」と答えて絶命した...</p>
+                `
+            },
+            4: {
+                title: "第四回：哪吒出世",
+                content: `
+                    <p>陳塘関総兵・李靖の夫人は、三年六ヶ月の身重の後、ついに出産の時を迎えた。しかし、生まれてきたのは人ではなく、肉の球であった。</p>
+                    <p>李靖は妖怪だと思い、剣で肉球を切り裂いた。すると中から一人の男児が飛び出してきた。その子は生まれながらにして、右手に「哪」の字、左手に「吒」の字が刻まれていた。</p>
+                    <p>翌日、太乙真人が陳塘関を訪れ、この子を弟子にしたいと申し出た。「この子は霊珠子の化身で、将来封神大戦で大功を立てるでしょう」</p>
+                    <p>太乙真人は哪吒に乾坤圏と混天綾を与えた。これらは強力な法宝で、哪吒の神通力をさらに増幅させる...</p>
+                `
+            },
+            5: {
+                title: "第五回：哪吒鬧海",
+                content: `
+                    <p>七歳になった哪吒は、ある暑い日、海辺で水浴びをしていた。彼が混天綾を水中で振ると、その神力により東海龍宮が激しく揺れた。</p>
+                    <p>龍王敖広は巡海夜叉を派遣して調べさせたが、哪吒は夜叉を打ち殺してしまった。怒った龍王は三太子敖丙を送ったが、敖丙も哪吒に殺され、その龍筋を抜かれてしまった。</p>
+                    <p>龍王は天庭に訴え出て、李靖一家の処罰を求めた。李靖は息子の行為に激怒し、哪吒を厳しく叱責した。</p>
+                    <p>親子の対立は深まり、ついに哪吒は「肉を父母に返す」と言って、自ら命を絶った。しかし、これは哪吒の新たな誕生の始まりに過ぎなかった...</p>
+                `
+            },
+            6: {
+                title: "第六回：姜子牙下山",
+                content: `
+                    <p>崑崙山玉虚宮にて、元始天尊の門下で四十年修行した姜子牙は、ついに師から呼ばれた。</p>
+                    <p>「子牙よ、汝は仙骨なく、ただ人間界で富貴を享受する命である。今、殷朝の気運は尽き、周室が興ろうとしている。汝は下山して、封神の大任を果たすがよい」</p>
+                    <p>姜子牙は師の命を受け、封神榜を携えて下山した。この榜には、三百六十五位の正神の名が記されており、これから起こる殷周の戦いで命を落とした英雄たちが、神として封じられることになっていた。</p>
+                    <p>姜子牙は渭水のほとりで釣りをしながら、明君の出現を待った。彼の釣り針は真っ直ぐで、「願う者が針に掛かる」という奇妙な釣りをしていた...</p>
+                `
+            },
+            7: {
+                title: "第七回：武王伐紂",
+                content: `
+                    <p>西伯侯姫昌の子・姫発（武王）は、父の遺志を継いで暴虐な紂王を討つことを決意した。彼は姜子牙を軍師として迎え、八百諸侯を糾合した。</p>
+                    <p>「天は殷を見放した。我々は天命に従い、暴君を討ち、民を救わねばならない」武王の檄文は諸侯の心を動かした。</p>
+                    <p>孟津に諸侯が集結し、ついに東征が始まった。姜子牙は六韜を駆使して軍を指揮し、次々と殷の要塞を攻略していった。</p>
+                    <p>しかし、殷朝にはまだ聞仲、張奎、鄧九公などの名将がおり、また截教の仙人たちも殷を助けた。両軍の激戦が始まった...</p>
+                `
+            },
+            8: {
+                title: "第八回：聞仲出征",
+                content: `
+                    <p>殷朝の太師・聞仲は、截教の金霊聖母の弟子で、額に第三の目を持つ。彼は雷部の神通力を操り、墨麒麟に乗って戦場を駆け巡った。</p>
+                    <p>聞仲は紂王の師でもあり、殷朝への忠誠は揺るぎなかった。西岐の反乱を聞いて激怒し、自ら大軍を率いて出征した。</p>
+                    <p>「姜尚（姜子牙）め、よくも殷朝に背いたな！」聞仲は雌雄鞭を振るい、雷電を操って西岐軍を攻撃した。</p>
+                    <p>しかし、姜子牙には闡教の仙人たちが味方し、激しい仙術合戦が繰り広げられた。聞仲は最後まで勇敢に戦ったが、ついに絶龍嶺で雲中子の通天神火柱により焼き殺された...</p>
+                `
+            },
+            9: {
+                title: "第九回：十絶陣",
+                content: `
+                    <p>截教の十天君は、恐るべき十絶陣を布いて西岐軍を待ち受けた。天絶陣、地烈陣、風吼陣、寒冰陣、金光陣、化血陣、烈焰陣、落魂陣、紅水陣、紅砂陣の十陣である。</p>
+                    <p>これらの陣は、それぞれが天地の理を操る恐怖の殺陣であった。闡教の十二金仙たちも、この陣を破るのに苦戦した。</p>
+                    <p>燃燈道人の指揮の下、闡教の仙人たちは一つずつ陣を破っていったが、多くの犠牲を出した。赤精子、太乙真人、玉鼎真人らが各自の法宝を駆使して戦った。</p>
+                    <p>最後に、陸圧道人の釘頭七箭書により、趙公明が倒され、十絶陣もついに破られた。しかし、これは更に大きな戦いの序章に過ぎなかった...</p>
+                `
+            },
+            10: {
+                title: "第十回：萬仙陣",
+                content: `
+                    <p>通天教主は愛弟子たちが次々と殺されるのを見て激怒し、ついに自ら出陣した。彼は截教の全ての仙人を集め、萬仙陣を布いた。</p>
+                    <p>この陣は、天地開闢以来最大規模の仙陣であった。無数の仙人、妖怪、精霊が集結し、その威容は天地を震撼させた。</p>
+                    <p>これに対し、元始天尊は太上老君、西方の准提道人、接引道人と連合し、四聖人で萬仙陣に挑んだ。</p>
+                    <p>激戦の末、萬仙陣は破られ、截教は壊滅的な打撃を受けた。多くの截教門人が西方教に帰順し、また多くが封神榜に名を連ねることになった...</p>
+                `
+            },
+            11: {
+                title: "第十一回：誅仙陣",
+                content: `
+                    <p>通天教主は最後の切り札として、誅仙四剣を用いて誅仙陣を布いた。誅仙剣、戮仙剣、陥仙剣、絶仙剣の四剣は、盤古が天地を開いた時の殺気が凝結したものである。</p>
+                    <p>「此の陣、四聖人に非ずんば破ること能わず」通天教主の自信は揺るぎなかった。</p>
+                    <p>元始天尊、太上老君、准提道人、接引道人の四聖人は、それぞれ一門を守って陣に入った。天地が暗転し、殺気が充満する中、聖人たちの激戦が始まった。</p>
+                    <p>最終的に、四聖人の連携により誅仙陣は破られた。通天教主は敗北を認め、紫霄宮の鴻鈞道祖の元へ去っていった...</p>
+                `
+            },
+            12: {
+                title: "第十二回：封神台",
+                content: `
+                    <p>牧野の戦いで紂王が自殺し、殷朝は滅亡した。武王は天下を統一し、周朝を建てた。姜子牙は斉国の君主に封じられた。</p>
+                    <p>そして、ついに封神の時が来た。姜子牙は封神台に登り、元始天尊から授かった封神榜を開いた。</p>
+                    <p>「柏鑑、汝を三界首領八部三百六十五清福正神之職に封ず」姜子牙は次々と戦死した英雄たちを神に封じていった。</p>
+                    <p>黄飛虎は五嶽正神、聞仲は九天応元雷声普化天尊、趙公明は金龍如意正一龍虎玄壇真君...新たな天界の秩序が確立され、封神演義の物語は幕を閉じた。しかし、姜子牙自身は神になれず、ただ「神上神」として、すべての神々の上に立つこととなった...</p>
+                `
+            }
+        };
+        
+        function openChapter(chapterNumber) {
+            const chapter = chapters[chapterNumber];
+            if (chapter) {
+                document.getElementById('reader-title').textContent = chapter.title;
+                document.getElementById('reader-content').innerHTML = chapter.content;
+                document.getElementById('reader').classList.add('active');
+                document.getElementById('reader').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function closeReader() {
+            document.getElementById('reader').classList.remove('active');
+        }
+        
+        function scrollToCharacters() {
+            document.getElementById('characters').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToTreasures() {
+            document.querySelector('.treasures-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToFormations() {
+            document.querySelector('.formations-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToReligions() {
+            document.querySelector('.religions-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

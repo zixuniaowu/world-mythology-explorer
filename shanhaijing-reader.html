@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山海経 - 図解付き原典</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reader-styles.css">
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <div id="reader-container">
+        <!-- ヘッダー -->
+        <header class="reader-header">
+            <h1 class="main-title">山海経図解</h1>
+            <p class="subtitle">古代中国の神獣と幻想世界</p>
+        </header>
+        
+        <!-- ナビゲーション -->
+        <nav class="chapter-nav">
+            <button class="nav-btn" onclick="reader.showChapter('eastern_chapter')">東山経</button>
+            <button class="nav-btn" onclick="reader.showChapter('western_chapter')">西山経</button>
+            <button class="nav-btn" onclick="reader.showChapter('southern_chapter')">南山経</button>
+            <button class="nav-btn" onclick="reader.showChapter('northern_chapter')">北山経</button>
+            <button class="nav-btn" onclick="reader.showChapter('central_chapter')">中山経</button>
+        </nav>
+        
+        <!-- メインコンテンツ -->
+        <main id="content-area" class="content-container">
+            <!-- 章のコンテンツがここに動的に挿入される -->
+        </main>
+        
+        <!-- フッター -->
+        <footer class="reader-footer">
+            <p>山海経 - 中国古代の地理書・博物誌</p>
+        </footer>
+    </div>
+    
+    <script src="shanhaijing-text.js"></script>
+    <script src="illustration-system.js"></script>
+    <script src="traditional-illustrations.js"></script>
+    <script src="shanhaijing-reader.js"></script>
+</body>
+</html>

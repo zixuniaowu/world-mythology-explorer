@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Stickfigure Animation | 文字转火柴人动画</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .examples {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .example-chip {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .example-chip:hover {
+            background: #e0e0e0;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .control-btn {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .control-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .parse-result {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .parse-result h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .parsed-entities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .entity-tag {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .entity-character {
+            background: #667eea;
+        }
+
+        .entity-action {
+            background: #ff6b6b;
+        }
+
+        .entity-object {
+            background: #4ecdc4;
+        }
+
+        .entity-emotion {
+            background: #f7b731;
+        }
+
+        .confidence-bar {
+            margin-top: 15px;
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .confidence-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .canvas-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .animation-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            width: 150px;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-section {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-section h3 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .info-section ul {
+            color: #666;
+            margin-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .examples {
+                justify-content: center;
+            }
+
+            .controls {
+                justify-content: center;
+            }
+
+            canvas {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Stickfigure Animation</h1>
+        <p class="subtitle">文字转火柴人动画 | テキストから棒人間アニメーション</p>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="textInput">Describe your scene / 描述你的场景 / シーンを説明してください</label>
+                <div class="examples">
+                    <div class="example-chip" onclick="setExample('A happy person walking to a tree')">Happy person walking</div>
+                    <div class="example-chip" onclick="setExample('Two people talking under the sun')">People talking</div>
+                    <div class="example-chip" onclick="setExample('Three birds flying over mountains')">Birds flying</div>
+                    <div class="example-chip" onclick="setExample('A sad person sitting by a house')">Sad person sitting</div>
+                    <div class="example-chip" onclick="setExample('两个人在树下跳舞')">中文示例</div>
+                    <div class="example-chip" onclick="setExample('三人が山で走っている')">日本語の例</div>
+                </div>
+                <textarea id="textInput" placeholder="Enter your scene description here...&#10;在此输入场景描述...&#10;ここにシーンの説明を入力してください..."></textarea>
+            </div>
+        </div>
+
+        <div id="parseResult" class="parse-result" style="display: none;">
+            <h3>Parsed Scene Analysis</h3>
+            <div id="parsedContent"></div>
+            <div class="confidence-bar">
+                <div id="confidenceFill" class="confidence-fill" style="width: 0%"></div>
+            </div>
+            <div id="confidenceText" class="confidence-text"></div>
+        </div>
+
+        <div class="controls">
+            <button class="generate-btn" id="generateBtn" onclick="generateAnimation()">
+                <span>🎬</span> Generate Animation
+            </button>
+            <button class="control-btn" onclick="playPauseAnimation()">
+                <span id="playPauseIcon">▶️</span> <span id="playPauseText">Play</span>
+            </button>
+            <button class="control-btn" onclick="resetAnimation()">
+                <span>🔄</span> Reset
+            </button>
+            <button class="control-btn" onclick="exportAnimation()">
+                <span>💾</span> Export GIF
+            </button>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="animationCanvas"></canvas>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+            <div class="animation-controls">
+                <div class="speed-control">
+                    <label for="speedSlider">Speed:</label>
+                    <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1">
+                    <span id="speedValue">1x</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Supported Elements / 支持的元素 / サポートされている要素</h3>
+            <ul>
+                <li><strong>Characters:</strong> person, people, man, woman, child, boy, girl, bird, cat, dog</li>
+                <li><strong>Actions:</strong> walk, run, jump, fly, talk, wave, dance, sit, stand, sleep, eat</li>
+                <li><strong>Objects:</strong> tree, mountain, sun, cloud, house, river, flower, rock, moon, star</li>
+                <li><strong>Emotions:</strong> happy, sad, angry, excited, surprised, scared, calm, tired</li>
+                <li><strong>Numbers:</strong> one, two, three, four, five, 1-5</li>
+                <li><strong>中文支持:</strong> 人、男人、女人、孩子、鸟、走、跑、跳、飞、说话、挥手、跳舞、坐、站、树、山、太阳、云、房子、河、花、开心、悲伤、生气</li>
+                <li><strong>日本語:</strong> 人、男、女、子供、鳥、歩く、走る、跳ぶ、飛ぶ、話す、手を振る、踊る、座る、立つ、木、山、太陽、雲、家、川、花、嬉しい、悲しい</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationId = null;
+        let isPlaying = false;
+        let animationSpeed = 1;
+        let currentScene = null;
+        let frameCount = 0;
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Speed control
+        const speedSlider = document.getElementById('speedSlider');
+        const speedValue = document.getElementById('speedValue');
+        speedSlider.addEventListener('input', (e) => {
+            animationSpeed = parseFloat(e.target.value);
+            speedValue.textContent = animationSpeed + 'x';
+        });
+
+        // Example setter
+        function setExample(text) {
+            document.getElementById('textInput').value = text;
+        }
+
+        // Enhanced Natural Language Processing
+        class TextParser {
+            constructor() {
+                this.patterns = {
+                    // Characters - more flexible patterns without word boundaries for multi-language support
+                    characters: {
+                        english: /(?:person|people|man|men|woman|women|child|children|boy|boys|girl|girls|bird|birds|cat|cats|dog|dogs)/gi,
+                        chinese: /(?:人|男人|女人|孩子|男孩|女孩|鸟|猫|狗)/g,
+                        japanese: /(?:人|男|女|子供|男の子|女の子|鳥|猫|犬)/g
+                    },
+                    // Actions
+                    actions: {
+                        english: /(?:walk|walking|walks|run|running|runs|jump|jumping|jumps|fly|flying|flies|talk|talking|talks|wave|waving|waves|dance|dancing|dances|sit|sitting|sits|stand|standing|stands|sleep|sleeping|sleeps|eat|eating|eats)/gi,
+                        chinese: /(?:走|走路|跑|跑步|跳|跳跃|飞|飞翔|说话|聊天|挥手|跳舞|坐|坐着|站|站着|睡觉|吃|吃饭)/g,
+                        japanese: /(?:歩く|歩いて|走る|走って|跳ぶ|跳んで|飛ぶ|飛んで|話す|話して|手を振る|踊る|踊って|座る|座って|立つ|立って|寝る|食べる)/g
+                    },
+                    // Objects
+                    objects: {
+                        english: /(?:tree|trees|mountain|mountains|sun|cloud|clouds|house|houses|river|rivers|flower|flowers|rock|rocks|moon|star|stars)/gi,
+                        chinese: /(?:树|树木|山|山脉|太阳|云|云彩|房子|房屋|河|河流|花|花朵|石头|月亮|星星)/g,
+                        japanese: /(?:木|山|太陽|雲|家|川|花|石|月|星)/g
+                    },
+                    // Emotions
+                    emotions: {
+                        english: /(?:happy|happily|sad|sadly|angry|angrily|excited|excitedly|surprised|scared|calm|calmly|tired)/gi,
+                        chinese: /(?:开心|快乐|悲伤|难过|生气|愤怒|兴奋|激动|惊讶|害怕|平静|疲倦|累)/g,
+                        japanese: /(?:嬉しい|楽しい|悲しい|怒って|興奮|驚いて|怖い|落ち着いて|疲れて)/g
+                    },
+                    // Numbers
+                    numbers: {
+                        english: /(?:one|two|three|four|five|1|2|3|4|5)/gi,
+                        chinese: /(?:一个|两个|三个|四个|五个|二人|三人|四人|五人|一|二|三|四|五)/g,
+                        japanese: /(?:一人|二人|三人|四人|五人|一つ|二つ|三つ|四つ|五つ|1|2|3|4|5)/g
+                    }
+                };
+
+                // Mapping for normalization
+                this.normalizeMap = {
+                    // Characters
+                    'person': 'person', 'people': 'person', 'man': 'person', 'men': 'person',
+                    'woman': 'person', 'women': 'person', 'child': 'person', 'children': 'person',
+                    'boy': 'person', 'boys': 'person', 'girl': 'person', 'girls': 'person',
+                    'bird': 'bird', 'birds': 'bird', 'cat': 'cat', 'cats': 'cat',
+                    'dog': 'dog', 'dogs': 'dog',
+                    '人': 'person', '男人': 'person', '女人': 'person', '孩子': 'person',
+                    '男孩': 'person', '女孩': 'person', '鸟': 'bird', '猫': 'cat', '狗': 'dog',
+                    '男': 'person', '女': 'person', '子供': 'person', '男の子': 'person',
+                    '女の子': 'person', '鳥': 'bird', '犬': 'dog',
+                    
+                    // Actions
+                    'walk': 'walk', 'walking': 'walk', 'walks': 'walk',
+                    'run': 'run', 'running': 'run', 'runs': 'run',
+                    'jump': 'jump', 'jumping': 'jump', 'jumps': 'jump',
+                    'fly': 'fly', 'flying': 'fly', 'flies': 'fly',
+                    'talk': 'talk', 'talking': 'talk', 'talks': 'talk',
+                    'wave': 'wave', 'waving': 'wave', 'waves': 'wave',
+                    'dance': 'dance', 'dancing': 'dance', 'dances': 'dance',
+                    'sit': 'sit', 'sitting': 'sit', 'sits': 'sit',
+                    'stand': 'stand', 'standing': 'stand', 'stands': 'stand',
+                    '走': 'walk', '走路': 'walk', '跑': 'run', '跑步': 'run',
+                    '跳': 'jump', '跳跃': 'jump', '飞': 'fly', '飞翔': 'fly',
+                    '说话': 'talk', '聊天': 'talk', '挥手': 'wave', '跳舞': 'dance',
+                    '坐': 'sit', '坐着': 'sit', '站': 'stand', '站着': 'stand',
+                    '歩く': 'walk', '歩いて': 'walk', '走る': 'run', '走って': 'run',
+                    '跳ぶ': 'jump', '跳んで': 'jump', '飛ぶ': 'fly', '飛んで': 'fly',
+                    '話す': 'talk', '話して': 'talk', '手を振る': 'wave',
+                    '踊る': 'dance', '踊って': 'dance', '座る': 'sit', '座って': 'sit',
+                    '立つ': 'stand', '立って': 'stand',
+                    
+                    // Numbers
+                    'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+                    '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
+                    '一个': 1, '两个': 2, '三个': 3, '四个': 4, '五个': 5,
+                    '一人': 1, '二人': 2, '三人': 3, '四人': 4, '五人': 5,
+                    '一': 1, '二': 2, '三': 3, '四': 4, '五': 5,
+                    '一つ': 1, '二つ': 2, '三つ': 3, '四つ': 4, '五つ': 5
+                };
+            }
+
+            parse(text) {
+                const result = {
+                    characters: [],
+                    actions: [],
+                    objects: [],
+                    emotions: [],
+                    count: 1,
+                    confidence: 0,
+                    detectedEntities: []
+                };
+
+                let totalMatches = 0;
+
+                // Extract numbers
+                for (const [lang, pattern] of Object.entries(this.patterns.numbers)) {
+                    const matches = text.match(pattern);
+                    if (matches) {
+                        for (const match of matches) {
+                            const normalized = this.normalizeMap[match.toLowerCase()] || this.normalizeMap[match];
+                            if (normalized && typeof normalized === 'number') {
+                                result.count = Math.max(result.count, normalized);
+                                result.detectedEntities.push({ type: 'number', value: match, normalized });
+                                totalMatches++;
+                            }
+                        }
+                    }
+                }
+
+                // Extract other entities
+                const categories = ['characters', 'actions', 'objects', 'emotions'];
+                for (const category of categories) {
+                    const seen = new Set();
+                    
+                    for (const [lang, pattern] of Object.entries(this.patterns[category])) {
+                        const matches = text.match(pattern);
+                        if (matches) {
+                            for (const match of matches) {
+                                const normalized = this.normalizeMap[match.toLowerCase()] || this.normalizeMap[match] || match.toLowerCase();
+                                if (!seen.has(normalized)) {
+                                    seen.add(normalized);
+                                    result[category].push(normalized);
+                                    result.detectedEntities.push({ type: category.slice(0, -1), value: match, normalized });
+                                    totalMatches++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Calculate confidence based on detected entities
+                const wordCount = text.split(/\s+/).length;
+                result.confidence = Math.min(100, (totalMatches / Math.max(wordCount * 0.3, 1)) * 100);
+
+                // Default values if nothing detected
+                if (result.characters.length === 0) {
+                    result.characters.push('person');
+                    result.confidence = Math.max(30, result.confidence);
+                }
+                if (result.actions.length === 0) {
+                    result.actions.push('walk');
+                    result.confidence = Math.max(30, result.confidence);
+                }
+
+                return result;
+            }
+        }
+
+        // Enhanced Stickfigure drawer with more emotions
+        class StickFigure {
+            constructor(x, y, emotion = 'neutral', gender = 'neutral') {
+                this.x = x;
+                this.y = y;
+                this.emotion = emotion;
+                this.gender = gender;
+                this.animationPhase = Math.random() * Math.PI * 2; // Random start phase
+                this.direction = 1;
+                this.action = 'walk';
+                this.baseY = y;
+            }
+
+            draw(ctx, action = 'stand') {
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                const headY = this.y - 50;
+                const bodyY = this.y - 30;
+                const legY = this.y;
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(this.x, headY, 10, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Face with enhanced emotions
+                this.drawFace(ctx, this.x, headY);
+
+                // Hair (if female or girl)
+                if (this.gender === 'female') {
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(this.x, headY - 5, 15, Math.PI, 0, false);
+                    ctx.stroke();
+                }
+
+                // Body
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(this.x, headY + 10);
+                ctx.lineTo(this.x, bodyY + 20);
+                ctx.stroke();
+
+                // Arms and legs based on action
+                this.drawLimbs(ctx, action, bodyY, legY);
+            }
+
+            drawFace(ctx, x, y) {
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+
+                // Eyes
+                ctx.fillStyle = '#333';
+                switch(this.emotion) {
+                    case 'happy':
+                    case 'excited':
+                        // Happy eyes (curved)
+                        ctx.beginPath();
+                        ctx.arc(x - 4, y - 2, 2, Math.PI, 0, true);
+                        ctx.arc(x + 4, y - 2, 2, Math.PI, 0, true);
+                        ctx.stroke();
+                        // Big smile
+                        ctx.beginPath();
+                        ctx.arc(x, y + 3, 6, 0, Math.PI);
+                        ctx.stroke();
+                        break;
+                    
+                    case 'sad':
+                        // Sad eyes
+                        ctx.beginPath();
+                        ctx.arc(x - 4, y - 2, 1.5, 0, Math.PI * 2);
+                        ctx.arc(x + 4, y - 2, 1.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        // Frown
+                        ctx.beginPath();
+                        ctx.arc(x, y + 8, 5, Math.PI, 0);
+                        ctx.stroke();
+                        // Tear
+                        ctx.beginPath();
+                        ctx.arc(x - 6, y + 2, 1, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                    
+                    case 'angry':
+                        // Angry eyebrows
+                        ctx.beginPath();
+                        ctx.moveTo(x - 7, y - 5);
+                        ctx.lineTo(x - 3, y - 3);
+                        ctx.moveTo(x + 3, y - 3);
+                        ctx.lineTo(x + 7, y - 5);
+                        ctx.stroke();
+                        // Angry eyes
+                        ctx.fillRect(x - 5, y - 2, 3, 2);
+                        ctx.fillRect(x + 2, y - 2, 3, 2);
+                        // Angry mouth
+                        ctx.beginPath();
+                        ctx.moveTo(x - 4, y + 5);
+                        ctx.lineTo(x + 4, y + 5);
+                        ctx.stroke();
+                        break;
+                    
+                    case 'surprised':
+                        // Wide eyes
+                        ctx.beginPath();
+                        ctx.arc(x - 4, y - 2, 3, 0, Math.PI * 2);
+                        ctx.arc(x + 4, y - 2, 3, 0, Math.PI * 2);
+                        ctx.stroke();
+                        // O mouth
+                        ctx.beginPath();
+                        ctx.arc(x, y + 5, 3, 0, Math.PI * 2);
+                        ctx.stroke();
+                        break;
+                    
+                    case 'scared':
+                        // Worried eyebrows
+                        ctx.beginPath();
+                        ctx.moveTo(x - 7, y - 3);
+                        ctx.lineTo(x - 3, y - 5);
+                        ctx.moveTo(x + 3, y - 5);
+                        ctx.lineTo(x + 7, y - 3);
+                        ctx.stroke();
+                        // Scared eyes
+                        ctx.beginPath();
+                        ctx.arc(x - 4, y - 2, 2, 0, Math.PI * 2);
+                        ctx.arc(x + 4, y - 2, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        // Wavy mouth
+                        ctx.beginPath();
+                        ctx.moveTo(x - 4, y + 5);
+                        ctx.quadraticCurveTo(x, y + 3, x + 4, y + 5);
+                        ctx.stroke();
+                        break;
+                    
+                    case 'tired':
+                        // Droopy eyes
+                        ctx.beginPath();
+                        ctx.moveTo(x - 6, y - 2);
+                        ctx.lineTo(x - 2, y - 2);
+                        ctx.moveTo(x + 2, y - 2);
+                        ctx.lineTo(x + 6, y - 2);
+                        ctx.stroke();
+                        // Tired mouth
+                        ctx.beginPath();
+                        ctx.moveTo(x - 3, y + 5);
+                        ctx.lineTo(x + 3, y + 5);
+                        ctx.stroke();
+                        break;
+                    
+                    default:
+                        // Neutral - dots for eyes
+                        ctx.beginPath();
+                        ctx.arc(x - 4, y - 2, 1.5, 0, Math.PI * 2);
+                        ctx.arc(x + 4, y - 2, 1.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        // Neutral mouth
+                        ctx.beginPath();
+                        ctx.moveTo(x - 3, y + 4);
+                        ctx.lineTo(x + 3, y + 4);
+                        ctx.stroke();
+                }
+            }
+
+            drawLimbs(ctx, action, bodyY, legY) {
+                const phase = this.animationPhase;
+
+                switch(action) {
+                    case 'walk':
+                        // Walking arms
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 15 + Math.sin(phase) * 8, bodyY + 15);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 15 - Math.sin(phase) * 8, bodyY + 15);
+                        ctx.stroke();
+
+                        // Walking legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 10 + Math.sin(phase) * 10, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 10 - Math.sin(phase) * 10, legY);
+                        ctx.stroke();
+                        break;
+
+                    case 'run':
+                        // Running arms (more movement)
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 20 + Math.sin(phase * 1.5) * 15, bodyY + 10);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 20 - Math.sin(phase * 1.5) * 15, bodyY + 10);
+                        ctx.stroke();
+
+                        // Running legs (bigger strides)
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 15 + Math.sin(phase * 1.5) * 20, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 15 - Math.sin(phase * 1.5) * 20, legY);
+                        ctx.stroke();
+                        break;
+
+                    case 'jump':
+                        // Arms up
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 20, bodyY - 15);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 20, bodyY - 15);
+                        ctx.stroke();
+
+                        // Legs bent
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 10, bodyY + 30);
+                        ctx.lineTo(this.x - 12, legY - 10);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 10, bodyY + 30);
+                        ctx.lineTo(this.x + 12, legY - 10);
+                        ctx.stroke();
+                        break;
+
+                    case 'wave':
+                        // Waving arm
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 15, bodyY + 10);
+                        ctx.moveTo(this.x, bodyY);
+                        const waveAngle = Math.sin(phase * 3) * 0.5;
+                        ctx.lineTo(this.x + 20 * Math.cos(waveAngle - 0.5), bodyY - 10 + 20 * Math.sin(waveAngle - 0.5));
+                        ctx.stroke();
+
+                        // Standing legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 8, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 8, legY);
+                        ctx.stroke();
+                        break;
+
+                    case 'dance':
+                        // Dancing arms
+                        const dancePhase = phase * 2;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 20 * Math.cos(dancePhase), bodyY - 10 * Math.sin(dancePhase));
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 20 * Math.cos(dancePhase + Math.PI), bodyY - 10 * Math.sin(dancePhase + Math.PI));
+                        ctx.stroke();
+
+                        // Dancing legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 10 + Math.sin(dancePhase) * 5, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 10 - Math.sin(dancePhase) * 5, legY);
+                        ctx.stroke();
+                        break;
+
+                    case 'sit':
+                        // Arms on knees
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 10, bodyY + 15);
+                        ctx.lineTo(this.x - 12, bodyY + 25);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 10, bodyY + 15);
+                        ctx.lineTo(this.x + 12, bodyY + 25);
+                        ctx.stroke();
+
+                        // Sitting legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 10, bodyY + 30);
+                        ctx.lineTo(this.x - 20, bodyY + 30);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 10, bodyY + 30);
+                        ctx.lineTo(this.x + 20, bodyY + 30);
+                        ctx.stroke();
+                        break;
+
+                    case 'sleep':
+                        // Arms at sides
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 5, bodyY + 20);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 5, bodyY + 20);
+                        ctx.stroke();
+
+                        // Lying legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 5, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 5, legY);
+                        ctx.stroke();
+
+                        // Z's for sleeping
+                        ctx.font = '16px Arial';
+                        ctx.fillText('Z', this.x + 15, headY - 15);
+                        ctx.font = '12px Arial';
+                        ctx.fillText('Z', this.x + 25, headY - 25);
+                        break;
+
+                    case 'talk':
+                        // Gesturing arms
+                        const talkPhase = Math.sin(phase * 2);
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 15 + talkPhase * 5, bodyY + 12);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 15 - talkPhase * 5, bodyY + 12);
+                        ctx.stroke();
+
+                        // Standing legs
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 8, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 8, legY);
+                        ctx.stroke();
+
+                        // Speech bubble indicator
+                        if (Math.floor(phase) % 2 === 0) {
+                            ctx.strokeStyle = '#666';
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.arc(this.x + 20, headY - 10, 3, 0, Math.PI * 2);
+                            ctx.stroke();
+                            ctx.beginPath();
+                            ctx.arc(this.x + 25, headY - 15, 2, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                        break;
+
+                    default:
+                        // Standing
+                        ctx.beginPath();
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x - 15, bodyY + 15);
+                        ctx.moveTo(this.x, bodyY);
+                        ctx.lineTo(this.x + 15, bodyY + 15);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x - 8, legY);
+                        ctx.moveTo(this.x, bodyY + 20);
+                        ctx.lineTo(this.x + 8, legY);
+                        ctx.stroke();
+                }
+            }
+
+            update(action = 'walk') {
+                this.animationPhase += 0.1 * animationSpeed;
+
+                switch(action) {
+                    case 'walk':
+                        this.x += 2 * this.direction * animationSpeed;
+                        if (this.x > canvas.width - 50 || this.x < 50) {
+                            this.direction *= -1;
+                        }
+                        break;
+                    
+                    case 'run':
+                        this.x += 4 * this.direction * animationSpeed;
+                        if (this.x > canvas.width - 50 || this.x < 50) {
+                            this.direction *= -1;
+                        }
+                        break;
+                    
+                    case 'jump':
+                        this.y = this.baseY - Math.abs(Math.sin(this.animationPhase)) * 40;
+                        break;
+                    
+                    case 'fly':
+                        this.x += 3 * this.direction * animationSpeed;
+                        this.y = canvas.height / 2 + Math.sin(this.animationPhase) * 30;
+                        if (this.x > canvas.width - 50 || this.x < 50) {
+                            this.direction *= -1;
+                        }
+                        break;
+                    
+                    case 'dance':
+                        this.x += Math.sin(this.animationPhase * 2) * 2;
+                        this.y = this.baseY + Math.abs(Math.sin(this.animationPhase * 4)) * 5;
+                        break;
+                }
+            }
+        }
+
+        // Enhanced Scene objects
+        class SceneObject {
+            constructor(type, x, y) {
+                this.type = type;
+                this.x = x;
+                this.y = y;
+                this.animationPhase = Math.random() * Math.PI * 2;
+            }
+
+            draw(ctx) {
+                switch(this.type) {
+                    case 'tree':
+                    case '树':
+                    case '木':
+                        this.drawTree(ctx);
+                        break;
+                    case 'mountain':
+                    case '山':
+                        this.drawMountain(ctx);
+                        break;
+                    case 'sun':
+                    case '太阳':
+                    case '太陽':
+                        this.drawSun(ctx);
+                        break;
+                    case 'cloud':
+                    case '云':
+                    case '雲':
+                        this.drawCloud(ctx);
+                        break;
+                    case 'house':
+                    case '房子':
+                    case '家':
+                        this.drawHouse(ctx);
+                        break;
+                    case 'flower':
+                    case '花':
+                        this.drawFlower(ctx);
+                        break;
+                    case 'river':
+                    case '河':
+                    case '川':
+                        this.drawRiver(ctx);
+                        break;
+                    case 'moon':
+                    case '月亮':
+                    case '月':
+                        this.drawMoon(ctx);
+                        break;
+                    case 'star':
+                    case '星星':
+                    case '星':
+                        this.drawStar(ctx);
+                        break;
+                }
+            }
+
+            drawTree(ctx) {
+                // Trunk
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(this.x - 10, this.y - 40, 20, 40);
+
+                // Leaves with slight animation
+                ctx.fillStyle = '#228B22';
+                ctx.save();
+                ctx.translate(this.x, this.y - 60);
+                ctx.rotate(Math.sin(this.animationPhase) * 0.02);
+                ctx.beginPath();
+                ctx.arc(0, 0, 30, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                this.animationPhase += 0.02 * animationSpeed;
+            }
+
+            drawMountain(ctx) {
+                ctx.fillStyle = '#8B7355';
+                ctx.beginPath();
+                ctx.moveTo(this.x - 80, this.y);
+                ctx.lineTo(this.x - 20, this.y - 80);
+                ctx.lineTo(this.x + 20, this.y - 100);
+                ctx.lineTo(this.x + 80, this.y);
+                ctx.closePath();
+                ctx.fill();
+
+                // Snow cap
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.moveTo(this.x - 10, this.y - 70);
+                ctx.lineTo(this.x + 20, this.y - 100);
+                ctx.lineTo(this.x + 40, this.y - 70);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            drawSun(ctx) {
+                // Glowing effect
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 40);
+                gradient.addColorStop(0, '#FFD700');
+                gradient.addColorStop(1, 'rgba(255, 215, 0, 0.3)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 30, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Rotating rays
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 3;
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI) / 4 + this.animationPhase * 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + Math.cos(angle) * 35, this.y + Math.sin(angle) * 35);
+                    ctx.lineTo(this.x + Math.cos(angle) * 45, this.y + Math.sin(angle) * 45);
+                    ctx.stroke();
+                }
+                
+                this.animationPhase += 0.01 * animationSpeed;
+            }
+
+            drawCloud(ctx) {
+                // Drifting cloud
+                const drift = Math.sin(this.animationPhase) * 2;
+                
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x - 20 + drift, this.y, 15, 0, Math.PI * 2);
+                ctx.arc(this.x + drift, this.y - 10, 20, 0, Math.PI * 2);
+                ctx.arc(this.x + 20 + drift, this.y, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                this.animationPhase += 0.01 * animationSpeed;
+            }
+
+            drawHouse(ctx) {
+                // Walls
+                ctx.fillStyle = '#D2691E';
+                ctx.fillRect(this.x - 40, this.y - 40, 80, 40);
+
+                // Roof
+                ctx.fillStyle = '#8B0000';
+                ctx.beginPath();
+                ctx.moveTo(this.x - 50, this.y - 40);
+                ctx.lineTo(this.x, this.y - 70);
+                ctx.lineTo(this.x + 50, this.y - 40);
+                ctx.closePath();
+                ctx.fill();
+
+                // Door
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(this.x - 10, this.y - 25, 20, 25);
+
+                // Windows
+                ctx.fillStyle = '#87CEEB';
+                ctx.fillRect(this.x - 30, this.y - 30, 15, 15);
+                ctx.fillRect(this.x + 15, this.y - 30, 15, 15);
+
+                // Window cross
+                ctx.strokeStyle = '#654321';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(this.x - 22.5, this.y - 30);
+                ctx.lineTo(this.x - 22.5, this.y - 15);
+                ctx.moveTo(this.x - 30, this.y - 22.5);
+                ctx.lineTo(this.x - 15, this.y - 22.5);
+                ctx.moveTo(this.x + 22.5, this.y - 30);
+                ctx.lineTo(this.x + 22.5, this.y - 15);
+                ctx.moveTo(this.x + 15, this.y - 22.5);
+                ctx.lineTo(this.x + 30, this.y - 22.5);
+                ctx.stroke();
+            }
+
+            drawFlower(ctx) {
+                // Swaying stem
+                const sway = Math.sin(this.animationPhase) * 3;
+                
+                ctx.strokeStyle = '#228B22';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.quadraticCurveTo(this.x + sway, this.y - 15, this.x + sway * 2, this.y - 30);
+                ctx.stroke();
+
+                // Petals
+                ctx.fillStyle = '#FF69B4';
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI * 2) / 6 + this.animationPhase * 0.5;
+                    ctx.beginPath();
+                    ctx.arc(this.x + sway * 2 + Math.cos(angle) * 10, this.y - 30 + Math.sin(angle) * 10, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Center
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(this.x + sway * 2, this.y - 30, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                this.animationPhase += 0.02 * animationSpeed;
+            }
+
+            drawRiver(ctx) {
+                // Flowing water
+                ctx.fillStyle = '#4169E1';
+                ctx.beginPath();
+                ctx.moveTo(this.x - 100, this.y);
+                for (let i = -100; i <= 100; i += 10) {
+                    const waveY = this.y - 10 + Math.sin((i + this.animationPhase * 50) * 0.05) * 5;
+                    ctx.lineTo(this.x + i, waveY);
+                }
+                ctx.lineTo(this.x + 100, this.y + 20);
+                ctx.lineTo(this.x - 100, this.y + 20);
+                ctx.closePath();
+                ctx.fill();
+                
+                this.animationPhase += 0.02 * animationSpeed;
+            }
+
+            drawMoon(ctx) {
+                // Glowing moon
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 30);
+                gradient.addColorStop(0, '#F0E68C');
+                gradient.addColorStop(1, 'rgba(240, 230, 140, 0.2)');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Crescent detail
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.beginPath();
+                ctx.arc(this.x - 5, this.y - 5, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawStar(ctx) {
+                // Twinkling star
+                const twinkle = Math.sin(this.animationPhase * 3) * 0.3 + 0.7;
+                
+                ctx.fillStyle = `rgba(255, 255, 0, ${twinkle})`;
+                ctx.beginPath();
+                for (let i = 0; i < 5; i++) {
+                    const angle = (i * Math.PI * 2) / 5 - Math.PI / 2;
+                    const innerAngle = angle + Math.PI / 5;
+                    const outerRadius = 10;
+                    const innerRadius = 4;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(this.x + Math.cos(angle) * outerRadius, this.y + Math.sin(angle) * outerRadius);
+                    } else {
+                        ctx.lineTo(this.x + Math.cos(angle) * outerRadius, this.y + Math.sin(angle) * outerRadius);
+                    }
+                    ctx.lineTo(this.x + Math.cos(innerAngle) * innerRadius, this.y + Math.sin(innerAngle) * innerRadius);
+                }
+                ctx.closePath();
+                ctx.fill();
+                
+                this.animationPhase += 0.03 * animationSpeed;
+            }
+        }
+
+        // Enhanced Bird character
+        class Bird {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.wingPhase = 0;
+                this.direction = 1;
+                this.baseY = y;
+            }
+
+            draw(ctx) {
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = '#FFD700';
+
+                // Body
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, 20, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(this.x + 15 * this.direction, this.y - 8, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Eye
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + 18 * this.direction, this.y - 8, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Beak
+                ctx.fillStyle = '#FF6347';
+                ctx.beginPath();
+                ctx.moveTo(this.x + 25 * this.direction, this.y - 8);
+                ctx.lineTo(this.x + 32 * this.direction, this.y - 6);
+                ctx.lineTo(this.x + 25 * this.direction, this.y - 4);
+                ctx.closePath();
+                ctx.fill();
+
+                // Wings
+                const wingOffset = Math.sin(this.wingPhase) * 15;
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                
+                // Wing 1
+                ctx.beginPath();
+                ctx.ellipse(this.x - 10, this.y - wingOffset, 15, 8, -0.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Wing 2
+                ctx.beginPath();
+                ctx.ellipse(this.x + 10, this.y - wingOffset, 15, 8, 0.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Tail
+                ctx.beginPath();
+                ctx.moveTo(this.x - 20, this.y);
+                ctx.lineTo(this.x - 30, this.y - 5);
+                ctx.lineTo(this.x - 28, this.y + 5);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            update() {
+                this.wingPhase += 0.3 * animationSpeed;
+                this.x += 3 * this.direction * animationSpeed;
+                this.y = this.baseY + Math.sin(this.x * 0.02) * 20;
+
+                if (this.x > canvas.width - 50 || this.x < 50) {
+                    this.direction *= -1;
+                }
+            }
+        }
+
+        // Other animal classes
+        class Cat {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.animationPhase = 0;
+                this.direction = 1;
+            }
+
+            draw(ctx) {
+                // Body
+                ctx.fillStyle = '#FF8C00';
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y - 10, 25, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(this.x + 20 * this.direction, this.y - 15, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Ears
+                ctx.beginPath();
+                ctx.moveTo(this.x + 10 * this.direction, this.y - 25);
+                ctx.lineTo(this.x + 15 * this.direction, this.y - 35);
+                ctx.lineTo(this.x + 20 * this.direction, this.y - 25);
+                ctx.moveTo(this.x + 20 * this.direction, this.y - 25);
+                ctx.lineTo(this.x + 25 * this.direction, this.y - 35);
+                ctx.lineTo(this.x + 30 * this.direction, this.y - 25);
+                ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + 18 * this.direction, this.y - 15, 2, 0, Math.PI * 2);
+                ctx.arc(this.x + 26 * this.direction, this.y - 15, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Tail
+                ctx.strokeStyle = '#FF8C00';
+                ctx.lineWidth = 8;
+                ctx.beginPath();
+                ctx.moveTo(this.x - 25, this.y - 5);
+                ctx.quadraticCurveTo(this.x - 35, this.y - 20 + Math.sin(this.animationPhase) * 5, this.x - 30, this.y - 30);
+                ctx.stroke();
+
+                // Legs
+                ctx.strokeStyle = '#FF8C00';
+                ctx.lineWidth = 6;
+                const legOffset = Math.sin(this.animationPhase) * 3;
+                ctx.beginPath();
+                ctx.moveTo(this.x - 10, this.y - 5);
+                ctx.lineTo(this.x - 10 + legOffset, this.y + 10);
+                ctx.moveTo(this.x + 10, this.y - 5);
+                ctx.lineTo(this.x + 10 - legOffset, this.y + 10);
+                ctx.stroke();
+            }
+
+            update() {
+                this.animationPhase += 0.1 * animationSpeed;
+                this.x += 1.5 * this.direction * animationSpeed;
+                
+                if (this.x > canvas.width - 50 || this.x < 50) {
+                    this.direction *= -1;
+                }
+            }
+        }
+
+        class Dog {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.animationPhase = 0;
+                this.direction = 1;
+                this.tailWag = 0;
+            }
+
+            draw(ctx) {
+                // Body
+                ctx.fillStyle = '#8B4513';
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y - 15, 30, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Head
+                ctx.beginPath();
+                ctx.ellipse(this.x + 25 * this.direction, this.y - 20, 15, 12, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Snout
+                ctx.beginPath();
+                ctx.ellipse(this.x + 35 * this.direction, this.y - 15, 8, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Ears
+                ctx.beginPath();
+                ctx.ellipse(this.x + 20 * this.direction, this.y - 30, 8, 12, -0.5 * this.direction, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + 22 * this.direction, this.y - 20, 2, 0, Math.PI * 2);
+                ctx.arc(this.x + 30 * this.direction, this.y - 20, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Nose
+                ctx.beginPath();
+                ctx.arc(this.x + 40 * this.direction, this.y - 15, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Tail (wagging)
+                ctx.strokeStyle = '#8B4513';
+                ctx.lineWidth = 10;
+                ctx.beginPath();
+                ctx.moveTo(this.x - 30, this.y - 10);
+                const tailAngle = Math.sin(this.tailWag) * 0.5;
+                ctx.quadraticCurveTo(this.x - 40, this.y - 20, this.x - 35 + Math.cos(tailAngle) * 10, this.y - 30 + Math.sin(tailAngle) * 10);
+                ctx.stroke();
+
+                // Legs
+                ctx.lineWidth = 8;
+                const legOffset = Math.sin(this.animationPhase) * 5;
+                ctx.beginPath();
+                ctx.moveTo(this.x - 15, this.y);
+                ctx.lineTo(this.x - 15 + legOffset, this.y + 15);
+                ctx.moveTo(this.x + 15, this.y);
+                ctx.lineTo(this.x + 15 - legOffset, this.y + 15);
+                ctx.stroke();
+            }
+
+            update() {
+                this.animationPhase += 0.1 * animationSpeed;
+                this.tailWag += 0.2 * animationSpeed;
+                this.x += 2 * this.direction * animationSpeed;
+                
+                if (this.x > canvas.width - 60 || this.x < 60) {
+                    this.direction *= -1;
+                }
+            }
+        }
+
+        // Enhanced Scene manager
+        class Scene {
+            constructor(parsedData) {
+                this.characters = [];
+                this.objects = [];
+                this.background = this.determineBackground(parsedData);
+
+                // Position objects first
+                this.positionObjects(parsedData.objects);
+                
+                // Then position characters
+                this.positionCharacters(parsedData);
+                
+                this.actions = parsedData.actions;
+            }
+
+            determineBackground(parsedData) {
+                // Determine background based on objects and time
+                if (parsedData.objects.includes('moon') || parsedData.objects.includes('star')) {
+                    return '#191970'; // Night sky
+                } else if (parsedData.objects.includes('sun')) {
+                    return '#87CEEB'; // Day sky
+                } else {
+                    return '#87CEEB'; // Default day sky
+                }
+            }
+
+            positionObjects(objects) {
+                const objectPositions = {
+                    sun: { x: canvas.width - 100, y: 100 },
+                    moon: { x: canvas.width - 100, y: 100 },
+                    cloud: { x: 200, y: 80 },
+                    mountain: { x: canvas.width / 2, y: canvas.height - 20 },
+                    tree: { x: 150, y: canvas.height - 20 },
+                    house: { x: canvas.width - 200, y: canvas.height - 20 },
+                    river: { x: canvas.width / 2, y: canvas.height - 50 },
+                    flower: { x: 250, y: canvas.height - 20 },
+                    star: { x: 150, y: 50 }
+                };
+
+                objects.forEach((obj, index) => {
+                    let pos = objectPositions[obj] || { 
+                        x: 200 + index * 150, 
+                        y: canvas.height - 20 
+                    };
+                    
+                    // Adjust positions for multiple objects of same type
+                    if (obj === 'cloud' || obj === 'star' || obj === 'flower' || obj === 'tree') {
+                        pos.x += index * 100;
+                    }
+                    
+                    this.objects.push(new SceneObject(obj, pos.x, pos.y));
+                });
+            }
+
+            positionCharacters(parsedData) {
+                const characterCount = parsedData.count || 1;
+                const spacing = Math.min(150, (canvas.width - 200) / characterCount);
+                
+                for (let i = 0; i < characterCount; i++) {
+                    const x = 100 + i * spacing;
+                    const y = canvas.height - 50;
+                    const emotion = parsedData.emotions[i] || parsedData.emotions[0] || 'neutral';
+                    const characterType = parsedData.characters[i] || parsedData.characters[0] || 'person';
+                    
+                    switch(characterType) {
+                        case 'bird':
+                            this.characters.push(new Bird(x, 150));
+                            break;
+                        case 'cat':
+                            this.characters.push(new Cat(x, y));
+                            break;
+                        case 'dog':
+                            this.characters.push(new Dog(x, y));
+                            break;
+                        default:
+                            // Determine gender for stick figures
+                            let gender = 'neutral';
+                            if (characterType.includes('woman') || characterType.includes('girl')) {
+                                gender = 'female';
+                            } else if (characterType.includes('man') || characterType.includes('boy')) {
+                                gender = 'male';
+                            }
+                            this.characters.push(new StickFigure(x, y, emotion, gender));
+                    }
+                }
+            }
+
+            render() {
+                // Clear canvas with background
+                ctx.fillStyle = this.background;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw ground
+                ctx.fillStyle = '#90EE90';
+                ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+
+                // Draw objects behind characters
+                this.objects.forEach(obj => {
+                    if (obj.type !== 'sun' && obj.type !== 'moon' && obj.type !== 'star' && obj.type !== 'cloud') {
+                        obj.draw(ctx);
+                    }
+                });
+
+                // Draw characters
+                this.characters.forEach((char, index) => {
+                    const action = this.actions[index] || this.actions[0] || 'walk';
+                    
+                    if (char instanceof Bird || char instanceof Cat || char instanceof Dog) {
+                        char.draw(ctx);
+                        char.update();
+                    } else {
+                        char.draw(ctx, action);
+                        char.update(action);
+                    }
+                });
+
+                // Draw sky objects in front
+                this.objects.forEach(obj => {
+                    if (obj.type === 'sun' || obj.type === 'moon' || obj.type === 'star' || obj.type === 'cloud') {
+                        obj.draw(ctx);
+                    }
+                });
+            }
+        }
+
+        // Visual feedback for parsing
+        function showParseResult(parsedData) {
+            const parseResult = document.getElementById('parseResult');
+            const parsedContent = document.getElementById('parsedContent');
+            const confidenceFill = document.getElementById('confidenceFill');
+            const confidenceText = document.getElementById('confidenceText');
+            
+            parseResult.style.display = 'block';
+            
+            // Clear previous content
+            parsedContent.innerHTML = '';
+            
+            // Create entity groups
+            const groups = [
+                { name: 'Characters', items: parsedData.characters, class: 'entity-character' },
+                { name: 'Actions', items: parsedData.actions, class: 'entity-action' },
+                { name: 'Objects', items: parsedData.objects, class: 'entity-object' },
+                { name: 'Emotions', items: parsedData.emotions, class: 'entity-emotion' }
+            ];
+            
+            groups.forEach(group => {
+                if (group.items.length > 0) {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'parsed-entities';
+                    
+                    const label = document.createElement('span');
+                    label.style.marginRight = '10px';
+                    label.style.color = '#666';
+                    label.textContent = group.name + ':';
+                    groupDiv.appendChild(label);
+                    
+                    group.items.forEach(item => {
+                        const tag = document.createElement('span');
+                        tag.className = 'entity-tag ' + group.class;
+                        tag.textContent = item;
+                        groupDiv.appendChild(tag);
+                    });
+                    
+                    parsedContent.appendChild(groupDiv);
+                }
+            });
+            
+            // Show count if > 1
+            if (parsedData.count > 1) {
+                const countDiv = document.createElement('div');
+                countDiv.style.marginTop = '10px';
+                countDiv.style.color = '#666';
+                countDiv.innerHTML = `<strong>Count:</strong> ${parsedData.count} characters`;
+                parsedContent.appendChild(countDiv);
+            }
+            
+            // Update confidence bar
+            confidenceFill.style.width = parsedData.confidence + '%';
+            confidenceText.textContent = `Confidence: ${Math.round(parsedData.confidence)}%`;
+        }
+
+        // Animation functions
+        function generateAnimation() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('Please enter a scene description!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('generateBtn').disabled = true;
+
+            // Parse text
+            const parser = new TextParser();
+            const parsedData = parser.parse(text);
+
+            // Show parse result
+            showParseResult(parsedData);
+
+            // Create scene with delay for visual effect
+            setTimeout(() => {
+                currentScene = new Scene(parsedData);
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('generateBtn').disabled = false;
+                
+                // Start animation
+                isPlaying = true;
+                updatePlayPauseButton();
+                animate();
+            }, 500);
+        }
+
+        function animate() {
+            if (!isPlaying || !currentScene) return;
+
+            currentScene.render();
+            frameCount++;
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function playPauseAnimation() {
+            if (!currentScene) {
+                alert('Please generate an animation first!');
+                return;
+            }
+
+            isPlaying = !isPlaying;
+            updatePlayPauseButton();
+
+            if (isPlaying) {
+                animate();
+            } else if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function updatePlayPauseButton() {
+            const icon = document.getElementById('playPauseIcon');
+            const text = document.getElementById('playPauseText');
+            
+            if (isPlaying) {
+                icon.textContent = '⏸️';
+                text.textContent = 'Pause';
+            } else {
+                icon.textContent = '▶️';
+                text.textContent = 'Play';
+            }
+        }
+
+        function resetAnimation() {
+            isPlaying = false;
+            updatePlayPauseButton();
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+
+            frameCount = 0;
+            currentScene = null;
+            
+            // Hide parse result
+            document.getElementById('parseResult').style.display = 'none';
+            
+            // Clear canvas
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+        }
+
+        function exportAnimation() {
+            if (!currentScene) {
+                alert('Please generate an animation first!');
+                return;
+            }
+
+            // Create a download link for the current frame
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'stickfigure-animation-frame.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // Initial canvas setup
+        ctx.fillStyle = '#87CEEB';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#90EE90';
+        ctx.fillRect(0, canvas.height - 20, canvas.width, 20);
+    </script>
+</body>
+</html>

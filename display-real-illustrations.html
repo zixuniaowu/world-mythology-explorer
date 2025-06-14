@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山海経 - 伝統的挿図集</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: #F5E6D3;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background: linear-gradient(to bottom, #2C1810 0%, #4A2C1F 100%);
+            color: #F5E6D3;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+            letter-spacing: 0.2em;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+        
+        .notice {
+            background: #FFF8DC;
+            border: 2px solid #DAA520;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 800px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        
+        .notice h2 {
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .chapter-section {
+            background: white;
+            border: 3px solid #8B4513;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .chapter-title {
+            font-size: 2em;
+            color: #8B4513;
+            border-bottom: 2px solid #D2691E;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .illustration-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .illustration-card {
+            border: 2px solid #8B4513;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #FAF8F5;
+        }
+        
+        .illustration-canvas {
+            width: 100%;
+            height: 400px;
+            display: block;
+            background: #F5E6D3;
+        }
+        
+        .illustration-info {
+            padding: 15px;
+            background: #FFF;
+            border-top: 1px solid #D2691E;
+        }
+        
+        .creature-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+        }
+        
+        .creature-desc {
+            color: #654321;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        .reference-note {
+            background: #F0F0F0;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>山海経図絵</h1>
+        <p>古代中国の神獣と幻想世界の挿図集</p>
+    </div>
+    
+    <div class="notice">
+        <h2>お知らせ</h2>
+        <p>当サイトでは、山海経の伝統的な挿図を独自のスタイルで再現しています。</p>
+        <p>各挿図は、古典的な描写に基づいて制作された想像図です。</p>
+    </div>
+    
+    <div class="content">
+        <!-- 東山経 -->
+        <div class="chapter-section">
+            <h2 class="chapter-title">東山経（とうざんきょう）</h2>
+            <p>東方の山々に住む神獣たち。青龍をはじめとする雷と嵐の精霊。</p>
+            
+            <div class="illustration-container">
+                <div class="illustration-card">
+                    <canvas id="dongshan-qinglong" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">青龍（セイリュウ）</div>
+                        <div class="creature-desc">東方を守護する神龍。雷雲を従え、天下の安寧をもたらす。</div>
+                    </div>
+                </div>
+                
+                <div class="illustration-card">
+                    <canvas id="dongshan-leiju" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">雷獣（ライジュウ）</div>
+                        <div class="creature-desc">雷鳴のような声を持つ獣。その肉を食べれば雷を恐れなくなる。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 西山経 -->
+        <div class="chapter-section">
+            <h2 class="chapter-title">西山経（せいざんきょう）</h2>
+            <p>西方の平原を支配する白虎と、金属の精霊たち。</p>
+            
+            <div class="illustration-container">
+                <div class="illustration-card">
+                    <canvas id="xishan-baihu" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">白虎（ビャッコ）</div>
+                        <div class="creature-desc">翼を持つ白い虎。千里を飛行し、その出現は戦を告げる。</div>
+                    </div>
+                </div>
+                
+                <div class="illustration-card">
+                    <canvas id="xishan-pixiu" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">貔貅（ヒキュウ）</div>
+                        <div class="creature-desc">金銀を食べる神獣。財運と富をもたらす。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 南山経 -->
+        <div class="chapter-section">
+            <h2 class="chapter-title">南山経（なんざんきょう）</h2>
+            <p>南方の火山に住む朱雀と、不死の炎を操る者たち。</p>
+            
+            <div class="illustration-container">
+                <div class="illustration-card">
+                    <canvas id="nanshan-zhuque" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">朱雀（スザク）</div>
+                        <div class="creature-desc">火の精霊である神鳥。五色の羽を持ち、再生の炎をまとう。</div>
+                    </div>
+                </div>
+                
+                <div class="illustration-card">
+                    <canvas id="nanshan-fenghuang" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">鳳凰（ホウオウ）</div>
+                        <div class="creature-desc">雄を鳳、雌を凰という。その出現は天下太平の兆し。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 北山経 -->
+        <div class="chapter-section">
+            <h2 class="chapter-title">北山経（ほくざんきょう）</h2>
+            <p>北方の湖に潜む玄武と、水の神秘。</p>
+            
+            <div class="illustration-container">
+                <div class="illustration-card">
+                    <canvas id="beishan-xuanwu" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">玄武（ゲンブ）</div>
+                        <div class="creature-desc">亀と蛇が一体となった水の神。北方を守護する。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 中山経 -->
+        <div class="chapter-section">
+            <h2 class="chapter-title">中山経（ちゅうざんきょう）</h2>
+            <p>中央の地に住む妖怪と神獣たち。</p>
+            
+            <div class="illustration-container">
+                <div class="illustration-card">
+                    <canvas id="zhongshan-jiuwei" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">九尾狐（キュウビノキツネ）</div>
+                        <div class="creature-desc">九つの尾を持つ妖狐。その声は嬰児のようで、幻術を使う。</div>
+                    </div>
+                </div>
+                
+                <div class="illustration-card">
+                    <canvas id="zhongshan-taotie" class="illustration-canvas"></canvas>
+                    <div class="illustration-info">
+                        <div class="creature-name">饕餮（トウテツ）</div>
+                        <div class="creature-desc">貪欲の象徴。羊の体に人の顔、目は腋の下にある。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reference-note">
+            <p>これらの挿図は、山海経の古典的な描写を基に独自に制作されたものです。</p>
+            <p>実際の古代の挿図とは異なる場合があります。</p>
+        </div>
+    </div>
+    
+    <script src="traditional-illustrations.js"></script>
+    <script src="enhanced-illustrations.js"></script>
+    <script>
+        // 挿図を描画
+        document.addEventListener('DOMContentLoaded', function() {
+            const illustrations = window.traditionalIllustrations || window.enhancedIllustrations;
+            
+            if (illustrations) {
+                // 東山経
+                const qinglongCanvas = document.getElementById('dongshan-qinglong');
+                if (qinglongCanvas) {
+                    const ctx = qinglongCanvas.getContext('2d');
+                    illustrations.drawQinglong(ctx, qinglongCanvas.width, qinglongCanvas.height);
+                }
+                
+                // 西山経
+                const baihuCanvas = document.getElementById('xishan-baihu');
+                if (baihuCanvas) {
+                    const ctx = baihuCanvas.getContext('2d');
+                    illustrations.drawBaihu(ctx, baihuCanvas.width, baihuCanvas.height);
+                }
+                
+                // 南山経
+                const zhuqueCanvas = document.getElementById('nanshan-zhuque');
+                if (zhuqueCanvas) {
+                    const ctx = zhuqueCanvas.getContext('2d');
+                    illustrations.drawZhuque(ctx, zhuqueCanvas.width, zhuqueCanvas.height);
+                }
+                
+                // 北山経
+                const xuanwuCanvas = document.getElementById('beishan-xuanwu');
+                if (xuanwuCanvas) {
+                    const ctx = xuanwuCanvas.getContext('2d');
+                    illustrations.drawXuanwu(ctx, xuanwuCanvas.width, xuanwuCanvas.height);
+                }
+                
+                // 中山経
+                const jiuweiCanvas = document.getElementById('zhongshan-jiuwei');
+                if (jiuweiCanvas) {
+                    const ctx = jiuweiCanvas.getContext('2d');
+                    if (illustrations.drawJiuweihuli) {
+                        illustrations.drawJiuweihuli(ctx, jiuweiCanvas.width, jiuweiCanvas.height);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

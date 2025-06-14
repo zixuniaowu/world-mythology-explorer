@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古事記 - 日本神話の原点</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: #333;
+            min-height: 100vh;
+            line-height: 1.8;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid #dc143c;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            color: #dc143c;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(220, 20, 60, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #fff;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(178, 34, 34, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.5);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-button {
+            padding: 8px 20px;
+            background: #dc143c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: #ff1744;
+            transform: translateY(-2px);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 900px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .story-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .story-title {
+            font-size: 2.5em;
+            color: #dc143c;
+            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+        }
+        
+        .story-subtitle {
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        /* 目次 */
+        .table-of-contents {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toc-title {
+            font-size: 1.5em;
+            color: #dc143c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .toc-list {
+            list-style: none;
+        }
+        
+        .toc-item {
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .toc-item:hover {
+            background: #f5f5f5;
+            border-left-color: #dc143c;
+            padding-left: 25px;
+        }
+        
+        .toc-item.active {
+            background: #fee;
+            border-left-color: #dc143c;
+            font-weight: bold;
+        }
+        
+        /* 物語セクション */
+        .story-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chapter-title {
+            font-size: 2em;
+            color: #dc143c;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chapter-icon {
+            font-size: 1.2em;
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #444;
+            text-align: justify;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+            text-indent: 1em;
+        }
+        
+        .divine-name {
+            color: #dc143c;
+            font-weight: bold;
+            background: linear-gradient(to bottom, transparent 60%, #ffe0e0 60%);
+            padding: 0 2px;
+        }
+        
+        .quote {
+            background: #f5f5f5;
+            border-left: 4px solid #dc143c;
+            padding: 20px 25px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #666;
+        }
+        
+        /* 神々の系譜図 */
+        .genealogy {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .genealogy-title {
+            font-size: 1.3em;
+            color: #dc143c;
+            margin-bottom: 20px;
+        }
+        
+        .god-box {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #dc143c;
+            border-radius: 25px;
+            margin: 5px;
+            font-weight: bold;
+            color: #dc143c;
+        }
+        
+        .connection {
+            color: #999;
+            margin: 10px 0;
+        }
+        
+        /* フッター */
+        .story-footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+        
+        .back-to-index {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #dc143c;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-index:hover {
+            background: #ff1744;
+            transform: translateY(-2px);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-section {
+                padding: 25px;
+            }
+            
+            .chapter-title {
+                font-size: 1.5em;
+            }
+            
+            .story-text {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="japanese-mythology-index.html" class="logo">⛩️ 古事記</a>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="scrollToTOC()">目次</button>
+                <button class="nav-button" onclick="location.href='japanese-mythology-index.html'">戻る</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリーヘッダー -->
+        <div class="story-header">
+            <h1 class="story-title">古事記</h1>
+            <p class="story-subtitle">天地開闢から神武天皇まで - 完全版</p>
+        </div>
+        
+        <!-- 目次 -->
+        <div class="table-of-contents" id="toc">
+            <h2 class="toc-title">目次</h2>
+            <ul class="toc-list">
+                <li class="toc-item active" onclick="scrollToChapter('creation')">一、天地開闢</li>
+                <li class="toc-item" onclick="scrollToChapter('izanagi-izanami')">二、イザナギとイザナミ</li>
+                <li class="toc-item" onclick="scrollToChapter('birth-of-gods')">三、神々の誕生</li>
+                <li class="toc-item" onclick="scrollToChapter('yomi')">四、黄泉の国</li>
+                <li class="toc-item" onclick="scrollToChapter('three-gods')">五、三貴子の誕生</li>
+                <li class="toc-item" onclick="scrollToChapter('cave-hiding')">六、天照大神の岩戸隠れ</li>
+                <li class="toc-item" onclick="scrollToChapter('yamata-orochi')">七、スサノオの八岐大蛇退治</li>
+                <li class="toc-item" onclick="scrollToChapter('okuninushi')">八、大国主の国作り</li>
+                <li class="toc-item" onclick="scrollToChapter('transfer-land')">九、国譲り</li>
+                <li class="toc-item" onclick="scrollToChapter('ninigi-descent')">十、天孫降臨</li>
+                <li class="toc-item" onclick="scrollToChapter('umiyama')">十一、海幸彦と山幸彦</li>
+                <li class="toc-item" onclick="scrollToChapter('jinmu')">十二、神武天皇の東征</li>
+            </ul>
+            <h3 class="toc-title" style="margin-top: 30px; font-size: 1.2em;">参考資料</h3>
+            <ul class="toc-list">
+                <li class="toc-item" onclick="scrollToChapter('treasures')">神器 - 三種の神器</li>
+                <li class="toc-item" onclick="scrollToChapter('deities')">重要な神々</li>
+                <li class="toc-item" onclick="scrollToChapter('places')">聖地</li>
+                <li class="toc-item" onclick="scrollToChapter('genealogy-chart')">皇統譜</li>
+            </ul>
+        </div>
+        
+        <!-- 第一章：天地開闢 -->
+        <section class="story-section" id="creation">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🌅</span>
+                第一章　天地開闢
+            </h2>
+            <div class="story-text">
+                <p>
+                    天地（あめつち）のはじめ、高天原（たかまのはら）に成りませる神の名は、
+                    <span class="divine-name">天之御中主神（アメノミナカヌシノカミ）</span>。
+                    次に<span class="divine-name">高御産巣日神（タカミムスヒノカミ）</span>、
+                    次に<span class="divine-name">神産巣日神（カミムスヒノカミ）</span>。
+                    この三柱の神は、みな独神（ひとりがみ）と成りまして、身を隠したまひき。
+                </p>
+                
+                <div class="quote">
+                    「混沌たる宇宙に、最初の意志が生まれ、それが神となった」
+                </div>
+                
+                <p>
+                    次に、国稚（くにわか）く浮ける脂（あぶら）の如くして、
+                    くらげなすただよへる時に、葦牙（あしかび）の如く萌え騰（あが）る物によりて成りませる神の名は、
+                    <span class="divine-name">宇摩志阿斯訶備比古遅神（ウマシアシカビヒコヂノカミ）</span>。
+                    次に<span class="divine-name">天之常立神（アメノトコタチノカミ）</span>。
+                    この二柱の神もまた、独神と成りまして、身を隠したまひき。
+                </p>
+                
+                <div class="genealogy">
+                    <h3 class="genealogy-title">別天津神（ことあまつかみ）の系譜</h3>
+                    <div class="god-box">天之御中主神</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">高御産巣日神</div>
+                    <span class="god-box">神産巣日神</span>
+                    <div class="connection">↓</div>
+                    <div class="god-box">宇摩志阿斯訶備比古遅神</div>
+                    <span class="god-box">天之常立神</span>
+                </div>
+                
+                <p>
+                    かくして、天地が分かれ、最初の五柱の神々が現れたのである。
+                    これらの神々を<span class="divine-name">別天津神（ことあまつかみ）</span>と申す。
+                    彼らは姿を現すことなく、高天原の奥深くに隠れ住まわれた。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第二章：イザナギとイザナミ -->
+        <section class="story-section" id="izanagi-izanami">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">💑</span>
+                第二章　イザナギとイザナミ
+            </h2>
+            <div class="story-text">
+                <p>
+                    ここに天つ神、諸（もろもろ）の命（みこと）もちて、
+                    <span class="divine-name">伊邪那岐命（イザナギノミコト）</span>と
+                    <span class="divine-name">伊邪那美命（イザナミノミコト）</span>と二柱の神に詔（の）りたまひて、
+                    「この漂へる国を修理（つく）り固め成せ」と詔りたまひて、
+                    天の沼矛（あめのぬぼこ）を賜ひて、言依（ことよ）さしたまひき。
+                </p>
+                
+                <p>
+                    かれ、二柱の神、天の浮橋（あめのうきはし）に立たして、
+                    その沼矛を指し下ろして画（か）きたまへば、塩こをろこをろに画き鳴（な）して、
+                    引き上げたまふ時に、その矛の末（さき）より滴（したた）る塩、
+                    累（かさ）なり積もりて島と成りき。これ<span class="divine-name">淤能碁呂島（オノゴロジマ）</span>なり。
+                </p>
+                
+                <div class="quote">
+                    「二神は天の浮橋に立ち、混沌とした海を矛でかき混ぜ、最初の島を創った」
+                </div>
+                
+                <p>
+                    その島に天降（あまくだ）りまして、天の御柱（あめのみはしら）を見立て、
+                    八尋殿（やひろどの）を見立てたまひき。ここにその妹（いも）伊邪那美命に問ひたまはく、
+                    「汝（な）が身は如何（いか）に成れる」と問ひたまへば、
+                    答へたまはく、「吾（あ）が身は成り成りて、成り合はぬ処一処（ひとところ）あり」とまをしたまひき。
+                </p>
+                
+                <p>
+                    ここに伊邪那岐命詔りたまはく、「我が身は成り成りて、成り余れる処一処あり。
+                    かれ、この吾が身の成り余れる処を、汝が身の成り合はぬ処に刺し塞（ふさ）ぎて、
+                    国土（くに）を生み成さむと思ふはいかに」と詔りたまへば、
+                    伊邪那美命答へたまはく、「しか善けむ」とまをしたまひき。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第三章：神々の誕生 -->
+        <section class="story-section" id="birth-of-gods">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">👶</span>
+                第三章　神々の誕生
+            </h2>
+            <div class="story-text">
+                <p>
+                    イザナギとイザナミの二神は、多くの島々を生み、次に神々を生み始めた。
+                    最初に生まれたのは<span class="divine-name">大事忍男神（オオコトオシヲノカミ）</span>、
+                    次に<span class="divine-name">石土毘古神（イワツチビコノカミ）</span>、
+                    家宅の神である<span class="divine-name">大屋毘古神（オオヤビコノカミ）</span>などである。
+                </p>
+                
+                <p>
+                    風の神<span class="divine-name">志那都比古神（シナツヒコノカミ）</span>、
+                    木の神<span class="divine-name">久久能智神（ククノチノカミ）</span>、
+                    山の神<span class="divine-name">大山津見神（オオヤマツミノカミ）</span>、
+                    野の神<span class="divine-name">鹿屋野比売神（カヤノヒメノカミ）</span>と、
+                    次々に自然を司る神々が生まれた。
+                </p>
+                
+                <div class="genealogy">
+                    <h3 class="genealogy-title">自然神の系譜</h3>
+                    <div class="god-box">イザナギ・イザナミ</div>
+                    <div class="connection">↓</div>
+                    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                        <div class="god-box">大事忍男神</div>
+                        <div class="god-box">石土毘古神</div>
+                        <div class="god-box">大屋毘古神</div>
+                        <div class="god-box">志那都比古神</div>
+                    </div>
+                </div>
+                
+                <p>
+                    しかし、火の神<span class="divine-name">迦具土神（カグツチノカミ）</span>を生む時、
+                    イザナミは火傷を負い、病に伏してしまった。その苦しみの中でも、
+                    嘔吐物から<span class="divine-name">金山毘古神（カナヤマビコノカミ）</span>と
+                    <span class="divine-name">金山毘売神（カナヤマビメノカミ）</span>が生まれ、
+                    糞から<span class="divine-name">波邇夜須毘古神（ハニヤスビコノカミ）</span>と
+                    <span class="divine-name">波邇夜須毘売神（ハニヤスビメノカミ）</span>が生まれた。
+                </p>
+                
+                <div class="quote">
+                    「火の神を生むことで、創造の母は命を落とす運命にあった」
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第四章：黄泉の国 -->
+        <section class="story-section" id="yomi">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">💀</span>
+                第四章　黄泉の国
+            </h2>
+            <div class="story-text">
+                <p>
+                    イザナミの死を嘆き悲しんだイザナギは、愛する妻を取り戻すため、
+                    <span class="divine-name">黄泉の国（よみのくに）</span>へと向かった。
+                    暗く陰鬱な道を進み、ついに黄泉の国の御殿にたどり着いた。
+                </p>
+                
+                <p>
+                    「愛しき我が汝妹（なにも）の命、吾と汝と作れる国、いまだ作り竟（お）へずあれば、還りまさね」
+                    とイザナギが呼びかけると、御殿の中からイザナミの声が聞こえてきた。
+                    「悔しきかも、速く来まさず。吾は黄泉戸喫（よもつへぐひ）してしまひぬ。
+                    されど愛しき我が汝兄（なせ）の命、入り来ませること恐（かしこ）し。
+                    かれ、還らむと欲（おも）ふ。しばらく黄泉神（よもつかみ）と相論（あげつら）はむ。我をな視たまひそ」
+                </p>
+                
+                <p>
+                    しかし、待ちきれなくなったイザナギは、髪に挿していた櫛の歯を折り、
+                    火を灯して御殿の中を覗いてしまった。そこで見たものは、
+                    蛆がたかり、雷神が宿る変わり果てたイザナミの姿だった。
+                </p>
+                
+                <div class="quote">
+                    「死者の国の掟を破った時、永遠の別離が定められた」
+                </div>
+                
+                <p>
+                    恐れをなしたイザナギは逃げ出したが、辱められたと怒ったイザナミは、
+                    <span class="divine-name">黄泉醜女（よもつしこめ）</span>を遣わして追いかけさせた。
+                    イザナギは髪飾りを投げて葡萄に変え、櫛を投げて筍に変えて追手を防ぎながら逃げた。
+                    最後には黄泉比良坂（よもつひらさか）の坂本まで逃げ、
+                    そこにあった桃の実を三つ取って投げつけ、ようやく追手を退けることができた。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第五章：三貴子の誕生 -->
+        <section class="story-section" id="three-gods">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">☀️</span>
+                第五章　三貴子の誕生
+            </h2>
+            <div class="story-text">
+                <p>
+                    黄泉の国から戻ったイザナギは、穢（けが）れを清めるため、
+                    日向の橘の小門（をど）の阿波岐原（あはきはら）で禊（みそぎ）を行った。
+                    衣服を脱ぎ捨て、水に入って身を清めると、多くの神々が生まれた。
+                </p>
+                
+                <p>
+                    左の目を洗った時に成りませる神は、
+                    <span class="divine-name">天照大御神（アマテラスオオミカミ）</span>。
+                    右の目を洗った時に成りませる神は、
+                    <span class="divine-name">月読命（ツクヨミノミコト）</span>。
+                    鼻を洗った時に成りませる神は、
+                    <span class="divine-name">建速須佐之男命（タケハヤスサノヲノミコト）</span>。
+                </p>
+                
+                <div class="genealogy">
+                    <h3 class="genealogy-title">三貴子の誕生</h3>
+                    <div class="god-box">イザナギの禊</div>
+                    <div class="connection">↓</div>
+                    <div style="display: flex; justify-content: center; gap: 20px;">
+                        <div>
+                            <div class="god-box">天照大御神</div>
+                            <div style="font-size: 0.8em; color: #666;">左目から誕生<br>太陽神</div>
+                        </div>
+                        <div>
+                            <div class="god-box">月読命</div>
+                            <div style="font-size: 0.8em; color: #666;">右目から誕生<br>月神</div>
+                        </div>
+                        <div>
+                            <div class="god-box">須佐之男命</div>
+                            <div style="font-size: 0.8em; color: #666;">鼻から誕生<br>海原の神</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>
+                    イザナギは大いに喜び、首にかけていた玉の緒を解いて、
+                    アマテラスに賜りて言った。「汝が命は、高天原を知らせ」と。
+                    次にツクヨミに「汝が命は、夜の食国（をすくに）を知らせ」と命じ、
+                    スサノヲには「汝が命は、海原を知らせ」と命じた。
+                </p>
+                
+                <div class="quote">
+                    「かくして、天と地と海を治める三柱の尊い神々が誕生し、世界の秩序が定められた」
+                </div>
+                
+                <p>
+                    こうして、日本神話における最も重要な三柱の神々が誕生した。
+                    アマテラスは高天原で輝き、ツクヨミは夜を治め、
+                    スサノヲは海原を治めることとなった。
+                    しかし、この後、神々の間には様々な物語が展開されていくのである。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第六章：天照大神の岩戸隠れ -->
+        <section class="story-section" id="cave-hiding">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🌑</span>
+                第六章　天照大神の岩戸隠れ
+            </h2>
+            <div class="story-text">
+                <p>
+                    スサノヲは海原を治めるよう命じられたが、母イザナミを慕い、泣き叫ぶばかりで国を治めなかった。
+                    怒ったイザナギに追放されたスサノヲは、姉のアマテラスに別れを告げるため高天原へ昇った。
+                </p>
+                
+                <p>
+                    しかし、スサノヲの昇って来る様があまりに激しかったため、
+                    アマテラスは弟が高天原を奪いに来たと思い、武装して待ち構えた。
+                    スサノヲは邪心のないことを証明するため、<span class="divine-name">誓約（うけひ）</span>を提案した。
+                </p>
+                
+                <div class="quote">
+                    「清き心を持つ者からは女神が生まれ、邪心ある者からは男神が生まれる」
+                </div>
+                
+                <p>
+                    誓約の結果、スサノヲの剣からは<span class="divine-name">宗像三女神</span>が生まれ、
+                    アマテラスの玉からは五柱の男神が生まれた。これによりスサノヲの潔白が証明されたが、
+                    調子に乗ったスサノヲは高天原で乱暴を働いた。田の畔を壊し、溝を埋め、
+                    神殿に糞を撒き散らし、ついには機織りの神殿に皮を剥いだ馬を投げ込んだ。
+                </p>
+                
+                <p>
+                    この暴挙に恐れをなした機織女が死んでしまい、怒り悲しんだアマテラスは
+                    <span class="divine-name">天の岩戸（あまのいわと）</span>に閉じこもってしまった。
+                    太陽神が隠れたため、高天原も葦原中国も真っ暗になり、様々な禍が起こった。
+                </p>
+                
+                <p>
+                    困った八百万の神々は<span class="divine-name">天の安河原（あまのやすかわら）</span>に集まり、
+                    <span class="divine-name">思金神（オモヒカネノカミ）</span>の知恵により、アマテラスを外に出す計画を立てた。
+                    <span class="divine-name">天宇受売命（アメノウズメノミコト）</span>が桶を伏せて踏み鳴らし、
+                    神憑りして乳房を露わにし、裳の紐を陰部まで押し下げて踊った。
+                </p>
+                
+                <p>
+                    八百万の神々が大笑いする声を聞いたアマテラスは、不思議に思って岩戸を少し開けた。
+                    「私が隠れて世界は暗闇のはずなのに、なぜ皆楽しそうなのか」と問うと、
+                    「あなた様より尊い神が現れたので喜んでいるのです」と答え、鏡を差し出した。
+                    鏡に映る自分の姿を見て、さらに外を覗こうとした時、
+                    <span class="divine-name">天手力男神（アメノタヂカラヲノカミ）</span>がその手を取って外に引き出した。
+                </p>
+                
+                <div class="quote">
+                    「こうして世界に再び光が戻り、スサノヲは高天原から追放された」
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第七章：スサノオの八岐大蛇退治 -->
+        <section class="story-section" id="yamata-orochi">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🐉</span>
+                第七章　スサノオの八岐大蛇退治
+            </h2>
+            <div class="story-text">
+                <p>
+                    高天原を追放されたスサノヲは、出雲国の肥河（ひのかわ）の上流、
+                    鳥髪（とりかみ）という地に降り立った。川の上流から箸が流れてきたのを見て、
+                    人が住んでいることを知り、川を遡っていった。
+                </p>
+                
+                <p>
+                    そこで老夫婦と美しい娘が泣いているのを見つけた。尋ねると、老人は
+                    <span class="divine-name">足名椎（アシナヅチ）</span>、妻は<span class="divine-name">手名椎（テナヅチ）</span>、
+                    娘は<span class="divine-name">櫛名田比売（クシナダヒメ）</span>という名で、
+                    もともと八人の娘がいたが、毎年<span class="divine-name">八岐大蛇（ヤマタノオロチ）</span>に
+                    食べられ、今年は末娘の番だと嘆いていた。
+                </p>
+                
+                <div class="quote">
+                    「その大蛇は、頭と尾が八つずつあり、目は赤かがちのようで、
+                    背には苔や木が生え、腹は血で爛れ、八つの谷と八つの峰にわたる」
+                </div>
+                
+                <p>
+                    スサノヲは娘を妻にもらうことを条件に、大蛇退治を引き受けた。
+                    まず、クシナダヒメを櫛に変えて髪に挿し、八つの門を作らせ、
+                    それぞれに酒を満たした槽を置かせた。
+                </p>
+                
+                <p>
+                    やがて大蛇が現れ、八つの頭をそれぞれの槽に入れて酒を飲み始めた。
+                    酔って眠った大蛇を、スサノヲは<span class="divine-name">十拳剣（とつかのつるぎ）</span>で
+                    切り刻んだ。肥河は血で真っ赤に染まった。
+                </p>
+                
+                <p>
+                    尾を切った時、剣の刃が欠けた。不思議に思って尾を裂いてみると、
+                    中から素晴らしい剣が出てきた。これが<span class="divine-name">草薙剣（くさなぎのつるぎ）</span>である。
+                    スサノヲはこの剣を、姉への詫びの印としてアマテラスに献上した。
+                </p>
+                
+                <div class="genealogy">
+                    <h3 class="genealogy-title">スサノヲの系譜</h3>
+                    <div class="god-box">スサノヲ</div>
+                    <span style="margin: 0 10px;">＋</span>
+                    <div class="god-box">クシナダヒメ</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">八島士奴美神</div>
+                    <div class="connection">（数代略）</div>
+                    <div class="god-box">大国主神</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第八章：大国主の国作り -->
+        <section class="story-section" id="okuninushi">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🏛️</span>
+                第八章　大国主の国作り
+            </h2>
+            <div class="story-text">
+                <p>
+                    <span class="divine-name">大国主神（オオクニヌシノカミ）</span>は、
+                    多くの兄弟神（八十神）の中で最も若い神であった。兄たちは因幡の
+                    <span class="divine-name">八上比売（ヤガミヒメ）</span>に求婚するため出かけ、
+                    大国主に荷物を持たせて従者のように扱った。
+                </p>
+                
+                <p>
+                    道中、皮を剥がれて苦しむ白兎に出会った。兄たちは意地悪な助言をしたが、
+                    大国主は正しい治療法を教えた。これが<span class="divine-name">因幡の白兎</span>である。
+                    感謝した兎は、八上比売は大国主を選ぶだろうと予言した。
+                </p>
+                
+                <div class="quote">
+                    「情け深き者こそ、真の国の主となる」
+                </div>
+                
+                <p>
+                    予言通り八上比売が大国主を選んだため、怒った兄たちは大国主を殺そうとした。
+                    焼けた岩を転がして殺したり、木の割れ目に挟んで殺したりしたが、
+                    母神の願いで蘇生した大国主は、スサノヲのいる根の国へ逃れた。
+                </p>
+                
+                <p>
+                    スサノヲは娘の<span class="divine-name">須勢理毘売（スセリビメ）</span>と
+                    恋に落ちた大国主に、蛇の室、蜈蚣と蜂の室で眠らせるなど試練を与えた。
+                    須勢理毘売の助けで試練を乗り越えた大国主は、最後にスサノヲが眠っている隙に、
+                    <span class="divine-name">生大刀（いくたち）</span>、<span class="divine-name">生弓矢（いくゆみや）</span>、
+                    <span class="divine-name">天の詔琴（あめののりごと）</span>を持って須勢理毘売と共に逃げ出した。
+                </p>
+                
+                <p>
+                    追いかけてきたスサノヲは、黄泉比良坂まで来ると大声で叫んだ。
+                    「その大刀と弓矢で兄弟神を追い払い、大国主神となり、須勢理毘売を正妻として、
+                    宇迦の山の麓に宮殿を建てて住め！」
+                </p>
+                
+                <p>
+                    こうして大国主は、<span class="divine-name">少名毘古那神（スクナビコナノカミ）</span>と共に
+                    国作りを始めた。農業、医療、温泉療法などを広め、葦原中国を豊かな国にした。
+                    しかし、少名毘古那神は国作りの途中で常世の国へ去ってしまった。
+                </p>
+                
+                <p>
+                    困った大国主の前に、海を照らして来る神が現れた。
+                    それは大国主自身の<span class="divine-name">幸魂（さきみたま）奇魂（くしみたま）</span>であり、
+                    大和の三輪山に祀るよう告げた。これが<span class="divine-name">大物主神（オオモノヌシノカミ）</span>である。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第九章：国譲り -->
+        <section class="story-section" id="transfer-land">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🤝</span>
+                第九章　国譲り
+            </h2>
+            <div class="story-text">
+                <p>
+                    大国主が葦原中国を立派に治めているのを見て、アマテラスは
+                    「葦原中国は我が子が治めるべき国である」と宣言した。
+                    そこで、何度も使者を送って国を譲るよう求めた。
+                </p>
+                
+                <p>
+                    最初に<span class="divine-name">天忍穂耳命（アメノオシホミミノミコト）</span>を
+                    遣わそうとしたが、葦原中国があまりに騒がしいので引き返した。
+                    次に<span class="divine-name">天菩比神（アメノホヒノカミ）</span>を遣わしたが、
+                    大国主に心服して三年経っても報告しなかった。
+                </p>
+                
+                <p>
+                    次に<span class="divine-name">天若日子（アメノワカヒコ）</span>を遣わしたが、
+                    大国主の娘<span class="divine-name">下照比売（シタテルヒメ）</span>と結婚し、
+                    自ら葦原中国の王になろうとして八年間報告しなかった。
+                </p>
+                
+                <div class="quote">
+                    「力だけでは真の統治は成し得ない。話し合いこそが大切である」
+                </div>
+                
+                <p>
+                    最後に、武神<span class="divine-name">建御雷神（タケミカヅチノカミ）</span>と
+                    <span class="divine-name">天鳥船神（アメノトリフネノカミ）</span>が遣わされた。
+                    出雲の伊那佐（いなさ）の浜に降り立ち、剣を逆さまに立てて
+                    その切っ先にあぐらをかいて座り、国譲りを迫った。
+                </p>
+                
+                <p>
+                    大国主は息子たちに相談すると答えた。息子の
+                    <span class="divine-name">事代主神（コトシロヌシノカミ）</span>は承諾したが、
+                    もう一人の息子<span class="divine-name">建御名方神（タケミナカタノカミ）</span>は
+                    力比べを挑んだ。しかし建御雷神に敗れ、諏訪湖まで逃げて降参した。
+                </p>
+                
+                <p>
+                    息子たちが従ったので、大国主も国譲りを承諾した。その条件として、
+                    天に届くような壮大な宮殿を建てることを求めた。これが<span class="divine-name">出雲大社</span>である。
+                    「私の子孫ではなく、天津神の子孫が表立って政治を行い、
+                    私は陰から守護しましょう」と言って、大国主は隠れた。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第十章：天孫降臨 -->
+        <section class="story-section" id="ninigi-descent">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">⬇️</span>
+                第十章　天孫降臨
+            </h2>
+            <div class="story-text">
+                <p>
+                    国譲りが成立したので、アマテラスは孫の
+                    <span class="divine-name">邇邇芸命（ニニギノミコト）</span>を
+                    葦原中国に降臨させることにした。アマテラスは三種の神器である
+                    <span class="divine-name">八咫鏡（やたのかがみ）</span>、
+                    <span class="divine-name">八尺瓊勾玉（やさかにのまがたま）</span>、
+                    <span class="divine-name">草薙剣（くさなぎのつるぎ）</span>を授けた。
+                </p>
+                
+                <div class="quote">
+                    「この鏡を私の魂として、私を拝むように祀りなさい」
+                </div>
+                
+                <p>
+                    ニニギは多くの神々を従えて、天の八重雲を押し分けて降臨した。
+                    天の浮橋から浮島に立ち、筑紫の日向の高千穂の霊峰に天降った。
+                    そこで<span class="divine-name">猿田毘古神（サルタビコノカミ）</span>が道案内をした。
+                </p>
+                
+                <p>
+                    ある日、ニニギは海辺で美しい女性に出会った。
+                    <span class="divine-name">大山津見神（オオヤマツミノカミ）</span>の娘で、
+                    姉の<span class="divine-name">石長比売（イワナガヒメ）</span>と
+                    妹の<span class="divine-name">木花之佐久夜毘売（コノハナノサクヤビメ）</span>であった。
+                </p>
+                
+                <p>
+                    ニニギは美しい妹を妻にしたいと申し出た。父の大山津見神は喜んで、
+                    姉妹二人とも差し出したが、ニニギは醜い姉を送り返し、美しい妹だけを妻にした。
+                </p>
+                
+                <p>
+                    大山津見神は言った。「石長比売を妻にすれば、天孫の命は岩のように永遠であったでしょう。
+                    木花之佐久夜毘売を妻にすれば、木の花のように栄えるでしょう。
+                    しかし石長比売を送り返したので、天孫の寿命は木の花のように短くなるでしょう」
+                </p>
+                
+                <p>
+                    これにより、天皇の寿命も限りあるものとなった。木花之佐久夜毘売は一夜で身籠り、
+                    ニニギに疑われたため、産屋に火を放ち、その中で
+                    <span class="divine-name">火照命（ホデリノミコト）</span>（海幸彦）、
+                    <span class="divine-name">火須勢理命（ホスセリノミコト）</span>、
+                    <span class="divine-name">火遠理命（ホオリノミコト）</span>（山幸彦）を産んだ。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第十一章：海幸彦と山幸彦 -->
+        <section class="story-section" id="umiyama">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🎣</span>
+                第十一章　海幸彦と山幸彦
+            </h2>
+            <div class="story-text">
+                <p>
+                    火照命（海幸彦）は海で魚を取り、火遠理命（山幸彦）は山で獣を狩って暮らしていた。
+                    ある日、山幸彦は兄に頼んで釣り針と弓矢を交換してもらったが、
+                    釣りに不慣れな山幸彦は、兄の大切な釣り針を失くしてしまった。
+                </p>
+                
+                <p>
+                    山幸彦は自分の剣を溶かして500本の釣り針を作って償おうとしたが、
+                    海幸彦は元の釣り針でなければ駄目だと言って許さなかった。
+                    困った山幸彦が海辺で泣いていると、<span class="divine-name">塩椎神（シオツチノカミ）</span>が現れ、
+                    海神の宮殿へ行くよう助言した。
+                </p>
+                
+                <div class="quote">
+                    「失ったものを取り戻す旅は、新たな出会いをもたらす」
+                </div>
+                
+                <p>
+                    海神<span class="divine-name">綿津見神（ワタツミノカミ）</span>の宮殿に着いた山幸彦は、
+                    海神の娘<span class="divine-name">豊玉毘売（トヨタマビメ）</span>と出会い、恋に落ちた。
+                    海神は山幸彦を歓迎し、豊玉毘売と結婚させた。
+                </p>
+                
+                <p>
+                    三年後、山幸彦は兄のことを思い出してため息をついた。
+                    事情を聞いた海神は、海の魚を集めて釣り針を探させた。
+                    鯛の喉に引っかかっていた釣り針が見つかり、海神は山幸彦に
+                    <span class="divine-name">塩盈珠（しおみちのたま）</span>と
+                    <span class="divine-name">塩乾珠（しおひのたま）</span>を授けた。
+                </p>
+                
+                <p>
+                    陸に戻った山幸彦は、釣り針を返したが、海幸彦はまだ責めた。
+                    そこで山幸彦が塩盈珠を使うと潮が満ちて海幸彦を溺れさせ、
+                    助けを求められると塩乾珠を使って潮を引かせた。
+                    これを繰り返して懲らしめ、ついに海幸彦は山幸彦に仕えることを誓った。
+                </p>
+                
+                <p>
+                    豊玉毘売は身籠っていたので、陸に上がってきて産屋を建てた。
+                    「お産の時は本来の姿に戻るので、決して覗かないでください」と言ったが、
+                    山幸彦は覗いてしまい、八尋の鰐になって子を産む姿を見てしまった。
+                    恥じた豊玉毘売は生まれた子<span class="divine-name">鵜葺草葺不合命（ウガヤフキアエズノミコト）</span>を残して海に帰った。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 第十二章：神武天皇の東征 -->
+        <section class="story-section" id="jinmu">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">⚔️</span>
+                第十二章　神武天皇の東征
+            </h2>
+            <div class="story-text">
+                <p>
+                    鵜葺草葺不合命は、育ての親となった豊玉毘売の妹
+                    <span class="divine-name">玉依毘売（タマヨリビメ）</span>と結婚し、
+                    四人の子をもうけた。その末子が<span class="divine-name">神倭伊波礼毘古命（カムヤマトイワレビコノミコト）</span>、
+                    後の<span class="divine-name">神武天皇</span>である。
+                </p>
+                
+                <p>
+                    神武天皇は日向で兄たちと相談し、「東に美しい土地があると聞く。
+                    そこへ行って都を造ろう」と決意した。こうして東征が始まった。
+                    多くの困難を乗り越えながら、瀬戸内海を東へ進んだ。
+                </p>
+                
+                <div class="quote">
+                    「太陽の子孫たる我らは、太陽に向かって戦ってはならない」
+                </div>
+                
+                <p>
+                    難波に上陸し、生駒山を越えて大和に入ろうとしたが、
+                    土地の豪族<span class="divine-name">長髄彦（ナガスネヒコ）</span>の激しい抵抗に遭った。
+                    兄の<span class="divine-name">五瀬命（イツセノミコト）</span>は矢に当たって負傷し、
+                    「我々は日の神の子孫なのに、太陽に向かって戦ったから負けたのだ」と悟った。
+                </p>
+                
+                <p>
+                    そこで紀伊半島を迂回して、熊野から大和に入ることにした。
+                    熊野では大熊が現れて毒気を吐き、一行は気を失ったが、
+                    <span class="divine-name">高倉下（タカクラジ）</span>が持ってきた霊剣で目覚めた。
+                    これは高天原から下された<span class="divine-name">布都御魂（ふつのみたま）</span>という剣であった。
+                </p>
+                
+                <p>
+                    山中で道に迷った時は、アマテラスの遣いである
+                    <span class="divine-name">八咫烏（やたがらす）</span>が現れて道案内をした。
+                    また、<span class="divine-name">布都御魂剣</span>の霊力により、
+                    行く手を阻む敵を次々と平定していった。
+                </p>
+                
+                <p>
+                    ついに再び長髄彦と対峙した時、金色の鵄（とび）が神武天皇の弓の先に止まり、
+                    稲妻のような光を放って敵の目を眩ませた。さらに、長髄彦が仕えていた
+                    <span class="divine-name">饒速日命（ニギハヤヒノミコト）</span>が、
+                    神武天皇も同じ天孫であることを認めて長髄彦を殺し、神武天皇に従った。
+                </p>
+                
+                <p>
+                    こうして大和平定を成し遂げた神武天皇は、畝傍山の東南の橿原の地に都を定め、
+                    初代天皇として即位した。これが<span class="divine-name">橿原宮</span>であり、
+                    人皇の始まりである。
+                </p>
+                
+                <div class="genealogy">
+                    <h3 class="genealogy-title">天皇家の系譜</h3>
+                    <div class="god-box">天照大神</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">天忍穂耳命</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">邇邇芸命</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">火遠理命（山幸彦）</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">鵜葺草葺不合命</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">神武天皇</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 参考資料：三種の神器 -->
+        <section class="story-section" id="treasures">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">👑</span>
+                神器　三種の神器
+            </h2>
+            <div class="story-text">
+                <p>
+                    <span class="divine-name">三種の神器（さんしゅのじんぎ）</span>は、
+                    日本の天皇が皇位の印として代々受け継いできた三つの宝物である。
+                    それぞれに神話的な由来があり、日本の皇室の正統性を象徴している。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">八咫鏡（やたのかがみ）</h3>
+                <p>
+                    天照大神が天の岩戸に隠れた際、神々が作った鏡。
+                    アマテラスはこの鏡に自身の魂を込め、「この鏡を私だと思って祀りなさい」と命じた。
+                    現在は伊勢神宮の内宮に神体として祀られており、
+                    皇居には形代（レプリカ）が安置されている。
+                    <strong>知恵</strong>を象徴する。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">八尺瓊勾玉（やさかにのまがたま）</h3>
+                <p>
+                    玉造部の祖神<span class="divine-name">玉屋命（タマノヤノミコト）</span>が作った勾玉。
+                    天の岩戸の前で榊の枝に掛けられた。多くの勾玉を緒で貫いて首飾りとしたもので、
+                    現在は皇居に安置されている。
+                    <strong>仁愛</strong>を象徴する。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">草薙剣（くさなぎのつるぎ）</h3>
+                <p>
+                    スサノオが八岐大蛇を退治した際、その尾から出てきた剣。
+                    天叢雲剣（あめのむらくものつるぎ）とも呼ばれる。
+                    後に日本武尊が東征の際に使用し、草を薙ぎ払って火攻めから逃れたことから草薙剣と呼ばれるようになった。
+                    現在は熱田神宮に祀られており、皇居には形代が安置されている。
+                    <strong>勇気</strong>を象徴する。
+                </p>
+                
+                <div class="quote">
+                    「三種の神器は、理想的な統治者が持つべき三つの徳を表している」
+                </div>
+                
+                <p>
+                    これらの神器は、天孫降臨の際にアマテラスからニニギノミコトに授けられ、
+                    以来、皇位継承の証として受け継がれてきた。実物を見ることができるのは
+                    天皇と限られた神職のみとされ、その神秘性が保たれている。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 参考資料：重要な神々 -->
+        <section class="story-section" id="deities">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">⛩️</span>
+                重要な神々
+            </h2>
+            <div class="story-text">
+                <h3 style="color: #dc143c; margin-bottom: 20px;">天照大御神（アマテラスオオミカミ）</h3>
+                <p>
+                    太陽神であり、日本神話の最高神。イザナギの左目から生まれた。
+                    高天原を統治し、皇室の祖神とされる。伊勢神宮内宮に祀られている。
+                    弟スサノオの乱暴に怒って天の岩戸に隠れ、世界を暗闇にした逸話が有名。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">須佐之男命（スサノオノミコト）</h3>
+                <p>
+                    海原の神。イザナギの鼻から生まれた。
+                    粗暴な性格で高天原を追放されたが、出雲で八岐大蛇を退治し英雄となった。
+                    大国主の祖先でもある。出雲系の神々の祖。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">月読命（ツクヨミノミコト）</h3>
+                <p>
+                    月の神。イザナギの右目から生まれた。
+                    夜の世界を統治するが、『古事記』では詳しい活躍は記されていない。
+                    『日本書紀』では保食神を殺して、アマテラスと不和になったとされる。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">大国主神（オオクニヌシノカミ）</h3>
+                <p>
+                    出雲大社の祭神。スサノオの子孫で、葦原中国の統治者だった。
+                    因幡の白兎を助けた心優しい神で、少名毘古那と共に国作りを行った。
+                    天孫に国を譲り、目に見えない世界の統治者となった。
+                    縁結びの神として信仰される。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">伊邪那岐命・伊邪那美命（イザナギ・イザナミ）</h3>
+                <p>
+                    日本の国土と多くの神々を生んだ創造神。
+                    天の沼矛で海をかき回して最初の島を作り、結婚して多くの神々を産んだ。
+                    イザナミは火の神を産んで死に、イザナギは黄泉の国まで追いかけたが、
+                    死者の姿を見て逃げ帰った。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">邇邇芸命（ニニギノミコト）</h3>
+                <p>
+                    アマテラスの孫で、天孫降臨の主人公。
+                    三種の神器を携えて高千穂に降臨し、木花之佐久夜毘売と結婚した。
+                    その子孫が神武天皇となり、皇室の系譜が始まった。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">建御雷神（タケミカヅチノカミ）</h3>
+                <p>
+                    雷神・武神。イザナギがカグツチを斬った際、剣に付いた血から生まれた。
+                    国譲りの交渉で大国主のもとに遣わされ、建御名方神と力比べをして勝利した。
+                    鹿島神宮の祭神。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">天宇受売命（アメノウズメノミコト）</h3>
+                <p>
+                    芸能の女神。天の岩戸の前で踊り、神々を笑わせてアマテラスを外に出すきっかけを作った。
+                    天孫降臨の際には猿田毘古神と出会い、後に結婚した。
+                    芸能・芸術の祖神として信仰される。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 参考資料：聖地 -->
+        <section class="story-section" id="places">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🗾</span>
+                聖地
+            </h2>
+            <div class="story-text">
+                <h3 style="color: #dc143c; margin-bottom: 20px;">高天原（たかまのはら）</h3>
+                <p>
+                    天津神が住む天上の世界。アマテラスが統治する神々の国。
+                    天の安河原で神々が会議を開き、天の岩戸もここにある。
+                    現実の場所ではなく、観念上の神聖な空間とされる。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">葦原中国（あしはらのなかつくに）</h3>
+                <p>
+                    人間が住む地上世界。元は大国主が統治していたが、
+                    国譲りによって天孫の統治下に入った。
+                    「豊葦原瑞穂国（とよあしはらのみずほのくに）」とも呼ばれる、
+                    豊かな稲作の国。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">黄泉の国（よみのくに）</h3>
+                <p>
+                    死者の世界。イザナミが死後に住むようになった地下の国。
+                    黄泉比良坂（よもつひらさか）で現世と繋がっている。
+                    穢れと死の世界で、生者は訪れてはならない場所。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">出雲大社（いずもたいしゃ）</h3>
+                <p>
+                    島根県出雲市にある大国主を祀る神社。
+                    国譲りの際、大国主の宮殿として建てられたとされる。
+                    旧暦10月を「神無月」と呼ぶが、出雲では全国の神々が集まるため「神在月」と呼ぶ。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">伊勢神宮（いせじんぐう）</h3>
+                <p>
+                    三重県伊勢市にあるアマテラスを祀る神社。
+                    内宮（皇大神宮）にアマテラス、外宮（豊受大神宮）に豊受大神を祀る。
+                    20年ごとに社殿を建て替える式年遷宮が行われる。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">高千穂（たかちほ）</h3>
+                <p>
+                    宮崎県にある天孫降臨の地とされる山。
+                    ニニギノミコトが降り立った聖地。
+                    天の岩戸や天安河原など、神話の舞台とされる場所が多く存在する。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">橿原（かしはら）</h3>
+                <p>
+                    奈良県橿原市。神武天皇が初代天皇として即位した地。
+                    橿原神宮は神武天皇と皇后を祀る。
+                    日本建国の地として重要な聖地。
+                </p>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">淤能碁呂島（おのごろじま）</h3>
+                <p>
+                    イザナギとイザナミが天の沼矛で海をかき回して作った最初の島。
+                    現在の淡路島の沼島や、友ヶ島などが候補地とされるが、
+                    正確な場所は不明。国生み神話の出発点。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 参考資料：皇統譜 -->
+        <section class="story-section" id="genealogy-chart">
+            <h2 class="chapter-title">
+                <span class="chapter-icon">🌳</span>
+                皇統譜
+            </h2>
+            <div class="story-text">
+                <p>
+                    日本の皇室は、天照大神から始まる万世一系の血統とされている。
+                    ここでは神代から人代への系譜を示す。
+                </p>
+                
+                <div class="genealogy" style="margin: 30px 0;">
+                    <h3 class="genealogy-title">神代の系譜</h3>
+                    <div class="god-box">天照大御神</div>
+                    <div class="connection">↓</div>
+                    <div class="god-box">天忍穂耳命</div>
+                    <span style="font-size: 0.9em; color: #666;">（アマテラスの子）</span>
+                    <div class="connection">↓</div>
+                    <div class="god-box">邇邇芸命</div>
+                    <span style="font-size: 0.9em; color: #666;">（天孫降臨）</span>
+                    <div class="connection">↓</div>
+                    <div class="god-box">火遠理命（山幸彦）</div>
+                    <span style="font-size: 0.9em; color: #666;">（海神の宮へ）</span>
+                    <div class="connection">↓</div>
+                    <div class="god-box">鵜葺草葺不合命</div>
+                    <span style="font-size: 0.9em; color: #666;">（豊玉毘売の子）</span>
+                    <div class="connection">↓</div>
+                    <div class="god-box" style="background: #dc143c; color: white;">神武天皇</div>
+                    <span style="font-size: 0.9em; color: #666;">（初代天皇）</span>
+                </div>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">初代から第十代まで</h3>
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 10px;">
+                    <p><strong>第1代　神武天皇</strong>（じんむてんのう）- 神倭伊波礼毘古命</p>
+                    <p><strong>第2代　綏靖天皇</strong>（すいぜいてんのう）- 神沼河耳命</p>
+                    <p><strong>第3代　安寧天皇</strong>（あんねいてんのう）- 師木津日子玉手見命</p>
+                    <p><strong>第4代　懿徳天皇</strong>（いとくてんのう）- 大日本彦耜友命</p>
+                    <p><strong>第5代　孝昭天皇</strong>（こうしょうてんのう）- 観松彦香殖稲命</p>
+                    <p><strong>第6代　孝安天皇</strong>（こうあんてんのう）- 日本足彦国押人命</p>
+                    <p><strong>第7代　孝霊天皇</strong>（こうれいてんのう）- 大日本根子彦太瓊命</p>
+                    <p><strong>第8代　孝元天皇</strong>（こうげんてんのう）- 大日本根子彦国牽命</p>
+                    <p><strong>第9代　開化天皇</strong>（かいかてんのう）- 稚日本根子彦大日日命</p>
+                    <p><strong>第10代　崇神天皇</strong>（すじんてんのう）- 御間城入彦五十瓊殖命</p>
+                </div>
+                
+                <div class="quote" style="margin-top: 30px;">
+                    「神代から人代へ、天津神の血統は絶えることなく続いている」
+                </div>
+                
+                <h3 style="color: #dc143c; margin: 30px 0 20px;">皇統の特徴</h3>
+                <p>
+                    <strong>万世一系</strong>：神武天皇から現在まで、男系で皇位が継承されてきたとされる。<br>
+                    <strong>三種の神器</strong>：皇位の正統性を示す神器が代々受け継がれる。<br>
+                    <strong>天照大神の子孫</strong>：太陽神の直系として、神聖な血統とされる。<br>
+                    <strong>現人神</strong>：かつては天皇は生きている神とされていた。
+                </p>
+                
+                <p style="margin-top: 30px;">
+                    『古事記』では第33代推古天皇までの系譜が記されており、
+                    それ以降も皇統は連綿と続き、現在に至っている。
+                    この世界最古の王朝は、日本の歴史と文化の中核を成している。
+                </p>
+            </div>
+        </section>
+        
+        <!-- フッター -->
+        <footer class="story-footer">
+            <a href="japanese-mythology-index.html" class="back-to-index">日本神話大全へ戻る</a>
+            <p style="margin-top: 20px; font-size: 0.9em;">
+                古事記 - 天地開闢から神武天皇まで - 完全版
+            </p>
+        </footer>
+    </main>
+    
+    <script>
+        // 目次へスクロール
+        function scrollToTOC() {
+            document.getElementById('toc').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+            });
+        }
+        
+        // チャプターへスクロール
+        function scrollToChapter(chapterId) {
+            // すべてのtoc-itemからactiveクラスを削除
+            document.querySelectorAll('.toc-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // クリックされたアイテムにactiveクラスを追加
+            event.target.classList.add('active');
+            
+            // チャプターへスクロール
+            const chapter = document.getElementById(chapterId);
+            const offset = 100; // ヘッダーの高さ分のオフセット
+            const elementPosition = chapter.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+            
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+        
+        // スクロールに応じて目次のアクティブ項目を更新
+        window.addEventListener('scroll', () => {
+            const chapters = ['creation', 'izanagi-izanami', 'birth-of-gods', 'yomi', 'three-gods', 
+                            'cave-hiding', 'yamata-orochi', 'okuninushi', 'transfer-land', 
+                            'ninigi-descent', 'umiyama', 'jinmu', 'treasures', 'deities', 
+                            'places', 'genealogy-chart'];
+            const tocItems = document.querySelectorAll('.toc-item');
+            
+            let currentChapter = '';
+            
+            chapters.forEach(chapterId => {
+                const chapter = document.getElementById(chapterId);
+                const rect = chapter.getBoundingClientRect();
+                
+                if (rect.top <= 150 && rect.bottom >= 150) {
+                    currentChapter = chapterId;
+                }
+            });
+            
+            if (currentChapter) {
+                tocItems.forEach((item, index) => {
+                    if (chapters[index] === currentChapter) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

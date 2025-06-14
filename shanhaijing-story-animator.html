@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山海経 - 火柴人动画故事</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        #app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 侧边栏 */
+        #sidebar {
+            width: 300px;
+            background: #2a2a2a;
+            border-right: 1px solid #444;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        #sidebar h2 {
+            color: #f0f0f0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .volume-section {
+            margin-bottom: 20px;
+        }
+
+        .volume-title {
+            background: #3a3a3a;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background 0.3s;
+        }
+
+        .volume-title:hover {
+            background: #4a4a4a;
+        }
+
+        .chapter-list {
+            display: none;
+            padding-left: 10px;
+        }
+
+        .chapter-list.active {
+            display: block;
+        }
+
+        .chapter-item {
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            transition: background 0.3s;
+        }
+
+        .chapter-item:hover {
+            background: #3a3a3a;
+        }
+
+        .chapter-item.active {
+            background: #4a7c7e;
+            color: #fff;
+        }
+
+        /* 主内容区 */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 动画舞台 */
+        #stage {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(to bottom, #2a3f5f 0%, #1a2a3a 50%, #0a1a2a 100%);
+            overflow: hidden;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 叙述文本区 */
+        #narrator {
+            height: 150px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-top: 2px solid #444;
+            overflow-y: auto;
+        }
+
+        #narrator-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #f0f0f0;
+        }
+
+        /* 控制面板 */
+        #controls {
+            position: absolute;
+            bottom: 170px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: #4a7c7e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #5a8c8e;
+        }
+
+        .control-btn:disabled {
+            background: #3a3a3a;
+            cursor: not-allowed;
+        }
+
+        #speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #speed-slider {
+            width: 100px;
+        }
+
+        /* 场景标题 */
+        #scene-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 1.3em;
+            color: #f0f0f0;
+        }
+
+        /* 加载提示 */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            color: #4a7c7e;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="sidebar">
+            <h2>山海经</h2>
+            <div id="volume-list"></div>
+        </div>
+        <div id="main-content">
+            <div id="stage">
+                <canvas id="canvas"></canvas>
+                <div id="scene-title"></div>
+                <div id="loading">加载中...</div>
+            </div>
+            <div id="narrator">
+                <div id="narrator-text"></div>
+            </div>
+            <div id="controls">
+                <button id="play-btn" class="control-btn">播放</button>
+                <button id="pause-btn" class="control-btn" style="display:none;">暂停</button>
+                <button id="prev-scene" class="control-btn">上一幕</button>
+                <button id="next-scene" class="control-btn">下一幕</button>
+                <div id="speed-control">
+                    <label>速度:</label>
+                    <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1">
+                    <span id="speed-value">1x</span>
+                </div>
+                <label>
+                    <input type="checkbox" id="auto-play"> 自动播放
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script src="shanhaijing-complete-text.js"></script>
+    <script>
+        // 动画系统
+        class StickFigureAnimator {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.width = canvas.width;
+                this.height = canvas.height;
+                this.figures = [];
+                this.environment = {
+                    mountains: [],
+                    rivers: [],
+                    trees: [],
+                    effects: []
+                };
+                this.animationFrame = 0;
+                this.animating = false;
+                this.speed = 1;
+            }
+
+            // 调整画布大小
+            resize() {
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = this.canvas.offsetHeight;
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+            }
+
+            // 清除画布
+            clear() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+            }
+
+            // 绘制火柴人
+            drawStickHuman(x, y, size = 40, pose = 'standing', features = {}) {
+                const ctx = this.ctx;
+                ctx.save();
+                ctx.strokeStyle = features.color || '#fff';
+                ctx.lineWidth = 3;
+
+                // 头
+                const headSize = size * 0.3;
+                ctx.beginPath();
+                ctx.arc(x, y - size, headSize, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 身体
+                ctx.beginPath();
+                ctx.moveTo(x, y - size + headSize);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+
+                // 根据姿势绘制四肢
+                if (pose === 'standing') {
+                    // 手臂
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x - size * 0.4, y - size * 0.3);
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x + size * 0.4, y - size * 0.3);
+                    ctx.stroke();
+
+                    // 腿
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x - size * 0.3, y + size * 0.6);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + size * 0.3, y + size * 0.6);
+                    ctx.stroke();
+                } else if (pose === 'walking') {
+                    const walkPhase = Math.sin(this.animationFrame * 0.1 * this.speed);
+                    const walkPhase2 = Math.cos(this.animationFrame * 0.1 * this.speed);
+                    
+                    // 手臂摆动
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x - size * 0.4 + walkPhase * size * 0.3, y - size * 0.3);
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x + size * 0.4 - walkPhase * size * 0.3, y - size * 0.3);
+                    ctx.stroke();
+
+                    // 腿部行走动画 - 更明显的步伐
+                    // 左腿
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    const leftKneeX = x - size * 0.15;
+                    const leftKneeY = y + size * 0.3;
+                    const leftFootX = x - size * 0.3 + walkPhase * size * 0.4;
+                    const leftFootY = y + size * 0.6;
+                    ctx.lineTo(leftKneeX, leftKneeY);
+                    ctx.lineTo(leftFootX, leftFootY);
+                    ctx.stroke();
+                    
+                    // 右腿
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    const rightKneeX = x + size * 0.15;
+                    const rightKneeY = y + size * 0.3;
+                    const rightFootX = x + size * 0.3 - walkPhase * size * 0.4;
+                    const rightFootY = y + size * 0.6;
+                    ctx.lineTo(rightKneeX, rightKneeY);
+                    ctx.lineTo(rightFootX, rightFootY);
+                    ctx.stroke();
+                } else if (pose === 'running') {
+                    const runPhase = Math.sin(this.animationFrame * 0.2 * this.speed);
+                    
+                    // 手臂大幅摆动
+                    ctx.beginPath();
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x - size * 0.5, y - size * 0.2 + runPhase * size * 0.2);
+                    ctx.moveTo(x, y - size * 0.6);
+                    ctx.lineTo(x + size * 0.5, y - size * 0.2 - runPhase * size * 0.2);
+                    ctx.stroke();
+
+                    // 腿部奔跑动画
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x - size * 0.4 + runPhase * size * 0.3, y + size * 0.5);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + size * 0.4 - runPhase * size * 0.3, y + size * 0.5);
+                    ctx.stroke();
+                }
+
+                // 绘制特征
+                if (features.ears === 'white') {
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(x - headSize * 0.8, y - size - headSize * 0.3, headSize * 0.3, 0, Math.PI * 2);
+                    ctx.arc(x + headSize * 0.8, y - size - headSize * 0.3, headSize * 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            // 绘制火柴鸟
+            drawStickBird(x, y, size = 30, flying = false, features = {}) {
+                const ctx = this.ctx;
+                ctx.save();
+                ctx.strokeStyle = features.color || '#fff';
+                ctx.lineWidth = 2;
+
+                // 身体
+                ctx.beginPath();
+                ctx.ellipse(x, y, size * 0.6, size * 0.4, 0, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 头
+                ctx.beginPath();
+                ctx.arc(x - size * 0.5, y - size * 0.3, size * 0.25, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 喙
+                ctx.beginPath();
+                ctx.moveTo(x - size * 0.7, y - size * 0.3);
+                ctx.lineTo(x - size * 0.9, y - size * 0.25);
+                ctx.stroke();
+
+                // 翅膀
+                if (flying) {
+                    const flapPhase = Math.sin(this.animationFrame * 0.2 * this.speed);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x - size * 0.8, y - size * 0.4 * flapPhase);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + size * 0.8, y - size * 0.4 * flapPhase);
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.moveTo(x - size * 0.2, y);
+                    ctx.lineTo(x - size * 0.5, y + size * 0.2);
+                    ctx.moveTo(x + size * 0.2, y);
+                    ctx.lineTo(x + size * 0.5, y + size * 0.2);
+                    ctx.stroke();
+                }
+
+                // 尾巴
+                if (features.tail === 'red') {
+                    ctx.strokeStyle = '#ff4444';
+                }
+                ctx.beginPath();
+                ctx.moveTo(x + size * 0.5, y);
+                ctx.lineTo(x + size * 0.9, y - size * 0.1);
+                ctx.lineTo(x + size * 0.8, y + size * 0.1);
+                ctx.stroke();
+
+                // 多尾巴（如九尾）
+                if (features.tails && features.tails > 1) {
+                    for (let i = 0; i < features.tails; i++) {
+                        const angle = (i / features.tails) * Math.PI * 0.5 - Math.PI * 0.25;
+                        ctx.beginPath();
+                        ctx.moveTo(x + size * 0.5, y);
+                        ctx.lineTo(
+                            x + size * 0.5 + Math.cos(angle) * size * 0.6,
+                            y + Math.sin(angle) * size * 0.6
+                        );
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            // 绘制火柴怪兽
+            drawStickMonster(x, y, size = 50, type = 'beast', features = {}) {
+                const ctx = this.ctx;
+                ctx.save();
+                ctx.strokeStyle = features.color || '#fff';
+                ctx.lineWidth = 3;
+
+                if (type === 'beast') {
+                    // 兽类身体
+                    ctx.beginPath();
+                    ctx.ellipse(x, y, size * 0.8, size * 0.5, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // 头
+                    if (features.heads && features.heads > 1) {
+                        // 多头
+                        for (let i = 0; i < features.heads; i++) {
+                            const offsetX = (i - (features.heads - 1) / 2) * size * 0.4;
+                            ctx.beginPath();
+                            ctx.arc(x + offsetX - size * 0.8, y - size * 0.3, size * 0.3, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(x - size * 0.8, y - size * 0.3, size * 0.3, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    // 四肢
+                    const legCount = features.legs || 4;
+                    for (let i = 0; i < legCount; i++) {
+                        const legX = x - size * 0.6 + (i / (legCount - 1)) * size * 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(legX, y + size * 0.3);
+                        ctx.lineTo(legX, y + size * 0.8);
+                        ctx.stroke();
+                    }
+
+                    // 尾巴
+                    if (features.tails && features.tails > 1) {
+                        for (let i = 0; i < features.tails; i++) {
+                            const angle = (i / features.tails) * Math.PI * 0.3 - Math.PI * 0.15;
+                            ctx.beginPath();
+                            ctx.moveTo(x + size * 0.7, y);
+                            ctx.quadraticCurveTo(
+                                x + size * 1.2, y + Math.sin(angle) * size * 0.3,
+                                x + size * 1.5 + Math.cos(angle) * size * 0.3,
+                                y + Math.sin(angle) * size * 0.5
+                            );
+                            ctx.stroke();
+                        }
+                    } else {
+                        ctx.beginPath();
+                        ctx.moveTo(x + size * 0.7, y);
+                        ctx.quadraticCurveTo(x + size * 1.2, y - size * 0.2, x + size * 1.5, y);
+                        ctx.stroke();
+                    }
+                } else if (type === 'serpent') {
+                    // 蛇形怪物
+                    ctx.beginPath();
+                    const segments = 8;
+                    for (let i = 0; i <= segments; i++) {
+                        const t = i / segments;
+                        const wave = Math.sin(t * Math.PI * 2 + this.animationFrame * 0.05 * this.speed);
+                        const sx = x - size + t * size * 2;
+                        const sy = y + wave * size * 0.3;
+                        if (i === 0) {
+                            ctx.moveTo(sx, sy);
+                        } else {
+                            ctx.lineTo(sx, sy);
+                        }
+                    }
+                    ctx.stroke();
+
+                    // 头
+                    ctx.beginPath();
+                    ctx.arc(x - size, y, size * 0.3, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    // 如果有翅膀
+                    if (features.wings) {
+                        const flapPhase = Math.sin(this.animationFrame * 0.1 * this.speed);
+                        for (let i = 0; i < features.wings; i++) {
+                            const wingX = x - size * 0.5 + i * size * 0.3;
+                            ctx.beginPath();
+                            ctx.moveTo(wingX, y);
+                            ctx.lineTo(wingX - size * 0.4, y - size * 0.5 * (1 + flapPhase * 0.3));
+                            ctx.lineTo(wingX + size * 0.4, y - size * 0.5 * (1 + flapPhase * 0.3));
+                            ctx.closePath();
+                            ctx.stroke();
+                        }
+                    }
+
+                    // 如果有足
+                    if (features.legs) {
+                        for (let i = 0; i < features.legs; i++) {
+                            const legX = x - size * 0.8 + i * size * 0.3;
+                            ctx.beginPath();
+                            ctx.moveTo(legX, y + size * 0.2);
+                            ctx.lineTo(legX, y + size * 0.5);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            // 绘制山
+            drawMountain(x, y, width, height, color = '#444') {
+                const ctx = this.ctx;
+                ctx.save();
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(x - width / 2, y);
+                ctx.lineTo(x, y - height);
+                ctx.lineTo(x + width / 2, y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 绘制河流
+            drawRiver(startX, startY, endX, endY, width = 40) {
+                const ctx = this.ctx;
+                ctx.save();
+                ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)';
+                ctx.lineWidth = width;
+                ctx.lineCap = 'round';
+                
+                ctx.beginPath();
+                const steps = 20;
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const wave = Math.sin(t * Math.PI * 4 + this.animationFrame * 0.02 * this.speed) * 20;
+                    const x = startX + (endX - startX) * t;
+                    const y = startY + (endY - startY) * t + wave;
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 绘制树
+            drawTree(x, y, size = 60) {
+                const ctx = this.ctx;
+                ctx.save();
+                
+                // 树干
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(x - size * 0.1, y - size * 0.5, size * 0.2, size * 0.5);
+                
+                // 树叶
+                ctx.fillStyle = '#228b22';
+                ctx.beginPath();
+                ctx.arc(x, y - size * 0.7, size * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+
+            // 绘制特效
+            drawEffect(type, x, y, size = 30) {
+                const ctx = this.ctx;
+                ctx.save();
+                
+                if (type === 'glow') {
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, size);
+                    gradient.addColorStop(0, 'rgba(255, 255, 100, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 255, 100, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (type === 'sparkle') {
+                    ctx.strokeStyle = 'rgba(255, 255, 200, 0.8)';
+                    ctx.lineWidth = 2;
+                    const sparkles = 8;
+                    for (let i = 0; i < sparkles; i++) {
+                        const angle = (i / sparkles) * Math.PI * 2;
+                        const innerR = size * 0.3;
+                        const outerR = size * (0.8 + Math.sin(this.animationFrame * 0.1 + i) * 0.2);
+                        ctx.beginPath();
+                        ctx.moveTo(x + Math.cos(angle) * innerR, y + Math.sin(angle) * innerR);
+                        ctx.lineTo(x + Math.cos(angle) * outerR, y + Math.sin(angle) * outerR);
+                        ctx.stroke();
+                    }
+                }
+                
+                ctx.restore();
+            }
+
+            // 主动画循环
+            animate() {
+                if (!this.animating) return;
+                
+                // 增加帧计数 - 必须在绘制前增加
+                this.animationFrame++;
+                
+                // 清除画布
+                this.clear();
+                
+                // 绘制调试信息
+                this.drawDebugInfo();
+                
+                // 绘制环境
+                this.environment.mountains.forEach(mountain => {
+                    this.drawMountain(mountain.x, mountain.y, mountain.width, mountain.height, mountain.color);
+                });
+                
+                this.environment.rivers.forEach(river => {
+                    this.drawRiver(river.startX, river.startY, river.endX, river.endY, river.width);
+                });
+                
+                this.environment.trees.forEach(tree => {
+                    this.drawTree(tree.x, tree.y, tree.size);
+                });
+                
+                // 绘制角色
+                this.figures.forEach((figure, index) => {
+                    // 每帧都记录位置变化
+                    const prevX = figure.x;
+                    const prevY = figure.y;
+                    
+                    if (figure.type === 'human') {
+                        this.drawStickHuman(figure.x, figure.y, figure.size, figure.pose, figure.features);
+                    } else if (figure.type === 'bird') {
+                        this.drawStickBird(figure.x, figure.y, figure.size, figure.flying, figure.features);
+                    } else if (figure.type === 'monster') {
+                        this.drawStickMonster(figure.x, figure.y, figure.size, figure.subtype, figure.features);
+                    }
+                    
+                    // 更新位置
+                    if (figure.movement) {
+                        figure.x += figure.movement.dx * this.speed;
+                        figure.y += figure.movement.dy * this.speed;
+                        
+                        // 边界检查和反弹
+                        if (figure.x < 50 || figure.x > this.width - 50) {
+                            figure.movement.dx *= -1; // 反转方向
+                            figure.x = Math.max(50, Math.min(this.width - 50, figure.x));
+                        }
+                        
+                        if (figure.y < 50 || figure.y > this.height - 100) {
+                            figure.movement.dy *= -1; // 反转方向
+                            figure.y = Math.max(50, Math.min(this.height - 100, figure.y));
+                        }
+                        
+                        // 飞行生物的上下波动
+                        if (figure.flying) {
+                            figure.movement.dy = Math.sin(this.animationFrame * 0.05) * 2;
+                        }
+                        
+                        // 每10帧记录一次位置变化
+                        if (this.animationFrame % 10 === 0) {
+                            console.log(`Figure ${index} moved from (${prevX.toFixed(1)}, ${prevY.toFixed(1)}) to (${figure.x.toFixed(1)}, ${figure.y.toFixed(1)})`);
+                        }
+                    }
+                });
+                
+                // 绘制特效
+                this.environment.effects.forEach(effect => {
+                    this.drawEffect(effect.type, effect.x, effect.y, effect.size);
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            // 绘制调试信息
+            drawDebugInfo() {
+                const ctx = this.ctx;
+                ctx.save();
+                
+                // 背景面板
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(5, 5, 400, 120 + this.figures.length * 20);
+                
+                // 文字信息
+                ctx.font = 'bold 16px monospace';
+                ctx.fillStyle = '#00ff00';
+                ctx.shadowColor = '#00ff00';
+                ctx.shadowBlur = 3;
+                
+                // 动画帧闪烁效果
+                if (this.animating && this.animationFrame % 20 < 10) {
+                    ctx.fillStyle = '#ffff00';
+                }
+                
+                ctx.fillText(`Frame: ${this.animationFrame}`, 10, 25);
+                ctx.fillStyle = '#00ff00';
+                ctx.fillText(`Figures: ${this.figures.length}`, 10, 45);
+                
+                // 状态高亮
+                ctx.fillStyle = this.animating ? '#00ff00' : '#ff0000';
+                ctx.font = 'bold 18px monospace';
+                ctx.fillText(`Status: ${this.animating ? 'PLAYING' : 'PAUSED'}`, 10, 65);
+                
+                ctx.fillStyle = '#00ff00';
+                ctx.font = 'bold 16px monospace';
+                ctx.fillText(`Speed: ${this.speed}x`, 10, 85);
+                
+                // 显示每个figure的信息
+                ctx.font = '14px monospace';
+                this.figures.forEach((figure, index) => {
+                    const dx = figure.movement?.dx || 0;
+                    const dy = figure.movement?.dy || 0;
+                    const moving = Math.abs(dx) > 0 || Math.abs(dy) > 0;
+                    ctx.fillStyle = moving ? '#00ffff' : '#808080';
+                    ctx.fillText(`Fig${index}: ${figure.type} at (${figure.x.toFixed(0)}, ${figure.y.toFixed(0)}) dx:${dx} dy:${dy.toFixed(2)} ${moving ? '→' : '●'}`, 10, 105 + index * 20);
+                });
+                
+                // 绘制动画进度指示器
+                if (this.animating) {
+                    const progressX = 10 + (this.animationFrame % 100) * 3;
+                    ctx.fillStyle = '#ff00ff';
+                    ctx.fillRect(progressX, 110 + this.figures.length * 20, 10, 5);
+                }
+                
+                ctx.restore();
+            }
+            
+            start() {
+                console.log('Animation started - figures:', this.figures.length, 'animating:', this.animating);
+                if (!this.animating) {
+                    this.animating = true;
+                    this.animate();
+                }
+            }
+            
+            stop() {
+                console.log('Animation stopped');
+                this.animating = false;
+            }
+        }
+
+        // 场景解析器
+        class SceneParser {
+            constructor() {
+                this.creaturePatterns = {
+                    // 形态描述
+                    '其状如(.*?)而(.*)': (match) => {
+                        return {
+                            baseForm: match[1],
+                            features: match[2]
+                        };
+                    },
+                    // 多头
+                    '(\\d+)首|首(\\d+)': (match) => ({heads: parseInt(match[1] || match[2])}),
+                    // 多尾
+                    '(\\d+)尾|尾(\\d+)': (match) => ({tails: parseInt(match[1] || match[2])}),
+                    // 多足
+                    '(\\d+)足|足(\\d+)': (match) => ({legs: parseInt(match[1] || match[2])}),
+                    // 翅膀
+                    '(\\d+)翼|翼(\\d+)': (match) => ({wings: parseInt(match[1] || match[2])}),
+                    // 颜色
+                    '白耳': () => ({ears: 'white'}),
+                    '赤尾': () => ({tail: 'red'}),
+                    '青': () => ({color: '#4488ff'}),
+                    '赤': () => ({color: '#ff4444'}),
+                    '黄': () => ({color: '#ffff44'}),
+                    '白': () => ({color: '#ffffff'}),
+                    '黑': () => ({color: '#444444'})
+                };
+                
+                this.actionPatterns = {
+                    '食之': 'eating',
+                    '见则': 'appearing',
+                    '其鸣': 'calling',
+                    '善走': 'running',
+                    '飞': 'flying',
+                    '游': 'swimming'
+                };
+            }
+            
+            parseCreature(text) {
+                const creature = {
+                    type: 'monster',
+                    subtype: 'beast',
+                    features: {},
+                    actions: []
+                };
+                
+                // 检测基本形态
+                if (text.includes('鸟') || text.includes('鸡') || text.includes('雉')) {
+                    creature.type = 'bird';
+                } else if (text.includes('蛇') || text.includes('龙') || text.includes('蛟')) {
+                    creature.subtype = 'serpent';
+                } else if (text.includes('人')) {
+                    creature.type = 'human';
+                }
+                
+                // 提取特征
+                for (const [pattern, extractor] of Object.entries(this.creaturePatterns)) {
+                    const regex = new RegExp(pattern);
+                    const match = text.match(regex);
+                    if (match) {
+                        Object.assign(creature.features, extractor(match));
+                    }
+                }
+                
+                // 提取动作
+                for (const [pattern, action] of Object.entries(this.actionPatterns)) {
+                    if (text.includes(pattern)) {
+                        creature.actions.push(action);
+                    }
+                }
+                
+                return creature;
+            }
+            
+            parseEnvironment(text) {
+                const environment = {
+                    mountains: [],
+                    rivers: [],
+                    trees: [],
+                    effects: []
+                };
+                
+                // 检测山
+                if (text.includes('山')) {
+                    environment.mountains.push({
+                        x: 200,
+                        y: 400,
+                        width: 300,
+                        height: 200,
+                        color: '#555'
+                    });
+                }
+                
+                // 检测水
+                if (text.includes('水') || text.includes('河') || text.includes('海')) {
+                    environment.rivers.push({
+                        startX: 100,
+                        startY: 450,
+                        endX: 700,
+                        endY: 480,
+                        width: 40
+                    });
+                }
+                
+                // 检测树木
+                if (text.includes('木') || text.includes('树') || text.includes('松')) {
+                    for (let i = 0; i < 3; i++) {
+                        environment.trees.push({
+                            x: 150 + i * 200,
+                            y: 380,
+                            size: 60
+                        });
+                    }
+                }
+                
+                // 添加一些特效
+                if (text.includes('光') || text.includes('明')) {
+                    environment.effects.push({
+                        type: 'glow',
+                        x: 400,
+                        y: 200,
+                        size: 50
+                    });
+                }
+                
+                return environment;
+            }
+        }
+
+        // 故事动画管理器
+        class StoryAnimationManager {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.animator = new StickFigureAnimator(this.canvas);
+                this.parser = new SceneParser();
+                this.currentVolume = null;
+                this.currentChapter = null;
+                this.currentScene = 0;
+                this.scenes = [];
+                this.isPlaying = false;
+                this.autoPlay = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // 调整画布大小
+                window.addEventListener('resize', () => {
+                    this.animator.resize();
+                });
+                this.animator.resize();
+                
+                // 加载章节列表
+                this.loadVolumeList();
+                
+                // 绑定控制按钮
+                this.bindControls();
+                
+                // 隐藏加载提示
+                document.getElementById('loading').style.display = 'none';
+            }
+            
+            loadVolumeList() {
+                const volumeList = document.getElementById('volume-list');
+                
+                for (const [key, volume] of Object.entries(window.SHANHAIJING_COMPLETE)) {
+                    const volumeSection = document.createElement('div');
+                    volumeSection.className = 'volume-section';
+                    
+                    const volumeTitle = document.createElement('div');
+                    volumeTitle.className = 'volume-title';
+                    volumeTitle.textContent = `${volume.title} - ${volume.subtitle}`;
+                    volumeTitle.onclick = () => this.toggleVolume(key);
+                    
+                    const chapterList = document.createElement('div');
+                    chapterList.className = 'chapter-list';
+                    chapterList.id = `chapters-${key}`;
+                    
+                    volume.chapters.forEach(chapter => {
+                        const chapterItem = document.createElement('div');
+                        chapterItem.className = 'chapter-item';
+                        chapterItem.textContent = chapter.title;
+                        chapterItem.onclick = () => this.loadChapter(key, chapter.id);
+                        chapterList.appendChild(chapterItem);
+                    });
+                    
+                    volumeSection.appendChild(volumeTitle);
+                    volumeSection.appendChild(chapterList);
+                    volumeList.appendChild(volumeSection);
+                }
+            }
+            
+            toggleVolume(volumeKey) {
+                const chapterList = document.getElementById(`chapters-${volumeKey}`);
+                chapterList.classList.toggle('active');
+            }
+            
+            loadChapter(volumeKey, chapterId) {
+                // 更新选中状态
+                document.querySelectorAll('.chapter-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                // 加载章节数据
+                const volume = window.SHANHAIJING_COMPLETE[volumeKey];
+                const chapter = volume.chapters.find(ch => ch.id === chapterId);
+                
+                if (!chapter) return;
+                
+                this.currentVolume = volumeKey;
+                this.currentChapter = chapter;
+                
+                // 解析场景
+                this.parseChapterScenes(chapter);
+                
+                // 显示第一个场景
+                this.currentScene = 0;
+                this.showScene(0);
+            }
+            
+            parseChapterScenes(chapter) {
+                this.scenes = [];
+                
+                // 将章节文本分段
+                const segments = chapter.original.split(/。|！|？/);
+                
+                segments.forEach((segment, index) => {
+                    if (!segment.trim()) return;
+                    
+                    const scene = {
+                        text: segment + '。',
+                        translation: this.getTranslationSegment(chapter.translation, index),
+                        creatures: [],
+                        environment: this.parser.parseEnvironment(segment),
+                        duration: 5000 // 5秒每场景
+                    };
+                    
+                    // 解析生物
+                    if (segment.includes('兽') || segment.includes('鸟') || 
+                        segment.includes('鱼') || segment.includes('其状如')) {
+                        const creature = this.parser.parseCreature(segment);
+                        scene.creatures.push(creature);
+                    }
+                    
+                    this.scenes.push(scene);
+                });
+            }
+            
+            getTranslationSegment(translation, index) {
+                const segments = translation.split(/。|！|？/);
+                return segments[index] || '';
+            }
+            
+            showScene(sceneIndex) {
+                if (sceneIndex < 0 || sceneIndex >= this.scenes.length) return;
+                
+                console.log('Showing scene:', sceneIndex);
+                
+                const scene = this.scenes[sceneIndex];
+                this.currentScene = sceneIndex;
+                
+                // 更新场景标题
+                document.getElementById('scene-title').textContent = 
+                    `${this.currentChapter.title} - 第${sceneIndex + 1}幕 / 共${this.scenes.length}幕`;
+                
+                // 更新叙述文本
+                document.getElementById('narrator-text').innerHTML = 
+                    `<p><strong>原文：</strong>${scene.text}</p>
+                     <p><strong>译文：</strong>${scene.translation}</p>`;
+                
+                // 清空当前动画
+                this.animator.figures = [];
+                this.animator.environment = scene.environment || {
+                    mountains: [],
+                    rivers: [],
+                    trees: [],
+                    effects: []
+                };
+                
+                // 如果没有生物，添加一个默认的火柴人
+                if (scene.creatures.length === 0) {
+                    console.log('No creatures found, adding default figure');
+                    const defaultFigure = {
+                        type: 'human',
+                        x: 100,
+                        y: this.animator.height - 150,
+                        size: 40,
+                        pose: 'walking',
+                        movement: { dx: 2, dy: 0 },
+                        features: { color: '#ffffff' }
+                    };
+                    this.animator.figures.push(defaultFigure);
+                } else {
+                    // 添加生物
+                    scene.creatures.forEach((creature, index) => {
+                        const figure = {
+                            ...creature,
+                            x: 100 + index * 150,
+                            y: this.animator.height - 150,
+                            size: creature.type === 'human' ? 40 : 50,
+                            movement: { dx: 1.5, dy: 0 }  // 默认移动
+                        };
+                        
+                        // 根据动作设置移动
+                        if (creature.actions.includes('running')) {
+                            figure.pose = 'running';
+                            figure.movement = { dx: 4, dy: 0 };
+                        } else if (creature.actions.includes('flying')) {
+                            figure.flying = true;
+                            figure.y = this.animator.height / 3;  // 飞行生物在上方
+                            figure.movement = { dx: 2.5, dy: Math.sin(this.animator.animationFrame * 0.05) * 2 };
+                        } else if (creature.actions.includes('walking')) {
+                            figure.pose = 'walking';
+                            figure.movement = { dx: 2, dy: 0 };
+                        } else {
+                            // 即使没有特定动作，也给一些默认移动
+                            figure.pose = figure.type === 'human' ? 'walking' : 'standing';
+                            figure.movement = { dx: 1.5, dy: 0 };
+                        }
+                        
+                        console.log(`Created figure: ${figure.type} at (${figure.x}, ${figure.y}) with movement dx:${figure.movement.dx}, dy:${figure.movement.dy}`);
+                        
+                        this.animator.figures.push(figure);
+                    });
+                }
+                
+                console.log('Scene loaded - figures:', this.animator.figures.length, 'environment:', this.animator.environment);
+                
+                // 如果正在播放，确保动画运行
+                if (this.isPlaying) {
+                    this.animator.animating = true;
+                    this.animator.start();
+                    
+                    // 自动切换到下一个场景
+                    if (this.autoPlay) {
+                        setTimeout(() => {
+                            if (this.currentScene < this.scenes.length - 1) {
+                                this.showScene(this.currentScene + 1);
+                            } else {
+                                this.pause();
+                            }
+                        }, scene.duration);
+                    }
+                } else {
+                    // 即使没有播放，也绘制一帧静态画面
+                    this.animator.clear();
+                    this.animator.drawDebugInfo();
+                    
+                    // 绘制环境
+                    this.animator.environment.mountains.forEach(mountain => {
+                        this.animator.drawMountain(mountain.x, mountain.y, mountain.width, mountain.height, mountain.color);
+                    });
+                    
+                    this.animator.environment.rivers.forEach(river => {
+                        this.animator.drawRiver(river.startX, river.startY, river.endX, river.endY, river.width);
+                    });
+                    
+                    this.animator.environment.trees.forEach(tree => {
+                        this.animator.drawTree(tree.x, tree.y, tree.size);
+                    });
+                    
+                    // 绘制角色（静态）
+                    this.animator.figures.forEach(figure => {
+                        if (figure.type === 'human') {
+                            this.animator.drawStickHuman(figure.x, figure.y, figure.size, figure.pose || 'standing', figure.features);
+                        } else if (figure.type === 'bird') {
+                            this.animator.drawStickBird(figure.x, figure.y, figure.size, figure.flying || false, figure.features);
+                        } else if (figure.type === 'monster') {
+                            this.animator.drawStickMonster(figure.x, figure.y, figure.size, figure.subtype, figure.features);
+                        }
+                    });
+                    
+                    // 绘制特效
+                    this.animator.environment.effects.forEach(effect => {
+                        this.animator.drawEffect(effect.type, effect.x, effect.y, effect.size);
+                    });
+                }
+            }
+            
+            play() {
+                console.log('Play button clicked - current scene:', this.currentScene, 'scenes:', this.scenes.length);
+                console.log('Current animator state - animating:', this.animator.animating, 'figures:', this.animator.figures.length);
+                
+                if (this.scenes.length === 0) {
+                    console.warn('No scenes loaded. Please select a chapter first.');
+                    alert('请先选择一个章节！');
+                    return;
+                }
+                
+                this.isPlaying = true;
+                document.getElementById('play-btn').style.display = 'none';
+                document.getElementById('pause-btn').style.display = 'block';
+                
+                // 确保动画器开始运行
+                this.animator.start();
+                
+                console.log('After start() - animating:', this.animator.animating, 'figures:', this.animator.figures.length);
+                
+                if (this.autoPlay && this.currentScene < this.scenes.length - 1) {
+                    this.autoPlayTimeout = setTimeout(() => {
+                        this.showScene(this.currentScene + 1);
+                    }, this.scenes[this.currentScene].duration);
+                }
+            }
+            
+            pause() {
+                console.log('Pause button clicked');
+                console.log('Current animator state - animating:', this.animator.animating);
+                
+                this.isPlaying = false;
+                document.getElementById('play-btn').style.display = 'block';
+                document.getElementById('pause-btn').style.display = 'none';
+                
+                // 清除自动播放定时器
+                if (this.autoPlayTimeout) {
+                    clearTimeout(this.autoPlayTimeout);
+                    this.autoPlayTimeout = null;
+                }
+                
+                this.animator.stop();
+                console.log('After stop() - animating:', this.animator.animating);
+            }
+            
+            bindControls() {
+                // 播放/暂停
+                document.getElementById('play-btn').onclick = () => this.play();
+                document.getElementById('pause-btn').onclick = () => this.pause();
+                
+                // 上一幕/下一幕
+                document.getElementById('prev-scene').onclick = () => {
+                    if (this.currentScene > 0) {
+                        this.showScene(this.currentScene - 1);
+                    }
+                };
+                
+                document.getElementById('next-scene').onclick = () => {
+                    if (this.currentScene < this.scenes.length - 1) {
+                        this.showScene(this.currentScene + 1);
+                    }
+                };
+                
+                // 速度控制
+                const speedSlider = document.getElementById('speed-slider');
+                const speedValue = document.getElementById('speed-value');
+                speedSlider.oninput = () => {
+                    this.animator.speed = parseFloat(speedSlider.value);
+                    speedValue.textContent = speedSlider.value + 'x';
+                };
+                
+                // 自动播放
+                document.getElementById('auto-play').onchange = (e) => {
+                    this.autoPlay = e.target.checked;
+                };
+            }
+        }
+
+        // 启动应用
+        window.addEventListener('DOMContentLoaded', () => {
+            new StoryAnimationManager();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>山海経完全版テスト</title>
+</head>
+<body>
+    <h1>山海経完全版データテスト</h1>
+    <div id="status"></div>
+    
+    <script src="shanhaijing-complete-text.js"></script>
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        // データのチェック
+        if (typeof window.SHANHAIJING_COMPLETE !== 'undefined') {
+            const volumes = Object.keys(window.SHANHAIJING_COMPLETE);
+            statusDiv.innerHTML = `
+                <p style="color: green;">✓ SHANHAIJING_COMPLETE が正しく読み込まれました</p>
+                <p>巻数: ${volumes.length}</p>
+                <p>巻のリスト: ${volumes.join(', ')}</p>
+            `;
+            
+            // 最初の巻のデータを表示
+            const firstVolume = window.SHANHAIJING_COMPLETE[volumes[0]];
+            statusDiv.innerHTML += `
+                <h2>最初の巻: ${firstVolume.title} (${firstVolume.titleJa})</h2>
+                <p>章数: ${firstVolume.chapters.length}</p>
+            `;
+        } else {
+            statusDiv.innerHTML = '<p style="color: red;">✗ SHANHAIJING_COMPLETE が見つかりません</p>';
+        }
+    </script>
+</body>
+</html>

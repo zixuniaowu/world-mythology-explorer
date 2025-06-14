@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南山経ミステリー - 火柴人探偵ゲーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f5f3e9;
+            color: #2c1810;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ゲームコンテナ */
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ヘッダー */
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0));
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            color: #8b4513;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .game-subtitle {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* メインゲームエリア */
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 火柴人キャンバスエリア */
+        .stick-figure-area {
+            background: white;
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            min-height: 400px;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 400px;
+            border: 1px dashed #ccc;
+            cursor: pointer;
+        }
+
+        /* テキストとパズルエリア */
+        .content-area {
+            background: white;
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        /* 章タイトル */
+        .chapter-title {
+            font-size: 1.8em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #8b4513;
+        }
+
+        /* テキスト表示エリア */
+        .text-display {
+            background: #fefefe;
+            padding: 15px;
+            border-left: 4px solid #d4a574;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .original-text {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dotted #ccc;
+        }
+
+        /* パズルエリア */
+        .puzzle-area {
+            background: #f9f7f3;
+            border: 2px dashed #8b4513;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .puzzle-title {
+            font-size: 1.4em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .puzzle-icon {
+            font-size: 1.5em;
+        }
+
+        .puzzle-progress {
+            font-size: 0.9em;
+            color: #666;
+            margin-left: auto;
+        }
+
+        /* クイズ・パズル要素 */
+        .quiz-question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #d4a574;
+            border-radius: 5px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-option:hover {
+            background: #f4e6d7;
+            transform: translateX(5px);
+            border-color: #8b4513;
+        }
+
+        .quiz-option.correct {
+            background: #90ee90;
+            border-color: #228b22;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .quiz-option.incorrect {
+            background: #ffcccb;
+            border-color: #dc143c;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* ヒントシステム */
+        .hint-box {
+            background: #fffacd;
+            border: 1px solid #daa520;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .hint-button {
+            background: #daa520;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .hint-button:hover {
+            background: #b8860b;
+        }
+
+        /* 進行状況バー */
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #8b4513, #d4a574);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        /* 推理ノート */
+        .detective-notebook {
+            background: #fffef0;
+            border: 2px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .notebook-title {
+            font-size: 1.3em;
+            color: #8b4513;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clue-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .clue-item {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .clue-item::before {
+            content: "🔍";
+            position: absolute;
+            left: 0;
+        }
+
+        /* コントロールボタン */
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .control-button {
+            background: #8b4513;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: #6b3410;
+            transform: translateY(-2px);
+        }
+
+        .control-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* スコア表示 */
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .score-value {
+            font-size: 1.8em;
+            color: #8b4513;
+            font-weight: bold;
+        }
+
+        /* アニメーションプレビュー */
+        .animation-preview {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .stick-figure-area {
+                min-height: 300px;
+            }
+            
+            #gameCanvas {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- ヘッダー -->
+        <div class="game-header">
+            <h1 class="game-title">南山経ミステリー</h1>
+            <p class="game-subtitle">火柴人探偵と山海経の謎を解く</p>
+        </div>
+
+        <!-- 進行状況バー -->
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>進行状況</span>
+                <span id="progressText">0 / 0 パズル完了</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+        </div>
+
+        <!-- メインゲームエリア -->
+        <div class="game-area">
+            <!-- 火柴人表示エリア -->
+            <div class="stick-figure-area">
+                <canvas id="gameCanvas"></canvas>
+                <div class="animation-preview">
+                    <canvas id="previewCanvas" width="100" height="100"></canvas>
+                </div>
+                <div class="detective-notebook">
+                    <h3 class="notebook-title">
+                        <span>📔</span>
+                        <span>探偵ノート</span>
+                    </h3>
+                    <ul class="clue-list" id="clueList">
+                        <li class="clue-item">ゲームを開始して手がかりを集めよう</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- コンテンツエリア -->
+            <div class="content-area">
+                <h2 class="chapter-title" id="chapterTitle">ゲーム開始画面</h2>
+                
+                <div class="text-display" id="textDisplay">
+                    <p>山海経の南山経には、不思議な生き物や植物がたくさん記録されています。</p>
+                    <p>あなたは火柴人探偵となって、古代の謎を解き明かしてください。</p>
+                    <p>テキストをよく読んで、生き物の特徴を推理し、パズルを解いて進みましょう！</p>
+                </div>
+
+                <div class="puzzle-area" id="puzzleArea">
+                    <h3 class="puzzle-title">
+                        <span class="puzzle-icon">🧩</span>
+                        <span>準備はいいですか？</span>
+                    </h3>
+                    <div class="control-buttons">
+                        <button class="control-button" onclick="startGame()">ゲームを始める</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- スコア表示 -->
+        <div class="score-display">
+            <div class="score-label">スコア</div>
+            <div class="score-value" id="scoreValue">0</div>
+        </div>
+    </div>
+
+    <!-- モーダル -->
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <!-- 動的に内容を挿入 -->
+        </div>
+    </div>
+
+    <!-- 外部スクリプト読み込み -->
+    <script src="shanhaijing-complete-text.js"></script>
+    
+    <script>
+        // ゲーム状態管理
+        const gameState = {
+            currentChapter: -1,
+            currentPuzzle: 0,
+            totalPuzzles: 0,
+            completedPuzzles: 0,
+            score: 0,
+            clues: [],
+            solvedPuzzles: [],
+            chapters: [],
+            animations: {}
+        };
+
+        // アニメーション設定
+        const ANIMATION_CONFIG = {
+            frameRate: 60,
+            creatures: {
+                xingxing: { frames: 8, speed: 0.15 },
+                lushu: { frames: 10, speed: 0.2 },
+                phoenix: { frames: 12, speed: 0.1 },
+                default: { frames: 6, speed: 0.15 }
+            }
+        };
+
+        // キャンバス設定
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const previewCanvas = document.getElementById('previewCanvas');
+        const previewCtx = previewCanvas.getContext('2d');
+
+        // キャンバスサイズ設定
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // アニメーションフレーム管理
+        let animationFrame = 0;
+        let lastTime = 0;
+
+        // 火柴人描画関数（アニメーション対応）
+        function drawStickFigure(ctx, x, y, type = 'detective', frame = 0, scale = 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.strokeStyle = '#2c1810';
+            ctx.lineWidth = 3;
+            
+            if (type === 'detective') {
+                // 探偵火柴人（歩行アニメーション）
+                const walkOffset = Math.sin(frame * 0.1) * 5;
+                
+                // 頭
+                ctx.beginPath();
+                ctx.arc(0, -30 + walkOffset * 0.3, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // 帽子
+                ctx.beginPath();
+                ctx.moveTo(-20, -35 + walkOffset * 0.3);
+                ctx.lineTo(20, -35 + walkOffset * 0.3);
+                ctx.lineTo(15, -45 + walkOffset * 0.3);
+                ctx.lineTo(-15, -45 + walkOffset * 0.3);
+                ctx.closePath();
+                ctx.stroke();
+                
+                // 体
+                ctx.beginPath();
+                ctx.moveTo(0, -15 + walkOffset * 0.3);
+                ctx.lineTo(0, 20);
+                ctx.stroke();
+                
+                // 腕（歩行時の振り）
+                const armSwing = Math.sin(frame * 0.1) * 10;
+                ctx.beginPath();
+                ctx.moveTo(-15 - armSwing * 0.5, 0);
+                ctx.lineTo(0, -5 + walkOffset * 0.3);
+                ctx.lineTo(15 + armSwing * 0.5, 0);
+                ctx.stroke();
+                
+                // 虫眼鏡
+                ctx.beginPath();
+                ctx.arc(25 + armSwing * 0.5, -5, 8, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(20 + armSwing * 0.5, 0);
+                ctx.lineTo(15 + armSwing * 0.5, 5);
+                ctx.stroke();
+                
+                // 脚（歩行アニメーション）
+                const legSwing = Math.sin(frame * 0.1) * 15;
+                ctx.beginPath();
+                ctx.moveTo(0, 20);
+                ctx.lineTo(-10 - legSwing, 40);
+                ctx.moveTo(0, 20);
+                ctx.lineTo(10 + legSwing, 40);
+                ctx.stroke();
+            } else if (type === 'celebration') {
+                // 正解時の喜びアニメーション
+                const jumpHeight = Math.abs(Math.sin(frame * 0.2)) * 20;
+                const armRaise = Math.sin(frame * 0.3) * 30;
+                
+                // 頭
+                ctx.beginPath();
+                ctx.arc(0, -30 - jumpHeight, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // 笑顔
+                ctx.beginPath();
+                ctx.arc(0, -25 - jumpHeight, 8, 0, Math.PI);
+                ctx.stroke();
+                
+                // 体
+                ctx.beginPath();
+                ctx.moveTo(0, -15 - jumpHeight);
+                ctx.lineTo(0, 20 - jumpHeight);
+                ctx.stroke();
+                
+                // 腕（上げ下げ）
+                ctx.beginPath();
+                ctx.moveTo(-15, -5 - jumpHeight);
+                ctx.lineTo(0, -5 - jumpHeight);
+                ctx.lineTo(15, -5 - jumpHeight - armRaise);
+                ctx.stroke();
+                
+                // 脚
+                ctx.beginPath();
+                ctx.moveTo(0, 20 - jumpHeight);
+                ctx.lineTo(-10, 40);
+                ctx.moveTo(0, 20 - jumpHeight);
+                ctx.lineTo(10, 40);
+                ctx.stroke();
+            } else if (type === 'wrong') {
+                // 不正解時の首振りアニメーション
+                const headShake = Math.sin(frame * 0.3) * 10;
+                
+                // 頭（首振り）
+                ctx.beginPath();
+                ctx.arc(headShake, -30, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // 困った顔
+                ctx.beginPath();
+                ctx.moveTo(headShake - 5, -25);
+                ctx.lineTo(headShake + 5, -25);
+                ctx.stroke();
+                
+                // 体
+                ctx.beginPath();
+                ctx.moveTo(0, -15);
+                ctx.lineTo(0, 20);
+                ctx.stroke();
+                
+                // 腕（下げ気味）
+                ctx.beginPath();
+                ctx.moveTo(-15, 5);
+                ctx.lineTo(0, -5);
+                ctx.lineTo(15, 5);
+                ctx.stroke();
+                
+                // 脚
+                ctx.beginPath();
+                ctx.moveTo(0, 20);
+                ctx.lineTo(-10, 40);
+                ctx.moveTo(0, 20);
+                ctx.lineTo(10, 40);
+                ctx.stroke();
+            }
+            
+            ctx.restore();
+        }
+
+        // 生き物を火柴人スタイルで描画（アニメーション対応）
+        function drawCreature(ctx, x, y, creatureData, frame = 0, scale = 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 2;
+            
+            switch(creatureData.type) {
+                case 'xingxing': // 狌狌（人のように歩く猿）
+                    const walkCycle = Math.sin(frame * 0.15) * 10;
+                    const armSwing = Math.sin(frame * 0.15 + Math.PI) * 15;
+                    
+                    // 頭
+                    ctx.beginPath();
+                    ctx.arc(0, -20 + Math.abs(walkCycle) * 0.3, 12, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 白い耳（アニメーション）
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(-15, -22 + Math.abs(walkCycle) * 0.3, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.arc(15, -22 + Math.abs(walkCycle) * 0.3, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    // 体（直立歩行）
+                    ctx.beginPath();
+                    ctx.moveTo(0, -8 + Math.abs(walkCycle) * 0.3);
+                    ctx.lineTo(0, 15);
+                    ctx.stroke();
+                    
+                    // 腕（人間のような振り）
+                    ctx.beginPath();
+                    ctx.moveTo(-10, 0);
+                    ctx.lineTo(0, -5 + Math.abs(walkCycle) * 0.3);
+                    ctx.lineTo(10, 0 - armSwing * 0.5);
+                    ctx.stroke();
+                    
+                    // 脚（二足歩行）
+                    ctx.beginPath();
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(-8 - walkCycle * 0.5, 30);
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(8 + walkCycle * 0.5, 30);
+                    ctx.stroke();
+                    
+                    // 吹き出し（名前を呼ぶ）
+                    if (frame % 120 < 60) {
+                        ctx.beginPath();
+                        ctx.moveTo(20, -25);
+                        ctx.lineTo(30, -35);
+                        ctx.lineTo(50, -35);
+                        ctx.lineTo(50, -45);
+                        ctx.lineTo(30, -45);
+                        ctx.lineTo(25, -35);
+                        ctx.closePath();
+                        ctx.stroke();
+                        ctx.fillStyle = '#2c1810';
+                        ctx.font = '10px sans-serif';
+                        ctx.fillText('名前！', 32, -38);
+                    }
+                    break;
+                    
+                case 'lushu': // 鹿蜀（虎縞の馬）
+                    const gallop = Math.sin(frame * 0.2) * 5;
+                    const legCycle = frame * 0.2;
+                    
+                    // 頭（馬）
+                    ctx.beginPath();
+                    ctx.ellipse(0, -25 + gallop, 10, 15, Math.PI * 0.1, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 体（横長）
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0 + gallop, 25, 15, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 虎縞模様
+                    ctx.strokeStyle = '#ff8c00';
+                    for (let i = -20; i <= 20; i += 8) {
+                        ctx.beginPath();
+                        ctx.moveTo(i, -10 + gallop);
+                        ctx.lineTo(i + 3, 10 + gallop);
+                        ctx.stroke();
+                    }
+                    ctx.strokeStyle = '#8b4513';
+                    
+                    // 脚（走行アニメーション）
+                    const legs = [
+                        { x: -15, phase: 0 },
+                        { x: -8, phase: Math.PI },
+                        { x: 8, phase: Math.PI * 0.5 },
+                        { x: 15, phase: Math.PI * 1.5 }
+                    ];
+                    
+                    legs.forEach(leg => {
+                        const legHeight = Math.sin(legCycle + leg.phase) * 10;
+                        ctx.beginPath();
+                        ctx.moveTo(leg.x, 15 + gallop);
+                        ctx.lineTo(leg.x, 25 + legHeight);
+                        ctx.stroke();
+                    });
+                    
+                    // 尾
+                    const tailSwing = Math.sin(frame * 0.15) * 20;
+                    ctx.beginPath();
+                    ctx.moveTo(25, 0 + gallop);
+                    ctx.quadraticCurveTo(35 + tailSwing * 0.5, 5 + gallop, 30 + tailSwing, 15 + gallop);
+                    ctx.stroke();
+                    break;
+                    
+                case 'phoenix': // 鳳凰（飛翔アニメーション）
+                    const flyHeight = Math.sin(frame * 0.1) * 10;
+                    const wingFlap = Math.sin(frame * 0.3) * 30;
+                    
+                    // 人の頭
+                    ctx.beginPath();
+                    ctx.arc(0, -25 + flyHeight, 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 王冠
+                    ctx.beginPath();
+                    ctx.moveTo(-8, -35 + flyHeight);
+                    ctx.lineTo(-4, -40 + flyHeight);
+                    ctx.lineTo(0, -38 + flyHeight);
+                    ctx.lineTo(4, -40 + flyHeight);
+                    ctx.lineTo(8, -35 + flyHeight);
+                    ctx.stroke();
+                    
+                    // 体（鳥）
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0 + flyHeight, 15, 20, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 翼（羽ばたき）
+                    ctx.beginPath();
+                    ctx.moveTo(-15, -5 + flyHeight);
+                    ctx.quadraticCurveTo(-30 - wingFlap, -10 + flyHeight - wingFlap * 0.5, -25 - wingFlap, 5 + flyHeight);
+                    ctx.moveTo(15, -5 + flyHeight);
+                    ctx.quadraticCurveTo(30 + wingFlap, -10 + flyHeight - wingFlap * 0.5, 25 + wingFlap, 5 + flyHeight);
+                    ctx.stroke();
+                    
+                    // 羽根の詳細
+                    ctx.strokeStyle = '#d4a574';
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i < 3; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(-20 - wingFlap + i * 5, -5 + flyHeight - wingFlap * 0.3);
+                        ctx.lineTo(-22 - wingFlap + i * 5, 0 + flyHeight);
+                        ctx.moveTo(20 + wingFlap - i * 5, -5 + flyHeight - wingFlap * 0.3);
+                        ctx.lineTo(22 + wingFlap - i * 5, 0 + flyHeight);
+                        ctx.stroke();
+                    }
+                    ctx.strokeStyle = '#8b4513';
+                    ctx.lineWidth = 2;
+                    
+                    // 尾（優雅に揺れる）
+                    const tailSway = Math.sin(frame * 0.08) * 10;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 20 + flyHeight);
+                    ctx.lineTo(-5 + tailSway * 0.3, 30 + flyHeight);
+                    ctx.moveTo(0, 20 + flyHeight);
+                    ctx.lineTo(0 + tailSway * 0.5, 32 + flyHeight);
+                    ctx.moveTo(0, 20 + flyHeight);
+                    ctx.lineTo(5 + tailSway * 0.3, 30 + flyHeight);
+                    ctx.stroke();
+                    
+                    // 輝きエフェクト
+                    if (frame % 60 < 30) {
+                        ctx.strokeStyle = '#ffd700';
+                        ctx.beginPath();
+                        ctx.arc(0, -10 + flyHeight, 25, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                    break;
+                    
+                case 'plant_effect': // 植物効果デモンストレーション
+                    const eatCycle = frame % 180;
+                    
+                    // 基本の火柴人
+                    ctx.beginPath();
+                    ctx.arc(0, -20, 12, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, -8);
+                    ctx.lineTo(0, 15);
+                    ctx.stroke();
+                    
+                    // 腕（食べる動作）
+                    if (eatCycle < 60) {
+                        const handMove = eatCycle / 60;
+                        ctx.beginPath();
+                        ctx.moveTo(-10, 0);
+                        ctx.lineTo(0, -5);
+                        ctx.lineTo(10 - handMove * 10, -5 - handMove * 15);
+                        ctx.stroke();
+                        
+                        // 植物
+                        ctx.fillStyle = '#90ee90';
+                        ctx.beginPath();
+                        ctx.arc(10 - handMove * 10, -5 - handMove * 15, 5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.stroke();
+                    } else {
+                        // 効果発動
+                        ctx.beginPath();
+                        ctx.moveTo(-10, -10);
+                        ctx.lineTo(0, -5);
+                        ctx.lineTo(10, -10);
+                        ctx.stroke();
+                        
+                        // エフェクト
+                        const effectRadius = (eatCycle - 60) / 120 * 30;
+                        ctx.strokeStyle = '#32cd32';
+                        ctx.beginPath();
+                        ctx.arc(0, 0, effectRadius, 0, Math.PI * 2);
+                        ctx.stroke();
+                        
+                        // 効果テキスト
+                        if (creatureData.effect) {
+                            ctx.fillStyle = '#228b22';
+                            ctx.font = '12px sans-serif';
+                            ctx.fillText(creatureData.effect, -30, -40);
+                        }
+                    }
+                    
+                    // 脚
+                    ctx.strokeStyle = '#8b4513';
+                    ctx.beginPath();
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(-8, 30);
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(8, 30);
+                    ctx.stroke();
+                    break;
+                    
+                case 'direction': // 方向指示アニメーション
+                    const pointCycle = Math.sin(frame * 0.1) * 10;
+                    
+                    // 頭
+                    ctx.beginPath();
+                    ctx.arc(0, -20, 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 体
+                    ctx.beginPath();
+                    ctx.moveTo(0, -10);
+                    ctx.lineTo(0, 15);
+                    ctx.stroke();
+                    
+                    // 指差し腕
+                    const direction = creatureData.direction || 'east';
+                    let armAngle = 0;
+                    switch(direction) {
+                        case 'east': armAngle = 0; break;
+                        case 'west': armAngle = Math.PI; break;
+                        case 'north': armAngle = -Math.PI / 2; break;
+                        case 'south': armAngle = Math.PI / 2; break;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(0, -5);
+                    ctx.lineTo(
+                        Math.cos(armAngle) * (20 + pointCycle),
+                        -5 + Math.sin(armAngle) * (20 + pointCycle)
+                    );
+                    ctx.stroke();
+                    
+                    // 矢印
+                    ctx.save();
+                    ctx.translate(
+                        Math.cos(armAngle) * (25 + pointCycle),
+                        -5 + Math.sin(armAngle) * (25 + pointCycle)
+                    );
+                    ctx.rotate(armAngle);
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(-5, -5);
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(-5, 5);
+                    ctx.stroke();
+                    ctx.restore();
+                    
+                    // もう片方の腕
+                    ctx.beginPath();
+                    ctx.moveTo(0, -5);
+                    ctx.lineTo(-10, 0);
+                    ctx.stroke();
+                    
+                    // 脚
+                    ctx.beginPath();
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(-8, 30);
+                    ctx.moveTo(0, 15);
+                    ctx.lineTo(8, 30);
+                    ctx.stroke();
+                    
+                    // 方向テキスト
+                    ctx.fillStyle = '#8b4513';
+                    ctx.font = '14px sans-serif';
+                    const dirText = {
+                        'east': '東へ→',
+                        'west': '←西へ',
+                        'north': '↑北へ',
+                        'south': '南へ↓'
+                    };
+                    ctx.fillText(dirText[direction] || '', -20, -40);
+                    break;
+            }
+            
+            ctx.restore();
+        }
+
+        // アニメーションループ
+        function animate(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            if (deltaTime > 16) { // 60fps制限
+                animationFrame++;
+                
+                // メインキャンバスをクリア
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 背景グラデーション
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, 'rgba(255, 250, 240, 0.5)');
+                gradient.addColorStop(1, 'rgba(255, 248, 220, 0.5)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 探偵を描画
+                drawStickFigure(ctx, 150, canvas.height / 2 + 50, gameState.animations.detective || 'detective', animationFrame);
+                
+                // 現在のクリーチャーを描画
+                if (gameState.animations.creature) {
+                    drawCreature(ctx, canvas.width - 200, canvas.height / 2 + 50, gameState.animations.creature, animationFrame);
+                }
+                
+                // 追加のアニメーション要素
+                if (gameState.animations.extras) {
+                    gameState.animations.extras.forEach(extra => {
+                        if (extra.type === 'celebration') {
+                            drawStickFigure(ctx, extra.x, extra.y, 'celebration', animationFrame, 0.8);
+                        }
+                    });
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        // パズル生成関数
+        function generatePuzzle(chapterData, puzzleIndex) {
+            const puzzleTypes = [
+                'creature_identification',
+                'property_matching',
+                'text_analysis',
+                'location_puzzle'
+            ];
+            
+            const type = puzzleTypes[puzzleIndex % puzzleTypes.length];
+            
+            switch(type) {
+                case 'creature_identification':
+                    return generateCreatureIdentificationPuzzle(chapterData);
+                case 'property_matching':
+                    return generatePropertyMatchingPuzzle(chapterData);
+                case 'text_analysis':
+                    return generateTextAnalysisPuzzle(chapterData);
+                case 'location_puzzle':
+                    return generateLocationPuzzle(chapterData);
+            }
+        }
+
+        // 生き物識別パズル
+        function generateCreatureIdentificationPuzzle(chapterData) {
+            const creatures = extractCreatures(chapterData);
+            if (creatures.length === 0) return null;
+            
+            const targetCreature = creatures[Math.floor(Math.random() * creatures.length)];
+            const question = `次の特徴を持つ生き物は何でしょう？\n${targetCreature.description}`;
+            
+            const options = [
+                targetCreature.name,
+                '天狗',
+                '麒麟',
+                '龍'
+            ].sort(() => Math.random() - 0.5);
+            
+            return {
+                type: 'creature',
+                question: question,
+                options: options,
+                correct: targetCreature.name,
+                hint: `ヒント：${chapterData.title}に登場する生き物です。`,
+                creatureData: targetCreature
+            };
+        }
+
+        // 特性マッチングパズル
+        function generatePropertyMatchingPuzzle(chapterData) {
+            const properties = extractProperties(chapterData);
+            if (properties.length === 0) return null;
+            
+            const targetProperty = properties[Math.floor(Math.random() * properties.length)];
+            const question = `「${targetProperty.item}」の効果は何でしょう？`;
+            
+            const options = [
+                targetProperty.effect,
+                '病気を治す',
+                '長寿をもたらす',
+                '富をもたらす'
+            ].sort(() => Math.random() - 0.5);
+            
+            return {
+                type: 'property',
+                question: question,
+                options: options,
+                correct: targetProperty.effect,
+                hint: `ヒント：原文をよく読んでみましょう。`,
+                propertyData: targetProperty
+            };
+        }
+
+        // テキスト分析パズル
+        function generateTextAnalysisPuzzle(chapterData) {
+            const question = `${chapterData.title}の舞台となる山の特徴は？`;
+            const features = extractMountainFeatures(chapterData);
+            
+            if (features.length === 0) return null;
+            
+            const correct = features[0];
+            const options = [
+                correct,
+                '東の海に面している',
+                '雪が一年中積もっている',
+                '人が住んでいる'
+            ].sort(() => Math.random() - 0.5);
+            
+            return {
+                type: 'text',
+                question: question,
+                options: options,
+                correct: correct,
+                hint: `ヒント：山の位置や特徴に注目してください。`
+            };
+        }
+
+        // 位置パズル
+        function generateLocationPuzzle(chapterData) {
+            const locations = extractLocations(chapterData);
+            if (locations.length === 0) return null;
+            
+            const question = `この章に登場する川はどこに流れていますか？`;
+            const correct = locations[0].destination;
+            
+            const options = [
+                correct,
+                '東の湖',
+                '北の大河',
+                '南の沼'
+            ].sort(() => Math.random() - 0.5);
+            
+            const directionMap = {
+                '海': 'east',
+                '東の湖': 'east',
+                '北の大河': 'north',
+                '南の沼': 'south'
+            };
+            
+            return {
+                type: 'location',
+                question: question,
+                options: options,
+                correct: correct,
+                hint: `ヒント：水の流れる方向に注目してください。`,
+                locationData: { direction: directionMap[correct] || 'east' }
+            };
+        }
+
+        // データ抽出関数
+        function extractCreatures(chapterData) {
+            const creatures = [];
+            const text = chapterData.japanese;
+            
+            // 狌狌の抽出
+            if (text.includes('狌狌')) {
+                creatures.push({
+                    name: '狌狌（せいせい）',
+                    description: '猿に似て白い耳を持ち、地を這うように進み人のように走る',
+                    type: 'xingxing'
+                });
+            }
+            
+            // 鹿蜀の抽出
+            if (text.includes('鹿蜀')) {
+                creatures.push({
+                    name: '鹿蜀（ろくしょく）',
+                    description: '馬のような形で白い頭、虎のような模様を持つ',
+                    type: 'lushu'
+                });
+            }
+            
+            // 貍力の抽出
+            if (text.includes('貍力')) {
+                creatures.push({
+                    name: '貍力（りりょく）',
+                    description: '豚に似た形で蹴爪を持ち、犬が吠えるような声を出す',
+                    type: 'lushu' // 一時的に鹿蜀のアニメーションを使用
+                });
+            }
+            
+            // 鳳凰の抽出
+            if (text.includes('鳳皇')) {
+                creatures.push({
+                    name: '鳳皇（ほうおう）',
+                    description: '鴟（とび）のような形で人の頭を持つ',
+                    type: 'phoenix'
+                });
+            }
+            
+            return creatures;
+        }
+
+        function extractProperties(chapterData) {
+            const properties = [];
+            const text = chapterData.japanese;
+            
+            if (text.includes('祝餘')) {
+                properties.push({
+                    item: '祝餘（しゅくよ）',
+                    effect: '食べると飢えることがない',
+                    type: 'plant_effect'
+                });
+            }
+            
+            if (text.includes('迷穀')) {
+                properties.push({
+                    item: '迷穀（めいこく）',
+                    effect: '身につけると道に迷わない',
+                    type: 'plant_effect'
+                });
+            }
+            
+            if (text.includes('育沛')) {
+                properties.push({
+                    item: '育沛（いくはい）',
+                    effect: '身につけると病気にかからない',
+                    type: 'plant_effect'
+                });
+            }
+            
+            return properties;
+        }
+
+        function extractMountainFeatures(chapterData) {
+            const features = [];
+            const text = chapterData.japanese;
+            
+            if (text.includes('西の海を見下ろし')) {
+                features.push('西の海を見下ろす位置にある');
+            }
+            
+            if (text.includes('桂の木が多く')) {
+                features.push('桂の木が多く生えている');
+            }
+            
+            if (text.includes('金や玉も豊富')) {
+                features.push('金や玉が豊富に産出される');
+            }
+            
+            return features;
+        }
+
+        function extractLocations(chapterData) {
+            const locations = [];
+            const text = chapterData.japanese;
+            
+            const riverMatch = text.match(/(.+?)という川が.+?流れ.+?([^に]+?)に注ぐ/);
+            if (riverMatch) {
+                locations.push({
+                    river: riverMatch[1],
+                    destination: riverMatch[2]
+                });
+            }
+            
+            // デフォルト値
+            if (locations.length === 0 && text.includes('海に注ぐ')) {
+                locations.push({
+                    river: '川',
+                    destination: '海'
+                });
+            }
+            
+            return locations;
+        }
+
+        // 総パズル数を計算
+        function calculateTotalPuzzles() {
+            const puzzlesPerChapter = 3;
+            return gameState.chapters.length * puzzlesPerChapter;
+        }
+
+        // ゲーム開始関数
+        function startGame() {
+            gameState.currentChapter = 0;
+            gameState.currentPuzzle = 0;
+            gameState.completedPuzzles = 0;
+            gameState.score = 0;
+            gameState.clues = [];
+            gameState.chapters = window.SHANHAIJING_COMPLETE.nanshan.chapters;
+            gameState.totalPuzzles = calculateTotalPuzzles();
+            
+            // アニメーション初期化
+            gameState.animations = {
+                detective: 'detective',
+                creature: null,
+                extras: []
+            };
+            
+            loadChapter(0);
+            updateProgress();
+            
+            // アニメーションループ開始
+            requestAnimationFrame(animate);
+        }
+
+        // 章の読み込み
+        function loadChapter(chapterIndex) {
+            if (chapterIndex >= gameState.chapters.length) {
+                showGameComplete();
+                return;
+            }
+            
+            const chapter = gameState.chapters[chapterIndex];
+            gameState.currentChapter = chapterIndex;
+            gameState.currentPuzzle = 0;
+            
+            // UI更新
+            document.getElementById('chapterTitle').textContent = chapter.title;
+            document.getElementById('textDisplay').innerHTML = `
+                <p>${chapter.japanese}</p>
+                <div class="original-text">
+                    <strong>原文：</strong>${chapter.original}
+                </div>
+            `;
+            
+            // 章に関連する生き物を設定
+            const creatures = extractCreatures(chapter);
+            if (creatures.length > 0) {
+                gameState.animations.creature = creatures[0];
+            } else {
+                gameState.animations.creature = null;
+            }
+            
+            // 最初のパズルを表示
+            showNextPuzzle();
+        }
+
+        // 次のパズルを表示
+        function showNextPuzzle() {
+            const chapter = gameState.chapters[gameState.currentChapter];
+            const puzzle = generatePuzzle(chapter, gameState.currentPuzzle);
+            
+            if (!puzzle || gameState.currentPuzzle >= 3) {
+                // パズルがない場合は次の章へ
+                loadChapter(gameState.currentChapter + 1);
+                return;
+            }
+            
+            displayPuzzle(puzzle);
+        }
+
+        // パズルの表示
+        function displayPuzzle(puzzle) {
+            const puzzleArea = document.getElementById('puzzleArea');
+            
+            // 現在のパズル番号を計算
+            const currentPuzzleNumber = gameState.currentChapter * 3 + gameState.currentPuzzle + 1;
+            
+            let puzzleHTML = `
+                <h3 class="puzzle-title">
+                    <span class="puzzle-icon">🧩</span>
+                    <span>謎解き ${gameState.currentPuzzle + 1}</span>
+                    <span class="puzzle-progress">(${currentPuzzleNumber} / ${gameState.totalPuzzles})</span>
+                </h3>
+                <div class="quiz-question">${puzzle.question}</div>
+                <div class="quiz-options">
+            `;
+            
+            puzzle.options.forEach((option, index) => {
+                puzzleHTML += `
+                    <div class="quiz-option" 
+                         data-option="${option}" 
+                         data-index="${index}"
+                         onmouseover="previewAnimation(this, '${puzzle.type}', ${index})"
+                         onmouseout="hidePreview()"
+                         onclick="checkAnswer('${option}', '${puzzle.correct}', this, '${puzzle.type}')">
+                        ${option}
+                    </div>
+                `;
+            });
+            
+            puzzleHTML += `
+                </div>
+                <button class="hint-button" onclick="showHint('${puzzle.hint}')">ヒントを見る</button>
+                <div class="hint-box" id="hintBox"></div>
+            `;
+            
+            puzzleArea.innerHTML = puzzleHTML;
+            
+            // パズルタイプに応じてアニメーションを更新
+            if (puzzle.type === 'creature' && puzzle.creatureData) {
+                gameState.animations.creature = puzzle.creatureData;
+            } else if (puzzle.type === 'property' && puzzle.propertyData) {
+                gameState.animations.creature = {
+                    type: 'plant_effect',
+                    effect: puzzle.propertyData.effect
+                };
+            } else if (puzzle.type === 'location' && puzzle.locationData) {
+                gameState.animations.creature = {
+                    type: 'direction',
+                    direction: puzzle.locationData.direction
+                };
+            }
+        }
+
+        // アニメーションプレビュー
+        function previewAnimation(element, puzzleType, optionIndex) {
+            const preview = document.querySelector('.animation-preview');
+            const rect = element.getBoundingClientRect();
+            
+            preview.style.display = 'block';
+            preview.style.left = '50%';
+            
+            // プレビューキャンバスをクリア
+            previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            
+            // オプションに基づいて簡単なアニメーションを表示
+            if (puzzleType === 'creature') {
+                drawStickFigure(previewCtx, 50, 70, 'detective', animationFrame * 2, 0.6);
+            } else if (puzzleType === 'property') {
+                drawCreature(previewCtx, 50, 70, { type: 'plant_effect', effect: '?' }, animationFrame * 2, 0.6);
+            } else if (puzzleType === 'location') {
+                const directions = ['east', 'north', 'west', 'south'];
+                drawCreature(previewCtx, 50, 70, { type: 'direction', direction: directions[optionIndex] }, animationFrame * 2, 0.6);
+            }
+        }
+
+        // プレビューを隠す
+        function hidePreview() {
+            document.querySelector('.animation-preview').style.display = 'none';
+        }
+
+        // 答えをチェック
+        function checkAnswer(selected, correct, element, puzzleType) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.onclick = null;
+                opt.onmouseover = null;
+                opt.onmouseout = null;
+            });
+            
+            if (selected === correct) {
+                element.classList.add('correct');
+                gameState.score += 100;
+                gameState.completedPuzzles++;
+                updateScore();
+                updateProgress();
+                
+                // 正解アニメーション
+                gameState.animations.detective = 'celebration';
+                gameState.animations.extras = [
+                    { type: 'celebration', x: 250, y: canvas.height / 2 + 50 },
+                    { type: 'celebration', x: 350, y: canvas.height / 2 + 50 }
+                ];
+                
+                // 手がかりを追加
+                addClue(`${gameState.chapters[gameState.currentChapter].title}の謎を解明！`);
+                
+                setTimeout(() => {
+                    gameState.animations.detective = 'detective';
+                    gameState.animations.extras = [];
+                    gameState.currentPuzzle++;
+                    
+                    if (gameState.currentPuzzle >= 3) {
+                        // 章クリア
+                        showChapterComplete();
+                    } else {
+                        showNextPuzzle();
+                    }
+                }, 2000);
+            } else {
+                element.classList.add('incorrect');
+                gameState.score = Math.max(0, gameState.score - 20);
+                updateScore();
+                
+                // 不正解アニメーション
+                gameState.animations.detective = 'wrong';
+                
+                // 正解を表示
+                options.forEach(opt => {
+                    if (opt.textContent.trim() === correct) {
+                        opt.classList.add('correct');
+                    }
+                });
+                
+                setTimeout(() => {
+                    gameState.animations.detective = 'detective';
+                    gameState.currentPuzzle++;
+                    
+                    if (gameState.currentPuzzle >= 3) {
+                        showChapterComplete();
+                    } else {
+                        showNextPuzzle();
+                    }
+                }, 2500);
+            }
+        }
+
+        // ヒント表示
+        function showHint(hint) {
+            const hintBox = document.getElementById('hintBox');
+            hintBox.style.display = 'block';
+            hintBox.innerHTML = `<strong>ヒント：</strong> ${hint}`;
+            
+            // スコアを少し減らす
+            gameState.score = Math.max(0, gameState.score - 10);
+            updateScore();
+        }
+
+        // 手がかりを追加
+        function addClue(clue) {
+            gameState.clues.push(clue);
+            updateClueList();
+        }
+
+        // 手がかりリストを更新
+        function updateClueList() {
+            const clueList = document.getElementById('clueList');
+            clueList.innerHTML = gameState.clues.map(clue => 
+                `<li class="clue-item">${clue}</li>`
+            ).join('');
+        }
+
+        // スコア更新
+        function updateScore() {
+            document.getElementById('scoreValue').textContent = gameState.score;
+        }
+
+        // 進行状況更新
+        function updateProgress() {
+            const progressPercent = (gameState.completedPuzzles / gameState.totalPuzzles) * 100;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = progressPercent + '%';
+            progressFill.textContent = Math.round(progressPercent) + '%';
+            progressText.textContent = `${gameState.completedPuzzles} / ${gameState.totalPuzzles} パズル完了`;
+        }
+
+        // 章クリア表示
+        function showChapterComplete() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <h2 style="color: #8b4513; margin-bottom: 20px;">章クリア！</h2>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">
+                    ${gameState.chapters[gameState.currentChapter].title}の謎を解き明かしました！
+                </p>
+                <p style="color: #666; margin-bottom: 20px;">
+                    獲得スコア: +300
+                </p>
+                <button class="control-button" onclick="closeModal(); loadChapter(${gameState.currentChapter + 1});">
+                    次の章へ進む
+                </button>
+            `;
+            
+            modal.style.display = 'flex';
+            gameState.score += 300;
+            updateScore();
+        }
+
+        // ゲーム完了表示
+        function showGameComplete() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const completionRate = Math.round((gameState.completedPuzzles / gameState.totalPuzzles) * 100);
+            
+            modalContent.innerHTML = `
+                <h2 style="color: #8b4513; margin-bottom: 20px;">🎉 ゲームクリア！ 🎉</h2>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">
+                    南山経のすべての謎を解き明かしました！
+                </p>
+                <p style="font-size: 1.5em; color: #8b4513; margin-bottom: 20px;">
+                    最終スコア: ${gameState.score}
+                </p>
+                <p style="color: #666; margin-bottom: 10px;">
+                    完了率: ${completionRate}%
+                </p>
+                <p style="color: #666; margin-bottom: 20px;">
+                    集めた手がかり: ${gameState.clues.length}個
+                </p>
+                <button class="control-button" onclick="location.reload();">
+                    もう一度プレイ
+                </button>
+            `;
+            
+            modal.style.display = 'flex';
+            
+            // 花火アニメーション
+            gameState.animations.extras = [];
+            for (let i = 0; i < 5; i++) {
+                gameState.animations.extras.push({
+                    type: 'celebration',
+                    x: 100 + i * 150,
+                    y: canvas.height / 2
+                });
+            }
+        }
+
+        // モーダルを閉じる
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // 初期描画
+        window.addEventListener('load', () => {
+            // 初期画面に探偵を描画
+            requestAnimationFrame(animate);
+        });
+
+        // キャンバスクリック時のインタラクション
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // クリック位置に一時的なエフェクト
+            gameState.animations.extras.push({
+                type: 'celebration',
+                x: x,
+                y: y,
+                duration: 30
+            });
+            
+            // 30フレーム後に削除
+            setTimeout(() => {
+                gameState.animations.extras = gameState.animations.extras.filter(e => e.duration !== 30);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

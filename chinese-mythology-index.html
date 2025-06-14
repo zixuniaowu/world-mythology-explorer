@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中華神話大全 - 古代中国の神話と伝説</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ローディング画面 */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #2C1810 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 3em;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 30px;
+            letter-spacing: 0.2em;
+        }
+        
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 31, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFD700;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,300 T1200,300" stroke="%23FFD700" stroke-width="2" fill="none"/></svg>') center/cover;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            letter-spacing: 0.2em;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); }
+            to { text-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero-button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .hero-button.primary {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #2C1810;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .hero-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .hero-button.secondary {
+            background: transparent;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+        }
+        
+        .hero-button.secondary:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* 巻のセレクション */
+        .volumes-section {
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            text-align: center;
+            color: #FFD700;
+            margin-bottom: 50px;
+            letter-spacing: 0.1em;
+        }
+        
+        .volumes-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            justify-content: center;
+        }
+        
+        .volume-card {
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 31, 0.8) 100%);
+            border: 2px solid #8B4513;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .volume-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .volume-card:hover::before {
+            opacity: 1;
+        }
+        
+        .volume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+        
+        .volume-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        
+        .volume-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.5em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+        }
+        
+        .volume-subtitle {
+            color: #F5E6D3;
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .volume-chapters {
+            color: #DAA520;
+            font-size: 0.85em;
+        }
+        
+        /* ゲームモード選択 */
+        .game-modes {
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .modes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .mode-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .mode-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #FFA500;
+        }
+        
+        .mode-title {
+            font-size: 1.3em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .mode-description {
+            color: #F5E6D3;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #1a1a2e;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid #8B4513;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.7;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .footer-links a {
+            color: #DAA520;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #FFD700;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 992px) {
+            .volumes-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2em;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .volumes-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+        
+        /* アニメーション */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- ローディング画面 -->
+    <div id="loading-screen">
+        <h1 class="loading-title">中華神話大全</h1>
+        <div class="loading-spinner"></div>
+        <p style="margin-top: 20px; opacity: 0.7;">ローディング中...</p>
+    </div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#" class="logo">中華神話大全</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#mythologies">神話を選ぶ</a></li>
+                    <li><a href="#categories">カテゴリー</a></li>
+                    <li><a href="index.html">ホーム</a></li>
+                    <li><a href="ai-text-to-animation.html">AIアニメーション</a></li>
+                    <li><a href="#about">について</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">中華神話大全</h1>
+            <p class="hero-subtitle fade-in stagger-1">五千年の歴史が紡ぐ神話と伝説の世界</p>
+            <div class="hero-buttons fade-in stagger-2">
+                <button class="hero-button primary" onclick="exploreMythologies()">神話を探索</button>
+                <button class="hero-button secondary" onclick="scrollToMythologies()">物語を選ぶ</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 神話コレクション -->
+    <section id="mythologies" class="volumes-section">
+        <h2 class="section-title fade-in">中華神話コレクション</h2>
+        <div class="volumes-grid">
+            <!-- 主要な神話 -->
+            <div class="volume-card fade-in stagger-1" onclick="openMythology('shanhaijing')">
+                <div class="volume-icon">🗺️</div>
+                <h3 class="volume-title">山海経</h3>
+                <p class="volume-subtitle">古代地理と神獣の百科全書</p>
+                <p class="volume-chapters">18巻 • 神獣、異国、地理</p>
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 215, 0, 0.3);">
+                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="event.stopPropagation(); window.location.href='nanshan-game.html'" 
+                                style="padding: 8px 12px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #2C1810; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s ease;" 
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(255,215,0,0.4)'" 
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.2)'">
+                            🕵️ 侦探游戏
+                        </button>
+                        <button onclick="event.stopPropagation(); window.location.href='text-to-animation.html'" 
+                                style="padding: 8px 12px; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: #FFD700; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s ease;" 
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(139,69,19,0.4)'" 
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.2)'">
+                            🔥 火柴人
+                        </button>
+                    </div>
+                    <p style="margin-top: 8px; font-size: 0.75em; color: #DAA520; opacity: 0.8;">特別なインターフェース</p>
+                </div>
+            </div>
+            
+            <div class="volume-card fade-in stagger-2" onclick="openMythology('fengshen')">
+                <div class="volume-icon">⚔️</div>
+                <h3 class="volume-title">封神演義</h3>
+                <p class="volume-subtitle">神々の戦いと封神の物語</p>
+                <p class="volume-chapters">100回 • 姜子牙、哪吒、楊戩</p>
+            </div>
+            
+            <div class="volume-card fade-in stagger-3" onclick="openMythology('liaozhai')">
+                <div class="volume-icon">👻</div>
+                <h3 class="volume-title">聊斎志異</h3>
+                <p class="volume-subtitle">狐妖と幽霊の奇怪談</p>
+                <p class="volume-chapters">491篇 • 狐仙、幽霊、書生</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- カテゴリー別 -->
+    <section id="categories" class="game-modes">
+        <h2 class="section-title fade-in">カテゴリー別探索</h2>
+        <div class="modes-container">
+            <div class="mode-card fade-in stagger-1" onclick="exploreCategory('creatures')">
+                <div class="mode-icon">🐉</div>
+                <h3 class="mode-title">神獣・妖怪図鑑</h3>
+                <p class="mode-description">龍、鳳凰、麒麟、九尾狐など中国神話の生き物たち</p>
+            </div>
+            
+            <div class="mode-card fade-in stagger-2" onclick="exploreCategory('gods')">
+                <div class="mode-icon">⛩️</div>
+                <h3 class="mode-title">神仙名鑑</h3>
+                <p class="mode-description">玉皇大帝、西王母、八仙など道教の神々</p>
+            </div>
+            
+            <div class="mode-card fade-in stagger-3" onclick="exploreCategory('heroes')">
+                <div class="mode-icon">🗡️</div>
+                <h3 class="mode-title">英雄伝説</h3>
+                <p class="mode-description">関羽、岳飛、花木蘭など歴史と神話の英雄</p>
+            </div>
+            
+            <div class="mode-card fade-in stagger-4" onclick="exploreCategory('places')">
+                <div class="mode-icon">🏔️</div>
+                <h3 class="mode-title">聖地巡礼</h3>
+                <p class="mode-description">崑崙山、蓬莱島、天宮など神話の聖地</p>
+            </div>
+        </div>
+    </section>
+    
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">中華神話大全 - 五千年の歴史が紡ぐ神話と伝説の世界</p>
+            <p class="footer-text">© 2024 Chinese Mythology Collection. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#mythologies">神話コレクション</a></li>
+                <li><a href="#categories">カテゴリー別探索</a></li>
+                <li><a href="#about">について</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // ローディング画面を非表示
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+        
+        // スムーズスクロール
+        function scrollToMythologies() {
+            document.getElementById('mythologies').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // 神話を開く
+        function openMythology(mythologyId) {
+            switch(mythologyId) {
+                case 'shanhaijing':
+                    window.location.href = 'shanhaijing-reader-complete.html';
+                    break;
+                case 'fengshen':
+                    window.location.href = 'fengshen-reader.html';
+                    break;
+                case 'liaozhai':
+                    window.location.href = 'liaozhai-reader.html';
+                    break;
+                case 'xiyouji':
+                    window.location.href = 'xiyouji-reader.html';
+                    break;
+                case 'baishe':
+                    window.location.href = 'baishe-reader.html';
+                    break;
+                case 'niulang':
+                    window.location.href = 'niulang-reader.html';
+                    break;
+                case 'creation':
+                    window.location.href = 'creation-myths.html';
+                    break;
+                case 'houyi':
+                    window.location.href = 'houyi-reader.html';
+                    break;
+                default:
+                    alert('この神話はまだ利用できません');
+            }
+        }
+        
+        // 神話を探索
+        function exploreMythologies() {
+            scrollToMythologies();
+        }
+        
+        // カテゴリーを探索
+        function exploreCategory(category) {
+            // カテゴリー別のページに遷移
+            switch(category) {
+                case 'creatures':
+                    window.location.href = 'mythical-creatures.html';
+                    break;
+                case 'gods':
+                    window.location.href = 'chinese-gods.html';
+                    break;
+                case 'heroes':
+                    window.location.href = 'chinese-heroes.html';
+                    break;
+                case 'places':
+                    window.location.href = 'mythical-places.html';
+                    break;
+                default:
+                    alert('このカテゴリーはまだ利用できません');
+            }
+        }
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

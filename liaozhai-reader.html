@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊斎志異 - 中華神話リーダー</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(to bottom, rgba(48, 43, 99, 0.9) 0%, rgba(36, 36, 62, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #E6E6FA;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(48, 43, 99, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #E6E6FA;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #E6E6FA;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(75, 0, 130, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-button {
+            background: rgba(230, 230, 250, 0.2);
+            border: 2px solid #E6E6FA;
+            color: #E6E6FA;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: rgba(230, 230, 250, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 230, 250, 0.3);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            margin-top: 100px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 40px 20px;
+        }
+        
+        /* イントロセクション */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: rgba(48, 43, 99, 0.3);
+            border-radius: 20px;
+            border: 2px solid #483D8B;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .intro-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(230, 230, 250, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .intro-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 3em;
+            color: #E6E6FA;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(230, 230, 250, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .intro-subtitle {
+            font-size: 1.5em;
+            color: #DDA0DD;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .intro-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #B19CD9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ストーリーグリッド */
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .story-card {
+            background: linear-gradient(135deg, rgba(72, 61, 139, 0.4) 0%, rgba(75, 0, 130, 0.3) 100%);
+            border: 2px solid #6A5ACD;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(230, 230, 250, 0.2) 0%, transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .story-card:hover::before {
+            opacity: 1;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(230, 230, 250, 0.3);
+            border-color: #E6E6FA;
+        }
+        
+        .story-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.3em;
+            color: #E6E6FA;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .story-type {
+            font-size: 0.9em;
+            color: #DDA0DD;
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .story-summary {
+            font-size: 0.9em;
+            color: #B19CD9;
+            line-height: 1.6;
+        }
+        
+        /* リーダーセクション */
+        .reader-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: none;
+            border: 2px solid #6A5ACD;
+        }
+        
+        .reader-section.active {
+            display: block;
+        }
+        
+        .reader-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .reader-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #E6E6FA;
+        }
+        
+        .close-button {
+            background: transparent;
+            border: 2px solid #E6E6FA;
+            color: #E6E6FA;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-button:hover {
+            background: rgba(230, 230, 250, 0.2);
+        }
+        
+        .reader-content {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #F0E6FA;
+        }
+        
+        .reader-content p {
+            margin-bottom: 20px;
+            text-indent: 2em;
+        }
+        
+        /* カテゴリーセクション */
+        .categories-section {
+            margin-top: 60px;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            text-align: center;
+            color: #E6E6FA;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(230, 230, 250, 0.5);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        
+        .category-card {
+            background: rgba(106, 90, 205, 0.2);
+            border: 2px solid rgba(230, 230, 250, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: scale(1.05);
+            border-color: #E6E6FA;
+            box-shadow: 0 10px 30px rgba(230, 230, 250, 0.2);
+            background: rgba(106, 90, 205, 0.3);
+        }
+        
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .category-name {
+            font-size: 1.2em;
+            color: #E6E6FA;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .category-count {
+            font-size: 0.9em;
+            color: #DDA0DD;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .intro-title {
+                font-size: 2em;
+            }
+            
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="chinese-mythology-index.html" class="logo">聊斎志異</a>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="window.location.href='chinese-mythology-index.html'">ホームに戻る</button>
+                <button class="nav-button" onclick="scrollToCategories()">カテゴリー</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+        <!-- イントロセクション -->
+        <section class="intro-section">
+            <h1 class="intro-title">聊斎志異</h1>
+            <p class="intro-subtitle">狐仙と幽霊の奇怪談</p>
+            <p class="intro-description">
+                聊斎志異は、清代の蒲松齢によって書かれた短編怪奇小説集です。狐の精、幽霊、花の妖精など、
+                様々な超自然的存在と人間との交流を描いた491篇の物語が収められています。
+                これらの物語は単なる怪談ではなく、当時の社会批判や人間の本質を鋭く描いた文学作品として高く評価されています。
+            </p>
+        </section>
+        
+        <!-- 著者紹介セクション -->
+        <section class="author-section" style="background: rgba(48, 43, 99, 0.3); border-radius: 20px; padding: 30px; margin-bottom: 40px; border: 2px solid #483D8B;">
+            <h2 style="font-family: 'Noto Serif JP', serif; font-size: 2em; color: #E6E6FA; text-align: center; margin-bottom: 20px;">著者・蒲松齢について</h2>
+            <div style="color: #B19CD9; line-height: 1.8; max-width: 1000px; margin: 0 auto;">
+                <p style="margin-bottom: 15px;">蒲松齢（1640-1715）は清代初期の文学者で、山東省淄川県（現在の淄博市）出身。字は留仙、号は柳泉居士。</p>
+                <p style="margin-bottom: 15px;">科挙試験に何度も失敗し、生涯を私塾の教師として過ごしながら、40年以上かけて『聊斎志異』を執筆しました。</p>
+                <p style="margin-bottom: 15px;">彼は民間伝承を集め、自身の想像力と文学的才能を加えて、幻想的でありながら現実的な批判精神に富んだ作品群を生み出しました。</p>
+                <p>『聊斎志異』は中国文学史上最も優れた短編小説集の一つとして、後世の文学に大きな影響を与えています。</p>
+            </div>
+        </section>
+        
+        <!-- カテゴリー別ストーリーセクション -->
+        <section class="story-categories">
+            <h2 class="section-title" style="font-family: 'Noto Serif JP', serif; font-size: 2.5em; text-align: center; color: #E6E6FA; margin-bottom: 40px; text-shadow: 0 0 20px rgba(230, 230, 250, 0.5);">物語集</h2>
+            
+            <!-- 狐仙故事 -->
+            <div class="category-stories" style="margin-bottom: 60px;">
+                <h3 style="font-family: 'Noto Serif JP', serif; font-size: 1.8em; color: #DDA0DD; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid #DDA0DD;">🦊 狐仙故事（Fox Spirit Tales）</h3>
+                <div class="stories-grid">
+            <div class="story-card" onclick="openStory('painted-skin')">
+                <div class="story-icon">👺</div>
+                <div class="story-title">画皮</div>
+                <div class="story-type">妖怪譚</div>
+                <div class="story-summary">美しい女性の正体は恐ろしい鬼。人の皮を被って人間に化ける妖怪と、それに惑わされた書生の物語。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('nie-xiaoqian')">
+                <div class="story-icon">👻</div>
+                <div class="story-title">聶小倩</div>
+                <div class="story-type">幽霊恋愛譚</div>
+                <div class="story-summary">美しい女幽霊・聶小倩と書生・寧采臣の切ない恋物語。妖怪に操られながらも純愛を貫く。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('qingfeng')">
+                <div class="story-icon">🦊</div>
+                <div class="story-title">青鳳</div>
+                <div class="story-type">狐仙譚</div>
+                <div class="story-summary">狐の精・青鳳と人間の青年との恋。種族を超えた愛と、それがもたらす試練と幸福。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('huangying')">
+                <div class="story-icon">🌸</div>
+                <div class="story-title">黄英</div>
+                <div class="story-type">花妖譚</div>
+                <div class="story-summary">菊の精・黄英と彼女を愛した青年の物語。花を愛する心が生んだ奇跡的な出会い。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('xiaocui')">
+                <div class="story-icon">🧚</div>
+                <div class="story-title">小翠</div>
+                <div class="story-type">狐仙報恩譚</div>
+                <div class="story-summary">恩返しのために人間の家に嫁いだ狐の精。夫を助け、家を守る献身的な妻の物語。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('yingning')">
+                <div class="story-icon">😊</div>
+                <div class="story-title">嬰寧</div>
+                <div class="story-type">狐女譚</div>
+                <div class="story-summary">いつも笑っている不思議な少女・嬰寧。その正体は狐の娘だが、純真無垢な心で周りを幸せにする。</div>
+            </div>
+            
+            <div class="story-card" onclick="openStory('lianxiang')">
+                <div class="story-icon">🦊</div>
+                <div class="story-title">蓮香</div>
+                <div class="story-type">狐仙譚</div>
+                <div class="story-summary">狐の精・蓮香と女幽霊・李氏、そして人間の青年・桑暁の三角関係。異なる存在が織りなす複雑な愛。</div>
+            </div>
+                </div>
+            </div>
+            
+            <!-- 花妖故事 -->
+            <div class="category-stories" style="margin-bottom: 60px;">
+                <h3 style="font-family: 'Noto Serif JP', serif; font-size: 1.8em; color: #DDA0DD; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid #DDA0DD;">🌸 花妖故事（Flower Demon Tales）</h3>
+                <div class="stories-grid">
+                    <div class="story-card" onclick="openStory('huangying')">
+                        <div class="story-icon">🌸</div>
+                        <div class="story-title">黄英</div>
+                        <div class="story-type">花妖譚</div>
+                        <div class="story-summary">菊の精・黄英と彼女を愛した青年の物語。花を愛する心が生んだ奇跡的な出会い。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('xiaomei')">
+                        <div class="story-icon">🌺</div>
+                        <div class="story-title">小梅</div>
+                        <div class="story-type">花妖譚</div>
+                        <div class="story-summary">梅の精・小梅が人間の青年を救い、恋に落ちる。梅の花のように清楚で美しい愛の物語。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 鬼魂故事 -->
+            <div class="category-stories" style="margin-bottom: 60px;">
+                <h3 style="font-family: 'Noto Serif JP', serif; font-size: 1.8em; color: #DDA0DD; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid #DDA0DD;">👻 鬼魂故事（Ghost Stories）</h3>
+                <div class="stories-grid">
+                    <div class="story-card" onclick="openStory('nie-xiaoqian')">
+                        <div class="story-icon">👻</div>
+                        <div class="story-title">聶小倩</div>
+                        <div class="story-type">幽霊恋愛譚</div>
+                        <div class="story-summary">美しい女幽霊・聶小倩と書生・寧采臣の切ない恋物語。妖怪に操られながらも純愛を貫く。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('wangliulang')">
+                        <div class="story-icon">🎣</div>
+                        <div class="story-title">王六郎</div>
+                        <div class="story-type">鬼魂友情譚</div>
+                        <div class="story-summary">漁師と水鬼の奇妙な友情。死者と生者の境界を超えた真の友情が試練を乗り越える。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('xiaoxie')">
+                        <div class="story-icon">👻</div>
+                        <div class="story-title">小謝</div>
+                        <div class="story-type">幽霊譚</div>
+                        <div class="story-summary">早世した娘・小謝の霊が家族を助ける。死してなお家族を思う娘の深い愛情。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 奇人異事 -->
+            <div class="category-stories" style="margin-bottom: 60px;">
+                <h3 style="font-family: 'Noto Serif JP', serif; font-size: 1.8em; color: #DDA0DD; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid #DDA0DD;">🎭 奇人異事（Strange People and Events）</h3>
+                <div class="stories-grid">
+                    <div class="story-card" onclick="openStory('painted-skin')">
+                        <div class="story-icon">👺</div>
+                        <div class="story-title">画皮</div>
+                        <div class="story-type">妖怪譚</div>
+                        <div class="story-summary">美しい女性の正体は恐ろしい鬼。人の皮を被って人間に化ける妖怪と、それに惑わされた書生の物語。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('lupan')">
+                        <div class="story-icon">⚖️</div>
+                        <div class="story-title">陸判</div>
+                        <div class="story-type">奇人譚</div>
+                        <div class="story-summary">冥界の判官と親交を結んだ男。生死の境を行き来し、運命を変える不思議な友情。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('cricket')">
+                        <div class="story-icon">🦗</div>
+                        <div class="story-title">促織</div>
+                        <div class="story-type">変身譚</div>
+                        <div class="story-summary">皇帝に献上するコオロギを失い、息子が変身してしまう。官僚社会の理不尽さを描く。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('abao')">
+                        <div class="story-icon">💎</div>
+                        <div class="story-title">阿寶</div>
+                        <div class="story-type">奇縁譚</div>
+                        <div class="story-summary">美女に恋した青年が、魂となって彼女のもとへ。執念の愛が生んだ奇跡。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 因果報應 -->
+            <div class="category-stories" style="margin-bottom: 60px;">
+                <h3 style="font-family: 'Noto Serif JP', serif; font-size: 1.8em; color: #DDA0DD; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid #DDA0DD;">⚖️ 因果報應（Karmic Retribution）</h3>
+                <div class="stories-grid">
+                    <div class="story-card" onclick="openStory('xifangping')">
+                        <div class="story-icon">⚖️</div>
+                        <div class="story-title">席方平</div>
+                        <div class="story-type">冥界訴訟譚</div>
+                        <div class="story-summary">父の冤罪を晴らすため、冥界で訴訟を起こす孝行息子。腐敗した冥界の官僚と戦う。</div>
+                    </div>
+                    
+                    <div class="story-card" onclick="openStory('kaochenghuang')">
+                        <div class="story-icon">🏛️</div>
+                        <div class="story-title">考城隍</div>
+                        <div class="story-type">神職任命譚</div>
+                        <div class="story-summary">徳行高い人物が死後、城隍神に任命される。生前の行いが死後の地位を決める。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- リーダーセクション -->
+        <section id="reader" class="reader-section">
+            <div class="reader-header">
+                <h2 class="reader-title" id="reader-title">画皮</h2>
+                <button class="close-button" onclick="closeReader()">閉じる</button>
+            </div>
+            <div class="reader-content" id="reader-content">
+                <!-- ここに物語の内容が表示されます -->
+            </div>
+        </section>
+        
+        <!-- カテゴリーセクション -->
+        <section id="categories" class="categories-section">
+            <h2 class="section-title">物語のカテゴリー</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🦊</div>
+                    <div class="category-name">狐仙故事</div>
+                    <div class="category-count">約80篇</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">👻</div>
+                    <div class="category-name">鬼魂故事</div>
+                    <div class="category-count">約60篇</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">🌺</div>
+                    <div class="category-name">花妖故事</div>
+                    <div class="category-count">約30篇</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">🎭</div>
+                    <div class="category-name">奇人異事</div>
+                    <div class="category-count">約100篇</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">⚖️</div>
+                    <div class="category-name">因果報應</div>
+                    <div class="category-count">約70篇</div>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-icon">🧙</div>
+                    <div class="category-name">道士法術</div>
+                    <div class="category-count">約40篇</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // 物語内容
+        const stories = {
+            'painted-skin': {
+                title: "画皮",
+                content: `
+                    <p>太原の王生という書生が、ある日、道で美しい女性に出会った。女は一人で歩いており、どこか寂しげな様子だった。王生が声をかけると、女は夫に虐待されて逃げてきたと涙ながらに語った。</p>
+                    <p>王生は女を不憫に思い、自宅の離れに住まわせることにした。妻には内緒にしていたが、女の美貌に心を奪われ、日々通うようになった。</p>
+                    <p>ある日、道士が王生の家の前を通りかかり、「この家には妖気がある」と警告した。しかし、王生は女の美しさに惑わされ、道士の言葉を信じなかった。</p>
+                    <p>心配になった王生がそっと女の部屋を覗くと、恐ろしい光景を目にした。醜い鬼が人の皮を広げ、筆で彩色を施していたのだ。鬼は彩色が終わると、その皮を身にまとい、再び美しい女の姿になった。</p>
+                    <p>恐怖に震えた王生は道士を探し出し、助けを求めた。道士は王生に護符を与えたが、鬼の力は強く、ついに王生は胸を裂かれ、心臓を奪われて死んでしまった。</p>
+                    <p>王生の妻・陳氏は夫の死を嘆き悲しんだ。道士は陳氏に「市場で最初に出会った人に、どんなに汚くても頭を下げて助けを求めよ」と告げた。</p>
+                    <p>陳氏が市場に行くと、狂った乞食に出会った。乞食は陳氏に唾を吐きかけたが、陳氏は耐えて頭を下げ続けた。すると乞食は薬を渡し、「これを夫に飲ませよ」と言った。</p>
+                    <p>陳氏が薬を王生の口に入れると、なんと王生は生き返った。画皮の鬼は道士によって退治され、美しい皮だけが残された。</p>
+                    <p>この物語は、外見の美しさに惑わされることの危険性と、真の愛と献身の力を教えている...</p>
+                `
+            },
+            'nie-xiaoqian': {
+                title: "聶小倩",
+                content: `
+                    <p>書生の寧采臣は、金華で宿を探していたが、どこも満室だった。仕方なく、人々が恐れる蘭若寺に泊まることにした。</p>
+                    <p>夜になると、美しい女性が現れた。彼女は聶小倩と名乗り、寧采臣に近づいてきた。しかし、寧采臣は真面目な性格で、彼女の誘惑を断った。</p>
+                    <p>小倩は寧采臣の高潔さに心を打たれ、真実を告白した。「私は幽霊です。妖怪に操られて、男性を誘惑し、その精気を奪っています。でも、あなたのような方を害したくありません」</p>
+                    <p>寧采臣は小倩を憐れみ、彼女を救う方法を探した。剣仙・燕赤霞の助けを借りて妖怪を退治し、小倩の遺骨を掘り出して故郷に埋葬した。</p>
+                    <p>その後、小倩は寧家に生まれ変わり、寧采臣と結ばれた。二人は幸せな家庭を築き、多くの子宝に恵まれた...</p>
+                `
+            },
+            'qingfeng': {
+                title: "青鳳",
+                content: `
+                    <p>耿去病という青年は、叔父の家に身を寄せていた。ある夜、隣家から美しい女性が塀を越えてやってきた。彼女は青鳳と名乗った。</p>
+                    <p>二人は恋に落ち、密かに会うようになった。青鳳は不思議な力を持っており、耿去病が困っている時にはいつも助けてくれた。</p>
+                    <p>しかし、青鳳には秘密があった。彼女は狐の一族で、人間との恋は一族の掟に反していた。青鳳の父は激怒し、娘を連れ戻そうとした。</p>
+                    <p>青鳳は耿去病への愛を貫き、父に対して「彼なしでは生きていけない」と訴えた。耿去病も青鳳の正体を知っても、変わらぬ愛を誓った。</p>
+                    <p>最終的に、青鳳の真心と耿去病の誠実さが認められ、二人は結ばれた。青鳳は人間として生きることを選び、幸せな家庭を築いた...</p>
+                `
+            },
+            'huangying': {
+                title: "黄英",
+                content: `
+                    <p>馬子才は菊の花を愛する青年だった。ある日、珍しい菊を売る姉弟に出会った。姉は黄英、弟は陶生といった。</p>
+                    <p>馬子才は二人と親しくなり、一緒に菊を育てるようになった。黄英の育てる菊は見事で、どんな品種も美しく咲かせることができた。</p>
+                    <p>時が経ち、馬子才は黄英に恋をした。しかし、黄英と陶生には秘密があった。二人は菊の精で、人間界で修行をしていたのだ。</p>
+                    <p>真実を知った馬子才は驚いたが、黄英への愛は変わらなかった。「花の精でも人間でも、君は君だ」と告白した。</p>
+                    <p>黄英も馬子才の純粋な愛に応え、人間として生きることを決めた。二人は結婚し、美しい菊園を営みながら、幸せに暮らした...</p>
+                `
+            },
+            'xiaocui': {
+                title: "小翠",
+                content: `
+                    <p>王太常は息子の嫁を探していた。息子は少し頭が弱く、なかなか嫁が見つからなかった。ある日、美しい娘・小翠が現れ、息子の嫁になりたいと申し出た。</p>
+                    <p>小翠は献身的な妻となり、頭の弱い夫を優しく世話した。また、不思議な力で家の財産を増やし、王家を繁栄させた。</p>
+                    <p>しかし、小翠には秘密があった。彼女は狐の精で、王太常がかつて助けた老狐の娘だった。恩返しのために人間界に来たのだ。</p>
+                    <p>ある日、小翠の正体を疑う者が現れ、道士を呼んで正体を暴こうとした。小翠は正体を明かし、「恩返しは済みました」と言って去っていった。</p>
+                    <p>王家の人々は小翠の献身に感謝し、彼女のために祠を建てて祀った。不思議なことに、息子の頭もよくなり、王家はますます繁栄した...</p>
+                `
+            },
+            'yingning': {
+                title: "嬰寧",
+                content: `
+                    <p>王子服は墓参りの帰り道、美しい少女に出会った。少女はいつも笑っており、その笑い声は鈴のように美しかった。名を嬰寧といった。</p>
+                    <p>王子服は嬰寧に一目惚れし、彼女の家を探し出した。嬰寧の母は、娘との結婚を許してくれた。</p>
+                    <p>結婚後、嬰寧の不思議な性質が明らかになった。彼女は何を見ても笑い、悲しいことがあっても笑っていた。実は、嬰寧は狐の娘で、人間の感情をまだ完全に理解していなかったのだ。</p>
+                    <p>ある日、嬰寧の笑い声で隣人とトラブルになった。王子服が嬰寧に「時には笑わない方がいい」と教えると、嬰寧は初めて涙を流した。</p>
+                    <p>それ以来、嬰寧は人間の感情を理解し、適切に振る舞うようになった。しかし、その純真な笑顔は変わらず、周りの人々を幸せにし続けた...</p>
+                `
+            },
+            'lianxiang': {
+                title: "蓮香",
+                content: `
+                    <p>桑暁という青年は、美しい二人の女性と出会った。一人は蓮香という狐の精、もう一人は李氏という女幽霊だった。</p>
+                    <p>最初、蓮香と李氏は互いを嫌い、桑暁を巡って争った。蓮香は「幽霊は陰気が強すぎる」と言い、李氏は「狐は獣臭い」と反論した。</p>
+                    <p>しかし、桑暁が病に倒れた時、二人は協力して看病した。蓮香は薬草を集め、李氏は陰気を吸い取って桑暁を助けた。</p>
+                    <p>この経験を通じて、蓮香と李氏は互いを理解し、姉妹のような絆で結ばれた。三人は奇妙だが幸せな関係を築いた。</p>
+                    <p>後に李氏は転生し、蓮香の導きで再び桑暁と結ばれた。蓮香も人間として生まれ変わり、三人は正式な家族となって幸せに暮らした...</p>
+                `
+            },
+            'xiaomei': {
+                title: "小梅",
+                content: `
+                    <p>封雲亭は梅の花を愛する文人だった。庭に珍しい梅の木を植え、毎日世話をしていた。ある雪の夜、梅の木の下で美しい女性に出会った。</p>
+                    <p>女性は小梅と名乗り、封雲亭の梅への愛情に感動して現れたと言った。二人は詩を詠み合い、心を通わせた。</p>
+                    <p>小梅は夜にだけ現れ、明け方には姿を消した。封雲亭は小梅が普通の人間ではないことに気づいたが、彼女への愛は深まるばかりだった。</p>
+                    <p>ある日、嫉妬深い隣人が梅の木を切り倒そうとした。小梅は自らの命と引き換えに梅の木を守った。</p>
+                    <p>封雲亭の悲しみは深く、小梅を偲んで梅の木の世話を続けた。すると翌年、梅の木から生まれた小さな女の子が現れ、それは小梅の生まれ変わりだった...</p>
+                `
+            },
+            'wangliulang': {
+                title: "王六郎",
+                content: `
+                    <p>漁師の許は、ある日釣りをしていると、水中から「助けてくれ」という声を聞いた。網を投げると、一人の男が上がってきた。男は王六郎と名乗った。</p>
+                    <p>王六郎は実は水鬼で、替わりの者を見つけて転生しなければならなかった。しかし、許の親切に感動し、友人となった。</p>
+                    <p>王六郎は許の釣りを手伝い、大漁をもたらした。二人は酒を飲み交わし、真の友情を育んだ。</p>
+                    <p>やがて王六郎の転生の機会が来た。しかし、身代わりとなるはずの人が幼い子供を残していることを知り、王六郎は転生を諦めた。</p>
+                    <p>この善行により、王六郎は土地神に任命された。許との友情は続き、王六郎は友人として許の家族を守り続けた...</p>
+                `
+            },
+            'xiaoxie': {
+                title: "小謝",
+                content: `
+                    <p>陶望三の娘・小謝は、十七歳で病死した。両親は深く悲しんだが、小謝の霊は家を離れず、家族を見守り続けた。</p>
+                    <p>ある夜、泥棒が家に入ろうとした時、小謝の霊が現れて泥棒を追い払った。家族は小謝がまだ側にいることを知って慰められた。</p>
+                    <p>小謝は夜になると現れ、母の裁縫を手伝い、父の帳簿を整理した。妹が病気になった時は、薬草の在処を教えて救った。</p>
+                    <p>やがて小謝は「もう転生の時が来ました」と告げた。家族は別れを惜しんだが、小謝は「また家族として生まれ変わります」と約束した。</p>
+                    <p>数年後、親戚の家に生まれた女の子が、小謝の生まれ変わりだとわかった。その子は前世の記憶を持ち、再び家族と幸せに暮らした...</p>
+                `
+            },
+            'lupan': {
+                title: "陸判",
+                content: `
+                    <p>朱爾旦は豪快な性格の男で、ある夜、友人たちと肝試しで冥界の判官の廟に行った。皆が恐れる中、朱爾旦だけは判官の像に酒を捧げて飲んだ。</p>
+                    <p>その夜から、陸判官が朱爾旦の家に現れるようになった。二人は酒を飲み交わし、親友となった。</p>
+                    <p>朱爾旦の妻は醜い容姿で悩んでいた。陸判官は朱爾旦のために、美しい女性の首と入れ替えてやった。妻は美人となったが、性格は変わらなかった。</p>
+                    <p>また、朱爾旦が科挙に失敗すると、陸判官は彼の心臓を聡明な者の心臓と取り替えた。朱爾旦は見事に合格した。</p>
+                    <p>陸判官との友情は朱爾旦の死後も続き、冥界でも二人は親友として過ごした...</p>
+                `
+            },
+            'cricket': {
+                title: "促織",
+                content: `
+                    <p>明の宣徳年間、皇帝はコオロギの闘いを好んだ。成名という男は、村からコオロギを献上する役目を負った。</p>
+                    <p>良いコオロギが見つからず、成名は困り果てた。占い師の助言で、ようやく優れたコオロギを捕まえたが、息子が誤って逃がしてしまった。</p>
+                    <p>恐れた息子は井戸に身を投げた。奇跡的に助かったが、意識が戻らなかった。</p>
+                    <p>翌日、小さいが俊敏なコオロギが現れた。このコオロギは全ての相手を打ち負かし、皇帝に献上されて大いに喜ばれた。</p>
+                    <p>成名が家に帰ると、息子が目を覚ました。息子は「自分がコオロギになって戦った」と語った。成名は褒美を得て、一家は幸せに暮らした...</p>
+                `
+            },
+            'abao': {
+                title: "阿寶",
+                content: `
+                    <p>孫子楚は絶世の美女・阿寶に一目惚れした。しかし、阿寶の家は裕福で、貧しい書生の孫子楚は相手にされなかった。</p>
+                    <p>孫子楚は恋の病に倒れ、日に日に衰弱していった。ついに息を引き取ったが、その魂は阿寶のもとへ飛んでいった。</p>
+                    <p>阿寶は突然、孫子楚の存在を感じるようになった。彼の真摯な愛に心を動かされ、次第に孫子楚を思うようになった。</p>
+                    <p>阿寶が孫子楚の墓を訪れて涙を流すと、奇跡が起きた。孫子楚は生き返り、二人は結ばれた。</p>
+                    <p>「真の愛は死をも超える」という言葉通り、二人は幸せな家庭を築き、子宝にも恵まれた...</p>
+                `
+            },
+            'xifangping': {
+                title: "席方平",
+                content: `
+                    <p>席方平の父は、隣人の羊某に恨まれて死んだ。死後も羊某は賄賂を使って冥界の役人を買収し、席父を苦しめ続けた。</p>
+                    <p>席方平は父を救うため、魂となって冥界に下った。しかし、城隍も冥王も羊某から賄賂を受け取っており、席方平の訴えを聞き入れなかった。</p>
+                    <p>それどころか、席方平は「誣告罪」で拷問を受けた。火であぶられ、のこぎりで体を切られても、席方平は訴えを取り下げなかった。</p>
+                    <p>ついに席方平は最高位の冥界の帝のもとにたどり着いた。帝は公正な裁きを下し、腐敗した役人たちを処罰した。</p>
+                    <p>席父は苦しみから解放され、席方平も現世に戻った。正義は最後に勝利し、親孝行の心が報われた...</p>
+                `
+            },
+            'kaochenghuang': {
+                title: "考城隍",
+                content: `
+                    <p>宋燾は学問に優れ、人格も高潔な人物だった。ある日、不思議な夢を見た。役人が現れて「城隍神の試験があるので来てください」と言った。</p>
+                    <p>試験会場に着くと、多くの受験者がいた。試験問題は「一日に命を受け、これを終身保つ」という一節だった。</p>
+                    <p>宋燾は「人は生まれた時に天から受けた善なる本性を、一生涯保ち続けるべきだ」という内容の答案を書いた。</p>
+                    <p>試験官は宋燾の答案を絶賛し、「あなたこそ城隍神にふさわしい」と告げた。しかし、宋燾の寿命はまだ残っていた。</p>
+                    <p>宋燾は現世に戻り、予言通りの日に安らかに世を去った。その後、城隍神として人々を守り、正義を実現した...</p>
+                `
+            }
+        };
+        
+        function openStory(storyId) {
+            const story = stories[storyId];
+            if (story) {
+                document.getElementById('reader-title').textContent = story.title;
+                document.getElementById('reader-content').innerHTML = story.content;
+                document.getElementById('reader').classList.add('active');
+                document.getElementById('reader').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function closeReader() {
+            document.getElementById('reader').classList.remove('active');
+        }
+        
+        function scrollToCategories() {
+            document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

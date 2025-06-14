@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>シンプルテスト</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="padding: 20px; background: #fff; color: #000;">
+        <h1>山海経クロニクル - シンプルテスト</h1>
+        <div id="test-output"></div>
+    </div>
+
+    <script src="creatures.js"></script>
+    <script src="locations.js"></script>
+    <script src="game.js"></script>
+    
+    <script>
+        const output = document.getElementById('test-output');
+        
+        function log(message) {
+            output.innerHTML += `<div>${message}</div>`;
+        }
+        
+        // テスト実行
+        try {
+            log('=== ゲームオブジェクトテスト ===');
+            
+            if (typeof Game !== 'undefined') {
+                log('✓ Gameクラスが定義されています');
+            } else {
+                log('✗ Gameクラスが見つかりません');
+            }
+            
+            if (typeof CreatureSystem !== 'undefined') {
+                log('✓ CreatureSystemクラスが定義されています');
+            } else {
+                log('✗ CreatureSystemクラスが見つかりません');
+            }
+            
+            if (typeof LocationSystem !== 'undefined') {
+                log('✓ LocationSystemクラスが定義されています');
+            } else {
+                log('✗ LocationSystemクラスが見つかりません');
+            }
+            
+            if (typeof game !== 'undefined') {
+                log('✓ gameインスタンスが存在します');
+                log(`  - player.hp: ${game.player.hp}`);
+                log(`  - currentLocation: ${game.locationSystem.currentLocation}`);
+                log(`  - capturedCreatures: ${game.creatureSystem.capturedCreatures.length}`);
+            } else {
+                log('✗ gameインスタンスが見つかりません');
+            }
+            
+            if (typeof CREATURES !== 'undefined') {
+                log('✓ CREATURESデータベースが存在します');
+                log(`  - 生物数: ${Object.keys(CREATURES).length}`);
+            } else {
+                log('✗ CREATURESデータベースが見つかりません');
+            }
+            
+            if (typeof LOCATIONS !== 'undefined') {
+                log('✓ LOCATIONSデータベースが存在します');
+                log(`  - 場所数: ${Object.keys(LOCATIONS).length}`);
+            } else {
+                log('✗ LOCATIONSデータベースが見つかりません');
+            }
+            
+            log('\n=== 基本動作テスト ===');
+            
+            // メインメニューを表示
+            setTimeout(() => {
+                const mainMenu = document.getElementById('main-menu');
+                if (mainMenu) {
+                    log('✓ メインメニュー要素が存在します');
+                } else {
+                    log('✗ メインメニュー要素が見つかりません');
+                }
+            }, 2500);
+            
+        } catch (error) {
+            log(`エラー発生: ${error.message}`);
+            console.error(error);
+        }
+    </script>
+</body>
+</html>

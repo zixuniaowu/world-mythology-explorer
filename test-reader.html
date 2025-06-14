@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Reader Test</title>
+</head>
+<body>
+    <h1>山海経リーダーテスト</h1>
+    <div id="test-output"></div>
+
+    <script src="shanhaijing-text.js"></script>
+    <script>
+        const output = document.getElementById('test-output');
+        
+        // データの存在確認
+        if (typeof SHANHAIJING_TEXTS !== 'undefined') {
+            output.innerHTML += '<p>✓ SHANHAIJING_TEXTSが定義されています</p>';
+            
+            // 各章の確認
+            const chapters = ['eastern_chapter', 'western_chapter', 'southern_chapter', 'northern_chapter', 'central_chapter'];
+            chapters.forEach(chapter => {
+                if (SHANHAIJING_TEXTS[chapter]) {
+                    output.innerHTML += `<p>✓ ${chapter}: ${SHANHAIJING_TEXTS[chapter].title} - ${SHANHAIJING_TEXTS[chapter].sections.length}セクション</p>`;
+                } else {
+                    output.innerHTML += `<p>✗ ${chapter}が見つかりません</p>`;
+                }
+            });
+        } else {
+            output.innerHTML += '<p>✗ SHANHAIJING_TEXTSが定義されていません</p>';
+        }
+    </script>
+</body>
+</html>

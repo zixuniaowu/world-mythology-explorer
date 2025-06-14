@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神話リーダーテンプレート</title>
+    <meta name="description" content="This is a template for creating mythology readers. Copy this file and modify for each mythology system (Norse, Egyptian, Indian, Japanese, etc.)">
+    <!-- 
+    USAGE INSTRUCTIONS:
+    1. Copy this file and rename it (e.g., norse-mythology-reader.html)
+    2. Update the color scheme in CSS variables
+    3. Replace MYTHOLOGY_DATA with your mythology content
+    4. Update all text labels and translations
+    5. Customize the deity/hero card structure as needed
+    -->
+</head>
+<body>
+    <h1>神話リーダーテンプレート</h1>
+    <p>このファイルをコピーして、各神話システム用に修正してください：</p>
+    <ul>
+        <li>norse-mythology-reader.html - 北欧神話</li>
+        <li>egyptian-mythology-reader.html - エジプト神話</li>
+        <li>indian-mythology-reader.html - インド神話</li>
+        <li>japanese-mythology-reader.html - 日本神話</li>
+    </ul>
+    
+    <h2>テンプレート構造：</h2>
+    <pre>
+const MYTHOLOGY_DATA = {
+    volumeKey: {
+        title: '日本語タイトル',
+        titleEn: 'English Title',
+        titleZh: '中文标题',
+        chapters: [
+            {
+                id: 'unique-id',
+                title: '章タイトル',
+                titleEn: 'Chapter Title',
+                titleZh: '章节标题',
+                content: {
+                    ja: '日本語の内容',
+                    en: 'English content',
+                    zh: '中文内容'
+                },
+                // Additional fields as needed
+            }
+        ]
+    }
+};
+    </pre>
+    
+    <h2>カラースキーム例：</h2>
+    <ul>
+        <li>Greek (紫): #5f27cd, #7f39fb</li>
+        <li>Norse (青緑): #006064, #00838f</li>
+        <li>Egyptian (金): #f57c00, #ffa726</li>
+        <li>Indian (オレンジ): #e65100, #ff6f00</li>
+        <li>Japanese (赤): #c62828, #ef5350</li>
+    </ul>
+</body>
+</html>

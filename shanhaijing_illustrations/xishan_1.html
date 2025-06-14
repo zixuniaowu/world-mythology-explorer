@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>è¥¿å±±ä¸ç» - ãå±±æµ·ç»ã</title>       
+    	<meta name="keywords" content="å±±æµ·ç»">
+    <meta name="description" content="">
+    <link rel="stylesheet" href="https://5000yan.com/static/web/wuqianyan/css/bootstrap.min.css">
+<script src="https://5000yan.com/static/web/wuqianyan/js/jquery.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8HSRETN5C"></script>
+<script src="https://5000yan.com/static/web/wuqianyan/js/wqy.js?1.25"></script>
+<link rel="stylesheet" href="https://5000yan.com/static/web/wuqianyan/css/style.css?1.129">
+  </head>
+  <body>
+    
+                <!-- å¨å±é®ç½©ï¼éåshowToastå½æ°ä½¿ç¨ -->
+                <div id="overlayMask" class="overlay-mask d-none" style="z-index: 9998;"></div>
+
+<!-- <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top shadow-sm" > -->
+<nav class="navbar bg-white sticky-top shadow-sm" >
+  <div class="container">
+
+      <a class="logo me-2" href="https://5000yan.com" alt="5000è¨">5000è¨</a>
+
+      <div class="d-flex nav-css align-items-center me-auto">
+            <a class="nav-link d-none d-md-flex" href="https://5000yan.com">é¦é¡µ</a>
+            <!-- <a class="nav-link shoppp"></a> -->
+
+
+            <div class="d-none d-lg-flex px-3 sousuo-pc">
+              <form id="form5" class="pcsearch"  name="formsearch" action="https://5000yan.com/apps/search.php" action="https://5000yan.com/apps/search.php" >
+                <input type="hidden" name="kwtype" value="0">
+                <input type="hidden" name="typee" value="1">
+                  <input name="q" type="text" class="" placeholder="è¯·è¾å¥æç´¢å³é®è¯..." id="q" value="">	
+                  <button type="submit" id="validateimg" class="">
+                    æç´¢
+                  </button>
+              </form>
+            </div>
+
+      </div>
+
+
+
+     
+      <a class="d-flex align-items-center nav-css" id="toggleTheme"></a>
+      
+      <div class="d-none d-md-flex align-items-center">
+
+        <div class="popup d-none d-md-flex px-2" onclick="tanchuang('myPopupp')">
+        <svg class="icon" style="width:2em;height:2em;vertical-align: -0.5em;" aria-hidden="true"><use xlink:href="#icon-weixin"></use></svg>
+        <span class="popuptext" id="myPopupp">
+        <p><img src="https://5000yan.com/static/web/wuqianyan/img/gzh.png"/></p>
+        <div class="mt-3 mb-1 text-white">å¬ä¼å·ï¼5000è¨</div>
+      </div>
+
+        <div class="popup" onclick="tanchuang('ydlogin')" style="margin-right: 20px;">
+        <svg class="icon" style="width:1.6em;height:1.6em;vertical-align: -0.4em;"  aria-hidden="true"><use xlink:href="#icon-yidongduan"></use></svg>
+        <span class="popuptext" id="ydlogin">
+            <div id="pcqr"></div>
+            <div class="mt-3 mb-1 text-white">ææºæ«ç è®¿é®æ¬é¡µ</div>
+        </div>
+
+    </div>
+
+    
+
+
+      <div class="d-md-none weixin px-1">
+        <div class="popup" onclick="tanchuang('myPopup')"><svg class="icon"  aria-hidden="true"><use xlink:href="#icon-weixin"></use></svg><span class="popuptext" id="myPopup">
+        å¬ä¼å·ï¼5000è¨
+        </span></div>
+      </div>
+
+    <a class="d-lg-none align-items-center px-1" href="https://5000yan.com/apps/list.php?tid=525">
+      <svg class="icon" aria-hidden="true" style="width:1.6em;height:1.6em;color: #fff;"><use xlink:href="#icon-sousuo"></use></svg>
+    </a>
+
+
+      <div class="nav_pc_login">
+        <div class="d-flex align-items-center nav-css"  data-bs-toggle="modal" data-bs-target="#exampleModal">    
+          <img data-wuqianyan="https://5000yan.com/static/web/wuqianyan/img/boy.png" class="rounded-circle d-none d-md-flex" width="40px" height="40px"> 
+          <span class="nav-link d-none d-md-flex">ç»å½ æ³¨å</span>
+        </div>
+      </div>
+    
+    
+      <div class="nav_yd_login">
+        <div class="d-md-none px-1" data-bs-toggle="modal" data-bs-target="#exampleModal"> 
+          <svg class="icon" aria-hidden="true" style="vertical-align: -0.7em;color: #747474;"><use xlink:href="#icon-huiyuan21"></use></svg>
+        </div>
+      </div>
+
+
+
+  </div>
+</nav>
+
+
+
+    <div class="container mt-md-2">
+      <div class="row custom-row">
+        <div class="col-md-9  gx-2">
+
+          <div class="py-3 px-2 bg-white headimg d-block d-md-rounded-top">
+            <h1 class="pb-2 text-white text-center">å±±æµ·ç»</h1>   
+            <div> ãå±±æµ·ç»ãæ¯åç§¦å¸ç±ä¸­åå«äºåå²ãç¥è¯ãå®æãå¤©æãå°çãæ°ä¿ãæ°æãç©äº§ãå»è¯ç­å¤ç§èµæçå°ç¾ç§å¨ä¹¦ï¼ä¹å¯ä»¥è¯´æ¯æå¤èçå°çäººæå¿ãå®èªå¤ä»¥æ¥å°±è¢«è§ä¸ºä¸é¨å¥ä¹¦ï¼å®è¶è¶äºæ¶ç©ºçéå¶ï¼è®°åç¥å¥çäººç©ãçµå¼çç¦½å½ãååå­æãæµ·å¤ä»å±±ï¼è¿æå¥çå¼å®â¦â¦å½¢è±¡å°å±ç°äºä¸å¹å¹ç¥å¥çè¿å¤çæ´»å¾å·ã</div>
+            </div>
+            
+            			<!-- nav -->
+			<div class="bg-white rounded-bottom">
+        <ul class="navbar justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link text-success"  href="https://shanhaijing.5000yan.com/">å¨æç®å½</a>
+          </li><li class="nav-item">
+            <a class="nav-link text-success"  href="https://shanhaijing.5000yan.com/jianjie/">ç®ä»</a>
+          </li><li class="nav-item">
+            <a class="nav-link text-success"  href="https://shanhaijing.5000yan.com/xitong/">ç³»ç»</a>
+          </li>
+          </ul>
+        </div>
+      <!-- nav end-->
+
+
+          <div class="py-1  px-3 my-2 bg-white rounded">
+            <div class="neirong-ding"></div>
+
+            <!-- æç« æ é¢ -->
+            <h4 class="py-3 text-center">è¥¿å±±ä¸ç»</h4>
+
+						<!-- å½åä½ç½® -->
+            <div class="search-block-postMetaWrap pb-3 justify-content-center d-flex align-items-center" >
+              å½åä½ç½®ï¼<li class='breadcrumb-item'><a href='https://5000yan.com/'>ä¸»é¡µ</a></li><li class='breadcrumb-item'><a href='https://shanhaijing.5000yan.com/'>å±±æµ·ç»</a></li><li class='breadcrumb-item'><a href='https://shanhaijing.5000yan.com/xishan/'>ç¬¬äºå· è¥¿å±±ç»</a></li><li class='breadcrumb-item'><a href='https://shanhaijing.5000yan.com/xishan/1/'>è¥¿å±±ä¸ç»</a></li>
+            </div>
+
+
+              <div class="text-center">
+              
+            </div>
+     
+
+
+          <div class="py-2"><p style="text-align: center;">
+	<strong>&nbsp;è¥¿å±±ä¸ç»è·¯çº¿ç¤ºæå¾</strong></p>
+<p style="text-align: center;">
+	<strong><a href="https://5000yan.com/static/allimg/220504/1FUT413-0.jpg" target="_blank"><img alt="" data-wuqianyan="https://5000yan.com/static/allimg/220504/1FUT413-0.jpg" /></a></strong></p>
+<p>
+	ãè¥¿å±±ä¸ç»ãè®°å½äºé±æ¥å±±å°å±±ï¼è¿äºååº§å±±çå°çä½ç½®åå±±å·é£è²ï¼å®ä»¬å¤§è´åå¸å¨ä»éè¥¿ãçèãéæµ·ä¸å¸¦ï¼èåçè¥¿å²³åå±±å°±å¨è¿åå±±ç³»ä¸­ã<br />
+	ç»ä¸­è¿è®°è½½äºè®¸å¤æè¯ç¨ä»·å¼çæ¤ç©ï¼è¯´æå½æ¶çäººä»¬å·²ç»å·å¤åæ­¥çè¯å­¦ç¥è¯ï¼å¦è½è§£æ¯æ¶è¿çæ¨æ§¿ãè½æ²»çå¿çççèèèãè½æ²»çæ¶ç®ççèç­ãå½æ¶çäººä»¬è¿ç¨ç¢±æ§çæ´ç³æ¥æ´æ¾¡ï¼å¹¶æç¾¬ç¾çèèªæ¶å¨èº«ä¸é²æ­¢ç®è¤å¹²è£ã<br />
+	è¿åå±±ç³»ä¸­è¿æåç§éå½åºæ²¡ï¼å¦å­è¶³åç¿çè¥ãå¤´ä¸æååªè§ççå¦ãæ­¤å¤ï¼å±±ä¸­æ æ¯çé¹¦é¹ãæ°æ¯ç­ç¦½é¸ï¼æ°´ä¸­çæ´»çååªèçå¨å¨é±¼ã&nbsp;</p>
+<p style="text-align: center;">
+	<img alt="" data-wuqianyan="https://5000yan.com/static/allimg/220504/1FUR922-1.jpg" /></p>
+<p>
+	&nbsp;</p>
+<div style="text-align: center;">
+	&nbsp;</div>
+<p>
+	&nbsp;</p>
+</div>
+
+               </div> 
+
+          <div class="p-2 my-2 bg-white rounded">
+            <div class="xinxiliu"></div>
+            <div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-1.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">è¥¿å±±ç»åå±±ä¹é¦ï¼æ°é±æ¥ä¹å±±ï¼å¶ä¸å¤æ¾ï¼å¶ä¸å¤æ´ç³ãæå½çï¼å¶ç¶å¦ç¾èé©¬å°¾ï¼åæ°ç¾¬ç¾ï¼å¶èå¯ä»¥å·²èã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/095J2LW-0.jpg"/><span class='suijibody'> è¥¿å±±ä¸ç»åå±±å±±ç³»çç¬¬ä¸åº§å±±ï¼åå«é±æ¥å±±ï¼å±±ä¸æè®¸å¤æ¾æ ï¼å±±ä¸æå¾å¤æ´ç³ãå±±éæä¸ç§å½ï¼å½¢ç¶å¦ç¾ä¸è¬ï¼é¿çé©¬ä¸æ ·çå°¾å·´ï¼åå­å«ç¾¬ç¾ï¼å®çæ²¹èå¯ç¨æ¥æ²»çç®è¤å¹²è£ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-2.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">è¥¿ååäºéï¼æ°æ¾æä¹å±±ãæ¿©æ°´åºçï¼åæµæ³¨äºæ¸­ï¼å¶ä¸­å¤éãæé¸çï¼å¶åæ°ä³æ¸ ï¼å¶ç¶å¦å±±é¸¡ï¼é»èº«èµ¤è¶³ï¼å¯ä»¥å·²[ææ´(å·¦å³)]ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"> ï¼ä»é±æ¥å±±ï¼åè¥¿ååäºéï¼æåº§æ¾æå±±ãæ¿©æ°´åæºäºæ­¤å±±ï¼ååæµå¥æ¸­æ°´ï¼æ°´ä¸­æå¾å¤éãå±±éæä¸ç§é¸ï¼åå«ä³æ¸ ï¼å®çå½¢ç¶åå±±é¸¡ï¼èº«å­æ¯é»è²çï¼è¶³çªæ¯çº¢è²çï¼åäºå®çèï¼å¯ä»¥æ²»çç®è¤å¹²è£åç±ã </p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-3.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿å­åéï¼æ°å¤ªåä¹å±±ï¼åæèåæ¹ï¼å¶é«äºåä»ï¼å¶å¹¿åéï¼é¸å½è«å±ãæèçï¼åæ°è¥[è«é(å·¦å³)]ï¼å­è¶³åç¿¼ï¼è§åå¤©ä¸å¤§æ±ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/095Pa616-1.jpg"/><span class='suijibody'> ååè¥¿å­åéæåº§å±±ï¼åå«å¤ªåå±±ï¼å±±å¿åæ¯ç¨åæ§ååèæçä¸æ ·ï¼ååæ¹å½¢ï¼é«äºåä»ï¼èå´å¹¿éï¼çºµæ¨ªåéï¼è¿é¸å½é½æ æ³å¨å±±ä¸æ èº«ãï¼å±±ä¸­ï¼æä¸ç§èï¼åå«è¥[è«é(å·¦å³)]ï¼é¿çå­æ¡è¿ãååªç¿èï¼åªè¦å®ä¸åºç°ï¼å¤©ä¸å°±ä¼åçæ±ç¾ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-4.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿å«åéï¼æ°å°åä¹å±±ï¼å¶æ¨å¤èæï¼å¶å½å¤ã¸²çï¼å¶é´å¤ç£¬ç³ï¼å¶é³å¤ã»¬çä¹çãé¸å¤èµ¤é·©ï¼å¯ä»¥å¾¡ç«ãå¶èæèèï¼ç¶å¦ä¹é­ï¼èçäºç³ä¸ï¼äº¦ç¼æ¨èçï¼é£ä¹å·²å¿çã </h5>
+						  </div>
+						  <p class="mb-1 suiji"> ååè¥¿å«åéæåº§å±±ï¼åå«å°åå±±ï¼å±±ä¸çæ æ¨å¤æ¯èç±»æ¤ç©åæ¸æï¼å±±éçéå½å¤æ¯ã¸²çï¼å±±çåé¢æå¾å¤éåå¶ç£¬çç³å¤´ï¼å±±çåé¢æå¾å¤ã»¬ççãï¼å±±ä¸­çï¼é¸ç±»å¤æ¯çº¢è²çé¦é¸¡ï¼äººä»¬å¯ä»¥ç¨å®æ¥é²ç«ãå±±ä¸­è¿æä¸ç§å«èèçèï¼å½¢ç¶å¦ä¹é­ä¸è¬ï¼çé¿å¨ç³å¤´ä¸é¢ï¼æçä¹ææ´æ æ¨çé¿ï¼åäºå®å¯ä»¥æ²»çå¿ççç¾çã </p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-5.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿å«åéï¼æ°ç¬¦ç¦ºä¹å±±ï¼å¶é³å¤éï¼å¶é´å¤éãå¶ä¸ææ¨çï¼åæ°æèï¼å¶å®å¦æ£ï¼å¯ä»¥å·²èãå¶èå¤æ¡ï¼å¶ç¶å¦èµï¼èèµ¤åé»å®ï¼å¦å©´å¿èï¼é£ä¹ä½¿äººä¸æãç¬¦ç¦ºä¹æ°´åºçï¼èåæµæ³¨äºæ¸­ãå¶å½å¤è±èï¼å¶ç¶å¦ç¾èèµ¤é¬£ãå¶é¸å¤é´ï¼å¶ç¶å¦ç¿ èèµ¤åï¼å¯ä»¥å¾¡ç«ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/095R35645-0.jpg"/><span class='suijibody'> ååè¥¿å«åéæåº§å±±ï¼åå«ç¬¦ç¦ºå±±ï¼å±±çåé¢æå¾å¤éï¼åé¢æè®¸å¤éãå±±ä¸æä¸ç§æ ï¼åå«æèï¼ç»çæå®åæ£ï¼åäºå®å¯ä»¥æ²»çè³èãå±±ä¸­çé¿çèå¤ä¸ºæ¡ï¼å½¢ç¶åèµä¸æ ·ï¼å¼çº¢è²çè±ï¼ç»é»è²çæå®ï¼æå®çå½¢ç¶åå©´å¿çèå¤´ï¼äººåäºå®å°±ä¸ä¼äº§çè¿·æãç¬¦ç¦ºæ°´åæºäºæ­¤å±±ï¼ååæµå¥æ¸­æ²³ãå±±ä¸­çéå½å¤æ¯è±èï¼å®çå½¢ç¶åç¾ï¼å´é¿æçº¢è²çè¡å­ãå±±ä¸­çé¸...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-6.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿å­åéï¼æ°ç³èä¹å±±ï¼å¶æ¨å¤æ£æï¼å¶èå¤æ¡ï¼å¶ç¶å¦é­ï¼èç½åé»å®ï¼é£ä¹å·²ç¥ãå¶é³å¤ã»¬çä¹çï¼å¶é´å¤éãçæ°´åºçï¼èåæµæ³¨äºç¦ºæ°´ãå¶ä¸­ææµèµ­ï¼ä»¥æ¶çé©¬æ çã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/095S41H2-0.jpg"/><span class='suijibody'> åå¾è¥¿å­åéæåº§å±±ï¼åå«ç³èå±±ï¼å±±ä¸çé¿çå¾å¤æ£æ åæ¥ æ¨ï¼çé¿çèå¤ä¸ºæ¡èï¼è¿ç§èå½¢ç¶ä¸é­èç¸ä¼¼ï¼å¼ç½è²çè±ï¼ç»é»è²çæå®ï¼åäºè¿ç§æå®å¯ä»¥æ²»çç¥ç®ãå±±çåé¢æå¾å¤ã»¬ççï¼å±±çåé¢æè®¸å¤éãçæ°´åæºäºæ­¤ï¼ååæµå¥ç¦ºæ°´ãæ°´ä¸­æå¾å¤ç¡«ç£ºåèµ­é»ï¼å°å®ä»¬æ¶å¨çé©¬èº«ä¸ï¼çé©¬å°±ä¸ä¼ççã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-7.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ä¸åéï¼æ°è±å±±ï¼å¶ä¸å¤æ»ãæ©¿ï¼å¶é´å¤éï¼å¶é³å¤èµ¤éãç¦ºæ°´åºçï¼æµæ³¨äºææ°´ï¼å¶ä¸­å¤é³¢é±¼ï¼å¶ç¶å¦é³ï¼å¶é³å¦ç¾ãå¶é³å¤ç®­ãäï¼å¶å½å¤çãç¾¬ç¾ãæé¸çï¼å¶ç¶å¦é¹ï¼é»èº«èèµ¤åï¼å¶åæ°è¥éï¼é£ä¹å·²ç ï¼å¯ä»¥æè«ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/095T4H24-0.jpg"/><span class='suijibody'> ååè¥¿ä¸åéæåº§å±±ï¼åå«è±å±±ï¼å±±ä¸é¿çå¾å¤æ»æ åæ©¿æ ï¼å±±çåé¢æå¾å¤éï¼å±±çåé¢æå¾å¤èµ¤éãç¦ºæ°´åæºäºæ­¤å±±ï¼ååæµå¥ææ°´ï¼æ°´ä¸­æå¾å¤é³¢é±¼ï¼å½¢ç¶åé³ï¼ååºçå£°é³åç¾çå«åå£°ãå±±çåé¢çé¿çå¾å¤ç®­ç«¹åäç«¹ï¼å±±éçéå½å¤æ¯çãç¾¬ç¾ãå±±ä¸­æä¸ç§é¸ï¼å½¢ç¶åé¹é¹ï¼é¿çé»è²çç¾½æ¯ãçº¢è²çå´ï¼è¿ç§é¸åå«è¥éï¼äººåäºå®å¯ä»¥æ²»çæ¶ç®ï¼...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-8.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿äºåäºéï¼æ°ç«¹å±±ï¼å¶ä¸å¤ä¹æ¨ï¼å¶é´å¤éãæèçï¼å¶åæ°é»éï¼å¶ç¶å¦æ¨ï¼å¶å¶å¦éº»ï¼ç½åèèµ¤å®ï¼å¶ç¶å¦èµ­ï¼æµ´ä¹å·²ç¥ï¼åå¯ä»¥å·²èãç«¹æ°´åºçï¼åæµæ³¨äºæ¸­ï¼å¶é³å¤ç«¹ç®­ï¼å¤èçãä¸¹æ°´åºçï¼ä¸åæµæ³¨äºæ´æ°´ï¼å¶ä¸­å¤æ°´çï¼å¤äººé±¼ãæå½çï¼å¶ç¶å¦è±èç½æ¯ï¼å¤§å¦ç¬èé»ç«¯ï¼åæ°è±ªå½ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/0959242S5-0.jpg"/><span class='suijibody'> åå¾è¥¿äºåäºéæä¸åº§å±±ï¼åå«ç«¹å±±ï¼å±±ä¸é¿æå¾å¤ä¹æ¨ï¼å±±çåé¢æå¾å¤éãå±±ä¸­çé¿çä¸ç§èï¼åå«é»éï¼å½¢ç¶åè­æ¤¿æ ï¼å¶å­ä¸éº»ç±»æ¤ç©çå¶å­ç¸åï¼å¼ç½è²çè±ï¼ç»çº¢è¤è²çæå®ï¼å®çå½¢ç¶åçº¢åï¼ç¨å®æ¥æ´æ¾¡ï¼è½å¤æ²»çç¥ç®ï¼è¿å¯ä»¥æ²»çæµ®è¿ãç«¹æ°´æºèªæ­¤å±±ï¼ååæµå¥æ¸­æ°´ï¼æ°´çåé¢é¿çå¾å¤ç»ç«¹å­ï¼è¿æè®¸å¤ç°ç½è²ççãä¸¹æ°´ä¹ä»æ­¤å±±åæºï¼åä¸åæµ...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-9.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ç¾äºåéï¼æ°æµ®å±±ï¼å¤ç¼æ¨ï¼æ³å¶èæ ä¼¤ï¼æ¨è«å±ä¹ãæèçï¼åæ°è°èï¼éº»å¶èæ¹èï¼èµ¤åèé»å®ï¼è­å¦é¡èï¼ä½©ä¹å¯ä»¥å·²ç ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/0959343156-0.jpg"/><span class='suijibody'> ååè¥¿ä¸ç¾äºåéæåº§å±±ï¼åå«æµ®å±±ï¼å±±ä¸é¿çå¾å¤ç¼æ¨ï¼å¶å­å¦æ³æ çå¶å­ä¸è¬ï¼ä½ä¸é¿åºï¼æ å¹²éçæèè«ãå±±ä¸­æä¸ç§èï¼åå«è°èï¼å®é¿çä¸éº»ç±»æ¤ç©ä¸æ ·çå¶å­ï¼æ¹å½¢çèå¹²ï¼å¼çº¢è²çè±ï¼ç»é»è²çæå®ï¼ååºå¦è¼èä¸è¬çé¦å³ï¼æå®ä½©æ´å¨èº«ä¸ï¼è½æ²»çæ¶ç®ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-10.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ä¸åéï¼æ°ç¾­æ¬¡ä¹å±±ï¼æ¼æ°´åºçï¼åæµæ³¨äºæ¸­ãå¶ä¸å¤æ£«ãæ©¿ï¼å¶ä¸å¤ç«¹ç®­ï¼å¶é´å¤èµ¤éï¼å¶é³å¤å©´å£ä¹çãæå½çï¼å¶ç¶å¦ç¦ºèé¿èï¼åæï¼å¶åæ°å£ãæé¸çï¼å¶ç¶å¦æ­ï¼äººé¢èä¸è¶³ï¼æ°æ©[éå·´(ä¸ä¸)]ï¼å¬è§å¤è°ï¼æä¹ä¸çé·ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/09594T2F-0.jpg"/><span class='suijibody'> ååè¥¿ä¸åéæåº§å±±ï¼åå«ç¾­æ¬¡å±±ãæ¼æ°´åæºäºç¾­æ¬¡å±±ï¼ååæµå¥æ¸­æ°´ãå±±ä¸çé¿çå¾å¤æ£«æ åæ©¿æ ï¼å±±ä¸é¿çè®¸å¤å°ç«¹ï¼å±±çåé¢æè®¸å¤èµ¤éï¼å±±çåé¢æè®¸å¤å©´å£çãå±±ä¸­æç§éå½ï¼å®çå½¢ç¶åçç´ï¼åèå¾é¿ï¼æé¿ææ·ï¼å®çåå­å«å£ãæä¸ç§é¸ï¼å½¢ç¶åç«å¤´é¹°ï¼é¿çäººä¸æ ·çé¢å­ï¼åªæä¸åªèï¼å®çåå­å«æ© [éå·´(ä¸ä¸ )] ï¼è¿ç§...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-11.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ç¾äºåéï¼æ°æ¶å±±ï¼æ èæ¨ãéæ°´åºçï¼åæµæ³¨äºæ¸­ï¼å¶ä¸­å¤æ°´çã </h5>
+						  </div>
+						  <p class="mb-1 suiji"> ååè¥¿ä¸ç¾äºåéæåº§å±±ï¼åå«æ¶å±±ï¼å±±ä¸ä¸é¿èæ¨ãéæ°´åæºäºè¿åº§å±±ï¼ååæµå¥æ¸­æ°´ï¼æ°´ä¸­æå¾å¤æ°´æ¶ã </p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-12.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ç¾ä¸åéï¼æ°åå±±ï¼ä¸å¤ä¸¹ç²ãä¸¹æ°´åºçï¼åæµæ³¨äºæ¸­ãå½å¤çè±¹ï¼é¸å¤å°¸é¸ ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/1000134609-0.jpg"/><span class='suijibody'> ååè¥¿ä¸ç¾ä¸åéæåº§å±±ï¼åå«åå±±ï¼å±±ä¸æå¾å¤ä¸¹ç ãä¸¹æ°´æºèªæ­¤å±±ï¼ååæµå¥æ¸­æ°´ãå±±ä¸­çéå½å¤æ¯çè±¹ï¼é¸ç±»å¤æ¯å¸è°·é¸ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-13.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ç¾å«åéï¼æ°å¤§æ¶ä¹å±±ï¼ä¸å¤æ¦ãæï¼ä¸å¤æ»ãæ©¿ï¼é´å¤é¶ï¼é³å¤ç½çãæ¶æ°´åºçï¼åæµæ³¨äºæ¸­ãæ¸æ°´åºçï¼åæµæ³¨äºæ±æ°´ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"> 2.13 åè¥¿ç¾å«åéï¼æ°å¤§æ¶ä¹å±±â ï¼ä¸å¤æ¦ãæâ¡ï¼ä¸å¤æ»ãæ©¿ï¼é´å¤é¶ï¼é³å¤ç½çãæ¶æ°´åºçâ¢ï¼åæµæ³¨äºæ¸­ãæ¸æ°´åºçâ£ï¼åæµæ³¨äºæ±æ°´â¤ã </p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-14.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ä¸ç¾äºåéï¼æ°å¶å¢ä¹å±±ï¼æ±æ°´åºçï¼èä¸åæµæ³¨äºæ²ï¼å£æ°´åºçï¼åæµæ³¨äºæ±¤æ°´ãå¶ä¸å¤æ¡æãç«¯ï¼å½å¤çãåãçãç½´ï¼é¸å¤ç½ç¿°ãèµ¤é·©ãæèçï¼å¶å¶å¦èï¼å¶æ¬å¦æ¡æ¢ï¼é»åèä¸å®ï¼åæ°èèï¼é£ä¹ä½¿äººæ å­ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/1000393550-0.jpg"/><span class='suijibody'> åå¾è¥¿ä¸ç¾äºåéæåº§å±±ï¼åå«å¶å¢å±±ï¼æ±æ°´åæºäºæ­¤å±±ï¼åä¸åæµå¥æ²æ°´ï¼å£æ°´ä¹åæºäºæ­¤ï¼ååæµå¥æ±¤æ°´ãå±±ä¸æå¾å¤æ¡æç«¹åé©ç«¯ç«¹ï¼éå½å¤ä¸ºççãåãçãç½´ï¼é¸ç±»å¤æ¯ç½éåçº¢è²çé¦é¸¡ãå±±ä¸­æä¸ç§èï¼å®é¿çèå°é£æ ·çå¶å­ãæ¡æ¢ä¸æ ·çæ ¹ï¼å¼é»è²çè±ä½ä¸ç»æå®ï¼åå­å«èèï¼äººä¸æ¦åäºå®ï¼å°±ä¼ä¸§å¤±çè²è½åã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-15.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ä¸ç¾äºåéï¼æ°å¤©å¸ä¹å±±ï¼ä¸å¤æ£ãæï¼ä¸å¤èãèãæå½çï¼å¶ç¶å¦çï¼åæ°è°¿è¾¹ï¼å¸­å¶ç®èä¸èãæé¸çï¼å¶ç¶å¦é¹ï¼é»æèèµ¤ç¿ï¼åæ°æ ï¼é£ä¹å·²çãæèçï¼å¶ç¶å¦èµï¼å¶è­å¦é¡èï¼åæ°æè¡¡ï¼å¯ä»¥èµ°é©¬ï¼é£ä¹å·²ç¿ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/10004GL5-0.jpg"/><span class='suijibody'> ååè¥¿ä¸ç¾äºåéæåº§å±±ï¼åå«å¤©å¸å±±ï¼å±±ä¸é¿çå¾å¤æ£æ åæ¥ æ¨ï¼å±±ä¸é¿æå¾å¤èèåèå°ãå±±éæä¸ç§å½ï¼å½¢ç¶åçï¼åå«è°¿è¾¹ï¼äººåå§æ¶ï¼æå®çç®éºå¨èº«ä¸ï¼å¯ä»¥ååæ¯ç­æ¶æ°çä¾µè¢­ãå±±éæä¸ç§é¸ï¼å½¢ç¶åé¹é¹ï¼èº«ä¸æé»è²çè±çº¹åçº¢è²çé¢æ¯ï¼å®çåå­å«ä½æ ï¼äººåäºå®çèï¼å¯ä»¥æ²»ççç®ãå±±éé¿çä¸ç§èï¼å½¢ç¶åèµï¼æ£ååºçæ°å³ä¸é¡è...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-16.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">è¥¿åä¸ç¾å«åéï¼æ°çæ¶ä¹å±±ï¼è·æ°´åºçï¼è¥¿æµæ³¨äºè¯¸èµä¹æ°´ï¼æ¶æ°´åºçï¼åæµæ³¨äºéè·ä¹æ°´ãå¶é³å¤ä¸¹ç²ï¼å¶é´å¤é¶ãé»éï¼å¶ä¸å¤æ¡æ¨ãæç½ç³çï¼å¶åæ°ç¤ï¼å¯ä»¥æ¯é¼ ãæèçï¼å¶ç¶å¦è³èï¼å¶å¶å¦èµèèµ¤èï¼åæ°æ æ¡ï¼å¯ä»¥æ¯é¼ ãæå½çï¼å¶ç¶å¦é¹¿èç½å°¾ï¼é©¬è¶³äººæèåè§ï¼åæ°çå¦ãæé¸çï¼å¶ç¶å¦é¸±èäººè¶³ï¼åæ°æ°æ¯ï¼é£ä¹å·²ç¿ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/10005MK5-0.jpg"/><span class='suijibody'> åè¥¿åä¸ç¾å«åéæåº§å±±ï¼åå«çæ¶å±±ï¼è·æ°´åæºäºçæ¶å±±ï¼åè¥¿æµå¥è¯¸èµæ°´ï¼æ¶æ°´ä¹ä»è¿éåæºï¼ååæµå¥éè·æ°´ãå±±çåé¢æå¾å¤ä¸¹ç ï¼å±±çåé¢æè®¸å¤é¶åé»éï¼å±±ä¸é¿çå¾å¤æ¡æ ãå±±ä¸­æä¸ç§ç½è²çç³å¤´ï¼å«åç¤ï¼å¯ä»¥ç¨æ¥æ¯æèé¼ ãå±±ä¸­æä¸ç§èï¼å½¢ç¶å¦è³èä¸è¬ï¼å¶å­çå½¢ç¶ä¸èµçå¶å­ç¸ä¼¼ï¼ä½å¶èåç°çº¢è²ï¼åå«æ æ¡ï¼å¯ä»¥æ¯æèé¼ ãå±±ä¸­æä¸ç§é...</span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-17.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿ç¾å«åéï¼æ°é»å±±ï¼æ èæ¨ï¼å¤ç«¹ç®­ãç¼æ°´åºçï¼è¥¿æµæ³¨äºèµ¤æ°´ï¼å¶ä¸­å¤çãæå½çï¼å¶ç¶å¦çèèé»ï¼å¤§ç®ï¼å¶åæ°åè¥¿ç¾å«åéï¼æ°é»å±±ï¼æ èæ¨ï¼å¤ç«¹ç®­ãç¼æ°´åºçï¼è¥¿æµæ³¨äºèµ¤æ°´ï¼å¶ä¸­å¤çãæå½çï¼å¶ç¶å¦çèèé»ï¼å¤§ç®ï¼å¶åæ°[æç(ä¸ä¸)]ãæé¸çï¼å¶ç¶å¦é¸®ï¼éç¾½èµ¤åï¼äººèè½è¨ï¼åæ°é¹¦[æ¯é¸(å·¦å³)]ãâ </h5>
+						  </div>
+						  <p class="mb-1 suiji"> ååè¥¿ä¸ç¾å«åéæåº§å±±ï¼åå«é»å±±ï¼å±±ä¸ä¸é¿èæ¨ï¼é¿çå¾å¤å°ç«¹ãç¼æ°´åæºäºé»å±±ï¼åè¥¿æµå¥èµ¤æ°´ï¼æ°´ä¸­æå¾å¤çãå±±ä¸­æä¸ç§éå½ï¼å½¢ç¶åçï¼ç®æ¯åç°ç°é»è²ï¼ç¼çå¾å¤§ï¼å®çåå­å«å[æç(ä¸ä¸)]ãå±±ä¸­æä¸ç§é¸ï¼å½¢ç¶åç«å¤´é¹°ï¼é¿çéè²çç¾½æ¯ãçº¢è²çå´ï¼èå¤´è·äººçç¸ä¼¼ï¼ä¼è¯´è¯ï¼å«åé¹¦[æ¯é¸(å·¦å³)]ã </p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-18.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿äºç¾éï¼æ°ç¿ å±±ï¼å¶ä¸å¤æ£æï¼å¶ä¸å¤ç«¹ç®­ï¼å¶é³å¤é»éãçï¼å¶é´å¤æçãç¾ãéºï¼å¶é¸å¤é¸ï¼å¶ç¶å¦é¹ï¼èµ¤é»èä¸¤é¦åè¶³ï¼å¯ä»¥å¾¡ç«ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/1001143J8-0.jpg"/><span class='suijibody'> ååè¥¿äºç¾éæåº§å±±ï¼åå«ç¿ å±±ï¼å±±ä¸æå¾å¤æ£æ åæ¥ æ¨ï¼å±±ä¸é¿çè®¸å¤å°ç«¹ï¼å±±çåé¢æå¾å¤é»éåçï¼åé¢æå¾å¤ç¦çãç¾ç¾åéºï¼å±±ä¸­çé¸å¤æ¯é¸é¸ï¼å®çå½¢ç¶ååé¹ï¼èº«ä½åç°çº¢é»è²ï¼æä¸¤ä¸ªèè¢ãååªèï¼å¯ä»¥ç¨æ¥é²ç«ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-19.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">åè¥¿äºç¾äºåéï¼æ°é¨©å±±ï¼æ¯éäºè¥¿æµ·ï¼æ èæ¨ï¼å¤çãåæ°´åºçï¼è¥¿æµæ³¨äºæµ·ï¼å¶ä¸­å¤éç³ãé»éï¼å¤ä¸¹ç²ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/1001225432-0.jpg"/><span class='suijibody'> ååè¥¿äºç¾äºåéæåº§å±±ï¼åå«é¨©å±±ï¼å®ä½äºéæµ·æ¹çï¼å±±ä¸­æ²¡æèæ¨ï¼æå¾å¤çãåæ°´åæºäºæ­¤å±±ï¼åè¥¿æµå¥éæµ·æ¹ï¼æ°´ä¸­æè®¸å¤å½©è²çç³å¤´ãé»éåä¸¹ç ã </span></p>
+						</a>
+						</div><div class="list-group-flush">
+						<a target="_blank"  href="https://shanhaijing.5000yan.com/2-20.html" class="list-group-item list-group-item-action py-4" aria-current="true">
+						  <div class="d-flex w-100 justify-content-between pb-1">
+						  <h5 class="mb-1 lh-base">å¡è¥¿ç»ä¹é¦ï¼èªé±æ¥ä¹å±±è³äºé¨©å±±ï¼å¡åä¹å±±ï¼äºåä¹ç¾äºåä¸éãåå±±å¢ä¹ï¼å¶ç¥ ä¹ç¤¼ï¼å¤ªç¢ãç¾­å±±ç¥ä¹ï¼ç¥ ä¹ç¨çï¼æç¾æ¥ä»¥ç¾çºï¼çç¨ç¾çï¼æ±¤å¶éç¾æ¨½ï¼å©´ä»¥ç¾çªç¾ç§ãå¶ä½åä¸å±±ä¹å±ï¼çæ¯ç·ç¨ä¸ç¾ç¥ ä¹ãçèï¼ç¾èä¹æªç°ï¼ç½å¸­éç­çº¯ä¹ã </h5>
+						  </div>
+						  <p class="mb-1 suiji"><img class='suijiimg' data-wuqianyan="https://5000yan.com/static/allimg/220430/1003336010-0.jpg"/><span class='suijibody'> æ»è®¡è¥¿å±±ä¸ç»ä¸­çå±±ï¼èªç¬¬ä¸åº§å±±é±æ¥å±±èµ·å°é¨©å±±æ­¢ï¼ä¸å±æåä¹åº§å±±ï¼è·ç¦»ä¸ºäºåä¹ç¾äºåä¸éãåå±±æ¯å¤§çå±±ç¥çæå¨å°ãç¥­ç¥åå±±å±±ç¥çç¤¼ä»ªæ¯ï¼ç¨å¤ªç¢ä¹ç¤¼ãç¾­æ¬¡å±±çå±±ç¥å¾ç¥å¦ï¼ç¥­ç¥æ¶è¦ç¨ç«ç¬ï¼åææä¸ç¾å¤©ï¼ç¶åç¨ä¸ç¾å¤´çº¯è²çç²çåç¥­åï¼æä¸ç¾åç¾çåå¥å°ä¸ï¼åç«ä¸ä¸ç¾æ¨½ç¾éï¼æä¸ç¾åªçªåä¸ç¾åç§ç³»å¨å±±ç¥çé¢ä¸ï¼ä½ä¸ºç¥­ç¥æ¶çé¥°ç©...</span></p>
+						</a>
+						</div>
+
+            <ul class="pagination pagination-sm justify-content-center pb-2"><li class='page-item disabled'><span class='page-link'>1é¡µ20æ¡</span></li></ul>
+         </div>
+
+<footer class="blog-footer rounded py-3 px-2 mt-2 bg-white">
+  <div>åèèµæ:èåºéãå±±æµ·ç»ï¼å¾ç»å¨åï¼ããè¡æçãå±±æµ·ç»å¾ããæ±ªç»ãå±±æµ·ç»å­ããéæ¢¦é·ãèå»·é¡ãå¤ä»å¾ä¹¦éæÂ·åç©æ±ç¼Â·ç¦½è«å¸ããå´ä»»è£ãå±±æµ·ç»å¹¿æ³¨ãåº·çå¾æ¬ ãå¢è¡¥ç»åå±±æµ·ç»å¹¿æ³¨ãè¿æå å¾æ¬ãæ¯æ²ãå±±æµ·ç»ãå¾æ¬ãéæ¿è¡ãå±±æµ·ç»ç¬ºçããèå»·é¡ãå¤ä»å¾ä¹¦éæ.åç©æ±ç¼Â·ç¥å¼å¸ããéæ¢¦é·ãæ¹èæ±ç¼.è¾¹è£å¸ããåå,åæ­,æå±¥ãå½©å¾å¨è§£å±±æµ·ç»ã</div>
+  <div>&copy; 2017-<script type="text/javascript">var d = new Date();var my_year=d.getFullYear();document.write(my_year);</script> 5000yan.com | <a target="_blank"  href="https://work.weixin.qq.com/kfid/kfccc5d7cb58e9e99ba" rel="nofollow">åå¡åä½</a> | <a target="_blank"  href="https://beian.miit.gov.cn/"  rel="nofollow">éICPå¤13017733å·-10</a></div>
+</footer> 
+</div>
+<div id="mySidebar" class="d-none d-md-block col-md-3 gx-2">
+
+  <div class="list-group list-group-checkable d-grid  border-0 w-auto">
+    <script src='https://5000yan.com/apps/mytag_js.php?aid=5&nocache=1'></script>
+  </div>
+
+      <div class="ggl">
+      </div>
+      
+</div>
+
+
+
+</div> 
+<!-- æ³¨åå¼¹çª -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog  modal-dialog-centered" role="document" >
+			<div class="modal-content rounded-4 p-3 shadow popup-content login-biaoshi">
+		
+
+				<div class="modal-header border-bottom-0 p-0">
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+		
+				<ul class="wqytabs nav text-lg my-3 justify-content-center">
+					<li class="wqytab text-muted px-2 active">ç­ä¿¡ç»å½</li>
+					<li class="wqytab text-muted px-2 nav-item">å¯ç ç»å½</li>
+				</ul>
+				
+				<div class="wqytab-content active">
+					<div class="mb-3 mx-2">ç»å½5000è¨</div>
+
+			<!-- -------ç­ä¿¡ç»å½----------- -->
+				<form name="form2" id="form2" action="https://5000yan.com/user/reg_new.php" method="post" >
+					<input type="hidden" name="dopost" value="regbase">
+					<input type="hidden" name="step" value="1">
+					<input type="hidden" name="mtype" value="ä¸ªäºº">
+					<input type="hidden" name="laiyuan" value="1">
+					<input type="hidden" name="gourl" value="">
+
+					<ul class="mb-3 mx-2">
+						<li class="d-flex align-items-center xiahuaxian" style="height: 60px;">
+							<div class="d-flex align-items-center " style="width: 60px;">è´¦å·</div>
+							<div class="flex-grow-1 d-flex align-items-center">
+								<input class="form-control"  type="text" name="tel" placeholder="ä½ çææºå·" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')">
+							</div>
+						</li>
+
+						<li class="d-flex align-items-center xiahuaxian" style="height: 60px;">
+							<div class="d-flex align-items-center " style="width: 60px;">éªè¯ç </div>
+							<div class="flex-grow-1 d-flex align-items-center position-relative">
+								<input class="form-control" type="text" name="telcode" maxlength="6" onkeyup="value=value.replace(/[^\d]/g,'')"  placeholder="è¯·è¾å¥éªè¯ç "/>
+								<a id="send" class="position-absolute end-0"><span id="svc">è·åéªè¯ç </span></a>
+							</div>
+						  </li>
+					</ul>
+						<div class="d-grid gap-2 py-4">
+							<button type="submit" class="btn-success btn smslogin">ç»å½ / æ³¨å</button>
+						</div>
+				</form>
+					<div class="text-muted" style="font-size:12px">æªæ³¨åè¿5000è¨çææºå·, æä»¬å°èªå¨å¸®ä½ æ³¨åè´¦å·</div>
+
+				</div>
+
+				<div class="wqytab-content">
+					<!-- å¯ç ç»å½ -->
+
+					<div class="mb-3 mx-2">ç»å½5000è¨</div>
+
+					<form name="form1" id="form1" method="POST" action="https://5000yan.com/user/index_do.php" >
+						<input type="hidden" name="fmdo" value="login">
+						<input type="hidden" name="dopost" value="login">
+						<input type="hidden" name="keeptime" value="63072000">
+						<input type="hidden" name="gourl" value="">
+
+
+						<ul class="mb-3 mx-2">
+							<li class="d-flex align-items-center xiahuaxian" style="height: 60px;">
+								<div class="d-flex align-items-center " style="width: 60px;">è´¦å·</div>
+								<div class="flex-grow-1 d-flex align-items-center">
+									<input class="form-control" type="text" name="tel" placeholder="ä½ çææºå·" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')" required="required">
+								</div>
+							</li>
+
+							<li class="d-flex align-items-center xiahuaxian" style="height: 60px;">
+								<div class="d-flex align-items-center " style="width: 60px;">å¯ç </div>
+								<div class="flex-grow-1 d-flex align-items-center">
+									<input class="form-control" type="password" name="pwd"  placeholder="è¯·è¾å¥ç»å½å¯ç " required="required">
+								</div>
+							</li>
+	
+							<li class="d-flex align-items-center xiahuaxian" style="height: 60px;">
+								<div class="d-flex align-items-center " style="width: 60px;">éªè¯ç </div>
+								<div class="flex-grow-1 d-flex align-items-center position-relative">
+									<input class="form-control" type="text" name="vdcode" id="iptValidate"  maxlength="4" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="è¯·è¾å¥éªè¯ç ">
+									<img class="position-absolute end-0" align="absmiddle" onclick="this.src=this.src+'?'" style="cursor: pointer;" alt="çä¸æ¸ï¼ç¹å»æ´æ¢" data-wuqianyan="https://5000yan.com/apps/vdimgck.php"/>
+								</div>
+							  </li>
+						
+						</ul>
+
+				
+						<div class="mb-3 text-end">
+							<!-- <span class="text-success"><a target="_blank"  href="https://5000yan.com/user/resetpassword.php">å¿è®°å¯ç ï¼</a></span> -->
+							<!-- <span class="text-success"><a target="_blank"  href="">å¿è®°å¯ç ï¼</a></span> -->
+						</div> 
+
+						<div class="d-flex justify-content-between gap-2">  
+							<button type="button" class="btn btn-outline-success col-6" style="height: 38px;">  
+								<span class="wqytabs">  
+									<li class="wqytab" style="font-size: 16px;">æ³¨å</li>  
+								</span>  
+							</button>  
+							<button type="submit" class="btn btn-success col-6" style="height: 38px;">ç»å½</button>  
+						</div>
+
+
+					</form>
+ 
+
+				</div>
+
+			</div>
+</div>
+</div>
+
+
+<div id="returntop-container">
+    <div id="returntop" title="è¿åé¡¶é¨">
+        <svg class="icon" style="color: #9c9c9c;" aria-hidden="true">
+            <use xlink:href="#icon-huidaodingbu"></use>
+        </svg>
+    </div>
+</div>
+
+<!-- æç¤ºtoastå¼¹çª -->
+<!-- showToast(type, message) -->
+  <div class="toast align-items-center text-bg-success border-0"  style="z-index: 9999;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2500">
+    <div class="d-flex">
+      <div id="toastBody" class="toast-body"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
+  
+
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="customModal" tabindex="-1" aria-labelledby="customModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="customModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="customModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">åæ¶</button>
+                <button type="button" class="btn btn-success" id="confluoji"></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript' src="https://5000yan.com/static/web/wuqianyan/js/erweima.js"></script> 
+<script type='text/javascript' src="https://5000yan.com/static/web/wuqianyan/js/bootstrap.min.js"></script>
+<script type='text/javascript' src="https://5000yan.com/static/web/wuqianyan/js/style.js?1.143"></script>
+<script src="https://5000yan.com/apps/count.php?aid=446&mid="></script>
+</body>
+</html>
+
+
+

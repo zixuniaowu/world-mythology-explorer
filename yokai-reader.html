@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妖怪物語 - 日本の怪異譚集</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: #1a1a1a;
+            color: #f0f0f0;
+            min-height: 100vh;
+            line-height: 1.8;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 背景効果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(75, 0, 130, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(138, 43, 226, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #E6E6FA;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #E6E6FA;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(153, 50, 204, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+        
+        /* ヘッダー */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(138, 43, 226, 0.5);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            color: #dc143c;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-button {
+            padding: 8px 20px;
+            background: rgba(138, 43, 226, 0.3);
+            color: white;
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-button:hover {
+            background: rgba(138, 43, 226, 0.5);
+            border-color: #8a2be2;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 900px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .story-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .story-title {
+            font-size: 3em;
+            color: #dc143c;
+            margin-bottom: 10px;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(220, 20, 60, 0.5);
+            animation: flicker 3s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .story-subtitle {
+            font-size: 1.2em;
+            color: #b19cd9;
+        }
+        
+        /* 妖怪カード */
+        .yokai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .yokai-card {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .yokai-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .yokai-card:hover::before {
+            opacity: 1;
+        }
+        
+        .yokai-card:hover {
+            transform: translateY(-5px);
+            border-color: #8a2be2;
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.3);
+        }
+        
+        .yokai-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+        
+        .yokai-name {
+            font-size: 1.5em;
+            color: #dc143c;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .yokai-type {
+            text-align: center;
+            color: #b19cd9;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .yokai-description {
+            color: #ccc;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* 物語セクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+            display: none;
+        }
+        
+        .story-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chapter-title {
+            font-size: 2.5em;
+            color: #dc143c;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #e0e0e0;
+            text-align: justify;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+            text-indent: 1em;
+        }
+        
+        .yokai-name-inline {
+            color: #dc143c;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(220, 20, 60, 0.5);
+        }
+        
+        .scary-quote {
+            background: rgba(138, 43, 226, 0.1);
+            border-left: 4px solid #8a2be2;
+            padding: 20px 25px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #b19cd9;
+            position: relative;
+        }
+        
+        .scary-quote::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 3em;
+            color: rgba(138, 43, 226, 0.3);
+        }
+        
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 30px;
+            background: rgba(220, 20, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(220, 20, 60, 0.3);
+        }
+        
+        .back-button:hover {
+            background: #dc143c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(220, 20, 60, 0.5);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .yokai-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-section {
+                padding: 25px;
+            }
+            
+            .chapter-title {
+                font-size: 2em;
+            }
+        }
+        
+        /* 特殊効果 */
+        .ghost-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .eerie-glow {
+            animation: eerieGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes eerieGlow {
+            from { text-shadow: 0 0 10px rgba(138, 43, 226, 0.5); }
+            to { text-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(138, 43, 226, 0.5); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <a href="japanese-mythology-index.html" class="logo">👺 妖怪物語</a>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showYokaiList()">妖怪一覧</button>
+                <button class="nav-button" onclick="location.href='japanese-mythology-index.html'">戻る</button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリーヘッダー -->
+        <div class="story-header">
+            <h1 class="story-title eerie-glow">妖怪物語</h1>
+            <p class="story-subtitle">闇に潜む者たちの物語</p>
+        </div>
+        
+        <!-- 妖怪一覧 -->
+        <div id="yokai-list" class="yokai-grid">
+            <!-- 鬼 -->
+            <div class="yokai-card ghost-float" onclick="showStory('oni')">
+                <div class="yokai-icon">👹</div>
+                <h3 class="yokai-name">鬼（おに）</h3>
+                <p class="yokai-type">人型妖怪</p>
+                <p class="yokai-description">
+                    角と牙を持つ恐ろしい姿の妖怪。
+                    地獄の番人とも、山に住む荒ぶる神ともいわれる。
+                </p>
+            </div>
+            
+            <!-- 天狗 -->
+            <div class="yokai-card ghost-float" onclick="showStory('tengu')">
+                <div class="yokai-icon">👺</div>
+                <h3 class="yokai-name">天狗（てんぐ）</h3>
+                <p class="yokai-type">山の妖怪</p>
+                <p class="yokai-description">
+                    赤い顔と長い鼻を持つ山の守護者。
+                    修験道の行者が妖怪化したともいわれる。
+                </p>
+            </div>
+            
+            <!-- 雪女 -->
+            <div class="yokai-card ghost-float" onclick="showStory('yukionna')">
+                <div class="yokai-icon">👻</div>
+                <h3 class="yokai-name">雪女（ゆきおんな）</h3>
+                <p class="yokai-type">雪の精霊</p>
+                <p class="yokai-description">
+                    雪の夜に現れる美しい女の妖怪。
+                    その冷たい息で人を凍らせるという。
+                </p>
+            </div>
+            
+            <!-- 河童 -->
+            <div class="yokai-card ghost-float" onclick="showStory('kappa')">
+                <div class="yokai-icon">🐸</div>
+                <h3 class="yokai-name">河童（かっぱ）</h3>
+                <p class="yokai-type">水の妖怪</p>
+                <p class="yokai-description">
+                    川や池に住む妖怪。頭に皿があり、
+                    相撲が好きで胡瓜を好む。
+                </p>
+            </div>
+            
+            <!-- 狐狸 -->
+            <div class="yokai-card ghost-float" onclick="showStory('kitsune')">
+                <div class="yokai-icon">🦊</div>
+                <h3 class="yokai-name">妖狐（ようこ）</h3>
+                <p class="yokai-type">獣妖怪</p>
+                <p class="yokai-description">
+                    人を化かす狐の妖怪。九尾の狐は
+                    最も強力で恐ろしい妖狐とされる。
+                </p>
+            </div>
+            
+            <!-- ろくろ首 -->
+            <div class="yokai-card ghost-float" onclick="showStory('rokurokubi')">
+                <div class="yokai-icon">🧟‍♀️</div>
+                <h3 class="yokai-name">ろくろ首</h3>
+                <p class="yokai-type">変化妖怪</p>
+                <p class="yokai-description">
+                    夜になると首が伸びる妖怪。
+                    昼間は普通の人間として暮らしている。
+                </p>
+            </div>
+        </div>
+        
+        <!-- 鬼の物語 -->
+        <section class="story-section" id="oni-story">
+            <h2 class="chapter-title">羅生門の鬼</h2>
+            <div class="story-text">
+                <p>
+                    平安の都、京の南にそびえる羅生門。かつては都の正門として威容を誇ったこの門も、
+                    今では荒れ果て、夜になれば<span class="yokai-name-inline">鬼</span>が出るという噂が立っていた。
+                </p>
+                
+                <p>
+                    ある月のない夜、源頼光の四天王の一人、渡辺綱（わたなべのつな）は、
+                    主君の命により羅生門へと向かった。鬼退治の名手として知られる綱だったが、
+                    この夜の相手は並の鬼ではなかった。
+                </p>
+                
+                <div class="scary-quote">
+                    お前の腕、もらい受ける......
+                </div>
+                
+                <p>
+                    門の上から不気味な声が響いた。綱が見上げると、
+                    そこには恐ろしい形相の鬼がいた。その名は<span class="yokai-name-inline">茨木童子（いばらきどうじ）</span>。
+                    大江山の酒呑童子の片腕として知られる強力な鬼である。
+                </p>
+                
+                <p>
+                    激しい戦いの末、綱は名刀「髭切」で鬼の腕を斬り落とした。
+                    鬼は恐ろしい叫び声を上げて姿を消し、綱は証拠として鬼の腕を持ち帰った。
+                    しかし、その腕を取り戻すため、鬼は様々な姿に化けて綱の元を訪れることとなる。
+                </p>
+                
+                <p>
+                    七日七晩、綱は鬼の腕を守り続けた。最後の夜、綱の伯母と名乗る老婆が訪ねてきた。
+                    優しい伯母の姿に油断した綱が腕を見せた瞬間、老婆は恐ろしい鬼の姿に戻り、
+                    腕を奪って逃げ去った。それが茨木童子だったのである。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 天狗の物語 -->
+        <section class="story-section" id="tengu-story">
+            <h2 class="chapter-title">鞍馬山の大天狗</h2>
+            <div class="story-text">
+                <p>
+                    深い霧に包まれた鞍馬山。この山には古くから<span class="yokai-name-inline">大天狗</span>が住むという。
+                    赤ら顔に長い鼻、背には黒い翼を持ち、手には羽団扇を持つ山の主である。
+                </p>
+                
+                <p>
+                    幼い源義経（牛若丸）は、この鞍馬山で修行をしていた。
+                    ある夜、いつものように剣術の稽古をしていると、突然強い風が吹き、
+                    目の前に巨大な影が現れた。
+                </p>
+                
+                <div class="scary-quote">
+                    小僧、なかなかの腕前だな。わしが相手をしてやろう。
+                </div>
+                
+                <p>
+                    それは鞍馬山の<span class="yokai-name-inline">僧正坊（そうじょうぼう）</span>という大天狗だった。
+                    天狗は牛若丸の才能を見抜き、秘伝の剣術を教え始めた。
+                    人間には不可能な、空を飛びながらの剣術、風を操る術、そして敵の心を読む術。
+                </p>
+                
+                <p>
+                    毎夜、牛若丸は天狗のもとで修行を重ねた。時には優しく、時には厳しく、
+                    天狗は牛若丸を一流の武士へと育て上げた。後に義経が見せる神業のような戦いぶりは、
+                    この天狗の教えによるものだという。
+                </p>
+                
+                <p>
+                    しかし天狗は警告した。「力に溺れるな。驕りは身を滅ぼす」と。
+                    後の義経の悲劇を、天狗は既に見通していたのかもしれない。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 雪女の物語 -->
+        <section class="story-section" id="yukionna-story">
+            <h2 class="chapter-title">雪女の約束</h2>
+            <div class="story-text">
+                <p>
+                    猛吹雪の夜だった。木こりの巳之吉（みのきち）と茂作（もさく）は、
+                    山小屋で一夜を過ごすことにした。しかし、真夜中に巳之吉が目を覚ますと、
+                    小屋の中に白い着物を着た美しい女が立っていた。
+                </p>
+                
+                <p>
+                    女は茂作に白い息を吹きかけていた。茂作の体は見る見るうちに凍りつき、
+                    命を落とした。次に女は巳之吉の方を向いた。
+                    それは<span class="yokai-name-inline">雪女</span>だった。
+                </p>
+                
+                <div class="scary-quote">
+                    お前は若いから助けてやる。だが今夜のことを誰かに話したら、お前も殺す。
+                </div>
+                
+                <p>
+                    翌年の春、巳之吉は「お雪」という美しい女と出会い、結婚した。
+                    二人は幸せに暮らし、子供にも恵まれた。しかしある冬の夜、
+                    囲炉裏の火を見つめながら、巳之吉はつい昔の恐ろしい体験を妻に話してしまった。
+                </p>
+                
+                <p>
+                    話を聞いたお雪の顔が変わった。「約束を破ったな」
+                    お雪こそが、あの夜の雪女だったのだ。しかし、子供たちを見た雪女は、
+                    「子供たちのために、今回だけは許す。だが二度と会うことはない」
+                    そう言い残して、雪女は吹雪の中に消えていった。
+                </p>
+                
+                <p>
+                    巳之吉は二度とお雪に会うことはなかった。
+                    ただ、雪の降る夜には、遠くから子供たちを見守る白い影があったという。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 河童の物語 -->
+        <section class="story-section" id="kappa-story">
+            <h2 class="chapter-title">河童の恩返し</h2>
+            <div class="story-text">
+                <p>
+                    利根川のほとりに、与助（よすけ）という心優しい農夫が住んでいた。
+                    ある日、川で網にかかってもがいている<span class="yokai-name-inline">河童</span>を見つけた。
+                    村人たちは「殺してしまえ」と言ったが、与助は河童を逃がしてやった。
+                </p>
+                
+                <p>
+                    「恩に着るぞ、人間。いつか必ず恩返しをする」
+                    河童はそう言って川に消えた。頭の皿から水がこぼれそうになりながらも、
+                    深々と頭を下げる河童の姿が印象的だった。
+                </p>
+                
+                <p>
+                    それから数日後、与助の娘が川で溺れかけた。
+                    もうだめかと思われたその時、川から緑色の手が伸びて娘を岸に押し上げた。
+                    それはあの河童だった。
+                </p>
+                
+                <div class="scary-quote">
+                    約束通り恩返しをした。だが人間よ、川を汚すな。我らの住処を奪うな。
+                </div>
+                
+                <p>
+                    河童は続けた。「人間と河童は共に生きることができる。
+                    だが、川を大切にしない者には、我らは容赦しない」
+                    それ以来、村人たちは川を大切にし、時折胡瓜を川に流して河童に供えるようになった。
+                </p>
+                
+                <p>
+                    今でも利根川には河童が住んでいるという。
+                    川を大切にする者には幸運を、粗末にする者には災いをもたらすと。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 妖狐の物語 -->
+        <section class="story-section" id="kitsune-story">
+            <h2 class="chapter-title">玉藻前と九尾の狐</h2>
+            <div class="story-text">
+                <p>
+                    平安時代末期、鳥羽上皇の前に現れた絶世の美女、<span class="yokai-name-inline">玉藻前（たまものまえ）</span>。
+                    その美貌と教養で上皇の寵愛を一身に受けたが、
+                    その正体は恐ろしい<span class="yokai-name-inline">九尾の狐</span>だった。
+                </p>
+                
+                <p>
+                    玉藻前が現れてから、上皇は次第に体調を崩し始めた。
+                    陰陽師の安倍泰成（安倍晴明の子孫）は、その原因が玉藻前にあることを見抜いた。
+                    宮中で行われた祈祷の最中、玉藻前の正体が暴かれた。
+                </p>
+                
+                <div class="scary-quote">
+                    千年を生きた妖狐の力、思い知るがよい！
+                </div>
+                
+                <p>
+                    九本の尾を持つ巨大な金色の狐が姿を現し、宮中は大混乱となった。
+                    妖狐は那須野が原へと逃げ、朝廷は三浦介と上総介に討伐を命じた。
+                    激しい戦いの末、ついに九尾の狐は射殺された。
+                </p>
+                
+                <p>
+                    しかし、狐の怨念は消えることなく、巨大な毒石「殺生石」となった。
+                    その石に近づく者は、鳥も虫も皆死んでしまう。
+                    後に玄翁和尚がこの石を打ち砕いたが、その破片は全国に飛び散り、
+                    今も各地で怪異を起こしているという。
+                </p>
+            </div>
+        </section>
+        
+        <!-- ろくろ首の物語 -->
+        <section class="story-section" id="rokurokubi-story">
+            <h2 class="chapter-title">ろくろ首の正体</h2>
+            <div class="story-text">
+                <p>
+                    旅の僧、海存（かいぞん）は、山深い村で一夜の宿を求めた。
+                    村の庄屋は快く僧を迎え入れ、美しい娘のお菊が給仕をした。
+                    しかし、その夜、海存は恐ろしいものを目撃することになる。
+                </p>
+                
+                <p>
+                    真夜中、ふと目を覚ました海存は、隣の部屋から奇妙な音を聞いた。
+                    そっと襖の隙間から覗くと、そこには信じられない光景があった。
+                    お菊の首が、まるで蛇のように伸びて、台所の方へと向かっていたのだ。
+                </p>
+                
+                <div class="scary-quote">
+                    今夜の坊主、なかなか精がつきそうだ......
+                </div>
+                
+                <p>
+                    お菊は<span class="yokai-name-inline">ろくろ首</span>だった。
+                    首だけが体から離れ、家中を這い回っている。
+                    海存は恐怖に震えながらも、朝まで眠ったふりを続けた。
+                </p>
+                
+                <p>
+                    翌朝、何事もなかったかのように朝餉の支度をするお菊。
+                    海存は礼を述べて早々に村を立ち去った。
+                    後で聞いた話では、その村の者は皆ろくろ首で、
+                    旅人を食らって生きているという。
+                </p>
+                
+                <p>
+                    海存はその後、二度とその村への道を通ることはなかった。
+                    今でもどこかに、ろくろ首の村があるのかもしれない。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 戻るボタン -->
+        <button class="back-button" onclick="location.href='japanese-mythology-index.html'">
+            日本神話大全へ戻る
+        </button>
+    </main>
+    
+    <script>
+        // 妖怪リストを表示
+        function showYokaiList() {
+            document.getElementById('yokai-list').style.display = 'grid';
+            document.querySelectorAll('.story-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+        }
+        
+        // 物語を表示
+        function showStory(yokaiType) {
+            document.getElementById('yokai-list').style.display = 'none';
+            document.querySelectorAll('.story-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+            
+            const storySection = document.getElementById(yokaiType + '-story');
+            if (storySection) {
+                storySection.style.display = 'block';
+                setTimeout(() => {
+                    storySection.classList.add('active');
+                }, 10);
+            }
+        }
+        
+        // ランダムな光の効果
+        function createRandomLight() {
+            const colors = ['rgba(138, 43, 226, 0.3)', 'rgba(220, 20, 60, 0.3)', 'rgba(75, 0, 130, 0.3)'];
+            const light = document.createElement('div');
+            light.style.position = 'fixed';
+            light.style.width = '200px';
+            light.style.height = '200px';
+            light.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random() * colors.length)]} 0%, transparent 70%)`;
+            light.style.borderRadius = '50%';
+            light.style.pointerEvents = 'none';
+            light.style.opacity = '0';
+            light.style.transition = 'all 3s ease';
+            light.style.zIndex = '-1';
+            
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            
+            light.style.left = x + 'px';
+            light.style.top = y + 'px';
+            
+            document.body.appendChild(light);
+            
+            setTimeout(() => {
+                light.style.opacity = '0.5';
+                light.style.transform = 'scale(2)';
+            }, 100);
+            
+            setTimeout(() => {
+                light.style.opacity = '0';
+            }, 2000);
+            
+            setTimeout(() => {
+                light.remove();
+            }, 3000);
+        }
+        
+        // 定期的に光の効果を生成
+        setInterval(createRandomLight, 3000);
+    </script>
+</body>
+</html>

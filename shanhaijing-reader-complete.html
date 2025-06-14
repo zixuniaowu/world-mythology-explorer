@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山海経全書 - 図解付き完全版</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background-color: #F5E6D3;
+            color: #2C1810;
+            line-height: 1.8;
+        }
+        
+        #reader-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #FFF8F0;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* ヘッダー */
+        .reader-header {
+            background: linear-gradient(to bottom, #2C1810 0%, #4A2C1F 100%);
+            color: #F5E6D3;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reader-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.03) 10px,
+                rgba(255,255,255,0.03) 20px
+            );
+        }
+        
+        .main-title {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            letter-spacing: 0.3em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            letter-spacing: 0.2em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ナビゲーション */
+        #volume-navigation {
+            background-color: #E8D5C4;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            border-bottom: 3px solid #8B4513;
+        }
+        
+        .volume-btn {
+            background-color: #FFF8F0;
+            border: 2px solid #8B4513;
+            color: #4A2C1F;
+            padding: 10px 20px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+        
+        .volume-btn:hover {
+            background-color: #8B4513;
+            color: #FFF8F0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        .volume-btn.active {
+            background-color: #4A2C1F;
+            color: #FFF8F0;
+        }
+        
+        /* コンテンツエリア */
+        .content-container {
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        /* 巻のスタイル */
+        .volume {
+            margin-bottom: 60px;
+        }
+        
+        .volume-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px double #8B4513;
+        }
+        
+        .volume-title {
+            font-size: 2.5em;
+            color: #4A2C1F;
+            margin-bottom: 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .volume-subtitle {
+            font-size: 1.2em;
+            color: #8B4513;
+            font-style: italic;
+        }
+        
+        /* 章のスタイル */
+        .chapter {
+            background-color: #FFF;
+            border: 2px solid #D2691E;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #E8D5C4;
+        }
+        
+        .chapter-number {
+            width: 50px;
+            height: 50px;
+            background-color: #8B4513;
+            color: #FFF8F0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        
+        .chapter-title {
+            font-size: 1.8em;
+            color: #4A2C1F;
+            letter-spacing: 0.1em;
+        }
+        
+        /* 挿図コンテナ */
+        .illustration-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .illustration {
+            max-width: 100%;
+            height: auto;
+            border: 3px solid #8B4513;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* テキストコンテンツ */
+        .text-content {
+            margin-top: 30px;
+        }
+        
+        .text-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .text-column {
+            padding: 20px;
+            background-color: #FAF8F5;
+            border-radius: 5px;
+            border: 1px solid #E8D5C4;
+        }
+        
+        .text-label {
+            display: block;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            border-bottom: 2px solid #E8D5C4;
+            padding-bottom: 5px;
+        }
+        
+        .original-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #4A2C1F;
+        }
+        
+        .translation-text {
+            font-size: 1em;
+            line-height: 1.8;
+            color: #654321;
+        }
+        
+        .japanese-text {
+            background-color: #F0F8FF;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #B0C4DE;
+            margin-bottom: 20px;
+        }
+        
+        .japanese-text p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #2C1810;
+        }
+        
+        .notes {
+            background-color: #FFF8DC;
+            padding: 15px;
+            border-left: 4px solid #DAA520;
+            font-size: 0.95em;
+            color: #654321;
+            font-style: italic;
+            margin-top: 20px;
+        }
+        
+        /* フッター */
+        .reader-footer {
+            background-color: #2C1810;
+            color: #F5E6D3;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+            }
+            
+            .volume-btn {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
+            
+            .text-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-container {
+                padding: 20px;
+            }
+            
+            .chapter {
+                padding: 20px;
+            }
+        }
+        
+        /* アニメーション */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chapter {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="reader-container">
+        <!-- ヘッダー -->
+        <header class="reader-header">
+            <h1 class="main-title">山海経全書</h1>
+            <p class="subtitle">古代中国の神獣と幻想世界の完全図解</p>
+        </header>
+        
+        <!-- ナビゲーション -->
+        <nav id="volume-navigation">
+            <!-- ボタンは動的に生成される -->
+        </nav>
+        
+        <!-- メインコンテンツ -->
+        <main id="content-area" class="content-container">
+            <!-- 巻のコンテンツがここに動的に挿入される -->
+        </main>
+        
+        <!-- フッター -->
+        <footer class="reader-footer">
+            <p>山海経 - 中国最古の地理書・博物誌（紀元前4世紀～紀元前1世紀）</p>
+            <p>全十八巻完全収録版</p>
+        </footer>
+    </div>
+    
+    <!-- スクリプト -->
+    <script src="shanhaijing-complete-text.js"></script>
+    <script src="traditional-illustrations.js"></script>
+    <script src="enhanced-illustrations.js"></script>
+    <script src="shanhaijing-reader-v2.js"></script>
+</body>
+</html>

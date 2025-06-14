@@ -1,0 +1,294 @@
+/* 山海経スタイルのメインメニュー用CSS */
+
+.main-menu-container {
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to bottom, #1a0f08 0%, #2a1810 50%, #1a0f08 100%);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* メニューヘッダー */
+.menu-header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 3px solid #8B0000;
+}
+
+.title-japanese {
+    font-size: 4em;
+    color: #FFD700;
+    text-shadow: 3px 3px 6px #000, 0 0 20px #8B0000;
+    margin: 0;
+    font-family: 'Noto Sans JP', serif;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.title-chinese {
+    font-size: 1.5em;
+    color: #F5E6D3;
+    margin: 10px 0;
+    opacity: 0.8;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #D4AF37;
+    margin: 10px 0 0 0;
+    font-style: italic;
+}
+
+/* 章のスクロールコンテナ */
+.chapters-scroll {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 40px 20px;
+    scroll-behavior: smooth;
+}
+
+.chapters-container {
+    display: flex;
+    gap: 30px;
+    min-width: min-content;
+    height: 100%;
+    align-items: center;
+}
+
+/* 章パネル */
+.chapter-panel {
+    background: #F5E6D3;
+    border: 4px solid #2C1810;
+    border-radius: 10px;
+    width: 400px;
+    min-width: 400px;
+    height: 500px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.chapter-panel:hover:not(.locked) {
+    transform: translateY(-10px);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.chapter-panel.locked {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* 章の挿図 */
+.chapter-illustration {
+    width: 100%;
+    height: 250px;
+    border-bottom: 3px solid #2C1810;
+    position: relative;
+    overflow: hidden;
+}
+
+.chapter-illustration canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* 章のコンテンツ */
+.chapter-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    color: #2C1810;
+}
+
+.chapter-header {
+    margin-bottom: 15px;
+}
+
+.chapter-number {
+    font-size: 0.9em;
+    color: #8B0000;
+    margin: 0 0 5px 0;
+}
+
+.chapter-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    color: #2C1810;
+}
+
+.chapter-subtitle {
+    font-size: 1em;
+    color: #666;
+    margin: 0;
+    font-style: italic;
+}
+
+.chapter-description {
+    flex: 1;
+    margin: 15px 0;
+}
+
+.chapter-description p {
+    line-height: 1.6;
+    color: #4A4A4A;
+}
+
+/* 章の情報 */
+.chapter-info {
+    margin: 10px 0;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #8B0000;
+    margin-right: 10px;
+}
+
+.location-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.location-tag {
+    background: #8B0000;
+    color: #FFF;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+/* 章開始ボタン */
+.chapter-start-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.chapter-start-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+    transform: scale(1.05);
+}
+
+.chapter-start-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ロックオーバーレイ */
+.lock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4em;
+    color: #666;
+    border-radius: 6px;
+}
+
+/* メニューフッター */
+.menu-footer {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    border-top: 3px solid #8B0000;
+}
+
+.menu-option-btn {
+    padding: 12px 24px;
+    background: rgba(139, 0, 0, 0.8);
+    color: #FFF;
+    border: 2px solid #FFD700;
+    border-radius: 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-option-btn:hover {
+    background: #FFD700;
+    color: #000;
+    transform: translateY(-2px);
+}
+
+.menu-option-btn .icon {
+    font-size: 1.2em;
+}
+
+/* スクロールバーのスタイリング */
+.chapters-scroll::-webkit-scrollbar {
+    height: 12px;
+}
+
+.chapters-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.chapters-scroll::-webkit-scrollbar-thumb {
+    background: #8B0000;
+    border-radius: 6px;
+}
+
+.chapters-scroll::-webkit-scrollbar-thumb:hover {
+    background: #DC143C;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .title-japanese {
+        font-size: 2.5em;
+    }
+    
+    .chapter-panel {
+        width: 300px;
+        min-width: 300px;
+        height: 450px;
+    }
+    
+    .chapter-illustration {
+        height: 200px;
+    }
+    
+    .chapter-title {
+        font-size: 1.5em;
+    }
+    
+    .menu-footer {
+        flex-wrap: wrap;
+    }
+    
+    .menu-option-btn {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}

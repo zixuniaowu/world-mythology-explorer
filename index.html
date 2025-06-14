@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Mythology Explorer - Interactive Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            background: rgba(15, 12, 41, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 10px 40px 10px 15px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 100px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2em;
+        }
+
+        /* Map Container */
+        .map-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #worldMapCanvas {
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(102, 126, 234, 0.3), 
+                        inset 0 0 30px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Mythology Markers */
+        .mythology-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .mythology-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .marker-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .marker-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            animation: pulse 2s infinite;
+            filter: blur(2px);
+        }
+
+        .marker-pin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #fff 30%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .mythology-marker.active .marker-pin {
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 1);
+        }
+
+        .marker-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .mythology-marker:hover .marker-label {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .connection-line.show {
+            opacity: 1;
+            animation: flow 3s linear infinite;
+        }
+
+        @keyframes flow {
+            0% {
+                background-position: -100% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Enhanced marker animations */
+        .mythology-marker {
+            animation: float-marker 3s ease-in-out infinite;
+            animation-delay: calc(var(--marker-index) * 0.2s);
+        }
+
+        @keyframes float-marker {
+            0%, 100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(-5px);
+            }
+        }
+
+        /* Mythology Cards */
+        .mythology-card {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            width: 350px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 100;
+            color: #333;
+            display: none;
+        }
+
+        .mythology-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            display: block;
+        }
+
+        .mythology-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .mythology-origin {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .mythology-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .mythology-features {
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .explore-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .close-card {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-card:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Map overlay effect */
+        .map-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 12, 41, 0.2) 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* About Section */
+        .about-section {
+            margin-top: 60px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .about-section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .links-section {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .link-btn {
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-input {
+                width: 200px;
+            }
+
+            .main-container {
+                padding: 20px;
+                margin-top: 120px;
+            }
+
+            .page-title h1 {
+                font-size: 2em;
+            }
+
+            .mythology-card {
+                width: 300px;
+            }
+
+            .links-section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo" onclick="location.reload()">World Mythology Explorer</div>
+        <div class="nav-controls">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="神話を検索...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="language-selector">
+                <button class="lang-btn" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="zh">中文</button>
+                <button class="lang-btn active" data-lang="ja">日本語</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="page-title">
+            <h1 id="mainTitle">世界神話の旅</h1>
+            <p class="page-subtitle" id="subtitle">地域をクリックして神話の宝物を探索</p>
+        </div>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <div class="map-wrapper">
+                <canvas id="worldMapCanvas"></canvas>
+                <div id="mythologyMarkers"></div>
+                <div id="connectionLines"></div>
+            </div>
+
+            <!-- Mythology Cards (dynamically positioned) -->
+            <div id="mythologyCards"></div>
+
+            <!-- Tooltip -->
+            <div class="tooltip" id="tooltip"></div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ff6b6b;"></div>
+                <span>East Asian Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4ecdc4;"></div>
+                <span>South Asian Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #f7b731;"></div>
+                <span>Middle Eastern Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #5f27cd;"></div>
+                <span>European Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ee5a6f;"></div>
+                <span>African Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00d2d3;"></div>
+                <span>American Mythology</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #22a6b3;"></div>
+                <span>Oceanic Mythology</span>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="about-section">
+            <h2>世界神話エクスプローラーについて</h2>
+            <div class="about-content">
+                <p>人間の想像力の豊かなタペストリーを旅しましょう。メソポタミアの古代の物語から太平洋諸島の鮮やかな物語まで、さまざまな文化が神話を通じて存在の神秘をどのように説明してきたかを探ります。</p>
+                <p>各神話は単なる物語ではなく、文明の魂を表しています - 彼らの価値観、恐れ、希望、そして宇宙への理解。任意の地域をクリックして、その神話の遺産を発見してください。</p>
+            </div>
+            <div class="links-section">
+                <a href="ai-text-to-animation.html" class="link-btn">AIアニメーションツール</a>
+                <a href="text-to-animation.html" class="link-btn">シンプルアニメーション</a>
+                <a href="#" class="link-btn">コミュニティフォーラム</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mythology locations with real world coordinates (normalized 0-1)
+        const mythologyLocations = {
+            china: { x: 0.75, y: 0.35, name: "China", region: "山海经" },
+            japan: { x: 0.85, y: 0.37, name: "Japan", region: "日本" },
+            india: { x: 0.65, y: 0.45, name: "India", region: "भारत" },
+            greece: { x: 0.52, y: 0.38, name: "Greece", region: "Ελλάδα" },
+            egypt: { x: 0.53, y: 0.47, name: "Egypt", region: "مصر" },
+            norse: { x: 0.50, y: 0.25, name: "Scandinavia", region: "Norge" },
+            celtic: { x: 0.47, y: 0.30, name: "Ireland", region: "Éire" },
+            mesopotamia: { x: 0.57, y: 0.42, name: "Mesopotamia", region: "Iraq" },
+            aztecMaya: { x: 0.25, y: 0.45, name: "Mexico", region: "México" },
+            nativeAmerican: { x: 0.20, y: 0.35, name: "North America", region: "Turtle Island" },
+            westAfrica: { x: 0.49, y: 0.55, name: "West Africa", region: "Nigeria/Ghana" },
+            aboriginal: { x: 0.80, y: 0.75, name: "Australia", region: "Dreamtime" },
+            polynesian: { x: 0.15, y: 0.60, name: "Pacific", region: "Polynesia" }
+        };
+
+        // Mythology Data
+        const mythologyData = {
+            china: {
+                title: "Chinese Mythology",
+                titleZh: "中国神话",
+                titleJa: "中国神話",
+                origin: "Ancient China",
+                originJa: "古代中国",
+                description: "A rich tapestry of legends including the Classic of Mountains and Seas (山海经), Investiture of the Gods (封神演义), and Strange Tales from a Chinese Studio (聊斋志异).",
+                descriptionJa: "山海経、封神演義、聊斎志異などの豊かな伝説の織物。古代中国の神話体系は、天地創造から神々と妖怪の物語まで幅広く展開しています。",
+                features: ["Dragons", "Immortals", "Journey to the West", "Jade Emperor", "Fox Spirits"],
+                featuresJa: ["龍", "仙人", "西遊記", "玉皇大帝", "狐狸精"],
+                color: "#ff6b6b"
+            },
+            japan: {
+                title: "Japanese Mythology",
+                titleZh: "日本神话",
+                titleJa: "日本神話",
+                origin: "Ancient Japan",
+                originZh: "古代日本",
+                originJa: "古代日本",
+                description: "Ancient chronicles like Kojiki (古事記) and Nihon Shoki (日本書紀), plus a rich tradition of yokai (妖怪) folklore.",
+                descriptionZh: "包括古事记、日本书纪等古代编年史，以及丰富的妖怪民俗传统。",
+                descriptionJa: "古事記や日本書紀などの古代の記録、そして豊かな妖怪の民俗伝統。",
+                features: ["Kami", "Yokai", "Amaterasu", "Susanoo", "Kitsune"],
+                featuresJa: ["神", "妖怪", "天照大神", "須佐之男", "狐"],
+                featuresZh: ["神灵", "妖怪", "天照大神", "须佐之男", "狐狸"],
+                color: "#ff9999"
+            },
+            india: {
+                title: "Indian Mythology",
+                titleZh: "印度神话",
+                titleJa: "インド神話",
+                origin: "Ancient India",
+                originJa: "古代インド",
+                description: "Epic tales from the Mahabharata, Ramayana, and ancient Vedic texts that form the foundation of Hindu philosophy.",
+                descriptionJa: "マハーバーラタ、ラーマーヤナ、そして古代ヴェーダの経典からの壮大な物語。ヒンドゥー哲学の基礎を形成する神話体系です。",
+                features: ["Vishnu", "Shiva", "Krishna", "Rama", "Vedas"],
+                featuresJa: ["ヴィシュヌ", "シヴァ", "クリシュナ", "ラーマ", "ヴェーダ"],
+                color: "#4ecdc4"
+            },
+            mesopotamia: {
+                title: "Mesopotamian Mythology",
+                titleZh: "美索不达米亚神话",
+                titleJa: "メソポタミア神話",
+                origin: "Ancient Mesopotamia",
+                originJa: "古代メソポタミア",
+                description: "The world's oldest recorded myths, including the Epic of Gilgamesh and tales from ancient Babylon and Sumeria.",
+                descriptionJa: "ギルガメシュ叙事詩を含む世界最古の記録された神話。古代バビロンとシュメールの物語が文明の黎明期を物語ります。",
+                features: ["Gilgamesh", "Enkidu", "Tiamat", "Marduk", "Ishtar"],
+                featuresJa: ["ギルガメシュ", "エンキドゥ", "ティアマト", "マルドゥク", "イシュタル"],
+                color: "#f7b731"
+            },
+            greece: {
+                title: "Greek Mythology",
+                titleZh: "希腊神话",
+                titleJa: "ギリシャ神話",
+                origin: "Ancient Greece",
+                originJa: "古代ギリシャ",
+                description: "The pantheon of Olympian gods and heroes whose stories have influenced Western culture for millennia.",
+                descriptionJa: "オリンポスの神々と英雄たちの物語。西洋文化に数千年にわたって影響を与え続けている神話体系です。",
+                features: ["Zeus", "Athena", "Odysseus", "Hercules", "Olympus"],
+                featuresJa: ["ゼウス", "アテナ", "オデュッセウス", "ヘラクレス", "オリンポス"],
+                color: "#5f27cd"
+            },
+            norse: {
+                title: "Norse Mythology",
+                titleZh: "北欧神话",
+                titleJa: "北欧神話",
+                origin: "Ancient Scandinavia",
+                originJa: "古代スカンジナビア",
+                description: "Tales of gods, giants, and the cosmic tree Yggdrasil from the Viking Age, preserved in the Eddas.",
+                descriptionJa: "エッダに保存されたヴァイキング時代の神々、巨人、世界樹ユグドラシルの物語。北欧の厳しい自然が生んだ壮大な神話です。",
+                features: ["Odin", "Thor", "Loki", "Ragnarok", "Valhalla"],
+                featuresJa: ["オーディン", "トール", "ロキ", "ラグナロク", "ヴァルハラ"],
+                color: "#7f39fb"
+            },
+            celtic: {
+                title: "Celtic Mythology",
+                titleZh: "凯尔特神话",
+                titleJa: "ケルト神話",
+                origin: "Ancient Celtic Lands",
+                originJa: "古代ケルト地域",
+                description: "Mystical tales from Ireland, Wales, and Scotland featuring otherworldly beings and heroic quests.",
+                descriptionJa: "アイルランド、ウェールズ、スコットランドから伝わる神秘的な物語。異界の存在と英雄の冒険が織りなす幻想的な世界です。",
+                features: ["Tuatha Dé Danann", "Cú Chulainn", "Morrigan", "Druids", "Sidhe"],
+                featuresJa: ["トゥアハ・デ・ダナーン", "クー・フーリン", "モリガン", "ドルイド", "シー"],
+                color: "#9c59d1"
+            },
+            egypt: {
+                title: "Egyptian Mythology",
+                titleZh: "埃及神话",
+                titleJa: "エジプト神話",
+                origin: "Ancient Egypt",
+                originJa: "古代エジプト",
+                description: "Stories of gods who controlled the Nile, the afterlife, and the cosmic order, preserved in hieroglyphs and papyri.",
+                descriptionJa: "ナイル川、来世、宇宙の秩序を司る神々の物語。ヒエログリフとパピルスに保存された永遠の生命への探求です。",
+                features: ["Ra", "Osiris", "Isis", "Anubis", "Book of the Dead"],
+                featuresJa: ["ラー", "オシリス", "イシス", "アヌビス", "死者の書"],
+                color: "#ee5a6f"
+            },
+            westAfrica: {
+                title: "West African Mythology",
+                titleZh: "西非神话",
+                titleJa: "西アフリカ神話",
+                origin: "West Africa",
+                originJa: "西アフリカ",
+                description: "Oral traditions including the trickster Anansi and creation myths from various West African cultures.",
+                descriptionJa: "アナンシを含む口承伝統。ヨルバ族をはじめとする様々な西アフリカ文化の創造神話が豊かな精神世界を物語ります。",
+                features: ["Anansi", "Yoruba Orishas", "Trickster Tales", "Creation Stories", "Ancestral Spirits"],
+                featuresJa: ["アナンシ", "ヨルバのオリシャ", "トリックスター物語", "創世神話", "祖先の霊"],
+                color: "#ff7979"
+            },
+            aztecMaya: {
+                title: "Aztec & Maya Mythology",
+                titleZh: "阿兹特克与玛雅神话",
+                titleJa: "アステカ・マヤ神話",
+                origin: "Mesoamerica",
+                originJa: "メソアメリカ",
+                description: "Complex cosmologies from the Aztec and Maya civilizations, featuring feathered serpents and jaguar gods.",
+                descriptionJa: "アステカとマヤ文明の複雑な宇宙観。羽毛の蛇やジャガーの神々が織りなす、天文学と精神世界が融合した神話体系です。",
+                features: ["Quetzalcoatl", "Kukulkan", "Popol Vuh", "Tezcatlipoca", "Xibalba"],
+                featuresJa: ["ケツァルコアトル", "ククルカン", "ポポル・ヴー", "テスカトリポカ", "シバルバ"],
+                color: "#00d2d3"
+            },
+            nativeAmerican: {
+                title: "Native American Mythology",
+                titleZh: "北美原住民神话",
+                titleJa: "ネイティブアメリカン神話",
+                origin: "North America",
+                originJa: "北アメリカ",
+                description: "Diverse traditions from hundreds of tribes, featuring creation stories, animal spirits, and sacred landscapes.",
+                descriptionJa: "数百の部族から伝わる多様な伝統。創世物語、動物の霊、聖なる大地が紡ぐ、自然との深い絆を表す神話です。",
+                features: ["Coyote", "Thunderbird", "Great Spirit", "Vision Quests", "Sacred Animals"],
+                featuresJa: ["コヨーテ", "サンダーバード", "グレート・スピリット", "ビジョン・クエスト", "聖なる動物"],
+                color: "#00b8d4"
+            },
+            aboriginal: {
+                title: "Aboriginal Dreamtime",
+                titleZh: "澳洲原住民梦时代",
+                titleJa: "アボリジニ・ドリームタイム",
+                origin: "Australia",
+                originJa: "オーストラリア",
+                description: "The Dreamtime stories that explain the creation of the land, animals, and people of Australia.",
+                descriptionJa: "オーストラリアの大地、動物、人々の創造を説明するドリームタイムの物語。時間と空間を超越した神聖なる世界観です。",
+                features: ["Rainbow Serpent", "Dreamtime", "Songlines", "Creation Ancestors", "Sacred Sites"],
+                featuresJa: ["虹蛇", "ドリームタイム", "ソングライン", "創造の祖先", "聖地"],
+                color: "#22a6b3"
+            },
+            polynesian: {
+                title: "Polynesian Mythology",
+                titleZh: "波利尼西亚神话",
+                titleJa: "ポリネシア神話",
+                origin: "Pacific Islands",
+                originJa: "太平洋諸島",
+                description: "Ocean-spanning myths from Hawaii, Tahiti, New Zealand, and other Pacific islands.",
+                descriptionJa: "ハワイ、タヒチ、ニュージーランドなど太平洋諸島の海を越えた神話。大海原を舞台にした壮大な冒険と神々の物語です。",
+                features: ["Maui", "Pele", "Tangaroa", "Tiki", "Ocean Voyages"],
+                featuresJa: ["マウイ", "ペレ", "タンガロア", "ティキ", "海洋航海"],
+                color: "#30e3ca"
+            }
+        };
+
+        // Language translations
+        const translations = {
+            en: {
+                title: "Journey Through World Mythologies",
+                subtitle: "Click on any region to explore its mythological treasures",
+                search: "Search mythologies...",
+                explore: "Explore",
+                about: "About World Mythology Explorer",
+                aboutText1: "Embark on a journey through the rich tapestry of human imagination. From the ancient tales of Mesopotamia to the vibrant stories of the Pacific Islands, explore how different cultures have explained the mysteries of existence through mythology.",
+                aboutText2: "Each mythology represents not just stories, but the soul of a civilization - their values, fears, hopes, and understanding of the cosmos. Click on any region to discover its mythological heritage."
+            },
+            zh: {
+                title: "世界神话之旅",
+                subtitle: "点击任意地区探索其神话宝藏",
+                search: "搜索神话...",
+                explore: "探索",
+                about: "关于世界神话探索者",
+                aboutText1: "踏上人类想象力丰富织锦的旅程。从美索不达米亚的古老传说到太平洋岛屿的生动故事，探索不同文化如何通过神话解释存在的奥秘。",
+                aboutText2: "每个神话不仅代表故事，更代表一个文明的灵魂——他们的价值观、恐惧、希望和对宇宙的理解。点击任意地区发现其神话遗产。"
+            },
+            ja: {
+                title: "世界神話の旅",
+                subtitle: "地域をクリックして神話の宝物を探索",
+                search: "神話を検索...",
+                explore: "探索",
+                about: "世界神話エクスプローラーについて",
+                aboutText1: "人間の想像力の豊かなタペストリーを旅しましょう。メソポタミアの古代の物語から太平洋諸島の鮮やかな物語まで、さまざまな文化が神話を通じて存在の神秘をどのように説明してきたかを探ります。",
+                aboutText2: "各神話は単なる物語ではなく、文明の魂を表しています - 彼らの価値観、恐れ、希望、そして宇宙への理解。任意の地域をクリックして、その神話の遺産を発見してください。"
+            }
+        };
+
+        let currentLang = 'ja';
+        let activeCard = null;
+        let canvas, ctx;
+        let mapImage;
+        let canvasWidth, canvasHeight;
+
+        // Initialize canvas and load map
+        function initializeMap() {
+            canvas = document.getElementById('worldMapCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Create world map image
+            mapImage = new Image();
+            mapImage.onload = function() {
+                // Set canvas size
+                const maxWidth = 1200;
+                const aspectRatio = mapImage.height / mapImage.width;
+                canvasWidth = Math.min(maxWidth, window.innerWidth - 80);
+                canvasHeight = canvasWidth * aspectRatio;
+                
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+                
+                // Draw map with overlay
+                drawMap();
+                
+                // Create markers
+                createMythologyMarkers();
+                
+                // Create connection lines
+                createConnectionLines();
+            };
+            
+            // Use a stylized world map image (we'll create a gradient-based one)
+            createStylizedWorldMap();
+        }
+
+        // Create a stylized world map using canvas
+        function createStylizedWorldMap() {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 1200;
+            tempCanvas.height = 600;
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            // Create gradient background
+            const gradient = tempCtx.createLinearGradient(0, 0, 1200, 600);
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(0.5, '#16213e');
+            gradient.addColorStop(1, '#0f3460');
+            tempCtx.fillStyle = gradient;
+            tempCtx.fillRect(0, 0, 1200, 600);
+            
+            // Draw simplified continents
+            tempCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            tempCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            tempCtx.lineWidth = 2;
+            
+            // Draw continents (simplified shapes)
+            drawContinents(tempCtx);
+            
+            // Set the map image
+            mapImage.src = tempCanvas.toDataURL();
+        }
+
+        // Draw simplified continent shapes
+        function drawContinents(ctx) {
+            // Africa
+            ctx.beginPath();
+            ctx.moveTo(600, 280);
+            ctx.quadraticCurveTo(650, 260, 680, 290);
+            ctx.quadraticCurveTo(700, 350, 680, 420);
+            ctx.quadraticCurveTo(650, 480, 600, 500);
+            ctx.quadraticCurveTo(550, 480, 520, 420);
+            ctx.quadraticCurveTo(500, 350, 520, 290);
+            ctx.quadraticCurveTo(550, 260, 600, 280);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Europe
+            ctx.beginPath();
+            ctx.moveTo(600, 280);
+            ctx.quadraticCurveTo(580, 220, 600, 160);
+            ctx.quadraticCurveTo(620, 140, 650, 150);
+            ctx.quadraticCurveTo(680, 160, 700, 180);
+            ctx.quadraticCurveTo(680, 220, 650, 250);
+            ctx.quadraticCurveTo(620, 270, 600, 280);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Asia
+            ctx.beginPath();
+            ctx.moveTo(700, 180);
+            ctx.quadraticCurveTo(800, 160, 900, 180);
+            ctx.quadraticCurveTo(1000, 200, 1050, 250);
+            ctx.quadraticCurveTo(1000, 350, 900, 400);
+            ctx.quadraticCurveTo(800, 420, 700, 400);
+            ctx.quadraticCurveTo(680, 350, 700, 300);
+            ctx.quadraticCurveTo(700, 250, 700, 180);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Americas
+            ctx.beginPath();
+            ctx.moveTo(200, 150);
+            ctx.quadraticCurveTo(250, 140, 300, 160);
+            ctx.quadraticCurveTo(350, 200, 350, 300);
+            ctx.quadraticCurveTo(350, 400, 300, 450);
+            ctx.quadraticCurveTo(250, 480, 200, 470);
+            ctx.quadraticCurveTo(150, 450, 150, 400);
+            ctx.quadraticCurveTo(150, 300, 150, 200);
+            ctx.quadraticCurveTo(150, 160, 200, 150);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Australia
+            ctx.beginPath();
+            ctx.moveTo(900, 450);
+            ctx.quadraticCurveTo(950, 440, 1000, 460);
+            ctx.quadraticCurveTo(1020, 500, 1000, 540);
+            ctx.quadraticCurveTo(950, 560, 900, 550);
+            ctx.quadraticCurveTo(850, 540, 850, 500);
+            ctx.quadraticCurveTo(850, 460, 900, 450);
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        // Draw the map with overlay
+        function drawMap() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Draw base map
+            ctx.drawImage(mapImage, 0, 0, canvasWidth, canvasHeight);
+            
+            // Add mystical overlay
+            const overlay = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, 0, canvasWidth/2, canvasHeight/2, canvasWidth/2);
+            overlay.addColorStop(0, 'rgba(102, 126, 234, 0.1)');
+            overlay.addColorStop(0.5, 'rgba(118, 75, 162, 0.05)');
+            overlay.addColorStop(1, 'transparent');
+            ctx.fillStyle = overlay;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        // Create mythology markers
+        function createMythologyMarkers() {
+            const markersContainer = document.getElementById('mythologyMarkers');
+            markersContainer.innerHTML = '';
+            
+            Object.entries(mythologyLocations).forEach(([key, location], index) => {
+                const marker = createMarker(key, location, index);
+                markersContainer.appendChild(marker);
+            });
+        }
+
+        // Create individual marker
+        function createMarker(mythKey, location, index) {
+            const marker = document.createElement('div');
+            marker.className = 'mythology-marker';
+            marker.dataset.mythology = mythKey;
+            marker.style.setProperty('--marker-index', index);
+            
+            const x = location.x * canvasWidth;
+            const y = location.y * canvasHeight;
+            
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            
+            const markerInner = document.createElement('div');
+            markerInner.className = 'marker-inner';
+            
+            const glow = document.createElement('div');
+            glow.className = 'marker-glow';
+            glow.style.background = `radial-gradient(circle, ${mythologyData[mythKey].color}88 0%, transparent 70%)`;
+            
+            const pin = document.createElement('div');
+            pin.className = 'marker-pin';
+            pin.style.background = `radial-gradient(circle, ${mythologyData[mythKey].color} 30%, transparent 70%)`;
+            
+            const label = document.createElement('div');
+            label.className = 'marker-label';
+            label.textContent = location.name;
+            
+            markerInner.appendChild(glow);
+            markerInner.appendChild(pin);
+            markerInner.appendChild(label);
+            marker.appendChild(markerInner);
+            
+            // Add click event
+            marker.addEventListener('click', () => {
+                if (activeCard === mythKey) {
+                    closeCard(mythKey);
+                } else {
+                    showMythologyCard(mythKey);
+                }
+            });
+            
+            return marker;
+        }
+
+        // Create connection lines between related mythologies
+        function createConnectionLines() {
+            const connections = [
+                ['china', 'japan'],
+                ['greece', 'egypt'],
+                ['norse', 'celtic'],
+                ['aztecMaya', 'nativeAmerican'],
+                ['india', 'mesopotamia']
+            ];
+            
+            const linesContainer = document.getElementById('connectionLines');
+            linesContainer.innerHTML = '';
+            
+            connections.forEach(([from, to]) => {
+                const line = createConnectionLine(from, to);
+                if (line) linesContainer.appendChild(line);
+            });
+        }
+
+        // Create connection line between two mythologies
+        function createConnectionLine(from, to) {
+            const fromLoc = mythologyLocations[from];
+            const toLoc = mythologyLocations[to];
+            
+            if (!fromLoc || !toLoc) return null;
+            
+            const x1 = fromLoc.x * canvasWidth;
+            const y1 = fromLoc.y * canvasHeight;
+            const x2 = toLoc.x * canvasWidth;
+            const y2 = toLoc.y * canvasHeight;
+            
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            line.dataset.from = from;
+            line.dataset.to = to;
+            
+            const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+            
+            line.style.width = distance + 'px';
+            line.style.left = x1 + 'px';
+            line.style.top = y1 + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+            
+            return line;
+        }
+
+        // Initialize particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create mythology card
+        function createMythologyCard(regionData, region) {
+            const card = document.createElement('div');
+            card.className = 'mythology-card';
+            card.id = `card-${region}`;
+            
+            const title = currentLang === 'zh' ? regionData.titleZh : 
+                         currentLang === 'ja' ? regionData.titleJa : 
+                         regionData.title;
+            
+            const origin = currentLang === 'zh' ? (regionData.originZh || regionData.origin) :
+                          currentLang === 'ja' ? (regionData.originJa || regionData.origin) :
+                          regionData.origin;
+            
+            const description = currentLang === 'zh' ? (regionData.descriptionZh || regionData.description) :
+                               currentLang === 'ja' ? (regionData.descriptionJa || regionData.description) :
+                               regionData.description;
+            
+            const features = currentLang === 'zh' ? (regionData.featuresZh || regionData.features) :
+                            currentLang === 'ja' ? (regionData.featuresJa || regionData.features) :
+                            regionData.features;
+            
+            card.innerHTML = `
+                <button class="close-card" onclick="closeCard('${region}')">✕</button>
+                <h3>${title}</h3>
+                <div class="mythology-origin">${origin}</div>
+                <div class="mythology-description">${description}</div>
+                <div class="mythology-features">
+                    ${features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+                </div>
+                <button class="explore-btn" onclick="exploreMythology('${region}')">${translations[currentLang].explore}</button>
+            `;
+            
+            return card;
+        }
+
+        // Position card near marker
+        function positionCard(card, region) {
+            const marker = document.querySelector(`[data-mythology="${region}"]`);
+            const rect = marker.getBoundingClientRect();
+            const mapContainer = document.querySelector('.map-container');
+            const mapRect = mapContainer.getBoundingClientRect();
+            
+            card.style.left = (rect.left - mapRect.left + rect.width / 2 - 175) + 'px';
+            card.style.top = (rect.top - mapRect.top + rect.height) + 'px';
+            
+            // Adjust if card goes off screen
+            const cardRect = card.getBoundingClientRect();
+            if (cardRect.right > window.innerWidth - 20) {
+                card.style.left = (window.innerWidth - mapRect.left - 370) + 'px';
+            }
+            if (cardRect.bottom > window.innerHeight - 20) {
+                card.style.top = (rect.top - mapRect.top - cardRect.height - 20) + 'px';
+            }
+        }
+
+        // Show mythology card
+        function showMythologyCard(region) {
+            // Close any open card
+            if (activeCard) {
+                closeCard(activeCard);
+            }
+            
+            const regionData = mythologyData[region];
+            if (!regionData) return;
+            
+            const cardsContainer = document.getElementById('mythologyCards');
+            const card = createMythologyCard(regionData, region);
+            cardsContainer.appendChild(card);
+            
+            // Position and show card
+            setTimeout(() => {
+                positionCard(card, region);
+                card.classList.add('show');
+                // Show connection lines for this mythology
+                showConnectionLines(region);
+                // Add active class to marker
+                document.querySelector(`[data-mythology="${region}"]`).classList.add('active');
+            }, 10);
+            
+            activeCard = region;
+        }
+
+        // Close card
+        function closeCard(region) {
+            const card = document.getElementById(`card-${region}`);
+            if (card) {
+                card.classList.remove('show');
+                setTimeout(() => card.remove(), 400);
+            }
+            // Remove active class from marker
+            document.querySelector(`[data-mythology="${region}"]`)?.classList.remove('active');
+            // Hide connection lines
+            hideConnectionLines();
+            if (activeCard === region) {
+                activeCard = null;
+            }
+        }
+
+        // Show connection lines for a mythology
+        function showConnectionLines(mythology) {
+            document.querySelectorAll('.connection-line').forEach(line => {
+                if (line.dataset.from === mythology || line.dataset.to === mythology) {
+                    line.classList.add('show');
+                }
+            });
+        }
+
+        // Hide all connection lines
+        function hideConnectionLines() {
+            document.querySelectorAll('.connection-line').forEach(line => {
+                line.classList.remove('show');
+            });
+        }
+
+        // Language switching
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentLang = this.getAttribute('data-lang');
+                updateLanguage();
+            });
+        });
+
+        // Update language
+        function updateLanguage() {
+            document.getElementById('mainTitle').textContent = translations[currentLang].title;
+            document.getElementById('subtitle').textContent = translations[currentLang].subtitle;
+            document.getElementById('searchInput').placeholder = translations[currentLang].search;
+            document.querySelector('.about-section h2').textContent = translations[currentLang].about;
+            
+            const aboutContent = document.querySelector('.about-content');
+            aboutContent.innerHTML = `
+                <p>${translations[currentLang].aboutText1}</p>
+                <p>${translations[currentLang].aboutText2}</p>
+            `;
+            
+            // Update any open card
+            if (activeCard) {
+                const oldCard = document.getElementById(`card-${activeCard}`);
+                const regionData = mythologyData[activeCard];
+                const newCard = createMythologyCard(regionData, activeCard);
+                
+                oldCard.parentNode.replaceChild(newCard, oldCard);
+                positionCard(newCard, activeCard);
+                newCard.classList.add('show');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            document.querySelectorAll('.mythology-marker').forEach(marker => {
+                const mythologyKey = marker.dataset.mythology;
+                const mythologyData_ = mythologyData[mythologyKey];
+                
+                const searchableText = [
+                    mythologyData_.title,
+                    mythologyData_.titleZh,
+                    mythologyData_.titleJa,
+                    mythologyData_.origin,
+                    mythologyData_.description,
+                    ...mythologyData_.features
+                ].join(' ').toLowerCase();
+                
+                if (searchableText.includes(searchTerm)) {
+                    marker.style.opacity = '1';
+                    marker.style.pointerEvents = 'auto';
+                } else {
+                    marker.style.opacity = '0.3';
+                    marker.style.pointerEvents = 'none';
+                }
+            });
+            
+            // Reset if search is empty
+            if (!searchTerm) {
+                document.querySelectorAll('.mythology-marker').forEach(marker => {
+                    marker.style.opacity = '';
+                    marker.style.pointerEvents = '';
+                });
+            }
+        });
+
+        // Explore mythology function
+        function exploreMythology(region) {
+            const mythologyPages = {
+                china: 'chinese-mythology-index.html',
+                greece: 'greek-mythology-reader.html',
+                norse: 'norse-mythology-reader.html',
+                // These will be created next:
+                // egypt: 'egyptian-mythology-reader.html',
+                // india: 'indian-mythology-reader.html',
+                japan: 'japanese-mythology-index.html',
+                // mesopotamia: 'mesopotamian-mythology-reader.html',
+                // celtic: 'celtic-mythology-reader.html',
+                // aztecMaya: 'aztec-maya-mythology-reader.html',
+                // nativeAmerican: 'native-american-mythology-reader.html',
+                // westAfrica: 'west-african-mythology-reader.html',
+                // aboriginal: 'aboriginal-mythology-reader.html',
+                // polynesian: 'polynesian-mythology-reader.html'
+            };
+            
+            if (mythologyPages[region]) {
+                window.location.href = mythologyPages[region];
+            } else {
+                alert(`${mythologyData[region].title} coming soon!`);
+            }
+        }
+
+        // Initialize
+        createParticles();
+        initializeMap();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (mapImage && mapImage.complete) {
+                const maxWidth = 1200;
+                const aspectRatio = mapImage.height / mapImage.width;
+                canvasWidth = Math.min(maxWidth, window.innerWidth - 80);
+                canvasHeight = canvasWidth * aspectRatio;
+                
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+                
+                drawMap();
+                createMythologyMarkers();
+                createConnectionLines();
+                
+                // Reposition active card if any
+                if (activeCard) {
+                    const card = document.getElementById(`card-${activeCard}`);
+                    if (card) {
+                        positionCard(card, activeCard);
+                    }
+                }
+            }
+        });
+
+        // Close card when clicking outside
+        document.addEventListener('click', function(e) {
+            if (activeCard && !e.target.closest('.mythology-card') && !e.target.closest('.mythology-marker')) {
+                closeCard(activeCard);
+            }
+        });
+
+        // Prevent card close when clicking inside card
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.mythology-card') && !e.target.closest('.close-card')) {
+                e.stopPropagation();
+            }
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.querySelectorAll('.legend-item, .about-section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

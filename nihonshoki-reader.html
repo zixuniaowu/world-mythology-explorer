@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本書紀 - 日本の歴史物語</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #4a148c 0%, #6a1b9a 50%, #7b1fa2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(74, 20, 140, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: #e1bee7;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        /* Home Navigation Button */
+        .home-nav-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(74, 20, 140, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            color: #e1bee7;
+            box-shadow: 0 4px 15px rgba(74, 20, 140, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            border: 2px solid #e1bee7;
+        }
+        
+        .home-nav-button:hover {
+            background: rgba(106, 27, 154, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 20, 140, 0.6);
+        }
+        
+        .home-nav-button:active {
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .home-nav-button {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        /* Chapter List */
+        .chapter-list {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .chapter-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4a148c;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1bee7;
+        }
+
+        .chapter-item {
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6a1b9a;
+        }
+
+        .chapter-item:hover {
+            background: #f3e5f5;
+            transform: translateX(5px);
+        }
+
+        .chapter-item.active {
+            background: #e1bee7;
+            color: #4a148c;
+            font-weight: bold;
+        }
+
+        /* Story Content */
+        .story-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .story-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #e1bee7;
+        }
+
+        .story-title {
+            font-size: 32px;
+            color: #4a148c;
+            margin-bottom: 10px;
+        }
+
+        .story-subtitle {
+            color: #7b1fa2;
+            font-size: 18px;
+        }
+
+        .story-content {
+            font-size: 16px;
+            line-height: 2;
+            color: #333;
+        }
+
+        .story-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #6a1b9a;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #e1bee7;
+        }
+
+        .imperial-quote {
+            background: #f3e5f5;
+            border-left: 4px solid #7b1fa2;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+
+        /* Reading Controls */
+        .reading-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            background: rgba(74, 20, 140, 0.95);
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chapter-list {
+                order: 2;
+            }
+            
+            .story-container {
+                order: 1;
+                padding: 20px;
+            }
+            
+            .reading-controls {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Navigation Button -->
+    <a href="index.html" class="home-nav-button" title="ホームに戻る">
+        🏠
+    </a>
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <h1 class="title">日本書紀</h1>
+                <p class="subtitle">日本の建国と初期天皇の物語</p>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="changeTheme()">テーマ変更</button>
+                <button class="nav-btn" onclick="changeFontSize()">文字サイズ</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="chapter-list">
+            <h2 class="chapter-title">章選択</h2>
+            <div class="chapter-item active" onclick="showChapter(1)">第一章：天地開闢</div>
+            <div class="chapter-item" onclick="showChapter(2)">第二章：神代紀異伝</div>
+            <div class="chapter-item" onclick="showChapter(3)">第三章：神武天皇の東征</div>
+            <div class="chapter-item" onclick="showChapter(4)">第四章：神功皇后と三韓征伐</div>
+            <div class="chapter-item" onclick="showChapter(5)">第五章：仁徳天皇の聖代</div>
+            <div class="chapter-item" onclick="showChapter(6)">第六章：雄略天皇と大王権</div>
+            <div class="chapter-item" onclick="showChapter(7)">第七章：推古天皇と聖徳太子</div>
+            <div class="chapter-item" onclick="showChapter(8)">第八章：大化改新</div>
+            <div class="chapter-item" onclick="showChapter(9)">第九章：白村江の戦い</div>
+            <div class="chapter-item" onclick="showChapter(10)">第十章：壬申の乱</div>
+            <div class="chapter-item" onclick="showChapter(11)">第十一章：律令国家の成立</div>
+            <div class="chapter-item" onclick="showChapter(12)">第十二章：古事記との相違</div>
+            <div class="chapter-item" onclick="showChapter(13)">第十三章：外交と遣隋使</div>
+            <div class="chapter-item" onclick="showChapter(14)">第十四章：仏教伝来と受容</div>
+            <div class="chapter-item" onclick="showChapter(15)">第十五章：持統天皇と藤原京</div>
+        </aside>
+
+        <main class="story-container">
+            <div class="story-header">
+                <h2 class="story-title">日本書紀</h2>
+                <p class="story-subtitle">日本最古の正史</p>
+            </div>
+
+            <div class="story-content" id="story-content">
+                <div class="story-section">
+                    <h3 class="section-title">天地開闢</h3>
+                    <p>
+                        太古の昔、天地はまだ分かれておらず、陰陽も分かれていませんでした。混沌として卵の中身のようで、ほの暗く、何かが芽生えようとしていました。
+                    </p>
+                    <p>
+                        やがて清らかで明るいものは、たなびいて天となり、重く濁ったものは、滞って地となりました。天が先にでき、地が後に定まりました。
+                    </p>
+                    <p>
+                        その後、天地の中に神が生まれました。最初に現れたのは国常立尊（くにのとこたちのみこと）でした。次に国狭槌尊（くにのさつちのみこと）、豊斟渟尊（とよくむぬのみこと）と続きました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">イザナギとイザナミ</h3>
+                    <p>
+                        七代目に伊弉諾尊（いざなぎのみこと）と伊弉冉尊（いざなみのみこと）が現れました。二神は天の浮橋に立ち、天の瓊矛（ぬぼこ）を下界に差し下ろして、かき回しました。
+                    </p>
+                    <p>
+                        矛を引き上げると、矛の先から滴り落ちた潮が固まって島となりました。これが淤能碁呂島（おのごろじま）です。
+                    </p>
+                    <p>
+                        二神はこの島に降り立ち、結婚して国生みを始めました。最初に淡路島、次に四国、隠岐、九州、壱岐、対馬、佐渡、そして最後に本州を生みました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">アマテラスの誕生</h3>
+                    <p>
+                        国生みの後、二神は多くの神々を生みました。イザナミが火の神を生んだ時、大火傷を負って亡くなってしまいました。
+                    </p>
+                    <p>
+                        イザナギは黄泉の国までイザナミを追いかけましたが、すでに黄泉の食べ物を食べてしまったイザナミは、恐ろしい姿に変わっていました。
+                    </p>
+                    <p>
+                        イザナギは逃げ帰り、筑紫の日向の橘の小戸の阿波岐原で禊をしました。左の目を洗うと天照大神（あまてらすおおみかみ）が、右の目を洗うと月読命（つくよみのみこと）が、鼻を洗うと素戔嗚尊（すさのおのみこと）が生まれました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    「天照大神は高天原を治め、月読命は夜の国を治め、素戔嗚尊は海原を治めよ」
+                    <br>- イザナギの命
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">天孫降臨</h3>
+                    <p>
+                        天照大神は孫の瓊瓊杵尊（ににぎのみこと）に、葦原中国（日本）を治めるよう命じました。
+                    </p>
+                    <p>
+                        瓊瓊杵尊は三種の神器（八咫鏡、八尺瓊勾玉、草薙剣）を携えて、高千穂の峰に降り立ちました。これが天孫降臨です。
+                    </p>
+                    <p>
+                        瓊瓊杵尊は木花開耶姫（このはなさくやひめ）と結婚し、火遠理命（ほおりのみこと）が生まれました。火遠理命の孫が、後の神武天皇となります。
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="reading-controls">
+        <button class="control-btn" onclick="prevChapter()">◀</button>
+        <button class="control-btn" onclick="toggleReading()">▶</button>
+        <button class="control-btn" onclick="nextChapter()">▶</button>
+    </div>
+
+    <script>
+        const chapters = {
+            1: {
+                title: "天地開闢",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">天地開闢</h3>
+                        <p>
+                            太古の昔、天地はまだ分かれておらず、陰陽も分かれていませんでした。混沌として卵の中身のようで、ほの暗く、何かが芽生えようとしていました。
+                        </p>
+                        <p>
+                            やがて清らかで明るいものは、たなびいて天となり、重く濁ったものは、滞って地となりました。天が先にでき、地が後に定まりました。
+                        </p>
+                        <p>
+                            その後、天地の中に神が生まれました。最初に現れたのは国常立尊（くにのとこたちのみこと）でした。次に国狭槌尊（くにのさつちのみこと）、豊斟渟尊（とよくむぬのみこと）と続きました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">イザナギとイザナミ</h3>
+                        <p>
+                            七代目に伊弉諾尊（いざなぎのみこと）と伊弉冉尊（いざなみのみこと）が現れました。二神は天の浮橋に立ち、天の瓊矛（ぬぼこ）を下界に差し下ろして、かき回しました。
+                        </p>
+                        <p>
+                            矛を引き上げると、矛の先から滴り落ちた潮が固まって島となりました。これが淤能碁呂島（おのごろじま）です。
+                        </p>
+                        <p>
+                            二神はこの島に降り立ち、結婚して国生みを始めました。最初に淡路島、次に四国、隠岐、九州、壱岐、対馬、佐渡、そして最後に本州を生みました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">アマテラスの誕生</h3>
+                        <p>
+                            国生みの後、二神は多くの神々を生みました。イザナミが火の神を生んだ時、大火傷を負って亡くなってしまいました。
+                        </p>
+                        <p>
+                            イザナギは黄泉の国までイザナミを追いかけましたが、すでに黄泉の食べ物を食べてしまったイザナミは、恐ろしい姿に変わっていました。
+                        </p>
+                        <p>
+                            イザナギは逃げ帰り、筑紫の日向の橘の小戸の阿波岐原で禊をしました。左の目を洗うと天照大神（あまてらすおおみかみ）が、右の目を洗うと月読命（つくよみのみこと）が、鼻を洗うと素戔嗚尊（すさのおのみこと）が生まれました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「天照大神は高天原を治め、月読命は夜の国を治め、素戔嗚尊は海原を治めよ」
+                        <br>- イザナギの命
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">天孫降臨</h3>
+                        <p>
+                            天照大神は孫の瓊瓊杵尊（ににぎのみこと）に、葦原中国（日本）を治めるよう命じました。
+                        </p>
+                        <p>
+                            瓊瓊杵尊は三種の神器（八咫鏡、八尺瓊勾玉、草薙剣）を携えて、高千穂の峰に降り立ちました。これが天孫降臨です。
+                        </p>
+                        <p>
+                            瓊瓊杵尊は木花開耶姫（このはなさくやひめ）と結婚し、火遠理命（ほおりのみこと）が生まれました。火遠理命の孫が、後の神武天皇となります。
+                        </p>
+                    </div>
+                `
+            },
+            2: {
+                title: "神代紀異伝",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">一書に曰く - 異なる伝承</h3>
+                        <p>
+                            日本書紀の特徴の一つは、「一書に曰く」として、異なる伝承を併記していることです。これは古事記にはない特徴で、中国の史書編纂の影響を受けています。
+                        </p>
+                        <p>
+                            例えば、天地開闢について、本文とは異なる伝承が記されています。「一書に曰く、古天地未剖、陰陽不分、渾沌如鶏子、溟涬而含牙」とあり、天地がまだ分かれていない時、陰陽も分かれず、混沌として鶏の卵のようで、ぼんやりとして芽を含んでいたとあります。
+                        </p>
+                        <p>
+                            この表現は、中国の『淮南子』などの影響を受けており、日本書紀が中国思想を取り入れて編纂されたことを示しています。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">国生みの異伝</h3>
+                        <p>
+                            国生みについても、複数の異伝が記されています。第一の一書では、イザナギとイザナミが天の浮橋に立って相談し、「底下に国はないだろうか」と言って、天の瓊矛を下ろしたとあります。
+                        </p>
+                        <p>
+                            第二の一書では、二神が天上で「豊葦原千五百秋瑞穂の地がある。行って治めよう」と相談したとあります。
+                        </p>
+                        <p>
+                            第四の一書では、大八洲国を生んだ後、海、川、山、木の祖、草の祖を生んだとあり、古事記とは異なる順序で神々が生まれています。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">黄泉国訪問の異伝</h3>
+                        <p>
+                            イザナギの黄泉国訪問についても、複数の版本があります。第五の一書では、イザナミは「私はすでに黄泉の竈で煮炊きをしてしまいました」と言い、第六の一書では「私はすでに黄泉の食物を食べてしまいました」と言います。
+                        </p>
+                        <p>
+                            第九の一書では、イザナギが投げた杖から岐神が生まれ、帯から長道磐神が生まれ、衣から煩神が生まれたとあります。これらの神々は、古事記には登場しません。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「一書に曰く」という形式は、歴史の多様性を認め、異なる伝承を等しく尊重する日本書紀の編纂方針を示している
+                        <br>- 編纂者の意図
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">天照大神誕生の異伝</h3>
+                        <p>
+                            三貴子（天照大神、月読命、素戔嗚尊）の誕生についても複数の伝承があります。第一の一書では、イザナギとイザナミが共に生んだとあり、第六の一書では、イザナギの左手から天照大神が、右手から月読命が、鼻から素戔嗚尊が生まれたとあります。
+                        </p>
+                        <p>
+                            第十一の一書では、日神と月神が生まれた時、その光が天地に満ちたので、天上に送ったとあります。これは、天照大神が最初から高天原にいたのではなく、地上で生まれてから天に昇ったことを示しています。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">素戔嗚尊の追放の異伝</h3>
+                        <p>
+                            素戔嗚尊の乱暴と追放についても、詳細が異なる複数の伝承があります。第一の一書では、素戔嗚尊が高天原で田の畔を壊し、溝を埋め、新嘗祭の神殿に糞をしたとあります。
+                        </p>
+                        <p>
+                            第三の一書では、素戔嗚尊が「韓郷の島には金銀がある」と言い、船を作って新羅に渡ったという、古事記にはない話が記されています。これは、日本書紀が朝鮮半島との関係を重視していたことを示しています。
+                        </p>
+                    </div>
+                `
+            },
+            3: {
+                title: "神武天皇の東征",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">東征の決意</h3>
+                        <p>
+                            神日本磐余彦尊（かむやまといわれびこのみこと）、後の神武天皇は、日向の高千穂に住んでいました。45歳の時、兄たちと相談して言いました。
+                        </p>
+                        <p>
+                            「昔、天照大神は、この豊葦原瑞穂国を我が子孫に授けられた。今、西の果てにいる私たちは、中央に行って都を開き、天下を治めるべきではないか」
+                        </p>
+                        <p>
+                            兄たちも賛同し、東征の準備を始めました。船を整え、兵を集め、いよいよ東に向かって出発しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">困難な道のり</h3>
+                        <p>
+                            神武天皇の一行は、まず筑紫（九州）の宇佐に到着しました。そこで宇佐津彦と宇佐津姫の歓待を受けました。
+                        </p>
+                        <p>
+                            次に筑紫の岡田宮に1年、安芸の多祁理宮に7年、吉備の高島宮に8年滞在しました。各地で兵を集め、船を整え、東征の準備を整えていきました。
+                        </p>
+                        <p>
+                            いよいよ難波の海に入り、河内国の草香邑の青雲の白肩津に上陸しました。しかし、そこで長髄彦（ながすねひこ）の激しい抵抗に遭いました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">神の助け</h3>
+                        <p>
+                            戦いの中、神武天皇の兄の五瀬命が矢に当たって負傷しました。神武天皇は言いました。
+                        </p>
+                        <p>
+                            「私たちは日の神の子孫なのに、日に向かって戦ったのがいけなかった。回り道をして、日を背にして戦おう」
+                        </p>
+                        <p>
+                            そこで紀伊半島を回って熊野から大和に入ることにしました。熊野では、大熊が現れて一行を悩ませましたが、高倉下（たかくらじ）が神剣を献上し、危機を脱しました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「私は日の神の子孫として、日の昇る東に都を定め、天下を治めよう」
+                        <br>- 神武天皇
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">八咫烏の導き</h3>
+                        <p>
+                            山中で道に迷った時、天照大神は八咫烏（やたがらす）を遣わして道案内をさせました。
+                        </p>
+                        <p>
+                            八咫烏に導かれて、宇陀に到着しました。そこで兄宇迦斯（えうかし）と弟宇迦斯（おとうかし）に出会いました。弟は恭順しましたが、兄は罠を仕掛けて神武天皇を殺そうとしました。
+                        </p>
+                        <p>
+                            しかし、計略は見破られ、兄宇迦斯は自分の仕掛けた罠にかかって死にました。こうして宇陀を平定し、さらに大和の中心部へと進みました。
+                        </p>
+                    </div>
+                `
+            },
+            4: {
+                title: "神功皇后と三韓征伐",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">仲哀天皇の崩御</h3>
+                        <p>
+                            仲哀天皇9年、天皇は筑紫の香椎宮で熊襲征伐を計画していました。皇后息長帯日売命（おきながたらしひめのみこと）、後の神功皇后は、神懸かりして神託を告げました。
+                        </p>
+                        <p>
+                            「西の方に国がある。金銀をはじめ、目もくらむような宝物がその国には多くある。今、その国を帰服させてやろう」
+                        </p>
+                        <p>
+                            しかし、仲哀天皇は「西の方を見ても、ただ海があるばかりで国など見えない」と言って、神託を信じませんでした。その夜、天皇は急に崩御してしまいました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">神功皇后の決意</h3>
+                        <p>
+                            皇后は密かに天皇を殯斂し、群臣を集めて再び神託を求めました。神は「この国は皇后の腹中の御子が治めるべき国である」と告げました。
+                        </p>
+                        <p>
+                            皇后は身重でありながら、男装して軍を率いることを決意しました。神の教えに従い、軍船を整え、兵を集めました。
+                        </p>
+                        <p>
+                            出発の時、皇后は「もし事が成就するなら、海の魚よ、大小を問わず、すべて我が軍を助けよ」と祈りました。すると、無数の魚が現れて船を押し進めました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">新羅征伐</h3>
+                        <p>
+                            神功皇后の軍船が新羅に近づくと、大波が起こって船を新羅の国中まで押し上げました。新羅王は恐れおののいて言いました。
+                        </p>
+                        <p>
+                            「東に日本という神国があると聞いていた。そこには天皇という聖王がいるとも聞いていた。今、その神兵が来たのに違いない」
+                        </p>
+                        <p>
+                            新羅王は白旗を掲げて降伏し、「今後、天地の続く限り、飼部となって貢物を絶やしません」と誓いました。高句麗と百済の王も、これを聞いて朝貢を約束しました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「神の教えに従い、海を渡って西の国を討つ。これは天皇の霊と国の神々の助けによるものである」
+                        <br>- 神功皇后
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">応神天皇の誕生</h3>
+                        <p>
+                            凱旋の途中、皇后は筑紫で産気づきました。しかし、「この地で皇子を産むわけにはいかない」と石を腰に巻いて出産を遅らせました。
+                        </p>
+                        <p>
+                            筑紫の宇瀰（うみ）で無事に皇子を出産しました。この皇子が後の応神天皇です。そのため、その地を宇美と名付けました。
+                        </p>
+                        <p>
+                            産湯を使った場所は産宮（うぶみや）と呼ばれ、皇子の御衣を洗った川は御笠川と名付けられました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">忍熊王の反乱</h3>
+                        <p>
+                            大和に帰還しようとすると、仲哀天皇の皇子である香坂王と忍熊王が反乱を起こしました。神功皇后は武内宿禰に皇子を託し、紀伊から迂回させました。
+                        </p>
+                        <p>
+                            皇后は喪船を作って、自分が死んだと偽装しました。忍熊王らが油断したところを攻撃し、宇治川で決戦となりました。
+                        </p>
+                        <p>
+                            忍熊王の軍は敗れ、忍熊王は琵琶湖に入水して死にました。こうして皇后は大和に帰還し、応神天皇を皇太子としました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">神功皇后の摂政</h3>
+                        <p>
+                            神功皇后は摂政として69年間、政治を行いました。この間、朝鮮半島との外交を重視し、百済から多くの文物がもたらされました。
+                        </p>
+                        <p>
+                            皇后は100歳で崩御し、狭城盾列陵に葬られました。後世、神功皇后は武神として信仰され、八幡宮では応神天皇と共に祭られています。
+                        </p>
+                        <p>
+                            日本書紀は神功皇后を天皇に準じて扱い、その事績を詳細に記録しています。これは、古代日本における女性統治者の重要性を示しています。
+                        </p>
+                    </div>
+                `
+            },
+            5: {
+                title: "仁徳天皇の聖代",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">最後の戦い</h3>
+                        <p>
+                            大和盆地に入った神武天皇は、再び長髄彦と対峙しました。長髄彦は言いました。
+                        </p>
+                        <p>
+                            「昔、天の神の子が天の磐船に乗って降りてきた。名を櫛玉饒速日命（くしたまにぎはやひのみこと）という。私の妹と結婚し、子供も生まれた。だから、天の神の子は二人もいるはずがない」
+                        </p>
+                        <p>
+                            しかし、饒速日命は神武天皇が本当の天孫であることを認め、長髄彦を殺して神武天皇に帰順しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">橿原宮の造営</h3>
+                        <p>
+                            こうして大和を平定した神武天皇は、畝傍山の東南の橿原の地に都を定めることにしました。
+                        </p>
+                        <p>
+                            「ここは国の真ん中だ。ここに都を造ろう」と言って、宮殿の建設を始めました。
+                        </p>
+                        <p>
+                            辛酉の年の春正月、庚辰の日に、神武天皇は橿原宮で即位しました。これが日本の初代天皇の誕生でした。この年を天皇の元年としました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「六合を兼ねて都を開き、八紘を掩いて宇と為さん」
+                        <br>- 神武天皇の建国の詔
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">皇后の選定</h3>
+                        <p>
+                            即位の翌年、神武天皇は皇后を求めました。大久米命が言いました。
+                        </p>
+                        <p>
+                            「事代主神の娘、媛蹈鞴五十鈴媛命（ひめたたらいすずひめのみこと）は、容姿端麗で賢い女性です」
+                        </p>
+                        <p>
+                            神武天皇は媛蹈鞴五十鈴媛命を皇后に迎えました。二人の間には、後の綏靖天皇となる神渟名川耳尊（かむぬなかわみみのみこと）が生まれました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">統治の始まり</h3>
+                        <p>
+                            神武天皇は、天神地祇を祭り、法を定め、民を慈しみました。農業を奨励し、産業を興し、国の基礎を固めました。
+                        </p>
+                        <p>
+                            在位76年、127歳で崩御されました。畝傍山の北東の陵に葬られました。
+                        </p>
+                        <p>
+                            こうして日本の皇室の歴史が始まり、万世一系の天皇制度が確立されたのです。
+                        </p>
+                    </div>
+                `
+            },
+            5: {
+                title: "仁徳天皇の聖代",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">民のかまど</h3>
+                        <p>
+                            仁徳天皇4年の春、天皇は高台に登って国を見渡しました。すると、民家から炊煙が立ち昇っていないことに気づきました。
+                        </p>
+                        <p>
+                            天皇は皇后に言いました。「民が貧しくて、炊事をすることもできないのだ。今日から3年間、すべての課税と労役を免除しよう」
+                        </p>
+                        <p>
+                            この間、宮殿の修理も行わず、雨漏りがしても修繕しませんでした。新しい衣服も作らず、食事も質素にしました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">民の復興</h3>
+                        <p>
+                            3年後、再び高台に登ると、今度は多くの家から煙が立ち昇っていました。天皇は喜んで言いました。
+                        </p>
+                        <p>
+                            「朕はすでに富んだ。民が富めば朕も富む。民が貧しければ朕も貧しい」
+                        </p>
+                        <p>
+                            皇后は「宮殿は荒れ果て、倉は空なのに、どうして富んだと言えるのですか」と尋ねました。天皇は「君主は民を本とする。民が富めば君主も富むのだ」と答えました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「高き屋に登りて見れば煙立つ民のかまどは賑はひにけり」
+                        <br>- 仁徳天皇御製
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">大土木事業</h3>
+                        <p>
+                            民が豊かになった後、天皇は大規模な土木事業を行いました。難波の堀江を開削し、茨田堤を築きました。これにより、洪水を防ぎ、農業生産が増大しました。
+                        </p>
+                        <p>
+                            茨田堤の工事は困難を極めました。ある箇所がどうしても完成しない時、夢に神が現れて「武蔵人強頸と河内人茨田連衫子を人柱にすれば完成する」と告げました。
+                        </p>
+                        <p>
+                            強頸は泣きながら水に入って人柱となりましたが、衫子は瓢箪を水に投げて「もし神意なら、この瓢箪を沈めてみよ」と言いました。瓢箪は沈まず、衫子は助かりました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">皇后との愛憎</h3>
+                        <p>
+                            仁徳天皇は磐之媛命を皇后としていましたが、後に八田皇女を愛するようになりました。皇后は嫉妬深く、天皇が八田皇女を宮中に入れようとすると、激怒して山城に去ってしまいました。
+                        </p>
+                        <p>
+                            天皇は皇后を慕って歌を詠みました。「つぎねふ山城女の木鍬持ち打ちし大根さわさわに汝が言へせこそ打ち渡す弥が橋渡る」
+                        </p>
+                        <p>
+                            しかし、皇后は許さず、そのまま崩御してしまいました。天皇は深く悲しみ、八田皇女を新たな皇后としました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">外交と文化</h3>
+                        <p>
+                            仁徳天皇の時代、朝鮮半島との交流が盛んでした。百済、新羅から多くの貢物が届きました。特に百済からは、優れた工人が来日し、建築や工芸の技術を伝えました。
+                        </p>
+                        <p>
+                            また、この時代に大陸から新しい農業技術が伝わり、鉄器の使用が広まりました。ため池の建設技術も向上し、農業生産力が飛躍的に増大しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">仁徳天皇の崩御</h3>
+                        <p>
+                            仁徳天皇は87年の治世の後、110歳で崩御しました。百舌鳥野陵に葬られました。この陵は日本最大の前方後円墳で、仁徳天皇の偉大さを今に伝えています。
+                        </p>
+                        <p>
+                            日本書紀は仁徳天皇を「聖帝」と称え、その仁政を詳しく記録しています。民を愛し、国を富ませた理想の君主として、後世の手本とされました。
+                        </p>
+                        <p>
+                            仁徳天皇の時代は、日本古代の黄金時代として記憶され、「仁徳天皇の御代」は理想の時代の代名詞となりました。
+                        </p>
+                    </div>
+                `
+            },
+            6: {
+                title: "雄略天皇と大王権",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">綏靖天皇</h3>
+                        <p>
+                            第二代綏靖天皇（すいぜいてんのう）は、神武天皇の第三皇子でした。兄の手研耳命（たぎしみみのみこと）が反乱を起こしましたが、もう一人の兄と協力してこれを討ちました。
+                        </p>
+                        <p>
+                            綏靖天皇は葛城高丘宮に都を移し、33年間在位しました。五十鈴依媛を皇后とし、安寧天皇が生まれました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">安寧天皇から開化天皇まで</h3>
+                        <p>
+                            第三代安寧天皇は片塩浮孔宮に都を置き、38年間在位しました。
+                        </p>
+                        <p>
+                            第四代懿徳天皇は軽曲峡宮に都を置き、34年間在位しました。
+                        </p>
+                        <p>
+                            第五代孝昭天皇は掖上池心宮に都を置き、83年間在位しました。
+                        </p>
+                        <p>
+                            第六代孝安天皇は室秋津島宮に都を置き、102年間在位しました。
+                        </p>
+                        <p>
+                            第七代孝霊天皇は黒田廬戸宮に都を置き、76年間在位しました。
+                        </p>
+                        <p>
+                            第八代孝元天皇は軽境原宮に都を置き、57年間在位しました。
+                        </p>
+                        <p>
+                            第九代開化天皇は春日率川宮に都を置き、60年間在位しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">崇神天皇の治世</h3>
+                        <p>
+                            第十代崇神天皇は、「御肇国天皇（はつくにしらすすめらみこと）」と呼ばれ、実質的な建国者とも言われています。
+                        </p>
+                        <p>
+                            崇神天皇の時代、疫病が流行り、国民の大半が死にました。天皇は神々を篤く祭り、天照大神を笠縫邑に祭らせました。
+                        </p>
+                        <p>
+                            また、四道将軍を派遣して、全国を平定しました。北陸に大彦命、東海に武渟川別、西道に吉備津彦、丹波に丹波道主命を遣わしました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「神を敬い、民を愛し、国を治めることこそ、天皇の道である」
+                        <br>- 崇神天皇
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">垂仁天皇と日本武尊</h3>
+                        <p>
+                            第十一代垂仁天皇の時代には、相撲の起源となる野見宿禰と当麻蹴速の力比べがありました。
+                        </p>
+                        <p>
+                            また、垂仁天皇は埴輪を考案し、殉死の風習を廃止しました。
+                        </p>
+                        <p>
+                            第十二代景行天皇の皇子、日本武尊（やまとたけるのみこと）は、熊襲征伐と東国平定で大きな功績を挙げました。しかし、伊吹山の神との戦いで傷つき、能褒野で亡くなり、白鳥となって飛び立ったと伝えられています。
+                        </p>
+                    </div>
+                `
+            },
+            6: {
+                title: "雄略天皇と大王権",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">武烈の即位</h3>
+                        <p>
+                            雄略天皇は、大泊瀬幼武尊（おおはつせわかたけるのみこと）として生まれました。安康天皇が眉輪王に殺されると、兄たちを疑い、次々と殺害して即位しました。
+                        </p>
+                        <p>
+                            即位の日、天皇は「朕は不肖であるが、天位を継いだ。しかし、良臣の助けなくして、どうして国を治められようか」と述べました。
+                        </p>
+                        <p>
+                            日本書紀は雄略天皇を「大悪天皇」とも記していますが、同時に強力な王権を確立した君主として描いています。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">葛城山の狩猟</h3>
+                        <p>
+                            ある時、天皇は葛城山で狩猟をしていました。すると、向かいの尾根に、天皇と全く同じ装束の一行が現れました。
+                        </p>
+                        <p>
+                            天皇が「この倭国に朕以外に王はいない。お前は誰だ」と問うと、相手も全く同じ言葉を返しました。
+                        </p>
+                        <p>
+                            天皇が矢を放とうとすると、相手も矢をつがえました。すると相手は「私は葛城の一言主神である」と名乗りました。天皇は恐れて、太刀や弓矢、衣服を献上しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">吉備氏の制圧</h3>
+                        <p>
+                            雄略天皇は地方豪族の力を抑えることに力を注ぎました。特に吉備氏は大きな勢力を持っていました。
+                        </p>
+                        <p>
+                            天皇は吉備上道臣田狭を任那に派遣し、その留守中に田狭の妻を奪いました。田狭の子、弟君は新羅と結んで反乱を起こしましたが、鎮圧されました。
+                        </p>
+                        <p>
+                            また、吉備下道臣前津屋を誣告して殺し、その妻を奪いました。こうして吉備氏の勢力を削ぎ、中央集権を進めました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「天下を治めるには、まず群臣を制し、次に万民を導く。これが王道である」
+                        <br>- 雄略天皇
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">部民制の確立</h3>
+                        <p>
+                            雄略天皇は部民制を整備し、様々な職業集団を組織しました。錦織部、鍛冶部、陶部、画部などが設置されました。
+                        </p>
+                        <p>
+                            特に渡来人の技術を重視し、多くの技術者を各地に配置しました。秦氏、漢氏などの渡来系氏族を優遇し、その技術を国家建設に活用しました。
+                        </p>
+                        <p>
+                            また、屯倉を各地に設置し、直轄地を増やしました。これにより、王権の経済基盤が強化されました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">宋への遣使</h3>
+                        <p>
+                            雄略天皇は中国の宋に使者を送りました。宋書に「倭王武」として記録されているのが雄略天皇です。
+                        </p>
+                        <p>
+                            上表文では「東は毛人を征すること55国、西は衆夷を服すること66国、北のかた海を渡って平らげること95国」と述べ、倭国の勢力範囲を誇示しました。
+                        </p>
+                        <p>
+                            宋の順帝は、雄略天皇を「使持節都督倭・新羅・任那・加羅・秦韓・慕韓六国諸軍事、安東大将軍、倭王」に任命しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">文化の振興</h3>
+                        <p>
+                            雄略天皇は和歌を愛し、多くの歌を詠みました。「籠もよ み籠持ち 掘串もよ み掘串持ち この岡に 菜摘ます児 家聞かな 名告らさね」という歌は、万葉集の巻頭を飾っています。
+                        </p>
+                        <p>
+                            また、各地の国造に歌舞を奏上させ、宮廷文化を発展させました。この時代に、日本独自の文化が形成され始めました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">雄略天皇の晩年</h3>
+                        <p>
+                            雄略天皇23年、天皇は病に倒れました。8月に崩御し、河内の高鷲原陵に葬られました。
+                        </p>
+                        <p>
+                            日本書紀は、雄略天皇を残虐な暴君として描く一方で、強力な王権を確立し、国家体制を整備した偉大な君主としても評価しています。
+                        </p>
+                        <p>
+                            雄略天皇の時代は、古代国家形成の重要な画期であり、「大王」から「天皇」への移行期として位置づけられています。
+                        </p>
+                    </div>
+                `
+            },
+            7: {
+                title: "推古天皇と聖徳太子",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">推古天皇の即位</h3>
+                        <p>
+                            第三十三代推古天皇は、日本初の女性天皇でした。崇峻天皇が蘇我馬子によって暗殺された後、皇室の安定のため即位しました。
+                        </p>
+                        <p>
+                            推古天皇は欽明天皇の皇女で、敏達天皇の皇后でもありました。政治的混乱を収め、仏教の興隆と国家体制の整備に努めました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">聖徳太子の摂政</h3>
+                        <p>
+                            推古天皇は甥の厩戸皇子（聖徳太子）を皇太子とし、摂政に任じました。聖徳太子は一度に十人の訴えを聞き分けたという逸話で知られています。
+                        </p>
+                        <p>
+                            聖徳太子は十七条憲法を制定し、「和を以て貴しと為す」を第一条とした道徳的な政治理念を示しました。
+                        </p>
+                        <p>
+                            また、冠位十二階を制定し、出生ではなく才能によって官位を決める制度を導入しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">遣隋使の派遣</h3>
+                        <p>
+                            聖徳太子は中国の隋に使者を派遣しました。小野妹子が携えた国書には「日出処天子致書日没処天子無恙」と記され、対等外交を志向しました。
+                        </p>
+                        <p>
+                            隋の皇帝煬帝はこの書を見て怒ったとされますが、日本の独立性を示す重要な外交文書でした。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「和を以て貴しと為し、忤ふること無きを宗とせよ」
+                        <br>- 十七条憲法第一条
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">仏教の興隆</h3>
+                        <p>
+                            推古天皇と聖徳太子の時代、仏教が本格的に日本に根付きました。法隆寺をはじめ多くの寺院が建立され、仏教文化が花開きました。
+                        </p>
+                        <p>
+                            聖徳太子は仏教に深く帰依し、法華経、勝鬘経、維摩経の三経の注釈書「三経義疏」を著したとされます。
+                        </p>
+                        <p>
+                            この時代の仏教美術は、飛鳥文化として後世に大きな影響を与えました。
+                        </p>
+                    </div>
+                `
+            },
+            8: {
+                title: "大化改新",
+                content: `
+                    <div class="story-section">
+                        <h3 class="section-title">蘇我氏の専横</h3>
+                        <p>
+                            聖徳太子の死後、蘇我入鹿が権力を握り、皇室をないがしろにするようになりました。山背大兄王を攻め滅ぼし、皇位継承に介入しました。
+                        </p>
+                        <p>
+                            蘇我入鹿の専横に対し、中大兄皇子（後の天智天皇）と中臣鎌足（後の藤原鎌足）が密かに結託し、打倒を計画しました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">乙巳の変</h3>
+                        <p>
+                            皇極天皇4年（645年）6月12日、飛鳥板蓋宮で三韓進調の儀が行われました。その最中、中大兄皇子らは蘇我入鹿を暗殺しました。
+                        </p>
+                        <p>
+                            「韓人が鞍作を殺しました」と報告を受けた皇極天皇は驚愕し、翌日、蘇我蝦夷も邸宅に火を放って自殺しました。
+                        </p>
+                        <p>
+                            こうして蘇我本宗家は滅亡し、政治の実権は中大兄皇子の手に移りました。
+                        </p>
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">改新の詔</h3>
+                        <p>
+                            孝徳天皇が即位し、年号を「大化」と定めました。翌年、改新の詔が発布され、「公地公民」の原則が宣言されました。
+                        </p>
+                        <p>
+                            豪族の私地私民を廃止し、全て天皇の土地・人民とする大改革でした。郡司制度を整備し、中央集権国家の基礎を築きました。
+                        </p>
+                    </div>
+
+                    <div class="imperial-quote">
+                        「公地公民制により、すべての土地と人民は天皇に帰属する」
+                        <br>- 改新の詔
+                    </div>
+
+                    <div class="story-section">
+                        <h3 class="section-title">都の移転</h3>
+                        <p>
+                            孝徳天皇は難波長柄豊碕宮に遷都し、新政権の象徴としました。しかし中大兄皇子は飛鳥への復帰を望み、対立が生じました。
+                        </p>
+                        <p>
+                            最終的に中大兄皇子は母の皇極天皇（重祚して斉明天皇）と共に飛鳥に戻り、孝徳天皇は失意のうちに崩御しました。
+                        </p>
+                        <p>
+                            大化改新は中央集権国家建設への第一歩となり、後の律令制度の基礎となりました。
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        // 追加の章のコンテンツを定義
+        chapters[9] = {
+            title: "白村江の戦い",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">百済復興への出兵</h3>
+                    <p>
+                        天智天皇2年（663年）、百済が唐・新羅連合軍に滅ぼされました。百済遺臣の要請を受け、日本は百済復興のため大軍を派遣しました。
+                    </p>
+                    <p>
+                        斉明天皇自らが筑紫に向かいましたが、朝倉宮で崩御。中大兄皇子（後の天智天皇）が称制として出兵を継続しました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">白村江での大敗</h3>
+                    <p>
+                        日本水軍は白村江（現在の錦江）で唐・新羅連合軍と激突しました。しかし、戦術の差により日本軍は大敗を喫しました。
+                    </p>
+                    <p>
+                        この敗戦により、日本の朝鮮半島への影響力は完全に失われ、東アジアの国際関係は大きく変化しました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    「天下大事を論ずるに、兵と食を先とす。今、両つながら欠く」
+                    <br>- 敗戦後の反省
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">国防体制の整備</h3>
+                    <p>
+                        敗戦の衝撃により、日本は国防体制の抜本的見直しを行いました。九州に水城を築き、防人制度を設けました。
+                    </p>
+                    <p>
+                        また、多くの百済遺民が日本に亡命し、その技術や文化が日本の発展に寄与しました。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[10] = {
+            title: "壬申の乱",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">後継者争い</h3>
+                    <p>
+                        天智天皇10年（671年）、天皇が崩御すると、皇太子大友皇子（弘文天皇）と天皇の弟・大海人皇子（後の天武天皇）の間で皇位継承争いが起きました。
+                    </p>
+                    <p>
+                        大海人皇子は吉野に逃れ、そこで挙兵の機会を窺っていました。翌年、ついに決起し、古代最大の内乱が始まりました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">天武天皇の勝利</h3>
+                    <p>
+                        壬申の乱は約1ヶ月間続き、最終的に大海人皇子が勝利しました。大友皇子は山前（山崎）で自殺し、近江朝廷は滅亡しました。
+                    </p>
+                    <p>
+                        この勝利により、大海人皇子は天武天皇として即位し、天皇親政の基礎を築きました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    「朕、徳薄くして、天の恩沢を蒙る」
+                    <br>- 天武天皇即位の宣命
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">天皇親政の確立</h3>
+                    <p>
+                        天武天皇は藤原京に遷都し、強力な天皇親政体制を構築しました。八色の姓を制定し、臣下の序列を明確にしました。
+                    </p>
+                    <p>
+                        また、神道を重視し、伊勢神宮の斎宮制度を確立するなど、天皇の神聖性を高める政策を実施しました。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[11] = {
+            title: "律令国家の成立",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">大宝律令の制定</h3>
+                    <p>
+                        文武天皇4年（701年）、大宝律令が制定されました。これは中国の律令制を参考にした日本初の本格的な法典でした。
+                    </p>
+                    <p>
+                        律は刑法、令は行政法にあたり、中央官制から地方行政まで詳細に規定されました。藤原不比等が編纂の中心的役割を果たしました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">官位制と官僚制</h3>
+                    <p>
+                        二官八省制による中央政府が確立され、大臣・大納言・中納言などの官位制度が整備されました。
+                    </p>
+                    <p>
+                        地方には国司を派遣し、郡司には在地豪族を任用する統治システムが構築されました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    "律令国家により、天皇を頂点とする統一国家が完成した"
+                    <br>- 律令制の意義
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">平城京への遷都</h3>
+                    <p>
+                        元明天皇の和銅3年（710年）、平城京に遷都しました。唐の長安をモデルとした大規模な都城で、奈良時代の幕開けとなりました。
+                    </p>
+                    <p>
+                        律令国家体制が確立し、日本書紀もこの時代に完成しました。古代国家の最盛期を迎えたのです。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[12] = {
+            title: "古事記との相違",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">編纂目的の違い</h3>
+                    <p>
+                        古事記は太安万侶が稗田阿礼の記憶を記録した私的史書的性格を持つのに対し、日本書紀は国家的事業として編纂された正史です。
+                    </p>
+                    <p>
+                        古事記は天皇家の系譜を重視し、日本書紀は中国式の編年史として政治的事件を詳細に記録しています。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">記述の特徴</h3>
+                    <p>
+                        古事記は和文で書かれ、神話的色彩が強く、日本書紀は漢文で書かれ、歴史的記述に重点を置いています。
+                    </p>
+                    <p>
+                        また、日本書紀は「一書に曰く」として異説を併記し、多角的な視点を提供しているのが特徴です。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    "古事記は物語として、日本書紀は歴史として読むべし"
+                    <br>- 本居宣長
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">対外的意識</h3>
+                    <p>
+                        日本書紀は中国や朝鮮半島諸国との関係を詳しく記述し、国際的な史書としての性格を持っています。
+                    </p>
+                    <p>
+                        神代巻でも中国思想の影響を受けた記述が見られ、東アジア文化圏における日本の位置づけを意識した編纂がなされています。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[13] = {
+            title: "外交と遣隋使",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">遣隋使の派遣</h3>
+                    <p>
+                        推古天皇15年（607年）、聖徳太子は小野妹子を隋に派遣しました。国書には「日出処天子致書日没処天子無恙」と記され、対等外交を表明しました。
+                    </p>
+                    <p>
+                        隋の皇帝煬帝はこの表現に不快感を示したものの、使者を返送し、外交関係が開始されました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">文化の摂取</h3>
+                    <p>
+                        遣隋使により、中国の先進文化が大量に日本に流入しました。仏教思想、法制度、建築技術、文学などが伝えられました。
+                    </p>
+                    <p>
+                        留学生や学問僧も派遣され、高向玄理、南淵請安、旻などが帰国後に政治顧問として活躍しました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    "隋との交流により、日本は東アジア文化圏の一員となった"
+                    <br>- 外交の意義
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">朝鮮三国との関係</h3>
+                    <p>
+                        日本は百済と密接な関係を保ち、高句麗・新羅とは時に対立しました。任那復興への野心も持ち続けました。
+                    </p>
+                    <p>
+                        これらの外交関係は白村江の戦いまで続き、東アジアの政治情勢に大きな影響を与えました。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[14] = {
+            title: "仏教伝来と受容",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">仏教の公伝</h3>
+                    <p>
+                        欽明天皇13年（552年）、百済の聖明王から仏像と経典が献上されました。これが日本への仏教公伝とされています。
+                    </p>
+                    <p>
+                        しかし、実際にはそれ以前から渡来人によって仏教は伝えられており、公式な受容のきっかけとなったのがこの出来事でした。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">崇仏・排仏論争</h3>
+                    <p>
+                        仏教受容をめぐって朝廷内で論争が起きました。蘇我稲目は崇仏派、物部尾輿・中臣鎌子は排仏派として対立しました。
+                    </p>
+                    <p>
+                        用明天皇の後継争いを機に武力衝突に発展し、蘇我馬子が物部守屋を滅ぼして崇仏派が勝利しました。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    "仏法は遠く三韓より伝わり、魚と水のごとく相合う"
+                    <br>- 推古天皇の詔
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">飛鳥文化の開花</h3>
+                    <p>
+                        聖徳太子の時代、法隆寺などの寺院建立が盛んになり、飛鳥文化が花開きました。
+                    </p>
+                    <p>
+                        仏教美術も発達し、止利仏師の釈迦三尊像、百済観音像など、日本仏教美術の原点となる作品が生まれました。
+                    </p>
+                </div>
+            `
+        };
+
+        chapters[15] = {
+            title: "持統天皇と藤原京",
+            content: `
+                <div class="story-section">
+                    <h3 class="section-title">持統天皇の治世</h3>
+                    <p>
+                        天武天皇の皇后であった持統天皇は、夫の死後、孫の軽皇子（文武天皇）が成人するまでの中継ぎとして即位しました。
+                    </p>
+                    <p>
+                        天武天皇の政策を継承し、律令制度の整備と藤原京建設を推進しました。女性天皇として優れた政治的手腕を発揮しました。
+                    </p>
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">藤原京の建設</h3>
+                    <p>
+                        持統天皇8年（694年）、藤原京に遷都しました。これは日本初の条坊制による本格的都城でした。
+                    </p>
+                    <p>
+                        藤原京は唐の長安を模範とし、大内裏、朱雀大路、左京・右京の配置を持つ計画都市でした。
+                    </p>
+                </div>
+
+                <div class="imperial-quote">
+                    "飛ぶ鳥の明日香の里を置きて去なば君があたりは見えずかもあらむ"
+                    <br>- 持統天皇の御製
+                </div>
+
+                <div class="story-section">
+                    <h3 class="section-title">万葉集の時代</h3>
+                    <p>
+                        持統天皇の時代は万葉集の黄金期でもありました。柿本人麻呂などの宮廷歌人が活躍し、優れた和歌を数多く残しました。
+                    </p>
+                    <p>
+                        日本書紀の編纂も進められ、古代日本の文化的完成期を迎えました。後に文武天皇に譲位し、上皇として政治に関与し続けました。
+                    </p>
+                </div>
+            `
+        };
+
+        let currentChapter = 1;
+
+        function showChapter(chapterNum) {
+            currentChapter = chapterNum;
+            if (chapters[chapterNum]) {
+                document.getElementById('story-content').innerHTML = chapters[chapterNum].content;
+                
+                // Update active chapter
+                document.querySelectorAll('.chapter-item').forEach((item, index) => {
+                    item.classList.remove('active');
+                    if (index === chapterNum - 1) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function prevChapter() {
+            if (currentChapter > 1) {
+                showChapter(currentChapter - 1);
+            }
+        }
+
+        function nextChapter() {
+            if (currentChapter < 15) {
+                showChapter(currentChapter + 1);
+            }
+        }
+
+        function changeTheme() {
+            // Theme change implementation
+            alert('テーマ変更機能は準備中です');
+        }
+
+        function changeFontSize() {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseInt(window.getComputedStyle(content).fontSize);
+            content.style.fontSize = currentSize === 16 ? '18px' : currentSize === 18 ? '20px' : '16px';
+        }
+
+        function toggleReading() {
+            // Auto-reading implementation
+            alert('自動読み上げ機能は準備中です');
+        }
+    </script>
+</body>
+</html>
