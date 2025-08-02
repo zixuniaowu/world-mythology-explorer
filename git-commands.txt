@@ -1,0 +1,13 @@
+# 請替換 "你的GitHub用戶名" 為你實際的用戶名，然後執行以下命令：
+
+# 1. 設置遠程倉庫
+git remote add origin https://github.com/你的GitHub用戶名/world-mythology-explorer.git
+
+# 2. 重命名主分支為 main（Cloudflare Pages 和 GitHub 的標準）
+git branch -M main
+
+# 3. 推送到 GitHub
+git push -u origin main
+
+# 如果遇到認證問題，可能需要設置個人訪問令牌（Personal Access Token）
+# 請訪問：https://github.com/settings/tokens
