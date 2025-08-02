@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SVG 动画生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .animation-area {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        #svgContainer {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #generatedSVG {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .status.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.5);
+        }
+
+        .status.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+        }
+
+        .status.processing {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .examples {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .example-btn {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .example-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .code-display {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .toggle-code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .llama-io {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .llama-io h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .llama-io pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✨ AI SVG 动画生成器 ✨</h1>
+        <p>使用 Llama2 将文字描述转换为 SVG 动画</p>
+    </div>
+
+    <div class="container">
+        <div class="control-panel">
+            <div class="section">
+                <h3>📝 场景描述</h3>
+                <textarea id="sceneInput" placeholder="描述您想要的场景，例如：
+夸父追日，他奔跑在大地上，太阳在前方逃跑...
+三个小孩在草地上踢足球...
+山海经中的凤凰在云端飞舞，羽毛闪烁着七彩光芒..."></textarea>
+            </div>
+
+            <div class="section">
+                <h3>🤖 AI 模型选择</h3>
+                <select id="modelSelect" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.3); border-radius: 5px; color: #fff; margin-bottom: 10px;" onchange="onModelChange()">
+                    <option value="gemini">Google Gemini (免费)</option>
+                    <option value="ollama">本地 Llama2 (Ollama)</option>
+                    <option value="openai">OpenAI GPT-4</option>
+                    <option value="deepseek">DeepSeek API</option>
+                    <option value="claude">Claude API</option>
+                    <option value="fallback">仅使用备用生成器</option>
+                </select>
+                
+                <div id="apiKeySection" style="display: none;">
+                    <input type="password" id="apiKey" placeholder="请输入 API Key" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.3); border-radius: 5px; color: #fff; margin-top: 10px;">
+                    <small style="color: #aaa; display: block; margin-top: 5px;">API Key 仅保存在浏览器本地</small>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🎯 动画类型</h3>
+                <select id="animationType" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.3); border-radius: 5px; color: #fff;">
+                    <option value="mythology">神话场景</option>
+                    <option value="character">人物动作</option>
+                    <option value="creature">神兽动画</option>
+                    <option value="nature">自然景观</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <button onclick="generateAnimation()" id="generateBtn">🎨 生成动画</button>
+                <button onclick="clearAnimation()">🗑️ 清除</button>
+                <button onclick="downloadSVG()">💾 下载 SVG</button>
+            </div>
+
+            <div class="section examples">
+                <h4>快速示例：</h4>
+                <button class="example-btn" onclick="loadExample('kuafu')">夸父追日</button>
+                <button class="example-btn" onclick="loadExample('phoenix')">凤凰飞舞</button>
+                <button class="example-btn" onclick="loadExample('dragon')">神龙出海</button>
+                <button class="example-btn" onclick="loadExample('houyi')">后羿射日</button>
+                <button class="example-btn" onclick="loadExample('soccer')">小孩踢球</button>
+            </div>
+
+            <div id="status"></div>
+        </div>
+
+        <div class="animation-area">
+            <h3 style="color: #FFD700; margin-bottom: 15px;">🎬 动画预览</h3>
+            <div id="svgContainer">
+                <div id="placeholder" style="text-align: center; color: #666;">
+                    <p style="font-size: 24px; margin-bottom: 10px;">✨</p>
+                    <p>在左侧输入场景描述，点击"生成动画"开始创作</p>
+                </div>
+            </div>
+            <button class="toggle-code" onclick="toggleCode()">查看 SVG 代码</button>
+            <button class="toggle-code" onclick="toggleLlamaIO()">查看 Llama2 调用详情</button>
+            <pre class="code-display" id="codeDisplay"></pre>
+            
+            <div class="llama-io" id="llamaIO" style="display: none;">
+                <h4>🤖 Llama2 调用详情</h4>
+                <div id="llamaInput">
+                    <h4>输入 (Prompt):</h4>
+                    <pre id="llamaInputContent"></pre>
+                </div>
+                <div id="llamaOutput" style="margin-top: 15px;">
+                    <h4>输出 (Response):</h4>
+                    <pre id="llamaOutputContent"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const OLLAMA_ENDPOINT = ''; // Set your local Ollama endpoint
+        const OPENAI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+        const DEEPSEEK_ENDPOINT = 'https://api.deepseek.com/v1/chat/completions';
+        const CLAUDE_ENDPOINT = 'https://api.anthropic.com/v1/messages';
+        const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+        
+        // Load saved API keys
+        window.onload = function() {
+            const savedModel = localStorage.getItem('selectedModel') || 'ollama';
+            document.getElementById('modelSelect').value = savedModel;
+            
+            const savedKey = localStorage.getItem(`apiKey_${savedModel}`);
+            if (savedKey) {
+                document.getElementById('apiKey').value = savedKey;
+            }
+            
+            onModelChange();
+        };
+        
+        function onModelChange() {
+            const model = document.getElementById('modelSelect').value;
+            const apiKeySection = document.getElementById('apiKeySection');
+            
+            if (['openai', 'deepseek', 'claude', 'gemini'].includes(model)) {
+                apiKeySection.style.display = 'block';
+                const savedKey = localStorage.getItem(`apiKey_${model}`);
+                if (savedKey) {
+                    document.getElementById('apiKey').value = savedKey;
+                }
+                
+                // Update placeholder text for different APIs
+                const apiKeyInput = document.getElementById('apiKey');
+                if (model === 'gemini') {
+                    apiKeyInput.placeholder = '请输入 Google API Key (在 Google AI Studio 获取)';
+                } else {
+                    apiKeyInput.placeholder = '请输入 API Key';
+                }
+            } else {
+                apiKeySection.style.display = 'none';
+            }
+            
+            localStorage.setItem('selectedModel', model);
+        }
+        
+        const examples = {
+            kuafu: "夸父追日：巨人夸父迈着大步追赶太阳，他的身形高大如山，每一步都震动大地。太阳在天空中快速移动，散发着金色的光芒。",
+            phoenix: "凤凰在云端飞舞，它的羽毛闪烁着红、橙、黄、绿、蓝五种颜色，翅膀优雅地扇动，身后留下彩虹般的轨迹。",
+            dragon: "青龙从海中腾空而起，身体呈S形摆动，鳞片闪闪发光，云雾缭绕在它的身边，威严而神秘。",
+            houyi: "后羿站在山巅，拉满神弓，瞄准天空中的九个太阳。箭矢带着流光射出，直指炽热的太阳。",
+            soccer: "三个小孩在绿色的草地上踢足球，他们穿着彩色的运动服，足球在他们之间传递，孩子们奔跑着，笑声回荡在阳光明媚的天空下。"
+        };
+
+        function loadExample(key) {
+            document.getElementById('sceneInput').value = examples[key];
+        }
+
+        async function generateAnimation() {
+            const scene = document.getElementById('sceneInput').value.trim();
+            if (!scene) {
+                showStatus('请输入场景描述', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ 生成中...';
+            const modelName = {
+                'ollama': 'Llama2',
+                'openai': 'GPT-4',
+                'deepseek': 'DeepSeek',
+                'claude': 'Claude',
+                'gemini': 'Gemini',
+                'fallback': '备用生成器'
+            }[document.getElementById('modelSelect').value];
+            showStatus(`正在调用 ${modelName} 生成 SVG 动画...`, 'processing');
+
+            try {
+                const animationType = document.getElementById('animationType').value;
+                const selectedModel = document.getElementById('modelSelect').value;
+                
+                // Save API key if provided
+                if (['openai', 'deepseek', 'claude', 'gemini'].includes(selectedModel)) {
+                    const apiKey = document.getElementById('apiKey').value;
+                    if (apiKey) {
+                        localStorage.setItem(`apiKey_${selectedModel}`, apiKey);
+                    }
+                }
+                
+                let svgCode;
+                if (selectedModel === 'fallback') {
+                    svgCode = createFallbackSVG(scene);
+                    showStatus('使用备用生成器创建动画', 'success');
+                } else {
+                    svgCode = await generateSVGWithAI(scene, animationType, selectedModel);
+                    // Check if fallback was used
+                    if (svgCode.includes('<!-- Fallback Animation -->')) {
+                        showStatus(`${selectedModel} 生成的内容不准确，已使用备用动画生成器`, 'success');
+                    } else {
+                        showStatus('动画生成成功！', 'success');
+                    }
+                }
+                
+                displaySVG(svgCode);
+            } catch (error) {
+                showStatus('生成失败：' + error.message, 'error');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🎨 生成动画';
+            }
+        }
+
+        async function generateSVGWithAI(scene, type, model) {
+            // Create a more specific prompt based on the scene
+            let specificRequirements = '';
+            
+            if (scene.includes('足球') || scene.includes('踢球')) {
+                specificRequirements = `
+- Include a soccer ball (white circle with black pentagons)
+- Show grass field (green rectangle at bottom)
+- Ball should bounce or move between players`;
+            }
+            
+            if (scene.includes('小孩') || scene.includes('孩子')) {
+                specificRequirements += `
+- Create simple stick figures or basic shapes for children
+- Each child should have: head (circle), body (rectangle), arms and legs (lines or rectangles)
+- Different colored shirts to distinguish them`;
+            }
+            
+            if (scene.includes('三个') || scene.includes('three')) {
+                specificRequirements += `
+- Must show exactly 3 children/figures
+- Position them at different x coordinates (e.g., 200, 400, 600)`;
+            }
+
+            const prompt = `Generate SVG code for: "${scene}"
+
+IMPORTANT: Output ONLY valid SVG code, no explanations. Start with <svg> and end with </svg>.
+
+Requirements:
+- Size: width="800" height="600"
+- Include animations using <animate> or <animateTransform>
+- Background: sky blue (#87CEEB) rectangle
+${specificRequirements}
+
+Example for reference:
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#87CEEB"/>
+  <rect x="0" y="400" width="800" height="200" fill="#228B22"/>
+  <circle cx="400" cy="350" r="20" fill="white">
+    <animate attributeName="cx" from="200" to="600" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>
+
+Generate the SVG now:`;
+
+            // Display the input prompt
+            document.getElementById('llamaInputContent').textContent = prompt;
+            document.getElementById('llamaIO').style.display = 'block';
+            document.getElementById('llamaOutputContent').textContent = `正在等待 ${model} 响应...`;
+
+            let response, result;
+            
+            switch (model) {
+                case 'ollama':
+                    response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: 'llama2',
+                            prompt: prompt,
+                            stream: false,
+                            temperature: 0.7
+                        })
+                    });
+                    if (!response.ok) {
+                        document.getElementById('llamaOutputContent').textContent = 'Error: Ollama 请求失败';
+                        throw new Error('Ollama 请求失败');
+                    }
+                    result = await response.json();
+                    break;
+                    
+                case 'openai':
+                    const openaiKey = localStorage.getItem('apiKey_openai');
+                    if (!openaiKey) throw new Error('请先设置 OpenAI API Key');
+                    
+                    response = await fetch(OPENAI_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${openaiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'gpt-4',
+                            messages: [{
+                                role: 'system',
+                                content: 'You are an SVG animation expert. Generate only valid SVG code without any explanations.'
+                            }, {
+                                role: 'user',
+                                content: prompt
+                            }],
+                            temperature: 0.7,
+                            max_tokens: 2000
+                        })
+                    });
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(`OpenAI API 错误: ${error.error?.message || '未知错误'}`);
+                    }
+                    const openaiResult = await response.json();
+                    result = { response: openaiResult.choices[0].message.content };
+                    break;
+                    
+                case 'deepseek':
+                    const deepseekKey = localStorage.getItem('apiKey_deepseek');
+                    if (!deepseekKey) throw new Error('请先设置 DeepSeek API Key');
+                    
+                    response = await fetch(DEEPSEEK_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${deepseekKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: [{
+                                role: 'system',
+                                content: 'You are an SVG animation expert. Generate only valid SVG code without any explanations.'
+                            }, {
+                                role: 'user',
+                                content: prompt
+                            }],
+                            temperature: 0.7
+                        })
+                    });
+                    if (!response.ok) {
+                        throw new Error('DeepSeek API 请求失败');
+                    }
+                    const deepseekResult = await response.json();
+                    result = { response: deepseekResult.choices[0].message.content };
+                    break;
+                    
+                case 'claude':
+                    const claudeKey = localStorage.getItem('apiKey_claude');
+                    if (!claudeKey) throw new Error('请先设置 Claude API Key');
+                    
+                    response = await fetch(CLAUDE_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': claudeKey,
+                            'anthropic-version': '2023-06-01'
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-3-opus-20240229',
+                            messages: [{
+                                role: 'user',
+                                content: prompt
+                            }],
+                            max_tokens: 2000
+                        })
+                    });
+                    if (!response.ok) {
+                        throw new Error('Claude API 请求失败');
+                    }
+                    const claudeResult = await response.json();
+                    result = { response: claudeResult.content[0].text };
+                    break;
+                    
+                case 'gemini':
+                    const geminiKey = localStorage.getItem('apiKey_gemini');
+                    if (!geminiKey) throw new Error('请先设置 Google API Key');
+                    
+                    response = await fetch(`${GEMINI_ENDPOINT}?key=${geminiKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: prompt
+                                }]
+                            }],
+                            generationConfig: {
+                                temperature: 0.7,
+                                maxOutputTokens: 2048,
+                            }
+                        })
+                    });
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(`Gemini API 错误: ${error.error?.message || '未知错误'}`);
+                    }
+                    const geminiResult = await response.json();
+                    result = { response: geminiResult.candidates[0].content.parts[0].text };
+                    break;
+                    
+                default:
+                    throw new Error('未知的模型类型');
+            }
+            
+            // Display the output response
+            document.getElementById('llamaOutputContent').textContent = result.response || 'No response received';
+            
+            // Add SVG extraction process details
+            let extractionInfo = '\n\n========== SVG 提取过程 ==========\n';
+            
+            // Extract SVG from response
+            const svgMatch = result.response.match(/<svg[\s\S]*?<\/svg>/);
+            if (svgMatch) {
+                extractionInfo += '✅ 成功找到 SVG 代码！\n';
+                extractionInfo += `📏 SVG 代码长度: ${svgMatch[0].length} 字符\n`;
+                extractionInfo += '📝 提取的 SVG 代码预览:\n';
+                extractionInfo += svgMatch[0].substring(0, 200) + '...\n';
+                
+                // Check if the SVG actually represents the scene
+                const svgContent = svgMatch[0].toLowerCase();
+                const sceneKeywords = scene.toLowerCase().split(/\s+/);
+                let relevanceScore = 0;
+                
+                // Check for soccer/football specific elements
+                if (scene.includes('足球') || scene.includes('踢球')) {
+                    if (svgContent.includes('ball') || svgContent.includes('sphere') || svgContent.includes('足球')) relevanceScore += 2;
+                    if (!svgContent.includes('ball') && !svgContent.includes('circle')) relevanceScore -= 2;
+                }
+                
+                // Check for kids/children
+                if (scene.includes('小孩') || scene.includes('孩子')) {
+                    if (svgContent.includes('boy') || svgContent.includes('girl') || svgContent.includes('child') || svgContent.includes('kid')) relevanceScore += 2;
+                    const personCount = (svgContent.match(/person|boy|girl|child|kid|head|body/g) || []).length;
+                    if (personCount < 2) relevanceScore -= 2;
+                }
+                
+                // Check for the number three
+                if (scene.includes('三个') || scene.includes('three')) {
+                    const groupCount = (svgContent.match(/<g\s|<circle|<ellipse|<rect/g) || []).length;
+                    if (groupCount < 5) relevanceScore -= 1; // Should have multiple elements for 3 kids
+                }
+                
+                extractionInfo += `\n🎯 相关性检查:\n`;
+                extractionInfo += `   - 场景关键词: ${sceneKeywords.join(', ')}\n`;
+                extractionInfo += `   - 相关性得分: ${relevanceScore}\n`;
+                
+                if (relevanceScore < -1) {
+                    extractionInfo += `\n⚠️ 警告: 生成的 SVG 与场景描述不匹配！\n`;
+                    extractionInfo += `🔄 使用备用动画生成器创建准确的动画\n`;
+                    document.getElementById('llamaOutputContent').textContent += extractionInfo;
+                    return createFallbackSVG(scene);
+                }
+                
+                document.getElementById('llamaOutputContent').textContent += extractionInfo;
+                return svgMatch[0];
+            } else {
+                extractionInfo += '❌ 未找到有效的 SVG 代码\n';
+                extractionInfo += '🔍 搜索模式: /<svg[\\s\\S]*?<\\/svg>/\n';
+                extractionInfo += '📋 响应内容类型: ' + typeof result.response + '\n';
+                extractionInfo += '📏 响应长度: ' + (result.response ? result.response.length : 0) + ' 字符\n';
+                extractionInfo += '🔄 使用备用动画生成器\n';
+                document.getElementById('llamaOutputContent').textContent += extractionInfo;
+                return createFallbackSVG(scene);
+            }
+        }
+
+        function createFallbackSVG(scene) {
+            // Create a simple fallback animation based on keywords
+            const isKuafu = scene.includes('夸父') || scene.includes('追日');
+            const isDragon = scene.includes('龙') || scene.includes('龍');
+            const isPhoenix = scene.includes('凤凰') || scene.includes('鳳凰');
+            const isSoccer = scene.includes('足球') || scene.includes('踢球') || scene.includes('soccer') || scene.includes('football');
+            const hasKids = scene.includes('小孩') || scene.includes('孩子') || scene.includes('儿童') || scene.includes('children') || scene.includes('kids');
+
+            let svg = `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fallback Animation -->`;
+
+            if (isSoccer) {
+                // Soccer scene
+                svg += `
+                <!-- 天空 -->
+                <rect width="800" height="600" fill="#87CEEB"/>
+                <!-- 草地 -->
+                <rect x="0" y="400" width="800" height="200" fill="#228B22"/>
+                
+                <!-- 足球 -->
+                <g id="ball">
+                    <circle cx="400" cy="380" r="20" fill="white" stroke="black" stroke-width="2">
+                        <animate attributeName="cx" values="400;300;500;400" dur="4s" repeatCount="indefinite"/>
+                        <animate attributeName="cy" values="380;350;350;380" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+                    <path d="M385,365 L395,365 L398,375 L390,382 L382,375 Z" fill="black"/>
+                    <path d="M405,375 L415,375 L415,385 L405,385 Z" fill="black"/>
+                </g>
+                
+                <!-- 小孩1 -->
+                <g id="kid1" transform="translate(200,350)">
+                    <circle cx="0" cy="-20" r="15" fill="#FDBCB4"/> <!-- 头 -->
+                    <rect x="-10" y="-5" width="20" height="30" fill="#FF6347"/> <!-- 身体 -->
+                    <rect x="-15" y="25" width="10" height="25" fill="#4169E1"/> <!-- 左腿 -->
+                    <rect x="5" y="25" width="10" height="25" fill="#4169E1"/> <!-- 右腿 -->
+                    <animateTransform attributeName="transform" type="translate" 
+                        values="200,350; 250,350; 200,350" dur="4s" repeatCount="indefinite"/>
+                </g>
+                
+                <!-- 小孩2 -->
+                <g id="kid2" transform="translate(400,350)">
+                    <circle cx="0" cy="-20" r="15" fill="#FDBCB4"/> <!-- 头 -->
+                    <rect x="-10" y="-5" width="20" height="30" fill="#32CD32"/> <!-- 身体 -->
+                    <rect x="-15" y="25" width="10" height="25" fill="#4169E1"/> <!-- 左腿 -->
+                    <rect x="5" y="25" width="10" height="25" fill="#4169E1"/> <!-- 右腿 -->
+                    <animateTransform attributeName="transform" type="translate" 
+                        values="400,350; 350,340; 450,340; 400,350" dur="4s" repeatCount="indefinite"/>
+                </g>
+                
+                <!-- 小孩3 -->
+                <g id="kid3" transform="translate(600,350)">
+                    <circle cx="0" cy="-20" r="15" fill="#FDBCB4"/> <!-- 头 -->
+                    <rect x="-10" y="-5" width="20" height="30" fill="#FFD700"/> <!-- 身体 -->
+                    <rect x="-15" y="25" width="10" height="25" fill="#4169E1"/> <!-- 左腿 -->
+                    <rect x="5" y="25" width="10" height="25" fill="#4169E1"/> <!-- 右腿 -->
+                    <animateTransform attributeName="transform" type="translate" 
+                        values="600,350; 550,350; 600,350" dur="4s" repeatCount="indefinite"/>
+                </g>`;
+            } else if (isKuafu) {
+                svg += `
+                <defs>
+                    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#FFA07A;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <rect width="800" height="600" fill="url(#skyGradient)"/>
+                <!-- 太阳 -->
+                <circle cx="700" cy="100" r="60" fill="#FFD700">
+                    <animate attributeName="cx" from="700" to="100" dur="5s" repeatCount="indefinite"/>
+                </circle>
+                <!-- 夸父 -->
+                <ellipse cx="200" cy="400" rx="40" ry="80" fill="#8B4513">
+                    <animateTransform attributeName="transform" type="translate" 
+                        from="0 0" to="400 0" dur="5s" repeatCount="indefinite"/>
+                </ellipse>`;
+            } else if (isDragon) {
+                svg += `
+                <rect width="800" height="600" fill="#001122"/>
+                <!-- 龙身 -->
+                <path d="M100,300 Q200,200 300,300 T500,300" stroke="#00CED1" stroke-width="20" fill="none">
+                    <animate attributeName="d" 
+                        values="M100,300 Q200,200 300,300 T500,300;
+                                M100,300 Q200,400 300,300 T500,300;
+                                M100,300 Q200,200 300,300 T500,300"
+                        dur="2s" repeatCount="indefinite"/>
+                </path>`;
+            } else {
+                svg += `
+                <rect width="800" height="600" fill="#87CEEB"/>
+                <!-- 通用动画元素 -->
+                <circle cx="400" cy="300" r="50" fill="#FFD700" opacity="0.8">
+                    <animate attributeName="r" from="50" to="80" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" from="0.8" to="0.3" dur="2s" repeatCount="indefinite"/>
+                </circle>`;
+            }
+
+            svg += `</svg>`;
+            return svg;
+        }
+
+        function displaySVG(svgCode) {
+            const container = document.getElementById('svgContainer');
+            container.innerHTML = svgCode;
+            document.getElementById('codeDisplay').textContent = svgCode;
+        }
+
+        function clearAnimation() {
+            document.getElementById('svgContainer').innerHTML = `
+                <div id="placeholder" style="text-align: center; color: #666;">
+                    <p style="font-size: 24px; margin-bottom: 10px;">✨</p>
+                    <p>在左侧输入场景描述，点击"生成动画"开始创作</p>
+                </div>`;
+            document.getElementById('codeDisplay').textContent = '';
+            document.getElementById('sceneInput').value = '';
+            document.getElementById('llamaIO').style.display = 'none';
+            document.getElementById('llamaInputContent').textContent = '';
+            document.getElementById('llamaOutputContent').textContent = '';
+            showStatus('', '');
+        }
+
+        function downloadSVG() {
+            const svgElement = document.querySelector('#svgContainer svg');
+            if (!svgElement) {
+                showStatus('没有可下载的动画', 'error');
+                return;
+            }
+
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mythology-animation.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+            showStatus('SVG 已下载', 'success');
+        }
+
+        function toggleCode() {
+            const codeDisplay = document.getElementById('codeDisplay');
+            codeDisplay.style.display = codeDisplay.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleLlamaIO() {
+            const llamaIO = document.getElementById('llamaIO');
+            if (llamaIO.style.display === 'none' && document.getElementById('llamaInputContent').textContent) {
+                llamaIO.style.display = 'block';
+            } else {
+                llamaIO.style.display = 'none';
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            if (!message) {
+                status.style.display = 'none';
+                return;
+            }
+            status.style.display = 'block';
+            status.className = 'status ' + type;
+            status.textContent = message;
+        }
+    </script>
+</body>
+</html>

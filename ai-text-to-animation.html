@@ -193,6 +193,18 @@
             max-height: 100%;
         }
 
+        #svgAnimationContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        #svgAnimationContainer svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
         .extracted-data {
             background: #1a1a1a;
             border-radius: 10px;
@@ -308,6 +320,7 @@
                 <h3>Model Configuration</h3>
                 <label for="modelSelect">Select AI Model:</label>
                 <select id="modelSelect">
+                    <option value="gemini">Google Gemini (Free)</option>
                     <option value="huggingface">Hugging Face API</option>
                     <option value="transformers">Transformers.js (Browser)</option>
                     <option value="ollama">Ollama (Local)</option>
@@ -324,7 +337,7 @@
 
                 <div id="localModelSection" class="api-key-group" style="display:none;">
                     <label for="modelEndpoint">Model Endpoint:</label>
-                    <input type="text" id="modelEndpoint" placeholder="http://localhost:11434">
+                    <input type="text" id="modelEndpoint" placeholder="Enter local model endpoint">
                     <label for="modelName">Model Name:</label>
                     <input type="text" id="modelName" placeholder="llama2">
                 </div>
@@ -333,7 +346,7 @@
             <div class="section">
                 <h3>Text Input</h3>
                 <label for="textInput">Enter your scene description:</label>
-                <textarea id="textInput" placeholder="Example: The tired warrior dragged his sword through the muddy battlefield while ravens circled overhead"></textarea>
+                <textarea id="textInput" placeholder="Example: Three children playing soccer on a green field under the bright sun"></textarea>
                 <button onclick="processText()" id="processBtn">
                     <span id="btnText">Process Text</span>
                     <span id="loadingSpinner" class="loading-spinner" style="display:none;"></span>
@@ -376,13 +389,16 @@
 
     <script type="module">
         // Global variables
-        let currentModel = 'huggingface';
+        let currentModel = 'gemini';
         let apiKey = '';
         let extractedElements = null;
         let animationRunning = false;
         let animationFrame = 0;
         let ctx = null;
         let canvas = null;
+        
+        // API Endpoints
+        const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
@@ -419,9 +435,17 @@
             const apiKeySection = document.getElementById('apiKeySection');
             const localModelSection = document.getElementById('localModelSection');
             
-            if (currentModel === 'huggingface' || currentModel === 'openai') {
+            if (currentModel === 'huggingface' || currentModel === 'openai' || currentModel === 'gemini') {
                 apiKeySection.style.display = 'block';
                 localModelSection.style.display = 'none';
+                
+                // Update placeholder for Gemini
+                const apiKeyInput = document.getElementById('apiKey');
+                if (currentModel === 'gemini') {
+                    apiKeyInput.placeholder = 'Enter your Google API Key (get it from Google AI Studio)';
+                } else {
+                    apiKeyInput.placeholder = 'Enter your API key';
+                }
             } else if (currentModel === 'ollama') {
                 apiKeySection.style.display = 'none';
                 localModelSection.style.display = 'block';
@@ -434,6 +458,7 @@
         function updateModelInfo() {
             const infoElement = document.getElementById('modelInfo');
             const modelInfos = {
+                'gemini': 'Google\'s free AI model - best for generating animations',
                 'huggingface': 'Uses Hugging Face Inference API for NLP tasks',
                 'transformers': 'Runs models directly in your browser (no API needed)',
                 'ollama': 'Connects to local Ollama server for privacy',
@@ -473,6 +498,9 @@
             try {
                 let result;
                 switch (currentModel) {
+                    case 'gemini':
+                        result = await processWithGemini(text);
+                        break;
                     case 'huggingface':
                         result = await processWithHuggingFace(text);
                         break;
@@ -515,6 +543,93 @@
         };
 
         // Model-specific processing functions
+        async function processWithGemini(text) {
+            if (!apiKey) {
+                throw new Error('API key required for Gemini');
+            }
+
+            // First, let's generate an SVG animation
+            const svgPrompt = `Create an animated SVG for this scene: "${text}"
+
+Requirements:
+1. Return ONLY the SVG code, starting with <svg> and ending with </svg>
+2. Use size width="800" height="600"
+3. Include smooth animations using <animate> or <animateTransform>
+4. Use appropriate colors for the scene
+5. Make it visually appealing and dynamic
+
+Output only the SVG code, no explanations.`;
+
+            const svgResponse = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: svgPrompt }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.7,
+                        maxOutputTokens: 2048,
+                    }
+                })
+            });
+
+            if (!svgResponse.ok) {
+                throw new Error('Gemini API request failed for SVG generation');
+            }
+
+            const svgResult = await svgResponse.json();
+            const svgContent = svgResult.candidates[0].content.parts[0].text;
+            
+            // Store the SVG for later use
+            window.generatedSVG = svgContent;
+
+            // Now analyze the text for entities and actions
+            const analysisPrompt = `Analyze this scene and extract entities, actions, emotions, and scene details: "${text}"
+
+Return a JSON object with this structure:
+{
+  "entities": [{"type": "PERSON/OBJECT/ANIMAL", "value": "name", "confidence": 0.9}],
+  "actions": [{"value": "action", "confidence": 0.8}],
+  "scene": {"location": "place", "atmosphere": "mood", "weather": "condition"},
+  "emotions": [{"value": "emotion", "confidence": 0.7}]
+}`;
+
+            const analysisResponse = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: analysisPrompt }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.3,
+                        maxOutputTokens: 1024,
+                    }
+                })
+            });
+
+            if (!analysisResponse.ok) {
+                throw new Error('Gemini API request failed for analysis');
+            }
+
+            const analysisResult = await analysisResponse.json();
+            const analysisText = analysisResult.candidates[0].content.parts[0].text;
+            
+            try {
+                // Try to parse JSON from response
+                const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    return JSON.parse(jsonMatch[0]);
+                }
+            } catch (e) {
+                console.error('Failed to parse Gemini analysis response:', e);
+            }
+            
+            // Fallback to basic extraction
+            return processWithRuleBased(text);
+        }
+
         async function processWithHuggingFace(text) {
             if (!apiKey) {
                 throw new Error('API key required for Hugging Face');
@@ -581,7 +696,7 @@
         }
 
         async function processWithOllama(text) {
-            const endpoint = document.getElementById('modelEndpoint').value || 'http://localhost:11434';
+            const endpoint = document.getElementById('modelEndpoint').value || '';
             const modelName = document.getElementById('modelName').value || 'llama2';
             
             const prompt = `Analyze this scene and extract entities, actions, emotions, and scene details in JSON format: "${text}"`;
@@ -844,6 +959,44 @@
 
         // Animation functions
         function generateAnimation(elements) {
+            // Check if we have a Gemini-generated SVG
+            if (window.generatedSVG && currentModel === 'gemini') {
+                const svgMatch = window.generatedSVG.match(/<svg[\s\S]*?<\/svg>/);
+                if (svgMatch) {
+                    // Display the SVG instead of canvas animation
+                    const canvasContainer = document.querySelector('.canvas-container');
+                    const existingCanvas = document.getElementById('animationCanvas');
+                    
+                    // Create a div to hold the SVG
+                    const svgContainer = document.createElement('div');
+                    svgContainer.id = 'svgAnimationContainer';
+                    svgContainer.style.width = '800px';
+                    svgContainer.style.height = '600px';
+                    svgContainer.style.background = '#000';
+                    svgContainer.style.borderRadius = '8px';
+                    svgContainer.innerHTML = svgMatch[0];
+                    
+                    // Hide canvas and show SVG
+                    existingCanvas.style.display = 'none';
+                    if (document.getElementById('svgAnimationContainer')) {
+                        document.getElementById('svgAnimationContainer').remove();
+                    }
+                    canvasContainer.appendChild(svgContainer);
+                    
+                    // Clear the stored SVG
+                    window.generatedSVG = null;
+                    return;
+                }
+            }
+            
+            // Fallback to canvas animation
+            const existingCanvas = document.getElementById('animationCanvas');
+            existingCanvas.style.display = 'block';
+            const svgContainer = document.getElementById('svgAnimationContainer');
+            if (svgContainer) {
+                svgContainer.remove();
+            }
+            
             // Reset animation
             animationFrame = 0;
             animationRunning = false;
@@ -1056,8 +1209,22 @@
         window.resetAnimation = function() {
             animationFrame = 0;
             animationRunning = false;
+            
+            // Clear any stored SVG
+            window.generatedSVG = null;
+            
+            // Remove SVG container if exists
+            const svgContainer = document.getElementById('svgAnimationContainer');
+            if (svgContainer) {
+                svgContainer.remove();
+            }
+            
+            // Show canvas
+            const existingCanvas = document.getElementById('animationCanvas');
+            existingCanvas.style.display = 'block';
+            
             if (extractedElements) {
-                drawScene(extractedElements);
+                generateAnimation(extractedElements);
             }
         };
 

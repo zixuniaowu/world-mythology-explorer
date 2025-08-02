@@ -78,25 +78,6 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .language-selector {
-            display: flex;
-            gap: 10px;
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background: transparent;
-            color: #fff;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .lang-btn:hover, .lang-btn.active {
-            background: rgba(102, 126, 234, 0.3);
-            border-color: #667eea;
-        }
 
         /* Main Container */
         .main-container {
@@ -206,19 +187,37 @@
             bottom: -25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             color: #fff;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
             white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            opacity: 1;
+            transition: all 0.3s ease;
             pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .marker-label::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid rgba(0, 0, 0, 0.9);
         }
 
         .mythology-marker:hover .marker-label {
-            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
         }
 
         @keyframes pulse {
@@ -556,11 +555,6 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="神話を検索...">
                 <span class="search-icon">🔍</span>
             </div>
-            <div class="language-selector">
-                <button class="lang-btn" data-lang="en">English</button>
-                <button class="lang-btn" data-lang="zh">中文</button>
-                <button class="lang-btn active" data-lang="ja">日本語</button>
-            </div>
         </div>
     </header>
 
@@ -590,31 +584,31 @@
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background: #ff6b6b;"></div>
-                <span>East Asian Mythology</span>
+                <span class="legend-text" data-en="East Asian Mythology" data-ja="東アジア神話" data-zh="东亚神话">East Asian Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #4ecdc4;"></div>
-                <span>South Asian Mythology</span>
+                <span class="legend-text" data-en="South Asian Mythology" data-ja="南アジア神話" data-zh="南亚神话">South Asian Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #f7b731;"></div>
-                <span>Middle Eastern Mythology</span>
+                <span class="legend-text" data-en="Middle Eastern Mythology" data-ja="中東神話" data-zh="中东神话">Middle Eastern Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #5f27cd;"></div>
-                <span>European Mythology</span>
+                <span class="legend-text" data-en="European Mythology" data-ja="ヨーロッパ神話" data-zh="欧洲神话">European Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #ee5a6f;"></div>
-                <span>African Mythology</span>
+                <span class="legend-text" data-en="African Mythology" data-ja="アフリカ神話" data-zh="非洲神话">African Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #00d2d3;"></div>
-                <span>American Mythology</span>
+                <span class="legend-text" data-en="American Mythology" data-ja="アメリカ神話" data-zh="美洲神话">American Mythology</span>
             </div>
             <div class="legend-item">
                 <div class="legend-color" style="background: #22a6b3;"></div>
-                <span>Oceanic Mythology</span>
+                <span class="legend-text" data-en="Oceanic Mythology" data-ja="オセアニア神話" data-zh="大洋洲神话">Oceanic Mythology</span>
             </div>
         </div>
 
@@ -634,21 +628,84 @@
     </div>
 
     <script>
+        // Current language state
+        // Language is fixed to Japanese
+        
+        // Update legend text to Japanese
+        function updateLegendLanguage() {
+            document.querySelectorAll('.legend-text').forEach(element => {
+                const text = element.getAttribute('data-ja') || element.getAttribute('data-en');
+                element.textContent = text;
+            });
+        }
+        
         // Mythology locations with real world coordinates (normalized 0-1)
         const mythologyLocations = {
-            china: { x: 0.75, y: 0.35, name: "China", region: "山海经" },
-            japan: { x: 0.85, y: 0.37, name: "Japan", region: "日本" },
-            india: { x: 0.65, y: 0.45, name: "India", region: "भारत" },
-            greece: { x: 0.52, y: 0.38, name: "Greece", region: "Ελλάδα" },
-            egypt: { x: 0.53, y: 0.47, name: "Egypt", region: "مصر" },
-            norse: { x: 0.50, y: 0.25, name: "Scandinavia", region: "Norge" },
-            celtic: { x: 0.47, y: 0.30, name: "Ireland", region: "Éire" },
-            mesopotamia: { x: 0.57, y: 0.42, name: "Mesopotamia", region: "Iraq" },
-            aztecMaya: { x: 0.25, y: 0.45, name: "Mexico", region: "México" },
-            nativeAmerican: { x: 0.20, y: 0.35, name: "North America", region: "Turtle Island" },
-            westAfrica: { x: 0.49, y: 0.55, name: "West Africa", region: "Nigeria/Ghana" },
-            aboriginal: { x: 0.80, y: 0.75, name: "Australia", region: "Dreamtime" },
-            polynesian: { x: 0.15, y: 0.60, name: "Pacific", region: "Polynesia" }
+            china: { 
+                x: 0.78, y: 0.38, 
+                name: { en: "China", ja: "中国", zh: "中国" }, 
+                region: { en: "Shanhaijing", ja: "山海経", zh: "山海经" }
+            },
+            japan: { 
+                x: 0.87, y: 0.36, 
+                name: { en: "Japan", ja: "日本", zh: "日本" }, 
+                region: { en: "Kojiki", ja: "古事記", zh: "古事记" }
+            },
+            india: { 
+                x: 0.67, y: 0.48, 
+                name: { en: "India", ja: "インド", zh: "印度" }, 
+                region: { en: "Mahabharata", ja: "マハーバーラタ", zh: "摩诃婆罗多" }
+            },
+            greece: { 
+                x: 0.52, y: 0.38, 
+                name: { en: "Greece", ja: "ギリシャ", zh: "希腊" }, 
+                region: { en: "Olympus", ja: "オリンポス", zh: "奥林匹斯" }
+            },
+            egypt: { 
+                x: 0.53, y: 0.50, 
+                name: { en: "Egypt", ja: "エジプト", zh: "埃及" }, 
+                region: { en: "Hieroglyphs", ja: "ヒエログリフ", zh: "象形文字" }
+            },
+            norse: { 
+                x: 0.50, y: 0.22, 
+                name: { en: "Scandinavia", ja: "スカンジナビア", zh: "斯堪的纳维亚" }, 
+                region: { en: "Valhalla", ja: "ヴァルハラ", zh: "瓦尔哈拉" }
+            },
+            celtic: { 
+                x: 0.46, y: 0.28, 
+                name: { en: "Ireland", ja: "アイルランド", zh: "爱尔兰" }, 
+                region: { en: "Tír na nÓg", ja: "ケルト神話", zh: "青春之地" }
+            },
+            mesopotamia: { 
+                x: 0.58, y: 0.42, 
+                name: { en: "Mesopotamia", ja: "メソポタミア", zh: "美索不达米亚" }, 
+                region: { en: "Babylon", ja: "バビロン", zh: "巴比伦" }
+            },
+            aztecMaya: { 
+                x: 0.22, y: 0.50, 
+                name: { en: "Mexico", ja: "メキシコ", zh: "墨西哥" }, 
+                region: { en: "Tenochtitlan", ja: "テノチティトラン", zh: "特诺奇提特兰" }
+            },
+            nativeAmerican: { 
+                x: 0.18, y: 0.38, 
+                name: { en: "North America", ja: "北アメリカ", zh: "北美洲" }, 
+                region: { en: "Great Spirit", ja: "グレートスピリット", zh: "大精灵" }
+            },
+            westAfrica: { 
+                x: 0.48, y: 0.58, 
+                name: { en: "West Africa", ja: "西アフリカ", zh: "西非" }, 
+                region: { en: "Yoruba", ja: "ヨルバ", zh: "约鲁巴" }
+            },
+            aboriginal: { 
+                x: 0.82, y: 0.72, 
+                name: { en: "Australia", ja: "オーストラリア", zh: "澳大利亚" }, 
+                region: { en: "Dreamtime", ja: "ドリームタイム", zh: "梦境时代" }
+            },
+            polynesian: { 
+                x: 0.90, y: 0.65, 
+                name: { en: "Polynesia", ja: "ポリネシア", zh: "波利尼西亚" }, 
+                region: { en: "Moana", ja: "モアナ", zh: "海洋" }
+            }
         };
 
         // Mythology Data
@@ -685,10 +742,13 @@
                 titleZh: "印度神话",
                 titleJa: "インド神話",
                 origin: "Ancient India",
+                originZh: "古代印度",
                 originJa: "古代インド",
                 description: "Epic tales from the Mahabharata, Ramayana, and ancient Vedic texts that form the foundation of Hindu philosophy.",
+                descriptionZh: "来自摩诃婆罗多、罗摩衍那和古代吠陀经典的史诗故事，构成了印度教哲学的基础。",
                 descriptionJa: "マハーバーラタ、ラーマーヤナ、そして古代ヴェーダの経典からの壮大な物語。ヒンドゥー哲学の基礎を形成する神話体系です。",
                 features: ["Vishnu", "Shiva", "Krishna", "Rama", "Vedas"],
+                featuresZh: ["毗湿奴", "湿婆", "克里希纳", "罗摩", "吠陀经"],
                 featuresJa: ["ヴィシュヌ", "シヴァ", "クリシュナ", "ラーマ", "ヴェーダ"],
                 color: "#4ecdc4"
             },
@@ -697,10 +757,13 @@
                 titleZh: "美索不达米亚神话",
                 titleJa: "メソポタミア神話",
                 origin: "Ancient Mesopotamia",
+                originZh: "古代美索不达米亚",
                 originJa: "古代メソポタミア",
                 description: "The world's oldest recorded myths, including the Epic of Gilgamesh and tales from ancient Babylon and Sumeria.",
+                descriptionZh: "世界上最古老的记录神话，包括吉尔伽美什史诗以及来自古巴比伦和苏美尔的传说。",
                 descriptionJa: "ギルガメシュ叙事詩を含む世界最古の記録された神話。古代バビロンとシュメールの物語が文明の黎明期を物語ります。",
                 features: ["Gilgamesh", "Enkidu", "Tiamat", "Marduk", "Ishtar"],
+                featuresZh: ["吉尔伽美什", "恩奇都", "提亚马特", "马尔杜克", "伊什塔尔"],
                 featuresJa: ["ギルガメシュ", "エンキドゥ", "ティアマト", "マルドゥク", "イシュタル"],
                 color: "#f7b731"
             },
@@ -709,10 +772,13 @@
                 titleZh: "希腊神话",
                 titleJa: "ギリシャ神話",
                 origin: "Ancient Greece",
+                originZh: "古希腊",
                 originJa: "古代ギリシャ",
                 description: "The pantheon of Olympian gods and heroes whose stories have influenced Western culture for millennia.",
+                descriptionZh: "奥林匹斯众神和英雄的万神殿，他们的故事千年来影响着西方文化。",
                 descriptionJa: "オリンポスの神々と英雄たちの物語。西洋文化に数千年にわたって影響を与え続けている神話体系です。",
                 features: ["Zeus", "Athena", "Odysseus", "Hercules", "Olympus"],
+                featuresZh: ["宙斯", "雅典娜", "奥德修斯", "赫拉克勒斯", "奥林匹斯"],
                 featuresJa: ["ゼウス", "アテナ", "オデュッセウス", "ヘラクレス", "オリンポス"],
                 color: "#5f27cd"
             },
@@ -721,10 +787,13 @@
                 titleZh: "北欧神话",
                 titleJa: "北欧神話",
                 origin: "Ancient Scandinavia",
+                originZh: "古代斯堪的纳维亚",
                 originJa: "古代スカンジナビア",
                 description: "Tales of gods, giants, and the cosmic tree Yggdrasil from the Viking Age, preserved in the Eddas.",
+                descriptionZh: "维京时代的诸神、巨人和世界树伊格德拉希尔的故事，保存在埃达中。",
                 descriptionJa: "エッダに保存されたヴァイキング時代の神々、巨人、世界樹ユグドラシルの物語。北欧の厳しい自然が生んだ壮大な神話です。",
                 features: ["Odin", "Thor", "Loki", "Ragnarok", "Valhalla"],
+                featuresZh: ["奥丁", "索尔", "洛基", "诸神黄昏", "瓦尔哈拉"],
                 featuresJa: ["オーディン", "トール", "ロキ", "ラグナロク", "ヴァルハラ"],
                 color: "#7f39fb"
             },
@@ -733,10 +802,13 @@
                 titleZh: "凯尔特神话",
                 titleJa: "ケルト神話",
                 origin: "Ancient Celtic Lands",
+                originZh: "古代凯尔特地区",
                 originJa: "古代ケルト地域",
                 description: "Mystical tales from Ireland, Wales, and Scotland featuring otherworldly beings and heroic quests.",
+                descriptionZh: "来自爱尔兰、威尔士和苏格兰的神秘故事，描绘了异世界生灵和英雄探险。",
                 descriptionJa: "アイルランド、ウェールズ、スコットランドから伝わる神秘的な物語。異界の存在と英雄の冒険が織りなす幻想的な世界です。",
                 features: ["Tuatha Dé Danann", "Cú Chulainn", "Morrigan", "Druids", "Sidhe"],
+                featuresZh: ["达努神族", "库丘林", "莫瑞甘", "德鲁伊", "仙灵"],
                 featuresJa: ["トゥアハ・デ・ダナーン", "クー・フーリン", "モリガン", "ドルイド", "シー"],
                 color: "#9c59d1"
             },
@@ -745,10 +817,13 @@
                 titleZh: "埃及神话",
                 titleJa: "エジプト神話",
                 origin: "Ancient Egypt",
+                originZh: "古埃及",
                 originJa: "古代エジプト",
                 description: "Stories of gods who controlled the Nile, the afterlife, and the cosmic order, preserved in hieroglyphs and papyri.",
+                descriptionZh: "掌管尼罗河、来世和宇宙秩序的诸神故事，保存在象形文字和纸莎草纸中。",
                 descriptionJa: "ナイル川、来世、宇宙の秩序を司る神々の物語。ヒエログリフとパピルスに保存された永遠の生命への探求です。",
                 features: ["Ra", "Osiris", "Isis", "Anubis", "Book of the Dead"],
+                featuresZh: ["拉", "奥西里斯", "伊西斯", "阿努比斯", "死者之书"],
                 featuresJa: ["ラー", "オシリス", "イシス", "アヌビス", "死者の書"],
                 color: "#ee5a6f"
             },
@@ -757,10 +832,13 @@
                 titleZh: "西非神话",
                 titleJa: "西アフリカ神話",
                 origin: "West Africa",
+                originZh: "西非",
                 originJa: "西アフリカ",
                 description: "Oral traditions including the trickster Anansi and creation myths from various West African cultures.",
+                descriptionZh: "包括恶作剧之神阿南西在内的口述传统，以及来自各种西非文化的创世神话。",
                 descriptionJa: "アナンシを含む口承伝統。ヨルバ族をはじめとする様々な西アフリカ文化の創造神話が豊かな精神世界を物語ります。",
                 features: ["Anansi", "Yoruba Orishas", "Trickster Tales", "Creation Stories", "Ancestral Spirits"],
+                featuresZh: ["阿南西", "约鲁巴神灵", "恶作剧故事", "创世故事", "祖先之灵"],
                 featuresJa: ["アナンシ", "ヨルバのオリシャ", "トリックスター物語", "創世神話", "祖先の霊"],
                 color: "#ff7979"
             },
@@ -769,10 +847,13 @@
                 titleZh: "阿兹特克与玛雅神话",
                 titleJa: "アステカ・マヤ神話",
                 origin: "Mesoamerica",
+                originZh: "中美洲",
                 originJa: "メソアメリカ",
                 description: "Complex cosmologies from the Aztec and Maya civilizations, featuring feathered serpents and jaguar gods.",
+                descriptionZh: "阿兹特克和玛雅文明的复杂宇宙观，以羽蛇神和美洲豹神为特色。",
                 descriptionJa: "アステカとマヤ文明の複雑な宇宙観。羽毛の蛇やジャガーの神々が織りなす、天文学と精神世界が融合した神話体系です。",
                 features: ["Quetzalcoatl", "Kukulkan", "Popol Vuh", "Tezcatlipoca", "Xibalba"],
+                featuresZh: ["羽蛇神", "库库尔坎", "波波尔乌", "特斯卡特利波卡", "西巴尔巴"],
                 featuresJa: ["ケツァルコアトル", "ククルカン", "ポポル・ヴー", "テスカトリポカ", "シバルバ"],
                 color: "#00d2d3"
             },
@@ -781,10 +862,13 @@
                 titleZh: "北美原住民神话",
                 titleJa: "ネイティブアメリカン神話",
                 origin: "North America",
+                originZh: "北美洲",
                 originJa: "北アメリカ",
                 description: "Diverse traditions from hundreds of tribes, featuring creation stories, animal spirits, and sacred landscapes.",
+                descriptionZh: "来自数百个部落的多样传统，包括创世故事、动物精灵和神圣景观。",
                 descriptionJa: "数百の部族から伝わる多様な伝統。創世物語、動物の霊、聖なる大地が紡ぐ、自然との深い絆を表す神話です。",
                 features: ["Coyote", "Thunderbird", "Great Spirit", "Vision Quests", "Sacred Animals"],
+                featuresZh: ["郊狼", "雷鸟", "大精灵", "灵视探索", "神圣动物"],
                 featuresJa: ["コヨーテ", "サンダーバード", "グレート・スピリット", "ビジョン・クエスト", "聖なる動物"],
                 color: "#00b8d4"
             },
@@ -793,10 +877,13 @@
                 titleZh: "澳洲原住民梦时代",
                 titleJa: "アボリジニ・ドリームタイム",
                 origin: "Australia",
+                originZh: "澳大利亚",
                 originJa: "オーストラリア",
                 description: "The Dreamtime stories that explain the creation of the land, animals, and people of Australia.",
+                descriptionZh: "梦时代故事解释了澳大利亚土地、动物和人民的创造。",
                 descriptionJa: "オーストラリアの大地、動物、人々の創造を説明するドリームタイムの物語。時間と空間を超越した神聖なる世界観です。",
                 features: ["Rainbow Serpent", "Dreamtime", "Songlines", "Creation Ancestors", "Sacred Sites"],
+                featuresZh: ["彩虹蛇", "梦境时代", "歌之径", "创世祖先", "圣地"],
                 featuresJa: ["虹蛇", "ドリームタイム", "ソングライン", "創造の祖先", "聖地"],
                 color: "#22a6b3"
             },
@@ -805,10 +892,13 @@
                 titleZh: "波利尼西亚神话",
                 titleJa: "ポリネシア神話",
                 origin: "Pacific Islands",
+                originZh: "太平洋岛屿",
                 originJa: "太平洋諸島",
                 description: "Ocean-spanning myths from Hawaii, Tahiti, New Zealand, and other Pacific islands.",
+                descriptionZh: "来自夏威夷、塔希提、新西兰和其他太平洋岛屿的跨海神话。",
                 descriptionJa: "ハワイ、タヒチ、ニュージーランドなど太平洋諸島の海を越えた神話。大海原を舞台にした壮大な冒険と神々の物語です。",
                 features: ["Maui", "Pele", "Tangaroa", "Tiki", "Ocean Voyages"],
+                featuresZh: ["毛伊", "贝利", "坦加罗阿", "提基", "海洋航行"],
                 featuresJa: ["マウイ", "ペレ", "タンガロア", "ティキ", "海洋航海"],
                 color: "#30e3ca"
             }
@@ -889,13 +979,24 @@
             tempCanvas.height = 600;
             const tempCtx = tempCanvas.getContext('2d');
             
-            // Create gradient background
+            // Create gradient background with aurora effect
             const gradient = tempCtx.createLinearGradient(0, 0, 1200, 600);
-            gradient.addColorStop(0, '#1a1a2e');
-            gradient.addColorStop(0.5, '#16213e');
+            gradient.addColorStop(0, '#0f0c29');
+            gradient.addColorStop(0.3, '#302b63');
+            gradient.addColorStop(0.7, '#24243e');
             gradient.addColorStop(1, '#0f3460');
             tempCtx.fillStyle = gradient;
             tempCtx.fillRect(0, 0, 1200, 600);
+            
+            // Add aurora waves
+            tempCtx.globalAlpha = 0.3;
+            const auroraGradient = tempCtx.createLinearGradient(0, 0, 1200, 300);
+            auroraGradient.addColorStop(0, 'transparent');
+            auroraGradient.addColorStop(0.5, '#667eea');
+            auroraGradient.addColorStop(1, 'transparent');
+            tempCtx.fillStyle = auroraGradient;
+            tempCtx.fillRect(0, 0, 1200, 300);
+            tempCtx.globalAlpha = 1;
             
             // Draw simplified continents
             tempCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
@@ -909,66 +1010,146 @@
             mapImage.src = tempCanvas.toDataURL();
         }
 
-        // Draw simplified continent shapes
+        // Draw more detailed continent shapes
         function drawContinents(ctx) {
+            // Set up drawing style
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = 'rgba(102, 126, 234, 0.5)';
+            
+            // North America
+            ctx.beginPath();
+            ctx.moveTo(150, 100);
+            ctx.lineTo(200, 90);
+            ctx.lineTo(250, 100);
+            ctx.lineTo(300, 120);
+            ctx.lineTo(350, 180);
+            ctx.lineTo(380, 250);
+            ctx.lineTo(350, 350);
+            ctx.lineTo(300, 400);
+            ctx.quadraticCurveTo(250, 420, 200, 400);
+            ctx.lineTo(150, 350);
+            ctx.lineTo(120, 280);
+            ctx.lineTo(100, 200);
+            ctx.lineTo(120, 150);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // South America
+            ctx.beginPath();
+            ctx.moveTo(280, 400);
+            ctx.lineTo(320, 420);
+            ctx.quadraticCurveTo(340, 460, 320, 520);
+            ctx.lineTo(280, 580);
+            ctx.lineTo(240, 560);
+            ctx.lineTo(220, 500);
+            ctx.lineTo(240, 440);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
             // Africa
             ctx.beginPath();
-            ctx.moveTo(600, 280);
-            ctx.quadraticCurveTo(650, 260, 680, 290);
-            ctx.quadraticCurveTo(700, 350, 680, 420);
-            ctx.quadraticCurveTo(650, 480, 600, 500);
-            ctx.quadraticCurveTo(550, 480, 520, 420);
-            ctx.quadraticCurveTo(500, 350, 520, 290);
-            ctx.quadraticCurveTo(550, 260, 600, 280);
+            ctx.moveTo(580, 200);
+            ctx.lineTo(620, 180);
+            ctx.lineTo(660, 200);
+            ctx.lineTo(680, 250);
+            ctx.lineTo(700, 320);
+            ctx.quadraticCurveTo(680, 400, 640, 480);
+            ctx.lineTo(600, 520);
+            ctx.lineTo(560, 500);
+            ctx.lineTo(540, 440);
+            ctx.lineTo(520, 380);
+            ctx.lineTo(500, 320);
+            ctx.lineTo(520, 260);
+            ctx.lineTo(560, 220);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
             
             // Europe
             ctx.beginPath();
-            ctx.moveTo(600, 280);
-            ctx.quadraticCurveTo(580, 220, 600, 160);
-            ctx.quadraticCurveTo(620, 140, 650, 150);
-            ctx.quadraticCurveTo(680, 160, 700, 180);
-            ctx.quadraticCurveTo(680, 220, 650, 250);
-            ctx.quadraticCurveTo(620, 270, 600, 280);
+            ctx.moveTo(560, 200);
+            ctx.lineTo(540, 160);
+            ctx.lineTo(560, 140);
+            ctx.lineTo(600, 130);
+            ctx.lineTo(640, 140);
+            ctx.lineTo(660, 160);
+            ctx.lineTo(640, 180);
+            ctx.lineTo(600, 190);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
             
             // Asia
             ctx.beginPath();
-            ctx.moveTo(700, 180);
-            ctx.quadraticCurveTo(800, 160, 900, 180);
-            ctx.quadraticCurveTo(1000, 200, 1050, 250);
-            ctx.quadraticCurveTo(1000, 350, 900, 400);
-            ctx.quadraticCurveTo(800, 420, 700, 400);
-            ctx.quadraticCurveTo(680, 350, 700, 300);
-            ctx.quadraticCurveTo(700, 250, 700, 180);
+            ctx.moveTo(660, 140);
+            ctx.lineTo(760, 120);
+            ctx.lineTo(860, 140);
+            ctx.lineTo(960, 180);
+            ctx.lineTo(1020, 220);
+            ctx.lineTo(1040, 280);
+            ctx.lineTo(1000, 340);
+            ctx.lineTo(920, 380);
+            ctx.lineTo(820, 360);
+            ctx.lineTo(720, 320);
+            ctx.lineTo(680, 280);
+            ctx.lineTo(680, 220);
+            ctx.lineTo(700, 180);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
             
-            // Americas
+            // India
             ctx.beginPath();
-            ctx.moveTo(200, 150);
-            ctx.quadraticCurveTo(250, 140, 300, 160);
-            ctx.quadraticCurveTo(350, 200, 350, 300);
-            ctx.quadraticCurveTo(350, 400, 300, 450);
-            ctx.quadraticCurveTo(250, 480, 200, 470);
-            ctx.quadraticCurveTo(150, 450, 150, 400);
-            ctx.quadraticCurveTo(150, 300, 150, 200);
-            ctx.quadraticCurveTo(150, 160, 200, 150);
+            ctx.moveTo(780, 360);
+            ctx.lineTo(820, 380);
+            ctx.lineTo(840, 420);
+            ctx.lineTo(820, 460);
+            ctx.lineTo(780, 440);
+            ctx.lineTo(760, 400);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
             
             // Australia
             ctx.beginPath();
-            ctx.moveTo(900, 450);
-            ctx.quadraticCurveTo(950, 440, 1000, 460);
-            ctx.quadraticCurveTo(1020, 500, 1000, 540);
-            ctx.quadraticCurveTo(950, 560, 900, 550);
-            ctx.quadraticCurveTo(850, 540, 850, 500);
-            ctx.quadraticCurveTo(850, 460, 900, 450);
+            ctx.moveTo(920, 480);
+            ctx.lineTo(1020, 460);
+            ctx.lineTo(1060, 500);
+            ctx.lineTo(1040, 540);
+            ctx.lineTo(980, 560);
+            ctx.lineTo(920, 540);
+            ctx.lineTo(900, 500);
+            ctx.closePath();
             ctx.fill();
             ctx.stroke();
+            
+            // Add grid overlay for style
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.1)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 15]);
+            
+            // Vertical lines
+            for (let x = 0; x < 1200; x += 100) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 600);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y < 600; y += 100) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(1200, y);
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
         }
 
         // Draw the map with overlay
@@ -979,13 +1160,25 @@
             // Draw base map
             ctx.drawImage(mapImage, 0, 0, canvasWidth, canvasHeight);
             
-            // Add mystical overlay
+            // Add mystical overlay with aurora effect
             const overlay = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, 0, canvasWidth/2, canvasHeight/2, canvasWidth/2);
-            overlay.addColorStop(0, 'rgba(102, 126, 234, 0.1)');
-            overlay.addColorStop(0.5, 'rgba(118, 75, 162, 0.05)');
+            overlay.addColorStop(0, 'rgba(102, 126, 234, 0.15)');
+            overlay.addColorStop(0.3, 'rgba(118, 75, 162, 0.1)');
+            overlay.addColorStop(0.6, 'rgba(238, 90, 111, 0.05)');
             overlay.addColorStop(1, 'transparent');
             ctx.fillStyle = overlay;
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Add animated stars
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * canvasWidth;
+                const y = Math.random() * canvasHeight;
+                const size = Math.random() * 2;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
         // Create mythology markers
@@ -1025,7 +1218,10 @@
             
             const label = document.createElement('div');
             label.className = 'marker-label';
-            label.textContent = location.name;
+            const lang = 'ja';
+            const regionText = typeof location.region === 'object' ? location.region[lang] : location.region;
+            const nameText = typeof location.name === 'object' ? location.name[lang] : location.name;
+            label.innerHTML = `<div style="font-size: 10px; opacity: 0.7; margin-bottom: 2px;">${regionText}</div><div style="font-size: 12px; font-weight: bold;">${nameText}</div>`;
             
             markerInner.appendChild(glow);
             markerInner.appendChild(pin);
@@ -1112,21 +1308,10 @@
             card.className = 'mythology-card';
             card.id = `card-${region}`;
             
-            const title = currentLang === 'zh' ? regionData.titleZh : 
-                         currentLang === 'ja' ? regionData.titleJa : 
-                         regionData.title;
-            
-            const origin = currentLang === 'zh' ? (regionData.originZh || regionData.origin) :
-                          currentLang === 'ja' ? (regionData.originJa || regionData.origin) :
-                          regionData.origin;
-            
-            const description = currentLang === 'zh' ? (regionData.descriptionZh || regionData.description) :
-                               currentLang === 'ja' ? (regionData.descriptionJa || regionData.description) :
-                               regionData.description;
-            
-            const features = currentLang === 'zh' ? (regionData.featuresZh || regionData.features) :
-                            currentLang === 'ja' ? (regionData.featuresJa || regionData.features) :
-                            regionData.features;
+            const title = regionData.titleJa || regionData.title;
+            const origin = regionData.originJa || regionData.origin;
+            const description = regionData.descriptionJa || regionData.description;
+            const features = regionData.featuresJa || regionData.features;
             
             card.innerHTML = `
                 <button class="close-card" onclick="closeCard('${region}')">✕</button>
@@ -1136,7 +1321,7 @@
                 <div class="mythology-features">
                     ${features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
                 </div>
-                <button class="explore-btn" onclick="exploreMythology('${region}')">${translations[currentLang].explore}</button>
+                <button class="explore-btn" onclick="exploreMythology('${region}')">探索</button>
             `;
             
             return card;
@@ -1221,40 +1406,7 @@
             });
         }
 
-        // Language switching
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentLang = this.getAttribute('data-lang');
-                updateLanguage();
-            });
-        });
-
-        // Update language
-        function updateLanguage() {
-            document.getElementById('mainTitle').textContent = translations[currentLang].title;
-            document.getElementById('subtitle').textContent = translations[currentLang].subtitle;
-            document.getElementById('searchInput').placeholder = translations[currentLang].search;
-            document.querySelector('.about-section h2').textContent = translations[currentLang].about;
-            
-            const aboutContent = document.querySelector('.about-content');
-            aboutContent.innerHTML = `
-                <p>${translations[currentLang].aboutText1}</p>
-                <p>${translations[currentLang].aboutText2}</p>
-            `;
-            
-            // Update any open card
-            if (activeCard) {
-                const oldCard = document.getElementById(`card-${activeCard}`);
-                const regionData = mythologyData[activeCard];
-                const newCard = createMythologyCard(regionData, activeCard);
-                
-                oldCard.parentNode.replaceChild(newCard, oldCard);
-                positionCard(newCard, activeCard);
-                newCard.classList.add('show');
-            }
-        }
+        // Language is fixed to Japanese - no language switching needed
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function(e) {
@@ -1295,13 +1447,12 @@
         function exploreMythology(region) {
             const mythologyPages = {
                 china: 'chinese-mythology-index.html',
-                greece: 'greek-mythology-reader.html',
-                norse: 'norse-mythology-reader.html',
-                // These will be created next:
-                // egypt: 'egyptian-mythology-reader.html',
-                // india: 'indian-mythology-reader.html',
+                greece: 'greek-mythology-index.html',
+                norse: 'norse-mythology-index.html',
+                egypt: 'egyptian-mythology-index.html',
+                india: 'indian-mythology-index.html',
                 japan: 'japanese-mythology-index.html',
-                // mesopotamia: 'mesopotamian-mythology-reader.html',
+                mesopotamia: 'mesopotamian-mythology-index.html',
                 // celtic: 'celtic-mythology-reader.html',
                 // aztecMaya: 'aztec-maya-mythology-reader.html',
                 // nativeAmerican: 'native-american-mythology-reader.html',
@@ -1317,9 +1468,29 @@
             }
         }
 
-        // Initialize
-        createParticles();
-        initializeMap();
+        // Initialize Japanese interface
+        function initializeJapanese() {
+            // Update page title and subtitle to Japanese
+            document.getElementById('mainTitle').textContent = "世界神話の旅";
+            document.getElementById('subtitle').textContent = "地域をクリックして神話の宝物を探索";
+            
+            // Update search placeholder to Japanese
+            document.getElementById('searchInput').placeholder = "神話を検索...";
+            
+            // Update legend text
+            updateLegendLanguage();
+            
+            // Create markers with Japanese language
+            createMythologyMarkers();
+        }
+        
+        // Initialize after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize all components
+            createParticles();
+            initializeMap();
+            updateLegendLanguage();
+        });
 
         // Handle window resize
         window.addEventListener('resize', () => {

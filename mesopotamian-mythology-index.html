@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美索不达米亚神话 - 世界神话宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 古巴比伦风格装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(205, 133, 63, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 页头样式 - 美索不达米亚风格 */
+        .header {
+            background: linear-gradient(135deg, #8b4513 0%, #cd853f 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* 楔形文字装饰 */
+        .header::before {
+            content: '𒀭 𒂗 𒆠 𒌌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            opacity: 0.05;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f4e7d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cuneiform {
+            font-size: 1.5rem;
+            color: #f4e7d7;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            letter-spacing: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: #cd853f;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 简介部分 */
+        .intro {
+            background: rgba(139, 69, 19, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        /* 巴比伦塔装饰 */
+        .intro::after {
+            content: '🏛️';
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.2;
+            transform: scaleY(1.5);
+        }
+
+        .intro h2 {
+            color: #daa520;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 星门装饰 */
+        .book-card::after {
+            content: '☆';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.1;
+            color: #cd853f;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b4513, #daa520);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .book-card h3 {
+            color: #daa520;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #8b4513 0%, #cd853f 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+
+        /* 特色部分 */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #daa520;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(139, 69, 19, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #daa520;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 楔形文字分隔线 */
+        .cuneiform-divider {
+            text-align: center;
+            font-size: 2rem;
+            color: #cd853f;
+            opacity: 0.3;
+            margin: 2rem 0;
+            letter-spacing: 2rem;
+        }
+
+        /* 沙尘动画 */
+        @keyframes sandDrift {
+            0% {
+                transform: translateX(-100%) translateY(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        .sand-particle {
+            position: fixed;
+            background: linear-gradient(45deg, #cd853f, #8b4513);
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            animation: sandDrift linear infinite;
+            z-index: 1;
+        }
+
+        .sand-particle:nth-child(1) { top: 10%; animation-duration: 20s; }
+        .sand-particle:nth-child(2) { top: 20%; animation-duration: 25s; animation-delay: 3s; }
+        .sand-particle:nth-child(3) { top: 30%; animation-duration: 22s; animation-delay: 5s; }
+        .sand-particle:nth-child(4) { top: 40%; animation-duration: 28s; animation-delay: 2s; }
+        .sand-particle:nth-child(5) { top: 50%; animation-duration: 23s; animation-delay: 4s; }
+        .sand-particle:nth-child(6) { top: 60%; animation-duration: 26s; animation-delay: 1s; }
+        .sand-particle:nth-child(7) { top: 70%; animation-duration: 21s; animation-delay: 6s; }
+        .sand-particle:nth-child(8) { top: 80%; animation-duration: 24s; animation-delay: 3.5s; }
+        .sand-particle:nth-child(9) { top: 90%; animation-duration: 27s; animation-delay: 0.5s; }
+        .sand-particle:nth-child(10) { top: 95%; animation-duration: 22s; animation-delay: 2.5s; }
+
+        /* 页脚 */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 沙尘效果 -->
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+    <div class="sand-particle"></div>
+
+    <!-- 页头 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="cuneiform">𒀭 𒂗 𒆠 𒌌</div>
+            <h1>美索不达米亚神话</h1>
+            <p>两河流域的文明曙光</p>
+        </div>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #daa520; text-decoration: none; font-size: 1.5rem;">🗿 神话宝库</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#books">经典文献</a></li>
+                <li><a href="#features">神话特色</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 简介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>美索不达米亚神话简介</h2>
+            <p>
+                美索不达米亚神话是人类文明最早的神话体系，诞生于幼发拉底河和底格里斯河之间的肥沃土地。这片被称为"文明摇篮"的土地，孕育了苏美尔、阿卡德、巴比伦和亚述等伟大文明，创造了人类最早的文字、法律和文学。
+            </p>
+            <p>
+                从最早的苏美尔神话到巴比伦的创世史诗，美索不达米亚神话深刻影响了后世的宗教和文学。《吉尔伽美什史诗》作为世界上最早的史诗文学，探讨了生死、友谊和人生意义的永恒主题。《恩努玛·埃利什》记录了宇宙的创造过程，而《伊南娜下冥界》则是最早的死而复生故事之一。这些古老的智慧至今仍在启发着人类对存在意义的思考。
+            </p>
+        </section>
+
+        <div class="cuneiform-divider">𒀭 𒂗 𒆠 𒌌 𒀭</div>
+
+        <!-- 经典书籍 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #daa520; margin-bottom: 2rem; font-size: 2.5rem;">经典文献</h2>
+            <div class="books-grid">
+                <!-- 吉尔伽美什史诗 -->
+                <div class="book-card fade-in">
+                    <h3>《吉尔伽美什史诗》</h3>
+                    <div class="book-info">成书时间：约公元前2100年 | 世界最早的史诗</div>
+                    <div class="book-description">
+                        讲述了乌鲁克国王吉尔伽美什与野人恩奇都的友谊，以及吉尔伽美什在朋友死后寻求永生的旅程。这部史诗探讨了文明与野性、生与死、友谊与孤独等永恒主题，包含了大洪水等重要神话母题。
+                    </div>
+                    <div class="book-links">
+                        <a href="mesopotamian-gilgamesh.html" class="book-link">📜 在线阅读</a>
+                        <a href="mesopotamian-gilgamesh-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 恩努玛·埃利什 -->
+                <div class="book-card fade-in">
+                    <h3>《恩努玛·埃利什》</h3>
+                    <div class="book-info">成书时间：约公元前18世纪 | 巴比伦创世史诗</div>
+                    <div class="book-description">
+                        巴比伦的创世神话，描述了马尔杜克如何战胜原始海洋女神提亚玛特，创造天地和人类的过程。这部史诗确立了马尔杜克作为众神之王的地位，反映了巴比伦帝国的政治和宗教观念。
+                    </div>
+                    <div class="book-links">
+                        <a href="mesopotamian-enuma-elish.html" class="book-link">📜 在线阅读</a>
+                        <a href="mesopotamian-enuma-elish-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 伊南娜下冥界 -->
+                <div class="book-card fade-in">
+                    <h3>《伊南娜下冥界》</h3>
+                    <div class="book-info">成书时间：约公元前2000年 | 苏美尔神话</div>
+                    <div class="book-description">
+                        讲述爱与美的女神伊南娜下到冥界，被其姐妹埃列什基伽尔杀死，后又复活的故事。这是关于死亡与重生的最早神话之一，影响了后世许多类似的神话故事，包括希腊的珀耳塞福涅神话。
+                    </div>
+                    <div class="book-links">
+                        <a href="mesopotamian-inanna.html" class="book-link">📜 在线阅读</a>
+                        <a href="mesopotamian-inanna-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="cuneiform-divider">𒆠 𒌌 𒀭 𒂗 𒆠</div>
+
+        <!-- 神话特色 -->
+        <section class="features" id="features">
+            <h2>美索不达米亚神话特色</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📜</div>
+                    <h3>楔形文字</h3>
+                    <p>人类最早的文字系统，记录了最古老的神话故事</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌊</div>
+                    <h3>大洪水传说</h3>
+                    <p>世界各地洪水神话的源头，影响了圣经故事</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>金字形神塔</h3>
+                    <p>连接天地的巴别塔，神与人交流的圣地</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>法律起源</h3>
+                    <p>汉谟拉比法典，人类最早的成文法律</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌟</div>
+                    <h3>占星术</h3>
+                    <p>观察星象预测命运，影响了后世占星学</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👑</div>
+                    <h3>神权君主</h3>
+                    <p>国王是神在人间的代表，统治具有神圣性</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="related-links" style="text-align: center; margin-top: 3rem;">
+            <h2 style="color: #daa520; margin-bottom: 1.5rem;">探索更多神话</h2>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="greek-mythology-index.html" class="book-link">🏛️ 希腊神话</a>
+                <a href="egyptian-mythology-index.html" class="book-link">🏺 埃及神话</a>
+                <a href="norse-mythology-index.html" class="book-link">🔨 北欧神话</a>
+                <a href="indian-mythology-index.html" class="book-link">🕉️ 印度神话</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神话宝库 | 让古老的智慧照亮现代</p>
+    </footer>
+</body>
+</html>

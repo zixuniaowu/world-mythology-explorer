@@ -1,0 +1,78 @@
+神话文献下载列表
+================
+
+以下是推荐的可直接下载的资源：
+
+## 希腊神话
+
+1. 伊利亚特全文（MIT版本）
+   基础URL: https://classics.mit.edu/Homer/iliad.{book}.{section}.html
+   示例: https://classics.mit.edu/Homer/iliad.1.i.html
+   共24卷
+
+2. 奥德赛全文（MIT版本）
+   基础URL: https://classics.mit.edu/Homer/odyssey.{book}.{section}.html
+   示例: https://classics.mit.edu/Homer/odyssey.1.i.html
+   共24卷
+
+3. 神谱（Sacred Texts）
+   URL: https://www.sacred-texts.com/cla/hesiod/theogony.htm
+   单文件，可直接下载
+
+## 日本神话
+
+1. 古事记（Sacred Texts英译本）
+   目录页: https://www.sacred-texts.com/shi/kj/index.htm
+   各章节独立文件
+
+2. 古事记（国学院大学）
+   基础URL: https://kojiki.kokugakuin.ac.jp/
+   需要JavaScript渲染
+
+## 中国神话
+
+1. 山海经（古诗文网）
+   南山经: https://so.gushiwen.cn/guwen/bookv_46653FD803893E4F9859860280C097A1.aspx
+   其他各卷有独立URL
+
+2. 封神演义（中国哲学书电子化计划）
+   URL: https://ctext.org/fengshen-yanyi/zh
+   可按章节访问
+
+## 北欧神话
+
+1. 老埃达（Sacred Texts）
+   目录: https://www.sacred-texts.com/neu/poe/index.htm
+   包含所有诗歌
+
+2. 新埃达（古腾堡）
+   HTML: https://www.gutenberg.org/files/18947/18947-h/18947-h.htm
+   TXT: https://www.gutenberg.org/files/18947/18947-0.txt
+
+## 印度神话
+
+1. 梨俱吠陀（Sacred Texts）
+   目录: https://sacred-texts.com/hin/rigveda/index.htm
+   10卷完整版
+
+2. 摩诃婆罗多（Sacred Texts）
+   第一卷: https://sacred-texts.com/hin/m01/index.htm
+   共18卷
+
+## 使用建议
+
+1. 对于多章节的文献，建议编写循环下载脚本
+2. 下载间隔建议1-2秒，避免对服务器造成压力
+3. Sacred Texts和MIT Classics对爬虫友好
+4. 中文网站可能需要处理编码问题
+5. 部分网站可能需要处理JavaScript渲染
+
+## 批量下载脚本示例
+
+```python
+# 下载伊利亚特全部24卷
+for book in range(1, 25):
+    url = f"https://classics.mit.edu/Homer/iliad.{book}.i.html"
+    # 下载代码...
+    time.sleep(2)
+```

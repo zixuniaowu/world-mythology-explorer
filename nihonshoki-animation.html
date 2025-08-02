@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本書紀アニメーション - 歴史物語の視覚化</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'MS Mincho', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2c1810 100%);
+            color: #f5e6d3;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(135deg, #8b4513 0%, #d4a574 100%);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            font-family: 'MS Mincho', serif;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #f5e6d3;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* タイムライン選択 */
+        .timeline-selector {
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #d4a574;
+        }
+
+        .timeline-title {
+            font-size: 1.8em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .timeline-periods {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .period-btn {
+            min-width: 150px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #4a2c1f 0%, #6b3e2a 100%);
+            border: 2px solid #d4a574;
+            border-radius: 10px;
+            color: #f5e6d3;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .period-btn:hover {
+            background: linear-gradient(135deg, #6b3e2a 0%, #8b5a3c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.3);
+        }
+
+        .period-btn.active {
+            background: linear-gradient(135deg, #d4a574 0%, #ffd700 100%);
+            color: #2c1810;
+        }
+
+        /* アニメーションステージ */
+        .animation-stage {
+            background: #f5e6d3;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* キャンバス */
+        #historyCanvas {
+            width: 100%;
+            height: 500px;
+            display: block;
+        }
+
+        /* イベント情報 */
+        .event-info {
+            background: rgba(212, 165, 116, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #d4a574;
+        }
+
+        .event-title {
+            font-size: 2em;
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-family: 'MS Mincho', serif;
+        }
+
+        .event-description {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #f5e6d3;
+            margin-bottom: 20px;
+        }
+
+        .event-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .detail-label {
+            color: #d4a574;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        /* コントロールパネル */
+        .control-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #d4a574 0%, #ffd700 100%);
+            border: none;
+            border-radius: 25px;
+            color: #2c1810;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .control-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        /* 速度コントロール */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d4a574;
+        }
+
+        .speed-slider {
+            width: 120px;
+        }
+
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(212, 165, 116, 0.9);
+            color: #2c1810;
+            border: 2px solid #2c1810;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            #historyCanvas {
+                height: 300px;
+            }
+            
+            .timeline-periods {
+                flex-direction: column;
+            }
+            
+            .period-btn {
+                width: 100%;
+            }
+        }
+
+        /* 装飾的な要素 */
+        .decoration {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .decoration.chrysanthemum {
+            font-size: 100px;
+            color: #ffd700;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <a href="japanese-mythology-index.html" class="back-button">← 戻る</a>
+
+    <div class="header">
+        <h1>日本書紀アニメーション</h1>
+        <p>日本の歴史を視覚的に体験する</p>
+    </div>
+
+    <div class="container">
+        <!-- タイムライン選択 -->
+        <div class="timeline-selector">
+            <h2 class="timeline-title">時代を選択</h2>
+            <div class="timeline-periods">
+                <button class="period-btn active" onclick="selectPeriod('jindai')">神代</button>
+                <button class="period-btn" onclick="selectPeriod('jinmu')">神武天皇</button>
+                <button class="period-btn" onclick="selectPeriod('kofun')">古墳時代</button>
+                <button class="period-btn" onclick="selectPeriod('asuka')">飛鳥時代</button>
+                <button class="period-btn" onclick="selectPeriod('buddhism')">仏教伝来</button>
+                <button class="period-btn" onclick="selectPeriod('taika')">大化の改新</button>
+            </div>
+        </div>
+
+        <!-- アニメーションステージ -->
+        <div class="animation-stage">
+            <div class="decoration chrysanthemum">🌸</div>
+            <canvas id="historyCanvas"></canvas>
+        </div>
+
+        <!-- イベント情報 -->
+        <div class="event-info">
+            <h2 class="event-title" id="eventTitle">天地開闢</h2>
+            <p class="event-description" id="eventDescription">
+                日本書紀によると、天地が初めて分かれた時、天に最初に現れたのは国常立尊でした。
+                その後、次々と神々が生まれ、最後にイザナギとイザナミが現れて国土を生み出しました。
+            </p>
+            <div class="event-details">
+                <div class="detail-item">
+                    <div class="detail-label">時代</div>
+                    <div class="detail-value" id="periodName">神代</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">主要人物</div>
+                    <div class="detail-value" id="mainCharacters">国常立尊、イザナギ、イザナミ</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">重要性</div>
+                    <div class="detail-value" id="importance">日本創世神話の始まり</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- コントロールパネル -->
+        <div class="control-panel">
+            <button class="control-btn" onclick="playAnimation()">
+                <span>▶</span> 再生
+            </button>
+            <button class="control-btn" onclick="pauseAnimation()">
+                <span>⏸</span> 一時停止
+            </button>
+            <button class="control-btn" onclick="resetAnimation()">
+                <span>⏮</span> リセット
+            </button>
+            
+            <div class="speed-control">
+                <label>速度:</label>
+                <input type="range" class="speed-slider" id="speedSlider" 
+                       min="0.5" max="2" step="0.1" value="1">
+                <span id="speedValue">1.0x</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // キャンバス設定
+        const canvas = document.getElementById('historyCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // アニメーション状態
+        let animationId = null;
+        let isPlaying = false;
+        let animationSpeed = 1;
+        let currentPeriod = 'jindai';
+        let animationProgress = 0;
+
+        // 時代データ
+        const periods = {
+            jindai: {
+                title: '天地開闢',
+                description: '日本書紀によると、天地が初めて分かれた時、天に最初に現れたのは国常立尊でした。その後、次々と神々が生まれ、最後にイザナギとイザナミが現れて国土を生み出しました。',
+                period: '神代',
+                characters: '国常立尊、イザナギ、イザナミ',
+                importance: '日本創世神話の始まり'
+            },
+            jinmu: {
+                title: '神武東征',
+                description: '初代天皇とされる神武天皇は、日向から東へ向かい、幾多の困難を乗り越えて大和の地に到達し、紀元前660年に即位したとされています。',
+                period: '神武天皇',
+                characters: '神武天皇、長髄彦、金鵄',
+                importance: '日本の建国'
+            },
+            kofun: {
+                title: '大和朝廷の成立',
+                description: '3世紀から7世紀にかけて、大和地方を中心に強力な政権が成立し、巨大な前方後円墳が各地に造られました。',
+                period: '古墳時代',
+                characters: '崇神天皇、垂仁天皇、景行天皇',
+                importance: '統一国家の形成'
+            },
+            asuka: {
+                title: '飛鳥文化の開花',
+                description: '6世紀後半から7世紀にかけて、飛鳥地方を中心に仏教文化が花開き、法隆寺などの寺院が建立されました。',
+                period: '飛鳥時代',
+                characters: '推古天皇、聖徳太子、蘇我馬子',
+                importance: '仏教文化の確立'
+            },
+            buddhism: {
+                title: '仏教の公伝',
+                description: '欽明天皇の時代（538年または552年）に、百済から仏教が正式に伝えられ、日本の精神文化に大きな影響を与えました。',
+                period: '仏教伝来',
+                characters: '欽明天皇、蘇我稲目、物部尾輿',
+                importance: '新たな思想の導入'
+            },
+            taika: {
+                title: '大化の改新',
+                description: '645年、中大兄皇子と中臣鎌足により蘇我氏が打倒され、天皇を中心とする中央集権国家への改革が始まりました。',
+                period: '大化の改新',
+                characters: '中大兄皇子、中臣鎌足、蘇我入鹿',
+                importance: '律令国家への転換'
+            }
+        };
+
+        // キャンバスのリサイズ
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+
+        // 時代選択
+        function selectPeriod(periodId) {
+            currentPeriod = periodId;
+            const period = periods[periodId];
+            
+            // UI更新
+            document.getElementById('eventTitle').textContent = period.title;
+            document.getElementById('eventDescription').textContent = period.description;
+            document.getElementById('periodName').textContent = period.period;
+            document.getElementById('mainCharacters').textContent = period.characters;
+            document.getElementById('importance').textContent = period.importance;
+            
+            // ボタンのアクティブ状態更新
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // アニメーションリセット
+            resetAnimation();
+        }
+
+        // アニメーション描画
+        function drawAnimation() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#F0E68C');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 時代別のアニメーション
+            switch(currentPeriod) {
+                case 'jindai':
+                    drawJindaiAnimation();
+                    break;
+                case 'jinmu':
+                    drawJinmuAnimation();
+                    break;
+                case 'kofun':
+                    drawKofunAnimation();
+                    break;
+                case 'asuka':
+                    drawAsukaAnimation();
+                    break;
+                case 'buddhism':
+                    drawBuddhismAnimation();
+                    break;
+                case 'taika':
+                    drawTaikaAnimation();
+                    break;
+            }
+            
+            // 進行状況を更新
+            animationProgress += 0.01 * animationSpeed;
+            if (animationProgress > 1) {
+                animationProgress = 0;
+            }
+        }
+
+        // 神代アニメーション
+        function drawJindaiAnimation() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // 天地分離の表現
+            const separation = Math.sin(animationProgress * Math.PI) * 100;
+            
+            // 天
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, centerY - separation);
+            
+            // 地
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, centerY + separation, canvas.width, canvas.height);
+            
+            // 神々の出現
+            if (animationProgress > 0.3) {
+                // 光の柱
+                ctx.fillStyle = `rgba(255, 215, 0, ${(animationProgress - 0.3) * 1.5})`;
+                ctx.fillRect(centerX - 50, 0, 100, canvas.height);
+                
+                // 神の表現（簡略化）
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - separation - 50, 30, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // 神武東征アニメーション
+        function drawJinmuAnimation() {
+            const startX = 50;
+            const endX = canvas.width - 100;
+            const currentX = startX + (endX - startX) * animationProgress;
+            const y = canvas.height / 2;
+            
+            // 地形
+            ctx.fillStyle = '#8FBC8F';
+            ctx.fillRect(0, y + 50, canvas.width, canvas.height);
+            
+            // 山
+            ctx.fillStyle = '#696969';
+            ctx.beginPath();
+            ctx.moveTo(canvas.width - 200, y + 50);
+            ctx.lineTo(canvas.width - 100, y - 50);
+            ctx.lineTo(canvas.width, y + 50);
+            ctx.fill();
+            
+            // 神武天皇（火柴人）
+            drawStickFigure(currentX, y, '#FF0000');
+            
+            // 金鵄（金色の鳥）
+            if (animationProgress > 0.7) {
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(currentX + 30, y - 60, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 翼
+                ctx.beginPath();
+                ctx.moveTo(currentX + 15, y - 60);
+                ctx.lineTo(currentX + 5, y - 50);
+                ctx.lineTo(currentX + 15, y - 55);
+                ctx.fillStyle = '#FFD700';
+                ctx.fill();
+            }
+        }
+
+        // 古墳時代アニメーション
+        function drawKofunAnimation() {
+            const centerX = canvas.width / 2;
+            const baseY = canvas.height * 0.7;
+            
+            // 前方後円墳の描画
+            const scale = 0.5 + animationProgress * 0.5;
+            
+            // 後円部
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.arc(centerX, baseY, 80 * scale, Math.PI, 0, false);
+            ctx.fill();
+            
+            // 前方部
+            ctx.fillRect(centerX - 60 * scale, baseY, 120 * scale, 60 * scale);
+            
+            // 埴輪
+            if (animationProgress > 0.5) {
+                const haniwaCount = 5;
+                for (let i = 0; i < haniwaCount; i++) {
+                    const angle = (i / haniwaCount) * Math.PI;
+                    const x = centerX + Math.cos(angle) * 100 * scale;
+                    const y = baseY - Math.sin(angle) * 20;
+                    
+                    // 埴輪（簡略化）
+                    ctx.fillStyle = '#DEB887';
+                    ctx.fillRect(x - 10, y - 30, 20, 30);
+                    ctx.beginPath();
+                    ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // 飛鳥時代アニメーション  
+        function drawAsukaAnimation() {
+            const centerX = canvas.width / 2;
+            const baseY = canvas.height * 0.8;
+            
+            // 寺院の建設アニメーション
+            const buildProgress = animationProgress;
+            
+            // 基壇
+            ctx.fillStyle = '#A9A9A9';
+            ctx.fillRect(centerX - 150, baseY, 300, 20);
+            
+            // 柱
+            if (buildProgress > 0.2) {
+                ctx.fillStyle = '#8B4513';
+                const pillars = 5;
+                for (let i = 0; i < pillars; i++) {
+                    const x = centerX - 120 + i * 60;
+                    const height = Math.min((buildProgress - 0.2) * 200, 150);
+                    ctx.fillRect(x - 10, baseY - height, 20, height);
+                }
+            }
+            
+            // 屋根
+            if (buildProgress > 0.6) {
+                ctx.fillStyle = '#2F4F4F';
+                ctx.beginPath();
+                ctx.moveTo(centerX - 180, baseY - 150);
+                ctx.lineTo(centerX, baseY - 220);
+                ctx.lineTo(centerX + 180, baseY - 150);
+                ctx.fill();
+            }
+            
+            // 仏像（シルエット）
+            if (buildProgress > 0.8) {
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(centerX, baseY - 80, 30, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillRect(centerX - 20, baseY - 50, 40, 50);
+            }
+        }
+
+        // 仏教伝来アニメーション
+        function drawBuddhismAnimation() {
+            const progress = animationProgress;
+            
+            // 海
+            ctx.fillStyle = '#4682B4';
+            ctx.fillRect(0, canvas.height * 0.6, canvas.width, canvas.height * 0.4);
+            
+            // 船
+            const shipX = progress * (canvas.width + 100) - 50;
+            const shipY = canvas.height * 0.6 - 20;
+            
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.moveTo(shipX - 40, shipY + 20);
+            ctx.lineTo(shipX - 30, shipY);
+            ctx.lineTo(shipX + 30, shipY);
+            ctx.lineTo(shipX + 40, shipY + 20);
+            ctx.fill();
+            
+            // 帆
+            ctx.fillStyle = '#FFFAF0';
+            ctx.fillRect(shipX - 5, shipY - 60, 10, 60);
+            ctx.fillRect(shipX - 25, shipY - 50, 50, 40);
+            
+            // 仏像（船上）
+            if (progress > 0.3) {
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(shipX, shipY - 20, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // 日本の陸地
+            ctx.fillStyle = '#8FBC8F';
+            ctx.fillRect(canvas.width * 0.7, canvas.height * 0.5, canvas.width * 0.3, canvas.height * 0.5);
+            
+            // 受け取る人々
+            if (progress > 0.7) {
+                drawStickFigure(canvas.width * 0.8, canvas.height * 0.5, '#000000');
+                drawStickFigure(canvas.width * 0.85, canvas.height * 0.5, '#000000');
+            }
+        }
+
+        // 大化の改新アニメーション
+        function drawTaikaAnimation() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // 宮殿
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(centerX - 150, centerY, 300, 100);
+            ctx.fillStyle = '#2F4F4F';
+            ctx.beginPath();
+            ctx.moveTo(centerX - 180, centerY);
+            ctx.lineTo(centerX, centerY - 80);
+            ctx.lineTo(centerX + 180, centerY);
+            ctx.fill();
+            
+            // 戦闘シーン
+            if (animationProgress < 0.5) {
+                // 蘇我入鹿
+                drawStickFigure(centerX - 50, centerY + 50, '#8B0000');
+                
+                // 中大兄皇子と中臣鎌足
+                const attackX = centerX + 50 - animationProgress * 100;
+                drawStickFigure(attackX, centerY + 50, '#000080');
+                drawStickFigure(attackX + 30, centerY + 50, '#006400');
+            } else {
+                // 改革の表現（巻物）
+                ctx.fillStyle = '#FFFAF0';
+                ctx.fillRect(centerX - 100, centerY - 50, 200, 100);
+                ctx.strokeStyle = '#8B4513';
+                ctx.strokeRect(centerX - 100, centerY - 50, 200, 100);
+                
+                // 文字（簡略化）
+                ctx.fillStyle = '#000000';
+                ctx.font = '20px serif';
+                ctx.fillText('大化改新', centerX - 40, centerY);
+            }
+        }
+
+        // 火柴人描画
+        function drawStickFigure(x, y, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            
+            // 頭
+            ctx.beginPath();
+            ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            
+            // 体
+            ctx.beginPath();
+            ctx.moveTo(x, y - 30);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            
+            // 腕
+            ctx.beginPath();
+            ctx.moveTo(x, y - 20);
+            ctx.lineTo(x - 15, y - 10);
+            ctx.moveTo(x, y - 20);
+            ctx.lineTo(x + 15, y - 10);
+            ctx.stroke();
+            
+            // 脚
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 10, y + 20);
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + 10, y + 20);
+            ctx.stroke();
+        }
+
+        // アニメーション制御
+        function animate() {
+            if (isPlaying) {
+                drawAnimation();
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+
+        function playAnimation() {
+            if (!isPlaying) {
+                isPlaying = true;
+                animate();
+            }
+        }
+
+        function pauseAnimation() {
+            isPlaying = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function resetAnimation() {
+            pauseAnimation();
+            animationProgress = 0;
+            drawAnimation();
+        }
+
+        // 速度調整
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            animationSpeed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = animationSpeed.toFixed(1) + 'x';
+        });
+
+        // 初期化
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        drawAnimation();
+    </script>
+</body>
+</html>

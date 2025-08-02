@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北欧神话 - 世界神话宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 北欧风格装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(127, 57, 251, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(127, 57, 251, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 页头样式 - 北欧风格 */
+        .header {
+            background: linear-gradient(135deg, #7f39fb 0%, #4a148c 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(127, 57, 251, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* 符文装饰 */
+        .header::before {
+            content: 'ᚠᚢᚦᚨᚱᚲ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10rem;
+            opacity: 0.05;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #e0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .runes {
+            font-size: 1.5rem;
+            color: #e0e0ff;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            letter-spacing: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: #9c88ff;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 简介部分 */
+        .intro {
+            background: rgba(127, 57, 251, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(127, 57, 251, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        /* 符文装饰 */
+        .intro::after {
+            content: 'ᚦᚨᚾᚨᚱ';
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.2;
+        }
+
+        .intro h2 {
+            color: #9c88ff;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 雷神锤子装饰 */
+        .book-card::after {
+            content: '⚡';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.1;
+            transform: rotate(45deg);
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #7f39fb, #9c88ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(127, 57, 251, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .book-card h3 {
+            color: #9c88ff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #7f39fb 0%, #4a148c 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(127, 57, 251, 0.4);
+        }
+
+        /* 特色部分 */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #9c88ff;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(127, 57, 251, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(127, 57, 251, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(127, 57, 251, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #9c88ff;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 符文分隔线 */
+        .rune-divider {
+            text-align: center;
+            font-size: 2rem;
+            color: #7f39fb;
+            opacity: 0.3;
+            margin: 2rem 0;
+            letter-spacing: 2rem;
+        }
+
+        /* 雪花动画 */
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: #fff;
+            user-select: none;
+            pointer-events: none;
+            animation: snowfall linear infinite;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .snowflake:nth-child(1) { left: 10%; animation-duration: 10s; font-size: 10px; }
+        .snowflake:nth-child(2) { left: 20%; animation-duration: 12s; font-size: 12px; animation-delay: 1s; }
+        .snowflake:nth-child(3) { left: 30%; animation-duration: 15s; font-size: 8px; animation-delay: 2s; }
+        .snowflake:nth-child(4) { left: 40%; animation-duration: 11s; font-size: 14px; animation-delay: 1.5s; }
+        .snowflake:nth-child(5) { left: 50%; animation-duration: 13s; font-size: 10px; animation-delay: 0.5s; }
+        .snowflake:nth-child(6) { left: 60%; animation-duration: 14s; font-size: 12px; animation-delay: 3s; }
+        .snowflake:nth-child(7) { left: 70%; animation-duration: 10s; font-size: 8px; animation-delay: 2.5s; }
+        .snowflake:nth-child(8) { left: 80%; animation-duration: 16s; font-size: 11px; animation-delay: 1s; }
+        .snowflake:nth-child(9) { left: 90%; animation-duration: 12s; font-size: 13px; animation-delay: 0s; }
+        .snowflake:nth-child(10) { left: 95%; animation-duration: 11s; font-size: 9px; animation-delay: 1.5s; }
+
+        /* 页脚 */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 雪花效果 -->
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❅</div>
+
+    <!-- 页头 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="runes">ᚦᚩᚱ • ᚩᛞᛁᚾ • ᛚᚩᚲᛁ</div>
+            <h1>北欧神话</h1>
+            <p>冰与火之歌，诸神的黄昏</p>
+        </div>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #9c88ff; text-decoration: none; font-size: 1.5rem;">🔨 神话宝库</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#books">经典文献</a></li>
+                <li><a href="#features">神话特色</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 简介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>北欧神话简介</h2>
+            <p>
+                北欧神话源自斯堪的纳维亚半岛，是维京时代日耳曼民族的精神支柱。这个充满力量与宿命的神话体系，展现了一个由冰与火创造的世界，以及注定走向毁灭又重生的宇宙循环。
+            </p>
+            <p>
+                从世界树伊格德拉西尔到九大世界，从众神之父奥丁到雷神索尔，从诡计之神洛基到诸神黄昏，北欧神话构建了一个独特的宇宙观。《老埃达》和《新埃达》等经典文献，保存了这些充满英勇与悲壮的故事。与其他神话不同的是，北欧神话中的神并非永恒不朽，他们也会面临命运，这种悲剧美学深深影响了后世的文学创作。
+            </p>
+        </section>
+
+        <div class="rune-divider">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ</div>
+
+        <!-- 经典书籍 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #9c88ff; margin-bottom: 2rem; font-size: 2.5rem;">经典文献</h2>
+            <div class="books-grid">
+                <!-- 老埃达 -->
+                <div class="book-card fade-in">
+                    <h3>《老埃达》（诗体埃达）</h3>
+                    <div class="book-info">成书时间：13世纪 | 收录古老诗歌</div>
+                    <div class="book-description">
+                        收录了大量古老的北欧神话诗歌，包括著名的《女先知的预言》、《格里姆尼尔之歌》等。这些诗歌以韵文形式记录了创世、诸神事迹和英雄传说，是北欧神话最原始、最重要的文献来源。
+                    </div>
+                    <div class="book-links">
+                        <a href="norse-elder-edda.html" class="book-link">📜 在线阅读</a>
+                        <a href="norse-elder-edda-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 新埃达 -->
+                <div class="book-card fade-in">
+                    <h3>《新埃达》（散文埃达）</h3>
+                    <div class="book-info">作者：斯诺里·斯图鲁松 | 约1220年</div>
+                    <div class="book-description">
+                        冰岛学者斯诺里编写的北欧神话手册，以散文形式系统地介绍了北欧神话。包括《欺骗古鲁菲》、《诗语法》等部分，详细叙述了宇宙起源、诸神谱系和各种神话故事。
+                    </div>
+                    <div class="book-links">
+                        <a href="norse-prose-edda.html" class="book-link">📜 在线阅读</a>
+                        <a href="norse-prose-edda-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 萨迦 -->
+                <div class="book-card fade-in">
+                    <h3>《沃尔松格萨迦》</h3>
+                    <div class="book-info">成书时间：13世纪后期</div>
+                    <div class="book-description">
+                        讲述沃尔松格家族的英雄传奇，包括著名的屠龙英雄西格尔德的故事。这部萨迦融合了神话与英雄传说，展现了北欧文化中的荣誉、复仇和命运主题，对后世影响深远。
+                    </div>
+                    <div class="book-links">
+                        <a href="norse-volsunga-saga.html" class="book-link">📜 在线阅读</a>
+                        <a href="norse-volsunga-saga-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="rune-divider">ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ</div>
+
+        <!-- 神话特色 -->
+        <section class="features" id="features">
+            <h2>北欧神话特色</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🌳</div>
+                    <h3>世界树伊格德拉西尔</h3>
+                    <p>连接九大世界的宇宙之树，是北欧宇宙观的核心</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>雷神之锤</h3>
+                    <p>索尔的神器妙尔尼尔，守护神域的强大武器</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🐺</div>
+                    <h3>芬里尔巨狼</h3>
+                    <p>注定吞噬奥丁的恐怖巨兽，诸神黄昏的象征</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌅</div>
+                    <h3>诸神黄昏</h3>
+                    <p>世界毁灭与重生的预言，体现宿命论思想</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>瓦尔哈拉</h3>
+                    <p>战死勇士的归宿，永恒战斗的英灵殿</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📿</div>
+                    <h3>如尼文字</h3>
+                    <p>神秘的古老文字，蕴含魔法力量</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="related-links" style="text-align: center; margin-top: 3rem;">
+            <h2 style="color: #9c88ff; margin-bottom: 1.5rem;">探索更多神话</h2>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="greek-mythology-index.html" class="book-link">🏛️ 希腊神话</a>
+                <a href="egyptian-mythology-index.html" class="book-link">🏺 埃及神话</a>
+                <a href="celtic-mythology-index.html" class="book-link">🍀 凯尔特神话</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神话宝库 | 让古老的智慧照亮现代</p>
+    </footer>
+</body>
+</html>

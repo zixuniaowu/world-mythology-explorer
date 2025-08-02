@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古事記ミステリー - 神話探索ゲーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'MS Gothic', sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            color: #2c1810;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ゲームコンテナ */
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* ヘッダー */
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .game-subtitle {
+            font-size: 1.2em;
+            color: #c44569;
+        }
+
+        /* メインゲームエリア */
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* 火柴人キャンバスエリア */
+        .stick-figure-area {
+            background: white;
+            border: 3px solid #ff6b9d;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            min-height: 400px;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 400px;
+            border: 1px dashed #ffb7c5;
+            cursor: pointer;
+            background: #fffafa;
+        }
+
+        /* テキストとパズルエリア */
+        .content-area {
+            background: white;
+            border: 3px solid #ff6b9d;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 600px;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        }
+
+        /* 章タイトル */
+        .chapter-title {
+            font-size: 1.8em;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b9d;
+        }
+
+        /* テキスト表示エリア */
+        .text-display {
+            background: #fffafa;
+            padding: 15px;
+            border-left: 4px solid #ffb7c5;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        /* パズルエリア */
+        .puzzle-area {
+            background: #ffeef8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .puzzle-question {
+            font-size: 1.2em;
+            color: #c44569;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .puzzle-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .puzzle-option {
+            background: white;
+            border: 2px solid #ffb7c5;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .puzzle-option:hover {
+            background: #ffe0f0;
+            border-color: #ff6b9d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 107, 157, 0.2);
+        }
+
+        .puzzle-option.correct {
+            background: #d4f8d4;
+            border-color: #4caf50;
+        }
+
+        .puzzle-option.incorrect {
+            background: #ffd4d4;
+            border-color: #f44336;
+        }
+
+        /* 制御ボタン */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 157, 0.4);
+        }
+
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ヒントエリア */
+        .hint-area {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffd700;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .hint-area.show {
+            display: block;
+        }
+
+        /* 得点表示 */
+        .score-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 1.2em;
+            color: #ff6b9d;
+            font-weight: bold;
+        }
+
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #ff6b9d;
+            border: 2px solid #ff6b9d;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #ff6b9d;
+            color: white;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .stick-figure-area {
+                min-height: 300px;
+            }
+            
+            #gameCanvas {
+                height: 300px;
+            }
+        }
+
+        /* 桜の装飾 */
+        .sakura-decoration {
+            position: absolute;
+            color: #ffb7c5;
+            font-size: 2em;
+            opacity: 0.3;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <a href="japanese-mythology-index.html" class="back-button">← 戻る</a>
+    <div class="score-display">得点: <span id="score">0</span></div>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">古事記ミステリー</h1>
+            <p class="game-subtitle">天照大神の岩戸隠れ - 神話探索アドベンチャー</p>
+        </div>
+
+        <div class="game-area">
+            <div class="stick-figure-area">
+                <div class="sakura-decoration" style="top: 10px; right: 10px;">🌸</div>
+                <div class="sakura-decoration" style="bottom: 10px; left: 10px;">🌸</div>
+                <canvas id="gameCanvas"></canvas>
+                <div class="hint-area" id="hintArea">
+                    <strong>ヒント:</strong>
+                    <p id="hintText"></p>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <h2 class="chapter-title" id="chapterTitle">第一章：高天原の騒動</h2>
+                
+                <div class="text-display" id="storyText">
+                    太陽の女神、天照大神が高天原を治めていた頃、弟の須佐之男命が海原の国から訪ねてきました。
+                    しかし、須佐之男の乱暴な振る舞いに怒った天照大神は...
+                </div>
+
+                <div class="puzzle-area" id="puzzleArea">
+                    <div class="puzzle-question" id="puzzleQuestion">
+                        天照大神が隠れた場所はどこでしょうか？
+                    </div>
+                    <div class="puzzle-options" id="puzzleOptions">
+                        <div class="puzzle-option" data-answer="cave">天の岩戸</div>
+                        <div class="puzzle-option" data-answer="sea">海の底</div>
+                        <div class="puzzle-option" data-answer="mountain">富士山頂</div>
+                        <div class="puzzle-option" data-answer="cloud">雲の上</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn" id="prevBtn" onclick="previousChapter()">前の章</button>
+                    <button class="control-btn" id="hintBtn" onclick="showHint()">ヒント</button>
+                    <button class="control-btn" id="nextBtn" onclick="nextChapter()" disabled>次の章</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ゲームデータ
+        const gameData = {
+            currentChapter: 0,
+            score: 0,
+            chapters: [
+                {
+                    title: "第一章：高天原の騒動",
+                    story: "太陽の女神、天照大神が高天原を治めていた頃、弟の須佐之男命が海原の国から訪ねてきました。しかし、須佐之男の乱暴な振る舞いに怒った天照大神は...",
+                    question: "天照大神が隠れた場所はどこでしょうか？",
+                    options: [
+                        { text: "天の岩戸", answer: "cave", correct: true },
+                        { text: "海の底", answer: "sea", correct: false },
+                        { text: "富士山頂", answer: "mountain", correct: false },
+                        { text: "雲の上", answer: "cloud", correct: false }
+                    ],
+                    hint: "太陽の女神が隠れたことで、世界は暗闇に包まれました。岩でできた場所です。"
+                },
+                {
+                    title: "第二章：神々の作戦",
+                    story: "天照大神が岩戸に隠れたことで、世界は暗闇に包まれました。困った八百万の神々は、天の安河に集まって相談を始めました。",
+                    question: "神々が天照大神を誘い出すために用意したものは？",
+                    options: [
+                        { text: "美しい音楽", answer: "music", correct: false },
+                        { text: "鏡と勾玉", answer: "mirror", correct: true },
+                        { text: "美味しい料理", answer: "food", correct: false },
+                        { text: "金銀財宝", answer: "treasure", correct: false }
+                    ],
+                    hint: "天照大神は自分の姿を映すものに興味を示しました。"
+                },
+                {
+                    title: "第三章：天鈿女の舞",
+                    story: "思金神の提案により、神々は岩戸の前で祭りを始めました。特に天鈿女命の踊りは...",
+                    question: "天鈿女命の踊りを見た神々の反応は？",
+                    options: [
+                        { text: "静かに見守った", answer: "quiet", correct: false },
+                        { text: "大笑いした", answer: "laugh", correct: true },
+                        { text: "悲しんだ", answer: "sad", correct: false },
+                        { text: "怒った", answer: "angry", correct: false }
+                    ],
+                    hint: "神々の楽しそうな様子が天照大神の好奇心を刺激しました。"
+                }
+            ]
+        };
+
+        // キャンバス描画
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawScene();
+        }
+
+        function drawScene() {
+            // 背景
+            ctx.fillStyle = '#fffafa';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 現在の章に応じた絵を描く
+            const chapter = gameData.chapters[gameData.currentChapter];
+            
+            if (gameData.currentChapter === 0) {
+                // 岩戸の絵
+                drawCave();
+                drawAmaterasu();
+            } else if (gameData.currentChapter === 1) {
+                // 神々の集まり
+                drawGods();
+            } else if (gameData.currentChapter === 2) {
+                // 天鈿女の踊り
+                drawDance();
+            }
+        }
+
+        function drawCave() {
+            // 岩戸
+            ctx.fillStyle = '#8b7355';
+            ctx.fillRect(canvas.width/2 - 60, canvas.height/2 - 80, 120, 160);
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(canvas.width/2 - 50, canvas.height/2 - 70, 100, 140);
+        }
+
+        function drawAmaterasu() {
+            // 天照大神（簡易的な光の表現）
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffd700';
+            ctx.fill();
+            
+            // 光線
+            for (let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI * 2) / 8;
+                ctx.beginPath();
+                ctx.moveTo(canvas.width/2, canvas.height/2);
+                ctx.lineTo(
+                    canvas.width/2 + Math.cos(angle) * 50,
+                    canvas.height/2 + Math.sin(angle) * 50
+                );
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+        }
+
+        function drawGods() {
+            // 複数の神々（簡易的な人型）
+            const positions = [
+                {x: canvas.width/4, y: canvas.height/2},
+                {x: canvas.width/2, y: canvas.height/2},
+                {x: canvas.width*3/4, y: canvas.height/2}
+            ];
+            
+            positions.forEach(pos => {
+                drawStickFigure(pos.x, pos.y, '#ff6b9d');
+            });
+        }
+
+        function drawDance() {
+            // 踊る天鈿女
+            const x = canvas.width/2;
+            const y = canvas.height/2;
+            
+            // 体
+            ctx.beginPath();
+            ctx.moveTo(x, y - 30);
+            ctx.lineTo(x, y + 20);
+            ctx.strokeStyle = '#ff6b9d';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // 頭
+            ctx.beginPath();
+            ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff6b9d';
+            ctx.fill();
+            
+            // 踊りのポーズ（腕）
+            ctx.beginPath();
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x - 30, y - 20);
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x + 30, y - 30);
+            ctx.stroke();
+            
+            // 脚
+            ctx.beginPath();
+            ctx.moveTo(x, y + 20);
+            ctx.lineTo(x - 20, y + 40);
+            ctx.moveTo(x, y + 20);
+            ctx.lineTo(x + 20, y + 40);
+            ctx.stroke();
+        }
+
+        function drawStickFigure(x, y, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            
+            // 頭
+            ctx.beginPath();
+            ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            
+            // 体
+            ctx.beginPath();
+            ctx.moveTo(x, y - 30);
+            ctx.lineTo(x, y + 20);
+            ctx.stroke();
+            
+            // 腕
+            ctx.beginPath();
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x - 20, y);
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x + 20, y);
+            ctx.stroke();
+            
+            // 脚
+            ctx.beginPath();
+            ctx.moveTo(x, y + 20);
+            ctx.lineTo(x - 15, y + 40);
+            ctx.moveTo(x, y + 20);
+            ctx.lineTo(x + 15, y + 40);
+            ctx.stroke();
+        }
+
+        // 章の更新
+        function updateChapter() {
+            const chapter = gameData.chapters[gameData.currentChapter];
+            document.getElementById('chapterTitle').textContent = chapter.title;
+            document.getElementById('storyText').textContent = chapter.story;
+            document.getElementById('puzzleQuestion').textContent = chapter.question;
+            
+            // オプションの更新
+            const optionsContainer = document.getElementById('puzzleOptions');
+            optionsContainer.innerHTML = '';
+            
+            chapter.options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'puzzle-option';
+                optionDiv.textContent = option.text;
+                optionDiv.dataset.answer = option.answer;
+                optionDiv.dataset.correct = option.correct;
+                optionDiv.onclick = () => checkAnswer(optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // ボタンの状態更新
+            document.getElementById('prevBtn').disabled = gameData.currentChapter === 0;
+            document.getElementById('nextBtn').disabled = true;
+            
+            // ヒントを隠す
+            document.getElementById('hintArea').classList.remove('show');
+            
+            // シーンを再描画
+            drawScene();
+        }
+
+        // 答えチェック
+        function checkAnswer(element) {
+            const correct = element.dataset.correct === 'true';
+            
+            if (correct) {
+                element.classList.add('correct');
+                gameData.score += 10;
+                document.getElementById('score').textContent = gameData.score;
+                document.getElementById('nextBtn').disabled = false;
+                
+                // 正解エフェクト
+                confetti();
+            } else {
+                element.classList.add('incorrect');
+                gameData.score = Math.max(0, gameData.score - 5);
+                document.getElementById('score').textContent = gameData.score;
+            }
+            
+            // 全オプションを無効化
+            document.querySelectorAll('.puzzle-option').forEach(opt => {
+                opt.onclick = null;
+            });
+        }
+
+        // ヒント表示
+        function showHint() {
+            const chapter = gameData.chapters[gameData.currentChapter];
+            document.getElementById('hintText').textContent = chapter.hint;
+            document.getElementById('hintArea').classList.add('show');
+            
+            // ヒントを使うと点数減少
+            gameData.score = Math.max(0, gameData.score - 2);
+            document.getElementById('score').textContent = gameData.score;
+        }
+
+        // 章の移動
+        function nextChapter() {
+            if (gameData.currentChapter < gameData.chapters.length - 1) {
+                gameData.currentChapter++;
+                updateChapter();
+            } else {
+                // ゲーム終了
+                alert(`ゲームクリア！\n最終得点: ${gameData.score}点`);
+            }
+        }
+
+        function previousChapter() {
+            if (gameData.currentChapter > 0) {
+                gameData.currentChapter--;
+                updateChapter();
+            }
+        }
+
+        // 紙吹雪エフェクト
+        function confetti() {
+            const colors = ['#ff6b9d', '#ffb7c5', '#ffd700', '#ff9999'];
+            const confettiCount = 30;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.style.opacity = '1';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.transition = 'all 1s ease-out';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.style.top = window.innerHeight + 'px';
+                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
+                    confetti.style.opacity = '0';
+                }, 10);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 1000);
+            }
+        }
+
+        // 初期化
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        updateChapter();
+    </script>
+</body>
+</html>

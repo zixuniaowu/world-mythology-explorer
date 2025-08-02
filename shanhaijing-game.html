@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>南山経ミステリー - 火柴人探偵ゲーム</title>
+    <title>山海経ミステリー - 火柴人探偵ゲーム</title>
     <style>
         * {
             margin: 0;
@@ -407,7 +407,7 @@
     <div class="game-container">
         <!-- ヘッダー -->
         <div class="game-header">
-            <h1 class="game-title">南山経ミステリー</h1>
+            <h1 class="game-title">山海経ミステリー</h1>
             <p class="game-subtitle">火柴人探偵と山海経の謎を解く</p>
         </div>
 
@@ -446,7 +446,7 @@
                 <h2 class="chapter-title" id="chapterTitle">ゲーム開始画面</h2>
                 
                 <div class="text-display" id="textDisplay">
-                    <p>山海経の南山経には、不思議な生き物や植物がたくさん記録されています。</p>
+                    <p>山海経には、南山、西山、北山、東山、中山の不思議な生き物や植物がたくさん記録されています。</p>
                     <p>あなたは火柴人探偵となって、古代の謎を解き明かしてください。</p>
                     <p>テキストをよく読んで、生き物の特徴を推理し、パズルを解いて進みましょう！</p>
                 </div>
@@ -969,6 +969,189 @@
                     };
                     ctx.fillText(dirText[direction] || '', -20, -40);
                     break;
+                    
+                // 西山経の生き物
+                case 'dragon': // 龍
+                    const dragonFloat = Math.sin(frame * 0.05) * 10;
+                    const bodyWave = frame * 0.1;
+                    
+                    // 龍の頭
+                    ctx.beginPath();
+                    ctx.arc(-30, -20 + dragonFloat, 15, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 角
+                    ctx.beginPath();
+                    ctx.moveTo(-35, -35 + dragonFloat);
+                    ctx.lineTo(-30, -45 + dragonFloat);
+                    ctx.moveTo(-25, -35 + dragonFloat);
+                    ctx.lineTo(-20, -45 + dragonFloat);
+                    ctx.stroke();
+                    
+                    // 体（波打つ）
+                    ctx.beginPath();
+                    for (let i = 0; i < 5; i++) {
+                        const x = -30 + i * 20;
+                        const y = Math.sin(bodyWave + i * 0.5) * 15 + dragonFloat;
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.quadraticCurveTo(x - 10, y - 10, x, y);
+                        }
+                    }
+                    ctx.stroke();
+                    
+                    // 雲のエフェクト
+                    ctx.strokeStyle = '#87ceeb';
+                    for (let i = 0; i < 3; i++) {
+                        const cloudX = -40 + i * 40 + Math.sin(frame * 0.05 + i) * 5;
+                        const cloudY = 20 + Math.sin(frame * 0.05 + i * 0.5) * 10;
+                        ctx.beginPath();
+                        ctx.arc(cloudX, cloudY, 10, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                    ctx.strokeStyle = '#8b4513';
+                    break;
+                    
+                // 北山経の生き物
+                case 'qilin': // 麒麟
+                    const qilinWalk = Math.sin(frame * 0.1) * 5;
+                    const hornGlow = Math.sin(frame * 0.2) * 0.5 + 0.5;
+                    
+                    // 頭
+                    ctx.beginPath();
+                    ctx.arc(0, -30 + qilinWalk, 12, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 単角（光る）
+                    ctx.strokeStyle = `rgba(255, 215, 0, ${hornGlow})`;
+                    ctx.beginPath();
+                    ctx.moveTo(0, -42 + qilinWalk);
+                    ctx.lineTo(0, -55 + qilinWalk);
+                    ctx.stroke();
+                    ctx.strokeStyle = '#8b4513';
+                    
+                    // 体（鹿のような）
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0 + qilinWalk, 20, 25, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 鱗模様
+                    for (let i = -15; i <= 15; i += 10) {
+                        for (let j = -20; j <= 15; j += 10) {
+                            ctx.beginPath();
+                            ctx.arc(i, j + qilinWalk, 3, 0, Math.PI);
+                            ctx.stroke();
+                        }
+                    }
+                    
+                    // 脚（優雅な歩き）
+                    const qilinLegs = [
+                        { x: -10, phase: 0 },
+                        { x: -5, phase: Math.PI },
+                        { x: 5, phase: Math.PI * 0.5 },
+                        { x: 10, phase: Math.PI * 1.5 }
+                    ];
+                    
+                    qilinLegs.forEach(leg => {
+                        const legMove = Math.sin(frame * 0.1 + leg.phase) * 8;
+                        ctx.beginPath();
+                        ctx.moveTo(leg.x, 20 + qilinWalk);
+                        ctx.lineTo(leg.x + legMove * 0.3, 35 + legMove);
+                        ctx.stroke();
+                    });
+                    break;
+                    
+                // 東山経の生き物
+                case 'ninetails': // 九尾の狐
+                    const foxBounce = Math.sin(frame * 0.1) * 5;
+                    
+                    // 頭（狐）
+                    ctx.beginPath();
+                    ctx.ellipse(0, -20 + foxBounce, 10, 12, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 耳
+                    ctx.beginPath();
+                    ctx.moveTo(-8, -32 + foxBounce);
+                    ctx.lineTo(-5, -40 + foxBounce);
+                    ctx.lineTo(-2, -32 + foxBounce);
+                    ctx.moveTo(8, -32 + foxBounce);
+                    ctx.lineTo(5, -40 + foxBounce);
+                    ctx.lineTo(2, -32 + foxBounce);
+                    ctx.stroke();
+                    
+                    // 体
+                    ctx.beginPath();
+                    ctx.ellipse(0, 5 + foxBounce, 18, 20, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 九つの尾（波打つ）
+                    for (let i = 0; i < 9; i++) {
+                        const tailAngle = (Math.PI * 2 / 9) * i;
+                        const tailWave = Math.sin(frame * 0.08 + i * 0.5) * 10;
+                        ctx.beginPath();
+                        ctx.moveTo(15, 10 + foxBounce);
+                        const tailX = 15 + Math.cos(tailAngle) * (30 + tailWave);
+                        const tailY = 10 + foxBounce + Math.sin(tailAngle) * (30 + tailWave);
+                        ctx.quadraticCurveTo(
+                            15 + Math.cos(tailAngle) * 15,
+                            10 + foxBounce + Math.sin(tailAngle) * 15,
+                            tailX,
+                            tailY
+                        );
+                        ctx.stroke();
+                    }
+                    break;
+                    
+                // 中山経の生き物
+                case 'birdman': // 鳥人
+                    const birdFly = Math.sin(frame * 0.15) * 15;
+                    const wingFlap2 = Math.sin(frame * 0.3) * 40;
+                    
+                    // 人の頭
+                    ctx.beginPath();
+                    ctx.arc(0, -25 + birdFly, 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // 人の体
+                    ctx.beginPath();
+                    ctx.moveTo(0, -15 + birdFly);
+                    ctx.lineTo(0, 5 + birdFly);
+                    ctx.stroke();
+                    
+                    // 鳥の翼
+                    ctx.beginPath();
+                    ctx.moveTo(-5, -10 + birdFly);
+                    ctx.quadraticCurveTo(
+                        -30 - wingFlap2,
+                        -5 + birdFly - wingFlap2 * 0.5,
+                        -25 - wingFlap2,
+                        10 + birdFly
+                    );
+                    ctx.moveTo(5, -10 + birdFly);
+                    ctx.quadraticCurveTo(
+                        30 + wingFlap2,
+                        -5 + birdFly - wingFlap2 * 0.5,
+                        25 + wingFlap2,
+                        10 + birdFly
+                    );
+                    ctx.stroke();
+                    
+                    // 鳥の脚
+                    ctx.beginPath();
+                    ctx.moveTo(-5, 5 + birdFly);
+                    ctx.lineTo(-5, 15 + birdFly);
+                    ctx.lineTo(-8, 18 + birdFly);
+                    ctx.moveTo(-5, 15 + birdFly);
+                    ctx.lineTo(-2, 18 + birdFly);
+                    ctx.moveTo(5, 5 + birdFly);
+                    ctx.lineTo(5, 15 + birdFly);
+                    ctx.lineTo(8, 18 + birdFly);
+                    ctx.moveTo(5, 15 + birdFly);
+                    ctx.lineTo(2, 18 + birdFly);
+                    ctx.stroke();
+                    break;
             }
             
             ctx.restore();
@@ -1272,7 +1455,38 @@
             gameState.completedPuzzles = 0;
             gameState.score = 0;
             gameState.clues = [];
-            gameState.chapters = window.SHANHAIJING_COMPLETE.nanshan.chapters;
+            // 各経から代表的な章を選択
+            gameState.chapters = [];
+            
+            // 南山経から2章
+            if (window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.nanshan && window.SHANHAIJING_COMPLETE.nanshan.chapters) {
+                gameState.chapters.push(...window.SHANHAIJING_COMPLETE.nanshan.chapters.slice(0, 2));
+            }
+            
+            // 西山経から2章
+            if (window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.xishan && window.SHANHAIJING_COMPLETE.xishan.chapters) {
+                gameState.chapters.push(...window.SHANHAIJING_COMPLETE.xishan.chapters.slice(0, 2));
+            }
+            
+            // 北山経から2章
+            if (window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.beishan && window.SHANHAIJING_COMPLETE.beishan.chapters) {
+                gameState.chapters.push(...window.SHANHAIJING_COMPLETE.beishan.chapters.slice(0, 2));
+            }
+            
+            // 東山経から2章
+            if (window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.dongshan && window.SHANHAIJING_COMPLETE.dongshan.chapters) {
+                gameState.chapters.push(...window.SHANHAIJING_COMPLETE.dongshan.chapters.slice(0, 2));
+            }
+            
+            // 中山経から2章
+            if (window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.zhongshan && window.SHANHAIJING_COMPLETE.zhongshan.chapters) {
+                gameState.chapters.push(...window.SHANHAIJING_COMPLETE.zhongshan.chapters.slice(0, 2));
+            }
+            
+            // データが無い場合のフォールバック
+            if (gameState.chapters.length === 0 && window.SHANHAIJING_COMPLETE && window.SHANHAIJING_COMPLETE.nanshan) {
+                gameState.chapters = window.SHANHAIJING_COMPLETE.nanshan.chapters;
+            }
             gameState.totalPuzzles = calculateTotalPuzzles();
             
             // アニメーション初期化
@@ -1556,7 +1770,7 @@
             modalContent.innerHTML = `
                 <h2 style="color: #8b4513; margin-bottom: 20px;">🎉 ゲームクリア！ 🎉</h2>
                 <p style="font-size: 1.2em; margin-bottom: 20px;">
-                    南山経のすべての謎を解き明かしました！
+                    山海経のすべての謎を解き明かしました！
                 </p>
                 <p style="font-size: 1.5em; color: #8b4513; margin-bottom: 20px;">
                     最終スコア: ${gameState.score}

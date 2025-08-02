@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Test files
+test-*.html
+debug-*.html
+*-test.html
+*-debug.html
+
+# Session files
+session.json
+*.session
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# NPM (if you add Node.js in the future)
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Server logs
+server.log
+access.log
+error.log

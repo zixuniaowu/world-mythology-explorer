@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>希腊神话 - 世界神话宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 页头样式 */
+        .header {
+            background: linear-gradient(135deg, #5f27cd 0%, #764ba2 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(95, 39, 205, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: #764ba2;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* 简介部分 */
+        .intro {
+            background: rgba(95, 39, 205, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(95, 39, 205, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .intro h2 {
+            color: #9c88ff;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #5f27cd, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(95, 39, 205, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .book-card h3 {
+            color: #9c88ff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #5f27cd 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(95, 39, 205, 0.4);
+        }
+
+        /* 特色部分 */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #9c88ff;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(95, 39, 205, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(95, 39, 205, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(95, 39, 205, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #9c88ff;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 页头 -->
+    <header class="header">
+        <div class="header-content">
+            <h1>希腊神话</h1>
+            <p>奥林匹斯山的不朽传说</p>
+        </div>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #9c88ff; text-decoration: none; font-size: 1.5rem;">🏛️ 神话宝库</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#books">经典作品</a></li>
+                <li><a href="#features">神话特色</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 简介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>希腊神话简介</h2>
+            <p>
+                希腊神话是世界文学宝库中最璀璨的明珠之一，它不仅是古希腊宗教的组成部分，更是西方文明的重要基石。这些神话故事通过口头传统和文学作品流传下来，描绘了众神、英雄、怪物以及宇宙起源的壮丽画卷。
+            </p>
+            <p>
+                从宙斯统治的奥林匹斯山到特洛伊战争的血腥战场，从普罗米修斯盗火到潘多拉魔盒，希腊神话以其丰富的想象力、深刻的人性洞察和永恒的主题，影响了整个西方文学、艺术和思想。这些故事不仅是娱乐，更是古希腊人理解世界、探讨道德和哲学问题的方式。
+            </p>
+        </section>
+
+        <!-- 经典书籍 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #9c88ff; margin-bottom: 2rem; font-size: 2.5rem;">经典作品</h2>
+            <div class="books-grid">
+                <!-- 伊利亚特 -->
+                <div class="book-card fade-in">
+                    <h3>《伊利亚特》</h3>
+                    <div class="book-info">作者：荷马 | 成书时间：约公元前8世纪</div>
+                    <div class="book-description">
+                        史诗讲述了特洛伊战争第十年的故事，以阿基里斯的愤怒为主线，描绘了希腊联军围攻特洛伊城的壮烈场面。作品深刻展现了英雄主义、荣誉、命运等主题，是西方文学的开山之作。
+                    </div>
+                    <div class="book-links">
+                        <a href="greek-iliad.html" class="book-link">📖 在线阅读</a>
+                        <a href="greek-iliad-analysis.html" class="book-link">📝 作品解析</a>
+                    </div>
+                </div>
+
+                <!-- 奥德赛 -->
+                <div class="book-card fade-in">
+                    <h3>《奥德赛》</h3>
+                    <div class="book-info">作者：荷马 | 成书时间：约公元前8世纪</div>
+                    <div class="book-description">
+                        讲述了奥德修斯在特洛伊战争后历经十年海上漂泊，最终返回家园的冒险故事。充满了与独眼巨人、海妖塞壬、女巫喀耳刻等的精彩遭遇，是冒险文学的典范。
+                    </div>
+                    <div class="book-links">
+                        <a href="greek-odyssey.html" class="book-link">📖 在线阅读</a>
+                        <a href="greek-odyssey-analysis.html" class="book-link">📝 作品解析</a>
+                    </div>
+                </div>
+
+                <!-- 神谱 -->
+                <div class="book-card fade-in">
+                    <h3>《神谱》</h3>
+                    <div class="book-info">作者：赫西俄德 | 成书时间：约公元前700年</div>
+                    <div class="book-description">
+                        系统地叙述了希腊神话中宇宙的起源和众神的谱系，从混沌初开到宙斯建立统治，详细记载了提坦之战等重要神话事件，是了解希腊神话体系的必读之作。
+                    </div>
+                    <div class="book-links">
+                        <a href="greek-theogony.html" class="book-link">📖 在线阅读</a>
+                        <a href="greek-theogony-analysis.html" class="book-link">📝 作品解析</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 神话特色 -->
+        <section class="features" id="features">
+            <h2>希腊神话特色</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <h3>奥林匹斯十二主神</h3>
+                    <p>以宙斯为首的十二位主神，各司其职，构成了完整的神界体系</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🗡️</div>
+                    <h3>英雄史诗</h3>
+                    <p>赫拉克勒斯、阿基里斯、奥德修斯等英雄的传奇故事</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎭</div>
+                    <h3>人性化的神</h3>
+                    <p>希腊诸神具有人的情感和缺陷，更加贴近人性</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <h3>宇宙起源</h3>
+                    <p>从混沌到秩序，详细描述了世界和众神的诞生</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📚</div>
+                    <h3>文学影响</h3>
+                    <p>深刻影响了西方文学、艺术和哲学的发展</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>文化遗产</h3>
+                    <p>成为西方文明的重要组成部分和精神财富</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="related-links" style="text-align: center; margin-top: 3rem;">
+            <h2 style="color: #9c88ff; margin-bottom: 1.5rem;">探索更多神话</h2>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="egyptian-mythology-index.html" class="book-link">🏺 埃及神话</a>
+                <a href="norse-mythology-index.html" class="book-link">🔨 北欧神话</a>
+                <a href="chinese-mythology-index.html" class="book-link">🐉 中国神话</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神话宝库 | 让古老的智慧照亮现代</p>
+    </footer>
+</body>
+</html>

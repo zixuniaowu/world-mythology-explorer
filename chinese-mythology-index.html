@@ -234,7 +234,7 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
             justify-content: center;
         }
@@ -477,42 +477,73 @@
         <h2 class="section-title fade-in">中華神話コレクション</h2>
         <div class="volumes-grid">
             <!-- 主要な神話 -->
-            <div class="volume-card fade-in stagger-1" onclick="openMythology('shanhaijing')">
-                <div class="volume-icon">🗺️</div>
-                <h3 class="volume-title">山海経</h3>
-                <p class="volume-subtitle">古代地理と神獣の百科全書</p>
-                <p class="volume-chapters">18巻 • 神獣、異国、地理</p>
-                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 215, 0, 0.3);">
-                    <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
-                        <button onclick="event.stopPropagation(); window.location.href='nanshan-game.html'" 
-                                style="padding: 8px 12px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #2C1810; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s ease;" 
-                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(255,215,0,0.4)'" 
-                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.2)'">
-                            🕵️ 侦探游戏
-                        </button>
-                        <button onclick="event.stopPropagation(); window.location.href='text-to-animation.html'" 
-                                style="padding: 8px 12px; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: #FFD700; border: none; border-radius: 20px; cursor: pointer; font-size: 0.85em; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s ease;" 
-                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 10px rgba(139,69,19,0.4)'" 
-                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(0,0,0,0.2)'">
-                            🔥 火柴人
-                        </button>
-                    </div>
-                    <p style="margin-top: 8px; font-size: 0.75em; color: #DAA520; opacity: 0.8;">特別なインターフェース</p>
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-1" onclick="openMythology('shanhaijing')">
+                    <div class="volume-icon">🗺️</div>
+                    <h3 class="volume-title">山海経</h3>
+                    <p class="volume-subtitle">古代地理と神獣の百科全書</p>
+                    <p class="volume-chapters">18巻 • 神獣、異国、地理</p>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="shanhaijing-game.html" 
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #2C1810; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(255,215,0,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(255,215,0,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(255,215,0,0.3)'">
+                        🕵️ 侦探游戏
+                    </a>
+                    <a href="text-to-animation.html"
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: #FFD700; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(139,69,19,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(139,69,19,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(139,69,19,0.3)'">
+                        🔥 火柴人
+                    </a>
                 </div>
             </div>
             
-            <div class="volume-card fade-in stagger-2" onclick="openMythology('fengshen')">
-                <div class="volume-icon">⚔️</div>
-                <h3 class="volume-title">封神演義</h3>
-                <p class="volume-subtitle">神々の戦いと封神の物語</p>
-                <p class="volume-chapters">100回 • 姜子牙、哪吒、楊戩</p>
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-2" onclick="openMythology('fengshen')">
+                    <div class="volume-icon">⚔️</div>
+                    <h3 class="volume-title">封神演義</h3>
+                    <p class="volume-subtitle">神々の戦いと封神の物語</p>
+                    <p class="volume-chapters">100回 • 姜子牙、哪吒、楊戩</p>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="fengshen-game.html" 
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #2C1810; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(255,215,0,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(255,215,0,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(255,215,0,0.3)'">
+                        🕵️ 侦探游戏
+                    </a>
+                    <a href="fengshen-animation.html"
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: #FFD700; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(139,69,19,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(139,69,19,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(139,69,19,0.3)'">
+                        🔥 火柴人
+                    </a>
+                </div>
             </div>
             
-            <div class="volume-card fade-in stagger-3" onclick="openMythology('liaozhai')">
-                <div class="volume-icon">👻</div>
-                <h3 class="volume-title">聊斎志異</h3>
-                <p class="volume-subtitle">狐妖と幽霊の奇怪談</p>
-                <p class="volume-chapters">491篇 • 狐仙、幽霊、書生</p>
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-3" onclick="openMythology('liaozhai')">
+                    <div class="volume-icon">👻</div>
+                    <h3 class="volume-title">聊斎志異</h3>
+                    <p class="volume-subtitle">狐妖と幽霊の奇怪談</p>
+                    <p class="volume-chapters">491篇 • 狐仙、幽霊、書生</p>
+                </div>
+                <div style="margin-top: 15px; text-align: center;">
+                    <a href="liaozhai-game.html" 
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #2C1810; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(255,215,0,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(255,215,0,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(255,215,0,0.3)'">
+                        🕵️ 侦探游戏
+                    </a>
+                    <a href="liaozhai-animation.html"
+                       style="display: inline-block; margin: 0 5px; padding: 10px 20px; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: #FFD700; text-decoration: none; border-radius: 25px; font-size: 0.9em; font-weight: bold; box-shadow: 0 3px 10px rgba(139,69,19,0.3); transition: all 0.3s ease;" 
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(139,69,19,0.5)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(139,69,19,0.3)'">
+                        🔥 火柴人
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -562,6 +593,36 @@
     </footer>
     
     <script>
+        // グローバルナビゲーション関数
+        function navigateToPage(url) {
+            console.log('Navigating to:', url);
+            try {
+                // Method 1: Direct assignment
+                window.location.href = url;
+            } catch (e1) {
+                console.error('Method 1 failed:', e1);
+                try {
+                    // Method 2: Using assign
+                    window.location.assign(url);
+                } catch (e2) {
+                    console.error('Method 2 failed:', e2);
+                    try {
+                        // Method 3: Using replace
+                        window.location.replace(url);
+                    } catch (e3) {
+                        console.error('Method 3 failed:', e3);
+                        // Method 4: Create and click a link
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
+            }
+        }
+        
         // ローディング画面を非表示
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -569,6 +630,7 @@
                 loadingScreen.style.opacity = '0';
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
+                    console.log('Loading screen hidden');
                 }, 500);
             }, 1500);
         });
@@ -639,6 +701,33 @@
             }
         }
         
+        // カードクリックハンドラー
+        function handleCardClick(event, mythologyId) {
+            // リンクがクリックされた場合は何もしない（リンクの通常の動作に任せる）
+            if (event.target.tagName === 'A' || event.target.closest('a')) {
+                console.log('Link clicked, allowing default navigation');
+                return;
+            }
+            
+            // カード自体がクリックされた場合
+            console.log('Card clicked, opening mythology:', mythologyId);
+            openMythology(mythologyId);
+        }
+        
+        // 特別なインターフェースを開く
+        function openSpecialInterface(type) {
+            switch(type) {
+                case 'detective':
+                    window.location.href = 'shanhaijing-game.html';
+                    break;
+                case 'animation':
+                    window.location.href = 'text-to-animation.html';
+                    break;
+                default:
+                    console.error('Unknown interface type:', type);
+            }
+        }
+        
         // フェードインアニメーション
         const observerOptions = {
             threshold: 0.1,
@@ -657,6 +746,8 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
+        
+        // リンクは通常のHTML動作で機能するため、特別な処理は不要
     </script>
 </body>
 </html>

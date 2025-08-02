@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古事記アニメーション - 神話の物語</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'MS Gothic', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 桜の装飾背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 182, 193, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #ffe0ec;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* アニメーションステージ */
+        .animation-stage {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        /* SVGキャンバス */
+        #animationCanvas {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 100%);
+            display: block;
+        }
+
+        /* ストーリーコントロール */
+        .story-controls {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .story-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .story-btn {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 107, 157, 0.3);
+        }
+
+        .story-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 157, 0.4);
+        }
+
+        .story-btn.active {
+            background: linear-gradient(135deg, #c44569 0%, #a0522d 100%);
+        }
+
+        /* プレイバックコントロール */
+        .playback-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: #ff6b9d;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .control-btn:hover {
+            background: #c44569;
+            transform: scale(1.05);
+        }
+
+        .control-btn:disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
+
+        /* スピード調整 */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ff9999;
+        }
+
+        .speed-slider {
+            width: 100px;
+        }
+
+        /* テキスト表示エリア */
+        .text-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .scene-title {
+            font-size: 1.5em;
+            color: #ff9999;
+            margin-bottom: 10px;
+        }
+
+        .scene-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #e0e0e0;
+        }
+
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #ff6b9d;
+            border: 2px solid #ff6b9d;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: #ff6b9d;
+            color: white;
+        }
+
+        /* 桜の花びらアニメーション */
+        .sakura-petal {
+            position: fixed;
+            color: #ffb7c5;
+            font-size: 20px;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            #animationCanvas {
+                height: 300px;
+            }
+            
+            .story-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="japanese-mythology-index.html" class="back-button">← 戻る</a>
+
+    <div class="header">
+        <h1>古事記アニメーション</h1>
+        <p>日本神話の物語を火柴人アニメーションで体験</p>
+    </div>
+
+    <div class="container">
+        <!-- ストーリー選択 -->
+        <div class="story-controls">
+            <h2 style="color: #ff9999; margin-bottom: 15px;">物語を選択</h2>
+            <div class="story-selector">
+                <button class="story-btn active" onclick="selectStory('amaterasu')">天照大神の岩戸隠れ</button>
+                <button class="story-btn" onclick="selectStory('yamata')">ヤマタノオロチ退治</button>
+                <button class="story-btn" onclick="selectStory('creation')">国生み神話</button>
+                <button class="story-btn" onclick="selectStory('inaba')">因幡の白兎</button>
+            </div>
+        </div>
+
+        <!-- アニメーションステージ -->
+        <div class="animation-stage">
+            <svg id="animationCanvas" viewBox="0 0 1000 500">
+                <!-- 背景要素 -->
+                <defs>
+                    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#98D8E8;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="sunGradient">
+                        <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0.8" />
+                    </radialGradient>
+                </defs>
+                
+                <!-- 背景 -->
+                <rect width="1000" height="500" fill="url(#skyGradient)" />
+                
+                <!-- アニメーション要素がここに追加される -->
+            </svg>
+        </div>
+
+        <!-- テキスト表示 -->
+        <div class="text-display">
+            <h3 class="scene-title" id="sceneTitle">天照大神の岩戸隠れ</h3>
+            <p class="scene-text" id="sceneText">
+                太陽の女神・天照大神が、弟の須佐之男命の乱暴な振る舞いに怒り、天の岩戸に隠れてしまいました。
+                世界は暗闇に包まれ、神々は困り果てました...
+            </p>
+        </div>
+
+        <!-- プレイバックコントロール -->
+        <div class="playback-controls">
+            <button class="control-btn" onclick="playAnimation()">
+                <span>▶</span> 再生
+            </button>
+            <button class="control-btn" onclick="pauseAnimation()">
+                <span>⏸</span> 一時停止
+            </button>
+            <button class="control-btn" onclick="resetAnimation()">
+                <span>⏮</span> リセット
+            </button>
+            
+            <div class="speed-control">
+                <label>速度:</label>
+                <input type="range" class="speed-slider" id="speedSlider" 
+                       min="0.5" max="2" step="0.1" value="1">
+                <span id="speedValue">1x</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // アニメーションの状態管理
+        let currentStory = 'amaterasu';
+        let animationFrame = null;
+        let isPlaying = false;
+        let animationSpeed = 1;
+        let currentScene = 0;
+
+        // SVG要素の取得
+        const svg = document.getElementById('animationCanvas');
+
+        // ストーリーデータ
+        const stories = {
+            amaterasu: {
+                title: '天照大神の岩戸隠れ',
+                scenes: [
+                    {
+                        title: 'シーン1：須佐之男の暴挙',
+                        text: '須佐之男命が高天原で乱暴な振る舞いをして、天照大神を怒らせました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン2：岩戸に隠れる',
+                        text: '天照大神は天の岩戸に隠れ、世界は暗闇に包まれました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン3：神々の作戦',
+                        text: '八百万の神々が集まり、天照大神を誘い出す作戦を立てました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン4：天鈿女の舞',
+                        text: '天鈿女命が踊り、神々が大笑いすると、天照大神は岩戸から顔を出しました。',
+                        duration: 3000
+                    }
+                ]
+            },
+            yamata: {
+                title: 'ヤマタノオロチ退治',
+                scenes: [
+                    {
+                        title: 'シーン1：須佐之男の旅',
+                        text: '高天原を追放された須佐之男命は、出雲の国へとやってきました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン2：櫛名田姫との出会い',
+                        text: '泣いている老夫婦と美しい娘・櫛名田姫に出会いました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン3：八岐大蛇の脅威',
+                        text: '8つの頭と尾を持つ恐ろしい大蛇が、毎年娘を食べに来るという話を聞きました。',
+                        duration: 3000
+                    },
+                    {
+                        title: 'シーン4：大蛇退治',
+                        text: '須佐之男は酒で大蛇を酔わせ、見事に退治しました。',
+                        duration: 3000
+                    }
+                ]
+            }
+        };
+
+        // 火柴人の描画
+        function drawStickFigure(x, y, id, color = '#000') {
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.setAttribute('id', id);
+            
+            // 頭
+            const head = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            head.setAttribute('cx', x);
+            head.setAttribute('cy', y - 40);
+            head.setAttribute('r', 15);
+            head.setAttribute('fill', color);
+            head.setAttribute('stroke', color);
+            head.setAttribute('stroke-width', '2');
+            
+            // 体
+            const body = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            body.setAttribute('x1', x);
+            body.setAttribute('y1', y - 25);
+            body.setAttribute('x2', x);
+            body.setAttribute('y2', y + 20);
+            body.setAttribute('stroke', color);
+            body.setAttribute('stroke-width', '3');
+            
+            // 左腕
+            const leftArm = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            leftArm.setAttribute('x1', x);
+            leftArm.setAttribute('y1', y - 10);
+            leftArm.setAttribute('x2', x - 20);
+            leftArm.setAttribute('y2', y);
+            leftArm.setAttribute('stroke', color);
+            leftArm.setAttribute('stroke-width', '3');
+            
+            // 右腕
+            const rightArm = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightArm.setAttribute('x1', x);
+            rightArm.setAttribute('y1', y - 10);
+            rightArm.setAttribute('x2', x + 20);
+            rightArm.setAttribute('y2', y);
+            rightArm.setAttribute('stroke', color);
+            rightArm.setAttribute('stroke-width', '3');
+            
+            // 左脚
+            const leftLeg = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            leftLeg.setAttribute('x1', x);
+            leftLeg.setAttribute('y1', y + 20);
+            leftLeg.setAttribute('x2', x - 15);
+            leftLeg.setAttribute('y2', y + 40);
+            leftLeg.setAttribute('stroke', color);
+            leftLeg.setAttribute('stroke-width', '3');
+            
+            // 右脚
+            const rightLeg = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightLeg.setAttribute('x1', x);
+            rightLeg.setAttribute('y1', y + 20);
+            rightLeg.setAttribute('x2', x + 15);
+            rightLeg.setAttribute('y2', y + 40);
+            rightLeg.setAttribute('stroke', color);
+            rightLeg.setAttribute('stroke-width', '3');
+            
+            group.appendChild(head);
+            group.appendChild(body);
+            group.appendChild(leftArm);
+            group.appendChild(rightArm);
+            group.appendChild(leftLeg);
+            group.appendChild(rightLeg);
+            
+            return group;
+        }
+
+        // 太陽の描画
+        function drawSun(x, y, radius = 50) {
+            const sun = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            sun.setAttribute('id', 'sun');
+            sun.setAttribute('cx', x);
+            sun.setAttribute('cy', y);
+            sun.setAttribute('r', radius);
+            sun.setAttribute('fill', 'url(#sunGradient)');
+            
+            // 光線
+            const rays = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            rays.setAttribute('id', 'sunRays');
+            
+            for (let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI * 2) / 8;
+                const ray = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                ray.setAttribute('x1', x + Math.cos(angle) * (radius + 5));
+                ray.setAttribute('y1', y + Math.sin(angle) * (radius + 5));
+                ray.setAttribute('x2', x + Math.cos(angle) * (radius + 20));
+                ray.setAttribute('y2', y + Math.sin(angle) * (radius + 20));
+                ray.setAttribute('stroke', '#FFD700');
+                ray.setAttribute('stroke-width', '3');
+                rays.appendChild(ray);
+            }
+            
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.appendChild(sun);
+            group.appendChild(rays);
+            
+            return group;
+        }
+
+        // 岩戸の描画
+        function drawCave() {
+            const cave = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            cave.setAttribute('id', 'cave');
+            cave.setAttribute('x', 700);
+            cave.setAttribute('y', 200);
+            cave.setAttribute('width', 150);
+            cave.setAttribute('height', 200);
+            cave.setAttribute('fill', '#8B7355');
+            cave.setAttribute('stroke', '#654321');
+            cave.setAttribute('stroke-width', '3');
+            cave.setAttribute('rx', '10');
+            
+            return cave;
+        }
+
+        // アニメーションの初期化
+        function initAnimation() {
+            // 既存の要素をクリア
+            while (svg.lastChild && svg.lastChild.id !== 'skyGradient') {
+                svg.removeChild(svg.lastChild);
+            }
+            
+            // 背景を再描画
+            const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bg.setAttribute('width', '1000');
+            bg.setAttribute('height', '500');
+            bg.setAttribute('fill', 'url(#skyGradient)');
+            svg.appendChild(bg);
+            
+            if (currentStory === 'amaterasu') {
+                initAmaterasuAnimation();
+            } else if (currentStory === 'yamata') {
+                initYamataAnimation();
+            }
+        }
+
+        // 天照大神アニメーションの初期化
+        function initAmaterasuAnimation() {
+            // 太陽（天照大神）
+            svg.appendChild(drawSun(200, 100));
+            
+            // 須佐之男（火柴人）
+            svg.appendChild(drawStickFigure(300, 300, 'susanoo', '#4169E1'));
+            
+            // 岩戸
+            svg.appendChild(drawCave());
+            
+            // 他の神々
+            for (let i = 0; i < 3; i++) {
+                svg.appendChild(drawStickFigure(100 + i * 100, 350, `god${i}`, '#FF69B4'));
+            }
+        }
+
+        // ヤマタノオロチアニメーションの初期化
+        function initYamataAnimation() {
+            // 須佐之男
+            svg.appendChild(drawStickFigure(100, 300, 'susanoo', '#4169E1'));
+            
+            // 大蛇の簡易表現
+            const snake = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            snake.setAttribute('id', 'yamata');
+            snake.setAttribute('d', 'M 700 300 Q 750 250 800 300 Q 850 350 900 300');
+            snake.setAttribute('stroke', '#8B0000');
+            snake.setAttribute('stroke-width', '20');
+            snake.setAttribute('fill', 'none');
+            svg.appendChild(snake);
+        }
+
+        // ストーリー選択
+        function selectStory(storyId) {
+            currentStory = storyId;
+            currentScene = 0;
+            
+            // ボタンのアクティブ状態更新
+            document.querySelectorAll('.story-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // ストーリー情報更新
+            const story = stories[storyId];
+            if (story) {
+                document.getElementById('sceneTitle').textContent = story.scenes[0].title;
+                document.getElementById('sceneText').textContent = story.scenes[0].text;
+            }
+            
+            // アニメーションリセット
+            resetAnimation();
+        }
+
+        // アニメーション再生
+        function playAnimation() {
+            if (!isPlaying) {
+                isPlaying = true;
+                animateScene();
+            }
+        }
+
+        // アニメーション一時停止
+        function pauseAnimation() {
+            isPlaying = false;
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+        }
+
+        // アニメーションリセット
+        function resetAnimation() {
+            pauseAnimation();
+            currentScene = 0;
+            initAnimation();
+        }
+
+        // シーンアニメーション
+        function animateScene() {
+            if (!isPlaying) return;
+            
+            const story = stories[currentStory];
+            if (!story || currentScene >= story.scenes.length) {
+                isPlaying = false;
+                return;
+            }
+            
+            const scene = story.scenes[currentScene];
+            document.getElementById('sceneTitle').textContent = scene.title;
+            document.getElementById('sceneText').textContent = scene.text;
+            
+            // シーン固有のアニメーション
+            if (currentStory === 'amaterasu') {
+                animateAmaterasuScene(currentScene);
+            }
+            
+            // 次のシーンへ
+            setTimeout(() => {
+                currentScene++;
+                if (currentScene < story.scenes.length) {
+                    animateScene();
+                } else {
+                    isPlaying = false;
+                }
+            }, scene.duration / animationSpeed);
+        }
+
+        // 天照大神シーンのアニメーション
+        function animateAmaterasuScene(sceneIndex) {
+            const sun = document.getElementById('sun');
+            const susanoo = document.getElementById('susanoo');
+            
+            switch(sceneIndex) {
+                case 0: // 須佐之男の暴挙
+                    // 須佐之男が動き回る
+                    susanoo.style.transition = 'transform 2s';
+                    susanoo.style.transform = 'translateX(200px)';
+                    break;
+                    
+                case 1: // 岩戸に隠れる
+                    // 太陽が岩戸に移動
+                    sun.style.transition = 'transform 2s';
+                    sun.style.transform = 'translate(500px, 100px)';
+                    // 背景を暗くする
+                    svg.style.filter = 'brightness(0.5)';
+                    break;
+                    
+                case 2: // 神々の作戦
+                    // 神々が集まる
+                    for (let i = 0; i < 3; i++) {
+                        const god = document.getElementById(`god${i}`);
+                        if (god) {
+                            god.style.transition = 'transform 2s';
+                            god.style.transform = 'translateX(300px)';
+                        }
+                    }
+                    break;
+                    
+                case 3: // 天鈿女の舞
+                    // 踊りのアニメーション
+                    const god0 = document.getElementById('god0');
+                    if (god0) {
+                        god0.style.animation = 'dance 2s ease-in-out';
+                    }
+                    // 明るさを戻す
+                    setTimeout(() => {
+                        svg.style.filter = 'brightness(1)';
+                    }, 1500);
+                    break;
+            }
+        }
+
+        // スピード調整
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            animationSpeed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = animationSpeed + 'x';
+        });
+
+        // 桜の花びらを生成
+        function createSakuraPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'sakura-petal';
+            petal.textContent = '🌸';
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+            petal.style.fontSize = (15 + Math.random() * 10) + 'px';
+            document.body.appendChild(petal);
+            
+            setTimeout(() => petal.remove(), 10000);
+        }
+
+        // 定期的に桜を生成
+        setInterval(createSakuraPetal, 2000);
+
+        // 踊りのアニメーション定義
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes dance {
+                0%, 100% { transform: translateX(300px) translateY(0); }
+                25% { transform: translateX(320px) translateY(-20px); }
+                50% { transform: translateX(300px) translateY(0); }
+                75% { transform: translateX(280px) translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初期化
+        initAnimation();
+    </script>
+</body>
+</html>

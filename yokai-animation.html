@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妖怪絵巻アニメーション - 百鬼夜行</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'MS Gothic', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 和紙テクスチャ風背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: linear-gradient(to bottom, rgba(75, 0, 130, 0.8), rgba(0, 0, 0, 0.8));
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(147, 112, 219, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #ff6b9d;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+            margin-bottom: 10px;
+            font-family: 'MS Mincho', serif;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #dda0dd;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 妖怪選択 */
+        .yokai-selector {
+            background: rgba(75, 0, 130, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #9370db;
+            backdrop-filter: blur(10px);
+        }
+
+        .selector-title {
+            font-size: 1.8em;
+            color: #ff6b9d;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .yokai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .yokai-btn {
+            background: rgba(147, 112, 219, 0.3);
+            border: 2px solid #9370db;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #e0e0e0;
+        }
+
+        .yokai-btn:hover {
+            background: rgba(147, 112, 219, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(147, 112, 219, 0.3);
+        }
+
+        .yokai-btn.active {
+            background: rgba(255, 107, 157, 0.4);
+            border-color: #ff6b9d;
+        }
+
+        .yokai-btn-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .yokai-btn-name {
+            font-size: 1.1em;
+            color: #dda0dd;
+        }
+
+        /* 絵巻ステージ */
+        .emaki-stage {
+            background: #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+
+        #emakiCanvas {
+            width: 100%;
+            height: 400px;
+            display: block;
+        }
+
+        /* 絵巻スタイルの枠 */
+        .emaki-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            border: 15px solid transparent;
+            border-image: linear-gradient(90deg, #8b4513, #d2691e) 1;
+        }
+
+        /* 物語テキスト */
+        .story-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #9370db;
+            backdrop-filter: blur(10px);
+        }
+
+        .story-title {
+            font-size: 2em;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+            font-family: 'MS Mincho', serif;
+        }
+
+        .story-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #e0e0e0;
+            text-align: justify;
+        }
+
+        /* コントロール */
+        .controls {
+            background: rgba(75, 0, 130, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #9370db 0%, #ff6b9d 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(147, 112, 219, 0.3);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(147, 112, 219, 0.5);
+        }
+
+        .control-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+
+        /* エフェクト設定 */
+        .effect-settings {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #dda0dd;
+        }
+
+        .effect-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(147, 112, 219, 0.8);
+            color: white;
+            border: 2px solid #dda0dd;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: #ff6b9d;
+            transform: translateY(-2px);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            #emakiCanvas {
+                height: 300px;
+            }
+            
+            .yokai-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            }
+            
+            .yokai-btn {
+                padding: 10px;
+            }
+            
+            .yokai-btn-icon {
+                font-size: 2em;
+            }
+        }
+
+        /* 妖火エフェクト */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <a href="japanese-mythology-index.html" class="back-button">← 戻る</a>
+
+    <div class="header">
+        <h1>妖怪絵巻</h1>
+        <p>百鬼夜行の世界をアニメーションで体験</p>
+    </div>
+
+    <div class="container">
+        <!-- 妖怪選択 -->
+        <div class="yokai-selector">
+            <h2 class="selector-title">妖怪を選択</h2>
+            <div class="yokai-grid">
+                <button class="yokai-btn active" onclick="selectYokai('hyakki')">
+                    <div class="yokai-btn-icon">👺</div>
+                    <div class="yokai-btn-name">百鬼夜行</div>
+                </button>
+                <button class="yokai-btn" onclick="selectYokai('tengu')">
+                    <div class="yokai-btn-icon">👺</div>
+                    <div class="yokai-btn-name">天狗</div>
+                </button>
+                <button class="yokai-btn" onclick="selectYokai('kitsune')">
+                    <div class="yokai-btn-icon">🦊</div>
+                    <div class="yokai-btn-name">九尾の狐</div>
+                </button>
+                <button class="yokai-btn" onclick="selectYokai('yukionna')">
+                    <div class="yokai-btn-icon">👻</div>
+                    <div class="yokai-btn-name">雪女</div>
+                </button>
+                <button class="yokai-btn" onclick="selectYokai('oni')">
+                    <div class="yokai-btn-icon">👹</div>
+                    <div class="yokai-btn-name">鬼</div>
+                </button>
+                <button class="yokai-btn" onclick="selectYokai('kappa')">
+                    <div class="yokai-btn-icon">🐢</div>
+                    <div class="yokai-btn-name">河童</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- 絵巻ステージ -->
+        <div class="emaki-stage">
+            <canvas id="emakiCanvas"></canvas>
+            <div class="emaki-frame"></div>
+        </div>
+
+        <!-- 物語パネル -->
+        <div class="story-panel">
+            <h3 class="story-title" id="storyTitle">百鬼夜行</h3>
+            <p class="story-text" id="storyText">
+                深夜、京の都の大路を、あらゆる妖怪たちが練り歩く。
+                これが百鬼夜行である。人間が寝静まった丑三つ時、
+                妖怪たちは自由に街を闊歩し、宴を楽しむのだ。
+            </p>
+        </div>
+
+        <!-- コントロール -->
+        <div class="controls">
+            <button class="control-btn" onclick="playAnimation()">
+                ▶ 再生
+            </button>
+            <button class="control-btn" onclick="pauseAnimation()">
+                ⏸ 一時停止
+            </button>
+            <button class="control-btn" onclick="resetAnimation()">
+                ⏮ リセット
+            </button>
+            
+            <div class="effect-settings">
+                <div class="effect-checkbox">
+                    <input type="checkbox" id="particleEffect" checked>
+                    <label for="particleEffect">妖火エフェクト</label>
+                </div>
+                <div class="effect-checkbox">
+                    <input type="checkbox" id="soundEffect">
+                    <label for="soundEffect">効果音</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // キャンバス設定
+        const canvas = document.getElementById('emakiCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // アニメーション状態
+        let animationId = null;
+        let isPlaying = false;
+        let currentYokai = 'hyakki';
+        let scrollX = 0;
+        let particles = [];
+
+        // 妖怪データ
+        const yokaiStories = {
+            hyakki: {
+                title: '百鬼夜行',
+                text: '深夜、京の都の大路を、あらゆる妖怪たちが練り歩く。これが百鬼夜行である。人間が寝静まった丑三つ時、妖怪たちは自由に街を闊歩し、宴を楽しむのだ。'
+            },
+            tengu: {
+                title: '天狗の山',
+                text: '深山幽谷に住まう天狗は、修験道の守護者であり、武術の達人でもある。赤い顔と長い鼻、背中の翼で空を自在に飛び回り、人里に降りては様々な神通力を見せつける。'
+            },
+            kitsune: {
+                title: '九尾の狐',
+                text: '千年を生きた狐は九つの尾を持ち、絶世の美女に化けて国を傾ける。その妖力は計り知れず、一国の運命すら左右する。しかし、その心には深い孤独が宿っているという。'
+            },
+            yukionna: {
+                title: '雪女の悲恋',
+                text: '吹雪の夜に現れる雪女は、白い着物を纏った美しい女性の姿をしている。迷い人を凍死させるという恐ろしい妖怪だが、時に人間の男性と恋に落ちることもあるという。'
+            },
+            oni: {
+                title: '鬼ヶ島',
+                text: '角と牙を持つ鬼は、怪力無双の妖怪である。金棒を振り回し、人里を襲うこともあるが、一方で義理人情に厚い一面も持つ。節分の豆には弱いという。'
+            },
+            kappa: {
+                title: '河童の恩返し',
+                text: '川や池に住む河童は、頭の皿に水を貯めている。相撲が大好きで、きゅうりが大好物。いたずら好きだが、助けてくれた人間には恩を返すという律儀な一面もある。'
+            }
+        };
+
+        // キャンバスのリサイズ
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+
+        // 妖怪選択
+        function selectYokai(yokaiId) {
+            currentYokai = yokaiId;
+            const story = yokaiStories[yokaiId];
+            
+            // UI更新
+            document.getElementById('storyTitle').textContent = story.title;
+            document.getElementById('storyText').textContent = story.text;
+            
+            // ボタンのアクティブ状態更新
+            document.querySelectorAll('.yokai-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.yokai-btn').classList.add('active');
+            
+            // アニメーションリセット
+            resetAnimation();
+        }
+
+        // 絵巻風背景描画
+        function drawEmakiBackground() {
+            // 和紙風の背景
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            gradient.addColorStop(0, '#2a1f1a');
+            gradient.addColorStop(0.5, '#3d2f26');
+            gradient.addColorStop(1, '#2a1f1a');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 雲の模様
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let i = 0; i < 5; i++) {
+                const x = (i * 200 - scrollX / 2) % (canvas.width + 200);
+                drawCloud(x, 50 + i * 30);
+            }
+        }
+
+        // 雲の描画
+        function drawCloud(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.arc(x + 25, y, 35, 0, Math.PI * 2);
+            ctx.arc(x + 50, y, 30, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // メインアニメーション
+        function animate() {
+            if (!isPlaying) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawEmakiBackground();
+            
+            // 妖怪別のアニメーション
+            switch(currentYokai) {
+                case 'hyakki':
+                    animateHyakkiYagyo();
+                    break;
+                case 'tengu':
+                    animateTengu();
+                    break;
+                case 'kitsune':
+                    animateKitsune();
+                    break;
+                case 'yukionna':
+                    animateYukiOnna();
+                    break;
+                case 'oni':
+                    animateOni();
+                    break;
+                case 'kappa':
+                    animateKappa();
+                    break;
+            }
+            
+            // パーティクルエフェクト
+            if (document.getElementById('particleEffect').checked) {
+                updateParticles();
+            }
+            
+            // スクロール更新
+            scrollX += 2;
+            
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // 百鬼夜行アニメーション
+        function animateHyakkiYagyo() {
+            const yokaiTypes = ['👺', '👹', '👻', '🦊', '🐢'];
+            const yokaiCount = 8;
+            
+            for (let i = 0; i < yokaiCount; i++) {
+                const x = ((i * 150) - scrollX) % (canvas.width + 300) - 150;
+                const y = canvas.height / 2 + Math.sin((scrollX + i * 50) * 0.01) * 50;
+                const yokai = yokaiTypes[i % yokaiTypes.length];
+                
+                // 影
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.ellipse(x, y + 60, 40, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 妖怪
+                ctx.font = '60px sans-serif';
+                ctx.fillText(yokai, x - 30, y);
+                
+                // 妖火
+                if (Math.random() < 0.02) {
+                    particles.push({
+                        x: x,
+                        y: y - 30,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: -Math.random() * 2 - 1,
+                        life: 1,
+                        color: `hsl(${180 + Math.random() * 60}, 100%, 70%)`
+                    });
+                }
+            }
+        }
+
+        // 天狗アニメーション
+        function animateTengu() {
+            const x = canvas.width / 2;
+            const y = canvas.height / 2 + Math.sin(scrollX * 0.02) * 30;
+            
+            // 天狗
+            ctx.font = '100px sans-serif';
+            ctx.fillText('👺', x - 50, y);
+            
+            // 翼
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x - 20, y - 30);
+            ctx.quadraticCurveTo(x - 80, y - 50, x - 100, y);
+            ctx.moveTo(x + 20, y - 30);
+            ctx.quadraticCurveTo(x + 80, y - 50, x + 100, y);
+            ctx.stroke();
+            
+            // 風のエフェクト
+            for (let i = 0; i < 3; i++) {
+                const windX = (scrollX * (i + 1) * 0.5) % canvas.width;
+                ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - i * 0.03})`;
+                ctx.beginPath();
+                ctx.moveTo(windX, 0);
+                ctx.quadraticCurveTo(windX + 50, canvas.height / 2, windX, canvas.height);
+                ctx.stroke();
+            }
+        }
+
+        // 九尾の狐アニメーション
+        function animateKitsune() {
+            const x = canvas.width / 2;
+            const y = canvas.height / 2;
+            
+            // 狐
+            ctx.font = '80px sans-serif';
+            ctx.fillText('🦊', x - 40, y);
+            
+            // 九つの尾
+            ctx.strokeStyle = '#ff6b4a';
+            ctx.lineWidth = 8;
+            for (let i = 0; i < 9; i++) {
+                const angle = (i - 4) * 0.2 + Math.sin(scrollX * 0.02) * 0.1;
+                const tailX = x + Math.sin(angle) * 100;
+                const tailY = y + 30 + Math.cos(angle) * 30;
+                
+                ctx.beginPath();
+                ctx.moveTo(x, y + 20);
+                ctx.quadraticCurveTo(x + 50, y + 40, tailX, tailY);
+                ctx.stroke();
+                
+                // 尾の先の炎
+                const fireX = tailX + Math.sin(scrollX * 0.1 + i) * 5;
+                const fireY = tailY + Math.cos(scrollX * 0.1 + i) * 5;
+                ctx.fillStyle = `hsl(${30 + i * 10}, 100%, 60%)`;
+                ctx.beginPath();
+                ctx.arc(fireX, fireY, 10 - i * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // 雪女アニメーション
+        function animateYukiOnna() {
+            const x = canvas.width / 2 + Math.sin(scrollX * 0.01) * 50;
+            const y = canvas.height / 2;
+            
+            // 雪女
+            ctx.font = '80px sans-serif';
+            ctx.fillText('👻', x - 40, y);
+            
+            // 吹雪エフェクト
+            for (let i = 0; i < 50; i++) {
+                const snowX = (i * 20 + scrollX * 2) % canvas.width;
+                const snowY = (i * 30 + scrollX) % canvas.height;
+                
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(snowX, snowY, 2 + Math.random() * 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // 冷気
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 150);
+            gradient.addColorStop(0, 'rgba(200, 220, 255, 0.3)');
+            gradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - 150, y - 150, 300, 300);
+        }
+
+        // 鬼アニメーション
+        function animateOni() {
+            const x = canvas.width / 2;
+            const y = canvas.height / 2 + Math.abs(Math.sin(scrollX * 0.05)) * 30;
+            
+            // 鬼
+            ctx.font = '100px sans-serif';
+            ctx.fillText('👹', x - 50, y);
+            
+            // 金棒
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 10;
+            ctx.beginPath();
+            ctx.moveTo(x + 30, y - 20);
+            ctx.lineTo(x + 80, y - 70);
+            ctx.stroke();
+            
+            // 金棒の突起
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = '#696969';
+                ctx.beginPath();
+                ctx.arc(x + 40 + i * 10, y - 30 - i * 10, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // 地面の振動
+            if (Math.abs(Math.sin(scrollX * 0.05)) < 0.1) {
+                ctx.strokeStyle = 'rgba(139, 69, 19, 0.5)';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.arc(x, y + 60, 30 + i * 20, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // 河童アニメーション
+        function animateKappa() {
+            const x = canvas.width / 2;
+            const y = canvas.height / 2;
+            
+            // 水面
+            ctx.fillStyle = 'rgba(100, 149, 237, 0.3)';
+            ctx.fillRect(0, y + 40, canvas.width, canvas.height);
+            
+            // 波紋
+            for (let i = 0; i < 3; i++) {
+                const rippleSize = (scrollX + i * 50) % 200;
+                ctx.strokeStyle = `rgba(100, 149, 237, ${0.5 - rippleSize / 400})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(x, y + 40, rippleSize, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // 河童
+            const bobY = y + Math.sin(scrollX * 0.05) * 10;
+            ctx.font = '80px sans-serif';
+            ctx.fillText('🐢', x - 40, bobY);
+            
+            // 頭の皿
+            ctx.fillStyle = 'rgba(135, 206, 235, 0.7)';
+            ctx.beginPath();
+            ctx.ellipse(x, bobY - 60, 30, 10, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // きゅうり
+            if (scrollX % 200 < 100) {
+                ctx.fillStyle = '#228b22';
+                ctx.fillRect(x + 60, bobY - 20, 40, 15);
+                ctx.fillStyle = '#006400';
+                for (let i = 0; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.arc(x + 65 + i * 10, bobY - 12, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        // パーティクル更新
+        function updateParticles() {
+            particles = particles.filter(p => p.life > 0);
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.1;
+                p.life -= 0.02;
+                
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 5 * p.life, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            ctx.globalAlpha = 1;
+        }
+
+        // アニメーション制御
+        function playAnimation() {
+            if (!isPlaying) {
+                isPlaying = true;
+                animate();
+            }
+        }
+
+        function pauseAnimation() {
+            isPlaying = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function resetAnimation() {
+            pauseAnimation();
+            scrollX = 0;
+            particles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawEmakiBackground();
+        }
+
+        // 初期化
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        drawEmakiBackground();
+    </script>
+</body>
+</html>

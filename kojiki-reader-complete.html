@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>古事記全書 - 日本神話の原点</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            color: #2c1810;
+            line-height: 1.8;
+        }
+        
+        #reader-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #fff8f0 0%, #fffafa 100%);
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.2);
+        }
+        
+        /* ヘッダー */
+        .reader-header {
+            background: linear-gradient(to bottom, #ff6b9d 0%, #c44569 100%);
+            color: #fff;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reader-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+        }
+        
+        .main-title {
+            font-size: 4em;
+            margin-bottom: 15px;
+            letter-spacing: 0.3em;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+            letter-spacing: 0.2em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .decorative-elements {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15em;
+            opacity: 0.1;
+            color: #fff;
+        }
+        
+        /* ナビゲーション */
+        #volume-navigation {
+            background: linear-gradient(to right, #ffe0f0 0%, #ffeef8 100%);
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            border-bottom: 3px solid #ff6b9d;
+        }
+        
+        .volume-btn {
+            background: linear-gradient(135deg, #fff 0%, #ffeef8 100%);
+            border: 2px solid #ff6b9d;
+            color: #c44569;
+            padding: 15px 30px;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .volume-btn:hover {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+        }
+        
+        .volume-btn.active {
+            background: linear-gradient(135deg, #c44569 0%, #a0522d 100%);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(196, 69, 105, 0.4);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            display: flex;
+            min-height: 80vh;
+        }
+        
+        /* サイドバー */
+        .sidebar {
+            width: 350px;
+            background: linear-gradient(to bottom, #ffe0f0 0%, #fff0f8 100%);
+            border-right: 3px solid #ff6b9d;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        
+        .chapter-list {
+            padding: 20px;
+        }
+        
+        .chapter-item {
+            background: #fff;
+            border: 2px solid #ffb7c5;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .chapter-item:hover {
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            border-color: #ff6b9d;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+        }
+        
+        .chapter-item.active {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            color: #fff;
+            border-color: #c44569;
+        }
+        
+        .chapter-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: inherit;
+        }
+        
+        .chapter-subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+            color: inherit;
+        }
+        
+        /* メインテキストエリア */
+        .text-area {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+        }
+        
+        .current-chapter {
+            margin-bottom: 40px;
+        }
+        
+        .chapter-header {
+            border-bottom: 3px solid #ff6b9d;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chapter-main-title {
+            font-size: 2.5em;
+            color: #c44569;
+            margin-bottom: 10px;
+            font-family: 'Noto Serif JP', serif;
+        }
+        
+        .chapter-reading {
+            font-size: 1.2em;
+            color: #ff6b9d;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-significance {
+            background: linear-gradient(135deg, #ffeef8 0%, #fff0f8 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ff6b9d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        
+        /* テキスト表示セクション */
+        .text-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .text-section.original {
+            background: linear-gradient(135deg, #fff8f0 0%, #fffafa 100%);
+            border-left: 6px solid #d4a574;
+        }
+        
+        .text-section.japanese {
+            background: linear-gradient(135deg, #ffeef8 0%, #fff0f8 100%);
+            border-left: 6px solid #ff6b9d;
+        }
+        
+        .text-section.modern {
+            background: linear-gradient(135deg, #f0f8ff 0%, #f8f8ff 100%);
+            border-left: 6px solid #9370db;
+        }
+        
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-icon {
+            font-size: 1.5em;
+        }
+        
+        .text-content {
+            font-size: 1.2em;
+            line-height: 2;
+            text-align: justify;
+        }
+        
+        /* 注釈と解説 */
+        .notes-section {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 6px solid #ffd700;
+            margin-top: 30px;
+        }
+        
+        .notes-title {
+            font-size: 1.4em;
+            color: #b8860b;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .notes-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+        
+        /* イラストレーション エリア */
+        .illustration-area {
+            background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+            border: 3px solid #ff6b9d;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .illustration-toggle {
+            margin-bottom: 20px;
+        }
+        
+        .toggle-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #c44569 0%, #a0522d 100%);
+            box-shadow: 0 3px 10px rgba(196, 69, 105, 0.3);
+        }
+        
+        .illustration-content {
+            font-size: 1.1em;
+            color: #666;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 10px;
+            border: 2px dashed #ff6b9d;
+            position: relative;
+        }
+        
+        /* コントロールパネル */
+        .control-panel {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #fff 0%, #ffeef8 100%);
+            border: 2px solid #ff6b9d;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            z-index: 1000;
+        }
+        
+        .control-btn {
+            display: block;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff9999 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        /* フッター */
+        .reader-footer {
+            background: linear-gradient(to right, #c44569 0%, #a0522d 100%);
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #ffe0ec;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #fff;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 300px;
+            }
+            
+            .control-panel {
+                position: static;
+                transform: none;
+                margin: 20px auto;
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+            }
+            
+            .text-area {
+                padding: 20px;
+            }
+            
+            .chapter-main-title {
+                font-size: 2em;
+            }
+            
+            #volume-navigation {
+                flex-direction: column;
+            }
+        }
+        
+        /* アニメーション */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(-30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        /* 桜のアニメーション */
+        .sakura {
+            position: fixed;
+            color: #ffb7c5;
+            font-size: 20px;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="reader-container">
+        <!-- ヘッダー -->
+        <header class="reader-header">
+            <div class="decorative-elements">🌸</div>
+            <h1 class="main-title">古事記</h1>
+            <p class="subtitle">日本神話の原点 - 完全版</p>
+        </header>
+        
+        <!-- ナビゲーション -->
+        <nav id="volume-navigation">
+            <button class="volume-btn active" data-volume="kamishiro">上巻（神代）</button>
+            <button class="volume-btn" data-volume="chuukan">中巻（神武〜応神）</button>
+            <button class="volume-btn" data-volume="gekan">下巻（仁徳〜推古）</button>
+        </nav>
+        
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- サイドバー -->
+            <aside class="sidebar">
+                <div class="chapter-list" id="chapterList">
+                    <!-- 章リストが動的に生成される -->
+                </div>
+            </aside>
+            
+            <!-- メインテキストエリア -->
+            <main class="text-area">
+                <div class="current-chapter fade-in" id="currentChapter">
+                    <!-- 選択された章の内容が表示される -->
+                </div>
+            </main>
+        </div>
+        
+        <!-- コントロールパネル -->
+        <div class="control-panel">
+            <button class="control-btn" onclick="previousChapter()" title="前の章">
+                ⟨
+            </button>
+            <button class="control-btn" onclick="toggleFontSize()" title="文字サイズ">
+                Aa
+            </button>
+            <button class="control-btn" onclick="toggleNightMode()" title="夜間モード">
+                🌙
+            </button>
+            <button class="control-btn" onclick="nextChapter()" title="次の章">
+                ⟩
+            </button>
+        </div>
+        
+        <!-- フッター -->
+        <footer class="reader-footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="japanese-mythology-index.html" class="footer-link">日本神話一覧</a>
+                    <a href="kojiki-game.html" class="footer-link">古事記ゲーム</a>
+                    <a href="kojiki-animation.html" class="footer-link">古事記アニメーション</a>
+                    <a href="nihonshoki-reader.html" class="footer-link">日本書紀</a>
+                </div>
+                <p>&copy; 2024 古事記デジタルライブラリ | 日本神話の世界へようこそ</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 桜エフェクト用要素 -->
+    <div class="sakura" style="left: 10%; animation-duration: 15s; animation-delay: 0s;">🌸</div>
+    <div class="sakura" style="left: 20%; animation-duration: 12s; animation-delay: 2s;">🌸</div>
+    <div class="sakura" style="left: 30%; animation-duration: 18s; animation-delay: 4s;">🌸</div>
+    <div class="sakura" style="left: 40%; animation-duration: 14s; animation-delay: 1s;">🌸</div>
+    <div class="sakura" style="left: 50%; animation-duration: 16s; animation-delay: 3s;">🌸</div>
+    <div class="sakura" style="left: 60%; animation-duration: 13s; animation-delay: 5s;">🌸</div>
+    <div class="sakura" style="left: 70%; animation-duration: 19s; animation-delay: 2.5s;">🌸</div>
+    <div class="sakura" style="left: 80%; animation-duration: 11s; animation-delay: 0.5s;">🌸</div>
+    <div class="sakura" style="left: 90%; animation-duration: 17s; animation-delay: 3.5s;">🌸</div>
+
+    <!-- JavaScript -->
+    <script src="kojiki-complete-text.js"></script>
+    <script>
+        // グローバル変数
+        let currentVolume = 'kamishiro';
+        let currentChapterIndex = 0;
+        let fontSize = 'normal';
+        let nightMode = false;
+        
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVolume(currentVolume);
+            setupEventListeners();
+        });
+        
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // 巻選択ボタン
+            document.querySelectorAll('.volume-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const volume = this.dataset.volume;
+                    loadVolume(volume);
+                    
+                    // アクティブボタンの切り替え
+                    document.querySelectorAll('.volume-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // キーボードナビゲーション
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    previousChapter();
+                } else if (e.key === 'ArrowRight') {
+                    nextChapter();
+                }
+            });
+        }
+        
+        // 巻の読み込み
+        function loadVolume(volumeKey) {
+            currentVolume = volumeKey;
+            currentChapterIndex = 0;
+            
+            const volume = window.KOJIKI_COMPLETE[volumeKey];
+            if (!volume) return;
+            
+            // 章リストの生成
+            generateChapterList(volume.chapters);
+            
+            // 最初の章を表示
+            displayChapter(volume.chapters[0]);
+        }
+        
+        // 章リストの生成
+        function generateChapterList(chapters) {
+            const chapterList = document.getElementById('chapterList');
+            chapterList.innerHTML = '';
+            
+            chapters.forEach((chapter, index) => {
+                const chapterItem = document.createElement('div');
+                chapterItem.className = 'chapter-item slide-in';
+                chapterItem.style.animationDelay = `${index * 0.1}s`;
+                
+                if (index === currentChapterIndex) {
+                    chapterItem.classList.add('active');
+                }
+                
+                chapterItem.innerHTML = `
+                    <div class="chapter-title">${chapter.title}</div>
+                    <div class="chapter-subtitle">${chapter.titleJa || ''}</div>
+                `;
+                
+                chapterItem.addEventListener('click', () => {
+                    currentChapterIndex = index;
+                    displayChapter(chapter);
+                    updateChapterListActive();
+                });
+                
+                chapterList.appendChild(chapterItem);
+            });
+        }
+        
+        // 章リストのアクティブ状態更新
+        function updateChapterListActive() {
+            document.querySelectorAll('.chapter-item').forEach((item, index) => {
+                item.classList.toggle('active', index === currentChapterIndex);
+            });
+        }
+        
+        // 章の表示
+        function displayChapter(chapter) {
+            const currentChapterDiv = document.getElementById('currentChapter');
+            currentChapterDiv.className = 'current-chapter fade-in';
+            
+            let illustrationHtml = '';
+            if (window.KOJIKI_ILLUSTRATIONS && window.KOJIKI_ILLUSTRATIONS[chapter.id]) {
+                illustrationHtml = `
+                    <div class="illustration-area">
+                        <div class="illustration-toggle">
+                            <button class="toggle-btn active" onclick="toggleIllustration('traditional')">伝統的表現</button>
+                            <button class="toggle-btn" onclick="toggleIllustration('modern')">現代的表現</button>
+                        </div>
+                        <div class="illustration-content" id="illustrationContent">
+                            ${window.KOJIKI_ILLUSTRATIONS[chapter.id].traditional.description}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            currentChapterDiv.innerHTML = `
+                <div class="chapter-header">
+                    <h2 class="chapter-main-title">${chapter.title}</h2>
+                    ${chapter.titleJa ? `<div class="chapter-reading">${chapter.titleJa}</div>` : ''}
+                    ${chapter.significance ? `<div class="chapter-significance">${chapter.significance}</div>` : ''}
+                </div>
+                
+                <div class="text-section original">
+                    <div class="section-title">
+                        <span class="section-icon">📜</span>
+                        原文（古典日本語）
+                    </div>
+                    <div class="text-content">${chapter.original}</div>
+                </div>
+                
+                <div class="text-section japanese">
+                    <div class="section-title">
+                        <span class="section-icon">🌸</span>
+                        読み下し文
+                    </div>
+                    <div class="text-content">${chapter.japanese}</div>
+                </div>
+                
+                <div class="text-section modern">
+                    <div class="section-title">
+                        <span class="section-icon">🔍</span>
+                        現代語訳
+                    </div>
+                    <div class="text-content">${chapter.modern}</div>
+                </div>
+                
+                ${illustrationHtml}
+                
+                ${chapter.notes ? `
+                    <div class="notes-section">
+                        <div class="notes-title">📝 解説・注釈</div>
+                        <div class="notes-content">${chapter.notes}</div>
+                    </div>
+                ` : ''}
+            `;
+        }
+        
+        // イラストレーション切り替え
+        function toggleIllustration(type) {
+            const currentChapter = window.KOJIKI_COMPLETE[currentVolume].chapters[currentChapterIndex];
+            const illustration = window.KOJIKI_ILLUSTRATIONS[currentChapter.id];
+            
+            if (!illustration) return;
+            
+            const content = document.getElementById('illustrationContent');
+            const buttons = document.querySelectorAll('.toggle-btn');
+            
+            // ボタンのアクティブ状態更新
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // コンテンツ更新
+            content.innerHTML = illustration[type].description;
+        }
+        
+        // ナビゲーション機能
+        function previousChapter() {
+            const chapters = window.KOJIKI_COMPLETE[currentVolume].chapters;
+            if (currentChapterIndex > 0) {
+                currentChapterIndex--;
+                displayChapter(chapters[currentChapterIndex]);
+                updateChapterListActive();
+            }
+        }
+        
+        function nextChapter() {
+            const chapters = window.KOJIKI_COMPLETE[currentVolume].chapters;
+            if (currentChapterIndex < chapters.length - 1) {
+                currentChapterIndex++;
+                displayChapter(chapters[currentChapterIndex]);
+                updateChapterListActive();
+            }
+        }
+        
+        // フォントサイズ切り替え
+        function toggleFontSize() {
+            const textContents = document.querySelectorAll('.text-content');
+            
+            if (fontSize === 'normal') {
+                fontSize = 'large';
+                textContents.forEach(el => el.style.fontSize = '1.4em');
+            } else if (fontSize === 'large') {
+                fontSize = 'extra-large';
+                textContents.forEach(el => el.style.fontSize = '1.6em');
+            } else {
+                fontSize = 'normal';
+                textContents.forEach(el => el.style.fontSize = '1.2em');
+            }
+        }
+        
+        // 夜間モード切り替え
+        function toggleNightMode() {
+            nightMode = !nightMode;
+            const body = document.body;
+            
+            if (nightMode) {
+                body.style.filter = 'invert(1) hue-rotate(180deg)';
+                document.getElementById('reader-container').style.filter = 'invert(1) hue-rotate(180deg)';
+            } else {
+                body.style.filter = 'none';
+                document.getElementById('reader-container').style.filter = 'none';
+            }
+        }
+        
+        // スムーズスクロール
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 検索機能（将来実装予定）
+        function searchText(query) {
+            // 検索機能の実装
+            console.log('検索:', query);
+        }
+        
+        // ローカルストレージに読書位置を保存
+        function saveReadingPosition() {
+            localStorage.setItem('kojiki_reading_position', JSON.stringify({
+                volume: currentVolume,
+                chapter: currentChapterIndex
+            }));
+        }
+        
+        // 読書位置の復元
+        function restoreReadingPosition() {
+            const saved = localStorage.getItem('kojiki_reading_position');
+            if (saved) {
+                const position = JSON.parse(saved);
+                currentVolume = position.volume;
+                currentChapterIndex = position.chapter;
+                loadVolume(currentVolume);
+            }
+        }
+        
+        // ページ離脱時に位置を保存
+        window.addEventListener('beforeunload', saveReadingPosition);
+        
+        // 読書位置復元（コメントアウト - 初回読書時は最初から始める）
+        // restoreReadingPosition();
+    </script>
+</body>
+</html>

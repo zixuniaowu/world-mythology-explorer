@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>埃及神话 - 世界神话宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 页头样式 - 埃及风格 */
+        .header {
+            background: linear-gradient(135deg, #ee5a6f 0%, #c9302c 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(238, 90, 111, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px),
+                repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+            animation: slide 30s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hieroglyphs {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: #ee5a6f;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* 简介部分 */
+        .intro {
+            background: rgba(238, 90, 111, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(238, 90, 111, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .intro::before {
+            content: '𓂀 𓁿 𓂝 𓁹';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            opacity: 0.2;
+        }
+
+        .intro h2 {
+            color: #ff7979;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ee5a6f, #ffd700);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(238, 90, 111, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .book-card h3 {
+            color: #ff7979;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #ee5a6f 0%, #c9302c 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(238, 90, 111, 0.4);
+        }
+
+        /* 特色部分 */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #ff7979;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(238, 90, 111, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(238, 90, 111, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(238, 90, 111, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #ff7979;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 象形文字装饰 */
+        .hieroglyph-decoration {
+            text-align: center;
+            font-size: 2rem;
+            color: #ffd700;
+            opacity: 0.3;
+            margin: 2rem 0;
+            letter-spacing: 1rem;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 页头 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="hieroglyphs">𓂀 𓁹 𓊖 𓊗</div>
+            <h1>埃及神话</h1>
+            <p>尼罗河畔的永恒传说</p>
+        </div>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ff7979; text-decoration: none; font-size: 1.5rem;">🏺 神话宝库</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#books">经典文献</a></li>
+                <li><a href="#features">神话特色</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 简介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>埃及神话简介</h2>
+            <p>
+                埃及神话是人类文明最古老的神话体系之一，诞生于尼罗河流域，跨越了三千多年的历史。这些神话不仅记录了古埃及人对生死、自然和宇宙的理解，更是他们宗教信仰和日常生活的核心。
+            </p>
+            <p>
+                从太阳神拉的每日巡游到奥西里斯的死而复生，从创世神话到来世审判，埃及神话构建了一个完整而神秘的宇宙观。金字塔文、棺材文和亡灵书等珍贵文献，为我们保存了这些永恒的智慧。埃及神话独特的生死观和复活信仰，深刻影响了后世的宗教和哲学思想。
+            </p>
+        </section>
+
+        <div class="hieroglyph-decoration">𓊖 𓊗 𓁹 𓂀 𓁿 𓂝</div>
+
+        <!-- 经典书籍 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #ff7979; margin-bottom: 2rem; font-size: 2.5rem;">经典文献</h2>
+            <div class="books-grid">
+                <!-- 亡灵书 -->
+                <div class="book-card fade-in">
+                    <h3>《亡灵书》</h3>
+                    <div class="book-info">时期：新王国时期 | 约公元前1550-1070年</div>
+                    <div class="book-description">
+                        古埃及最重要的宗教文献之一，包含了大量咒语、祷文和指导，帮助死者在来世获得永生。详细描述了死后审判、灵魂旅程和复活的过程，是了解埃及生死观的关键文献。
+                    </div>
+                    <div class="book-links">
+                        <a href="egyptian-book-of-dead.html" class="book-link">📜 在线阅读</a>
+                        <a href="egyptian-book-of-dead-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 金字塔文 -->
+                <div class="book-card fade-in">
+                    <h3>《金字塔文》</h3>
+                    <div class="book-info">时期：古王国时期 | 约公元前2400-2300年</div>
+                    <div class="book-description">
+                        世界上最古老的宗教文献，刻在第五和第六王朝法老金字塔的墓室墙壁上。包含了帮助法老升天成神的咒语，记录了早期的创世神话和宇宙观。
+                    </div>
+                    <div class="book-links">
+                        <a href="egyptian-pyramid-texts.html" class="book-link">📜 在线阅读</a>
+                        <a href="egyptian-pyramid-texts-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 棺材文 -->
+                <div class="book-card fade-in">
+                    <h3>《棺材文》</h3>
+                    <div class="book-info">时期：中王国时期 | 约公元前2055-1650年</div>
+                    <div class="book-description">
+                        金字塔文的发展和普及版本，不再是法老专属，贵族和富人也可使用。包含了更加丰富的神话故事、宇宙地理和来世指南，是埃及宗教民主化的重要标志。
+                    </div>
+                    <div class="book-links">
+                        <a href="egyptian-coffin-texts.html" class="book-link">📜 在线阅读</a>
+                        <a href="egyptian-coffin-texts-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="hieroglyph-decoration">𓁹 𓂝 𓊖 𓂀 𓊗 𓁿</div>
+
+        <!-- 神话特色 -->
+        <section class="features" id="features">
+            <h2>埃及神话特色</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">☀️</div>
+                    <h3>太阳崇拜</h3>
+                    <p>以太阳神拉为中心的宇宙观，太阳的运行象征着生命的循环</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>死后审判</h3>
+                    <p>著名的羽毛称心仪式，决定死者能否进入来世</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h3>复活信仰</h3>
+                    <p>奥西里斯的死而复生，象征着永恒的生命循环</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🐱</div>
+                    <h3>动物崇拜</h3>
+                    <p>众多神祇以动物形象出现，体现了人与自然的和谐</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📜</div>
+                    <h3>象形文字</h3>
+                    <p>神圣的文字系统，每个符号都蕴含着神秘的力量</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>木乃伊文化</h3>
+                    <p>独特的防腐技术，为来世保存完整的身体</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="related-links" style="text-align: center; margin-top: 3rem;">
+            <h2 style="color: #ff7979; margin-bottom: 1.5rem;">探索更多神话</h2>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="greek-mythology-index.html" class="book-link">🏛️ 希腊神话</a>
+                <a href="norse-mythology-index.html" class="book-link">🔨 北欧神话</a>
+                <a href="mesopotamian-mythology-index.html" class="book-link">🗿 美索不达米亚神话</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神话宝库 | 让古老的智慧照亮现代</p>
+    </footer>
+</body>
+</html>

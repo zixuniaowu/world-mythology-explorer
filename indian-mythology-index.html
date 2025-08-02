@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>印度神话 - 世界神话宝库</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 印度风格装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 193, 7, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 页头样式 - 印度风格 */
+        .header {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9100 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* 曼陀罗装饰 */
+        .header::before {
+            content: '☸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15rem;
+            opacity: 0.05;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffe0b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sanskrit {
+            font-size: 1.8rem;
+            color: #ffe0b2;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-links a:hover {
+            color: #ff9100;
+        }
+
+        /* 主要内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 简介部分 */
+        .intro {
+            background: rgba(255, 107, 0, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        /* 莲花装饰 */
+        .intro::after {
+            content: '🪷';
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+
+        .intro h2 {
+            color: #ffa726;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* 书籍卡片网格 */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* OM符号装饰 */
+        .book-card::after {
+            content: 'ॐ';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.1;
+            color: #ff9100;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b00, #ffc107);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .book-card h3 {
+            color: #ffa726;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .book-info {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9100 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        /* 特色部分 */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #ffa726;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(255, 107, 0, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 107, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #ffa726;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 装饰分隔线 */
+        .decorative-divider {
+            text-align: center;
+            font-size: 2rem;
+            color: #ff9100;
+            opacity: 0.3;
+            margin: 2rem 0;
+            letter-spacing: 1rem;
+        }
+
+        /* 花瓣飘落动画 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .petal {
+            position: fixed;
+            color: #ff9100;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        .petal:nth-child(1) { left: 10%; animation-duration: 15s; font-size: 20px; }
+        .petal:nth-child(2) { left: 20%; animation-duration: 18s; font-size: 15px; animation-delay: 2s; }
+        .petal:nth-child(3) { left: 30%; animation-duration: 20s; font-size: 18px; animation-delay: 4s; }
+        .petal:nth-child(4) { left: 40%; animation-duration: 16s; font-size: 22px; animation-delay: 1s; }
+        .petal:nth-child(5) { left: 50%; animation-duration: 19s; font-size: 16px; animation-delay: 3s; }
+        .petal:nth-child(6) { left: 60%; animation-duration: 17s; font-size: 20px; animation-delay: 5s; }
+        .petal:nth-child(7) { left: 70%; animation-duration: 21s; font-size: 14px; animation-delay: 2.5s; }
+        .petal:nth-child(8) { left: 80%; animation-duration: 15s; font-size: 19px; animation-delay: 0.5s; }
+        .petal:nth-child(9) { left: 90%; animation-duration: 18s; font-size: 17px; animation-delay: 3.5s; }
+        .petal:nth-child(10) { left: 95%; animation-duration: 16s; font-size: 21px; animation-delay: 1.5s; }
+
+        /* 页脚 */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- 花瓣飘落效果 -->
+    <div class="petal">✿</div>
+    <div class="petal">❀</div>
+    <div class="petal">✿</div>
+    <div class="petal">❀</div>
+    <div class="petal">✿</div>
+    <div class="petal">❀</div>
+    <div class="petal">✿</div>
+    <div class="petal">❀</div>
+    <div class="petal">✿</div>
+    <div class="petal">❀</div>
+
+    <!-- 页头 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="sanskrit">सनातन धर्म</div>
+            <h1>印度神话</h1>
+            <p>恒河之畔的永恒智慧</p>
+        </div>
+    </header>
+
+    <!-- 导航栏 -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffa726; text-decoration: none; font-size: 1.5rem;">🕉️ 神话宝库</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="#intro">简介</a></li>
+                <li><a href="#books">经典文献</a></li>
+                <li><a href="#features">神话特色</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 简介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>印度神话简介</h2>
+            <p>
+                印度神话是世界上最古老、最丰富的神话体系之一，承载着数千年的文明智慧。从吠陀时代的自然崇拜到史诗时代的英雄传说，印度神话构建了一个包罗万象的宇宙观，深刻影响了印度教、佛教、耆那教等宗教的形成。
+            </p>
+            <p>
+                这些神话不仅讲述了宇宙的创造与毁灭、神祇的故事和英雄的冒险，更蕴含着深刻的哲学思想。梵天的创造、毗湿奴的保护、湿婆的毁灭，构成了印度教的三位一体。《梨俱吠陀》的神圣颂歌、《摩诃婆罗多》的史诗战争、《罗摩衍那》的英雄传奇，这些不朽的作品至今仍在指导着亿万信徒的精神生活。
+            </p>
+        </section>
+
+        <div class="decorative-divider">✿ ❀ ✿ ❀ ✿</div>
+
+        <!-- 经典书籍 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #ffa726; margin-bottom: 2rem; font-size: 2.5rem;">经典文献</h2>
+            <div class="books-grid">
+                <!-- 梨俱吠陀 -->
+                <div class="book-card fade-in">
+                    <h3>《梨俱吠陀》</h3>
+                    <div class="book-info">成书时间：约公元前1500-1200年 | 印度最古老的文献</div>
+                    <div class="book-description">
+                        印度最古老的宗教文献，包含1028首赞美诗，分为10卷。主要是对因陀罗、阿耆尼、伐楼拿等自然神祇的颂歌，记录了雅利安人的宗教信仰、社会生活和宇宙观，是了解古印度文明的重要窗口。
+                    </div>
+                    <div class="book-links">
+                        <a href="indian-rigveda.html" class="book-link">📜 在线阅读</a>
+                        <a href="indian-rigveda-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 摩诃婆罗多 -->
+                <div class="book-card fade-in">
+                    <h3>《摩诃婆罗多》</h3>
+                    <div class="book-info">作者：广博仙人 | 约公元前4世纪-公元4世纪</div>
+                    <div class="book-description">
+                        世界上最长的史诗，共18篇，约10万颂(20万行诗句)。讲述了般度族和俱卢族争夺王位的故事，其中包含了著名的《薄伽梵歌》。史诗融合了历史、神话、哲学和法律，被誉为"第五吠陀"。
+                    </div>
+                    <div class="book-links">
+                        <a href="indian-mahabharata.html" class="book-link">📜 在线阅读</a>
+                        <a href="indian-mahabharata-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+
+                <!-- 罗摩衍那 -->
+                <div class="book-card fade-in">
+                    <h3>《罗摩衍那》</h3>
+                    <div class="book-info">作者：蚁垤仙人 | 约公元前5-4世纪</div>
+                    <div class="book-description">
+                        印度两大史诗之一，共7篇，约24000颂。讲述了罗摩王子为救妻子悉多而与魔王罗波那战斗的故事。作品展现了理想的君主、夫妻和兄弟关系，对东南亚文化产生了深远影响。
+                    </div>
+                    <div class="book-links">
+                        <a href="indian-ramayana.html" class="book-link">📜 在线阅读</a>
+                        <a href="indian-ramayana-analysis.html" class="book-link">🔍 深度解析</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="decorative-divider">☸ ॐ ☸ ॐ ☸</div>
+
+        <!-- 神话特色 -->
+        <section class="features" id="features">
+            <h2>印度神话特色</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🕉️</div>
+                    <h3>三位一体</h3>
+                    <p>梵天创造、毗湿奴维护、湿婆毁灭的宇宙循环</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h3>轮回转世</h3>
+                    <p>生死轮回的独特生命观，业报因果的道德体系</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🪷</div>
+                    <h3>化身理论</h3>
+                    <p>神祇的多种化身，如毗湿奴的十大化身</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📿</div>
+                    <h3>瑜伽修行</h3>
+                    <p>通过修行达到解脱，实现梵我合一</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🐘</div>
+                    <h3>神兽坐骑</h3>
+                    <p>每位神祇都有独特的坐骑，象征不同的力量</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💫</div>
+                    <h3>宇宙时间</h3>
+                    <p>独特的时间观念，一劫等于43.2亿年</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关链接 -->
+        <section class="related-links" style="text-align: center; margin-top: 3rem;">
+            <h2 style="color: #ffa726; margin-bottom: 1.5rem;">探索更多神话</h2>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="greek-mythology-index.html" class="book-link">🏛️ 希腊神话</a>
+                <a href="egyptian-mythology-index.html" class="book-link">🏺 埃及神话</a>
+                <a href="norse-mythology-index.html" class="book-link">🔨 北欧神话</a>
+                <a href="mesopotamian-mythology-index.html" class="book-link">🗿 美索不达米亚神话</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神话宝库 | 让古老的智慧照亮现代</p>
+    </footer>
+</body>
+</html>
