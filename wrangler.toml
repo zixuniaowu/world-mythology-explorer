@@ -1,0 +1,6 @@
+name = "world-mythology-explorer"
+compatibility_date = "2024-01-01"
+
+# 這是可選的，如果你想指定部署的路徑
+[site]
+bucket = "./"
