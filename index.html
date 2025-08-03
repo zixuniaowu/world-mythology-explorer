@@ -324,19 +324,37 @@
             }
         }
 
-        /* Legend */
+        /* Legend / Filter Controls */
         .legend {
             margin-top: 30px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .legend-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .legend-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
         }
 
         .legend-color {
@@ -344,6 +362,28 @@
             height: 20px;
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            margin: 0 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #667eea;
         }
 
         /* About Section */
@@ -445,6 +485,31 @@
                 flex-direction: column;
                 align-items: center;
             }
+            
+            /* 手機端過濾器優化 */
+            .legend {
+                gap: 8px;
+            }
+            
+            .legend-item {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+            
+            .legend-color {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .filter-controls {
+                margin-top: 15px;
+            }
+            
+            .filter-btn {
+                padding: 6px 15px;
+                font-size: 12px;
+                margin: 0 3px;
+            }
         }
 
         /* Loading Animation */
@@ -512,35 +577,41 @@
         </div>
 
         <!-- Legend -->
-        <div class="legend">
-            <div class="legend-item">
+        <div class="legend" id="legendFilter">
+            <div class="legend-item" data-region="east-asia" onclick="toggleFilter('east-asia')">
                 <div class="legend-color" style="background: #ff6b6b;"></div>
-                <span class="legend-text" data-en="East Asian Mythology" data-ja="東アジア神話" data-zh="东亚神话">East Asian Mythology</span>
+                <span class="legend-text">東アジア神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="south-asia" onclick="toggleFilter('south-asia')">
                 <div class="legend-color" style="background: #4ecdc4;"></div>
-                <span class="legend-text" data-en="South Asian Mythology" data-ja="南アジア神話" data-zh="南亚神话">South Asian Mythology</span>
+                <span class="legend-text">南アジア神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="middle-east" onclick="toggleFilter('middle-east')">
                 <div class="legend-color" style="background: #f7b731;"></div>
-                <span class="legend-text" data-en="Middle Eastern Mythology" data-ja="中東神話" data-zh="中东神话">Middle Eastern Mythology</span>
+                <span class="legend-text">中東神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="europe" onclick="toggleFilter('europe')">
                 <div class="legend-color" style="background: #5f27cd;"></div>
-                <span class="legend-text" data-en="European Mythology" data-ja="ヨーロッパ神話" data-zh="欧洲神话">European Mythology</span>
+                <span class="legend-text">ヨーロッパ神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="africa" onclick="toggleFilter('africa')">
                 <div class="legend-color" style="background: #ee5a6f;"></div>
-                <span class="legend-text" data-en="African Mythology" data-ja="アフリカ神話" data-zh="非洲神话">African Mythology</span>
+                <span class="legend-text">アフリカ神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="americas" onclick="toggleFilter('americas')">
                 <div class="legend-color" style="background: #00d2d3;"></div>
-                <span class="legend-text" data-en="American Mythology" data-ja="アメリカ神話" data-zh="美洲神话">American Mythology</span>
+                <span class="legend-text">アメリカ神話</span>
             </div>
-            <div class="legend-item">
+            <div class="legend-item" data-region="oceania" onclick="toggleFilter('oceania')">
                 <div class="legend-color" style="background: #22a6b3;"></div>
-                <span class="legend-text" data-en="Oceanic Mythology" data-ja="オセアニア神話" data-zh="大洋洲神话">Oceanic Mythology</span>
+                <span class="legend-text">オセアニア神話</span>
             </div>
+        </div>
+        
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <button class="filter-btn" onclick="showAllRegions()">すべて表示</button>
+            <button class="filter-btn" onclick="clearFilters()">フィルタークリア</button>
         </div>
 
         <!-- About Section -->
@@ -1266,6 +1337,93 @@
                 });
             }
         });
+
+        // Filter functionality
+        let activeFilters = new Set();
+        
+        // Define region categories for each mythology
+        const mythologyRegions = {
+            'china': 'east-asia',
+            'japan': 'east-asia',
+            'india': 'south-asia',
+            'egypt': 'africa',
+            'greece': 'europe',
+            'norse': 'europe',
+            'mesopotamia': 'middle-east',
+            'celtic': 'europe',
+            'aztecMaya': 'americas',
+            'nativeAmerican': 'americas',
+            'westAfrica': 'africa',
+            'aboriginal': 'oceania',
+            'polynesian': 'oceania'
+        };
+        
+        // Toggle filter function
+        function toggleFilter(region) {
+            const filterItem = document.querySelector(`[data-region="${region}"]`);
+            
+            if (activeFilters.has(region)) {
+                // Remove filter
+                activeFilters.delete(region);
+                filterItem.classList.remove('active');
+            } else {
+                // Add filter
+                activeFilters.add(region);
+                filterItem.classList.add('active');
+            }
+            
+            applyFilters();
+        }
+        
+        // Apply filters to markers with smooth animations
+        function applyFilters() {
+            const markers = document.querySelectorAll('.mythology-marker');
+            
+            markers.forEach((marker, index) => {
+                const mythologyKey = marker.dataset.mythology;
+                const mythologyRegion = mythologyRegions[mythologyKey];
+                
+                // Add transition for smooth animations
+                marker.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                
+                // Delay animations for staggered effect
+                setTimeout(() => {
+                    if (activeFilters.size === 0) {
+                        // No filters active, show all
+                        marker.style.opacity = '1';
+                        marker.style.transform = 'translate(-50%, -50%) scale(1)';
+                        marker.style.pointerEvents = 'auto';
+                        marker.style.filter = 'none';
+                    } else if (activeFilters.has(mythologyRegion)) {
+                        // Show filtered items with highlight
+                        marker.style.opacity = '1';
+                        marker.style.transform = 'translate(-50%, -50%) scale(1.15)';
+                        marker.style.pointerEvents = 'auto';
+                        marker.style.filter = 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.8))';
+                    } else {
+                        // Hide non-filtered items
+                        marker.style.opacity = '0.15';
+                        marker.style.transform = 'translate(-50%, -50%) scale(0.7)';
+                        marker.style.pointerEvents = 'none';
+                        marker.style.filter = 'grayscale(100%)';
+                    }
+                }, index * 50); // Staggered animation delay
+            });
+        }
+        
+        // Show all regions
+        function showAllRegions() {
+            activeFilters.clear();
+            document.querySelectorAll('.legend-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            applyFilters();
+        }
+        
+        // Clear filters (same as show all)
+        function clearFilters() {
+            showAllRegions();
+        }
 
         // Explore mythology function
         function exploreMythology(region) {
