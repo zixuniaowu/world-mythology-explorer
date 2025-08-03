@@ -275,98 +275,6 @@
             }
         }
 
-        /* Mythology Cards */
-        .mythology-card {
-            position: absolute;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
-            border-radius: 15px;
-            padding: 25px;
-            width: 350px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 100;
-            color: #333;
-            display: none;
-        }
-
-        .mythology-card.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            display: block;
-        }
-
-        .mythology-card h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .mythology-origin {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .mythology-description {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .mythology-features {
-            margin-bottom: 20px;
-        }
-
-        .feature-tag {
-            display: inline-block;
-            padding: 5px 12px;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            border-radius: 15px;
-            font-size: 12px;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        .explore-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .explore-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .close-card {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.1);
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .close-card:hover {
-            background: rgba(0, 0, 0, 0.2);
-        }
 
         /* Map overlay effect */
         .map-wrapper::before {
@@ -504,8 +412,20 @@
                 font-size: 2em;
             }
 
-            .mythology-card {
-                width: 300px;
+            .mythology-marker {
+                width: 50px;
+                height: 50px;
+            }
+
+            .marker-pin {
+                width: 40px;
+                height: 40px;
+            }
+
+            .marker-label {
+                font-size: 11px;
+                padding: 4px 8px;
+                bottom: -30px;
             }
 
             .links-section {
@@ -573,8 +493,6 @@
                 <div id="connectionLines"></div>
             </div>
 
-            <!-- Mythology Cards (dynamically positioned) -->
-            <div id="mythologyCards"></div>
 
             <!-- Tooltip -->
             <div class="tooltip" id="tooltip"></div>
@@ -936,7 +854,6 @@
         };
 
         let currentLang = 'ja';
-        let activeCard = null;
         let canvas, ctx;
         let mapImage;
         let canvasWidth, canvasHeight;
@@ -1228,13 +1145,9 @@
             markerInner.appendChild(label);
             marker.appendChild(markerInner);
             
-            // Add click event
+            // Add click event - direct navigation to mythology page
             marker.addEventListener('click', () => {
-                if (activeCard === mythKey) {
-                    closeCard(mythKey);
-                } else {
-                    showMythologyCard(mythKey);
-                }
+                exploreMythology(mythKey);
             });
             
             return marker;
@@ -1302,109 +1215,7 @@
             }
         }
 
-        // Create mythology card
-        function createMythologyCard(regionData, region) {
-            const card = document.createElement('div');
-            card.className = 'mythology-card';
-            card.id = `card-${region}`;
-            
-            const title = regionData.titleJa || regionData.title;
-            const origin = regionData.originJa || regionData.origin;
-            const description = regionData.descriptionJa || regionData.description;
-            const features = regionData.featuresJa || regionData.features;
-            
-            card.innerHTML = `
-                <button class="close-card" onclick="closeCard('${region}')">✕</button>
-                <h3>${title}</h3>
-                <div class="mythology-origin">${origin}</div>
-                <div class="mythology-description">${description}</div>
-                <div class="mythology-features">
-                    ${features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
-                </div>
-                <button class="explore-btn" onclick="exploreMythology('${region}')">探索</button>
-            `;
-            
-            return card;
-        }
 
-        // Position card near marker
-        function positionCard(card, region) {
-            const marker = document.querySelector(`[data-mythology="${region}"]`);
-            const rect = marker.getBoundingClientRect();
-            const mapContainer = document.querySelector('.map-container');
-            const mapRect = mapContainer.getBoundingClientRect();
-            
-            card.style.left = (rect.left - mapRect.left + rect.width / 2 - 175) + 'px';
-            card.style.top = (rect.top - mapRect.top + rect.height) + 'px';
-            
-            // Adjust if card goes off screen
-            const cardRect = card.getBoundingClientRect();
-            if (cardRect.right > window.innerWidth - 20) {
-                card.style.left = (window.innerWidth - mapRect.left - 370) + 'px';
-            }
-            if (cardRect.bottom > window.innerHeight - 20) {
-                card.style.top = (rect.top - mapRect.top - cardRect.height - 20) + 'px';
-            }
-        }
-
-        // Show mythology card
-        function showMythologyCard(region) {
-            // Close any open card
-            if (activeCard) {
-                closeCard(activeCard);
-            }
-            
-            const regionData = mythologyData[region];
-            if (!regionData) return;
-            
-            const cardsContainer = document.getElementById('mythologyCards');
-            const card = createMythologyCard(regionData, region);
-            cardsContainer.appendChild(card);
-            
-            // Position and show card
-            setTimeout(() => {
-                positionCard(card, region);
-                card.classList.add('show');
-                // Show connection lines for this mythology
-                showConnectionLines(region);
-                // Add active class to marker
-                document.querySelector(`[data-mythology="${region}"]`).classList.add('active');
-            }, 10);
-            
-            activeCard = region;
-        }
-
-        // Close card
-        function closeCard(region) {
-            const card = document.getElementById(`card-${region}`);
-            if (card) {
-                card.classList.remove('show');
-                setTimeout(() => card.remove(), 400);
-            }
-            // Remove active class from marker
-            document.querySelector(`[data-mythology="${region}"]`)?.classList.remove('active');
-            // Hide connection lines
-            hideConnectionLines();
-            if (activeCard === region) {
-                activeCard = null;
-            }
-        }
-
-        // Show connection lines for a mythology
-        function showConnectionLines(mythology) {
-            document.querySelectorAll('.connection-line').forEach(line => {
-                if (line.dataset.from === mythology || line.dataset.to === mythology) {
-                    line.classList.add('show');
-                }
-            });
-        }
-
-        // Hide all connection lines
-        function hideConnectionLines() {
-            document.querySelectorAll('.connection-line').forEach(line => {
-                line.classList.remove('show');
-            });
-        }
 
         // Language is fixed to Japanese - no language switching needed
 
@@ -1507,29 +1318,9 @@
                 createMythologyMarkers();
                 createConnectionLines();
                 
-                // Reposition active card if any
-                if (activeCard) {
-                    const card = document.getElementById(`card-${activeCard}`);
-                    if (card) {
-                        positionCard(card, activeCard);
-                    }
-                }
             }
         });
 
-        // Close card when clicking outside
-        document.addEventListener('click', function(e) {
-            if (activeCard && !e.target.closest('.mythology-card') && !e.target.closest('.mythology-marker')) {
-                closeCard(activeCard);
-            }
-        });
-
-        // Prevent card close when clicking inside card
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.mythology-card') && !e.target.closest('.close-card')) {
-                e.stopPropagation();
-            }
-        });
 
         // Animation on scroll
         const observerOptions = {
