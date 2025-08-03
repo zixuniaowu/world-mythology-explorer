@@ -136,8 +136,8 @@
         /* Mythology Markers */
         .mythology-marker {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             transform: translate(-50%, -50%);
             cursor: pointer;
             z-index: 10;
@@ -145,7 +145,7 @@
         }
 
         .mythology-marker:hover {
-            transform: translate(-50%, -50%) scale(1.2);
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         .marker-inner {
@@ -166,14 +166,14 @@
 
         .marker-pin {
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             background: radial-gradient(circle, #fff 30%, transparent 70%);
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             border: 2px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -184,14 +184,14 @@
 
         .marker-label {
             position: absolute;
-            bottom: -25px;
+            bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.9);
             color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: 600;
             white-space: nowrap;
             opacity: 1;
@@ -413,19 +413,32 @@
             }
 
             .mythology-marker {
-                width: 50px;
-                height: 50px;
+                width: 25px;
+                height: 25px;
             }
 
             .marker-pin {
-                width: 40px;
-                height: 40px;
+                width: 15px;
+                height: 15px;
             }
 
             .marker-label {
-                font-size: 11px;
-                padding: 4px 8px;
-                bottom: -30px;
+                font-size: 9px;
+                padding: 3px 6px;
+                bottom: -18px;
+            }
+
+            /* 增加手機端點擊區域 */
+            .mythology-marker::before {
+                content: '';
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: transparent;
+                z-index: -1;
             }
 
             .links-section {
