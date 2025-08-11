@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エジプト神話 - 世界神話探索者</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* エジプト風装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(238, 90, 111, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(218, 165, 32, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル - エジプト風 */
+        .header {
+            background: linear-gradient(135deg, #ee5a6f 0%, #daa520 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(238, 90, 111, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* ヒエログリフ装飾 */
+        .header::before {
+            content: '𓀀𓁿𓂀𓃀𓄿𓅓𓆎𓇳';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 1rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .hieroglyphs {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            letter-spacing: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーションバー */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #daa520;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* イントロセクション */
+        .intro {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+        }
+
+        .intro h2 {
+            color: #daa520;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 書籍グリッド */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ee5a6f, #daa520, #ee5a6f);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .book-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(238, 90, 111, 0.3);
+        }
+
+        .book-card h3 {
+            color: #daa520;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .book-info {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #ee5a6f 0%, #daa520 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(238, 90, 111, 0.4);
+        }
+
+        /* 特徴セクション */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #daa520;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(218, 165, 32, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(218, 165, 32, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(218, 165, 32, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #daa520;
+            margin-bottom: 0.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 関連物語 */
+        .related-works {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+        }
+
+        .related-works h2 {
+            color: #daa520;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .story-card {
+            background: rgba(218, 165, 32, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-card:hover {
+            transform: translateY(-3px);
+            background: rgba(218, 165, 32, 0.2);
+        }
+
+        .story-card h4 {
+            color: #daa520;
+            margin-bottom: 0.5rem;
+        }
+
+        .story-card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* アニメーション効果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* 砂塵エフェクト */
+        .sand-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(218, 165, 32, 0.3);
+            border-radius: 50%;
+            animation: drift 20s linear infinite;
+        }
+
+        @keyframes drift {
+            from {
+                transform: translateX(-100px) translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100vw) translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 砂塵エフェクト -->
+    <div class="sand-particles" id="sandParticles"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="hieroglyphs">𓂀 𓆎 𓅓 𓊖</div>
+            <h1>エジプト神話</h1>
+            <p>ナイル川と永遠の生命の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーションバー -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #daa520; text-decoration: none; font-size: 1.5rem;">🏺 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="#intro">はじめに</a></li>
+                <li><a href="#books">代表作品</a></li>
+                <li><a href="#features">神話の特徴</a></li>
+                <li><a href="#stories">物語一覧</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <!-- 紹介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>エジプト神話について</h2>
+            <p>
+                エジプト神話は、人類最古の文明の一つから生まれた豊かな神話体系です。ナイル川の恵みと砂漠の厳しさが育んだこの神話は、死と再生、秩序と混沌、そして永遠の生命というテーマを中心に展開します。ピラミッドの壁画やパピルスに記された物語は、5000年以上の時を超えて私たちに古代エジプト人の世界観を伝えています。
+            </p>
+            <p>
+                太陽神ラーの日々の旅、オシリスの死と復活、イシスの愛と魔法、そしてファラオと神々の関係など、エジプト神話は宗教と政治が密接に結びついた独特の体系を持っています。これらの物語は、単なる神話ではなく、古代エジプト人の死生観、道徳観、そして宇宙観を反映した深遠な哲学でもあります。
+            </p>
+        </section>
+
+        <!-- 代表作品 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #daa520; margin-bottom: 2rem; font-size: 2.5rem;">代表的な作品</h2>
+            <div class="books-grid">
+                <!-- 死者の書 -->
+                <div class="book-card fade-in">
+                    <h3>『死者の書』</h3>
+                    <div class="book-info">成立時期：新王国時代（紀元前1550-1070年）</div>
+                    <div class="book-description">
+                        死後の世界への案内書として墓に納められた呪文集。死者が冥界で直面する試練を乗り越え、永遠の生命を得るための知識と呪文が記されています。有名な「心臓の計量」の場面など、エジプトの死生観の集大成です。
+                    </div>
+                    <div class="book-links">
+                        <a href="#" class="book-link">📖 オンライン読書</a>
+                        <a href="#" class="book-link">📝 作品解説</a>
+                    </div>
+                </div>
+
+                <!-- オシリス神話 -->
+                <div class="book-card fade-in">
+                    <h3>『オシリス神話』</h3>
+                    <div class="book-info">プルタルコス版 | 紀元後1世紀</div>
+                    <div class="book-description">
+                        エジプト神話の中核をなすオシリスの死と復活の物語。セトによる殺害、イシスによる遺体の捜索、ホルスの誕生と復讐など、死と再生のテーマを通じて、ナイル川の氾濫と農業のサイクルを象徴的に表現しています。
+                    </div>
+                    <div class="book-links">
+                        <a href="osiris-reader.html" class="book-link">📖 オシリス神話を読む</a>
+                        <a href="isis-horus-reader.html" class="book-link">📖 イシスとホルスを読む</a>
+                    </div>
+                </div>
+
+                <!-- ピラミッド・テキスト -->
+                <div class="book-card fade-in">
+                    <h3>『ピラミッド・テキスト』</h3>
+                    <div class="book-info">成立時期：古王国時代（紀元前2400-2300年）</div>
+                    <div class="book-description">
+                        世界最古の宗教文書の一つ。ピラミッドの内壁に刻まれた呪文と祈祷文で、ファラオが死後、天界で神々と合一するための手引きです。太陽神ラーとの関係、天空への昇天など、王権神話の原型が見られます。
+                    </div>
+                    <div class="book-links">
+                        <a href="ra-sun-journey-reader.html" class="book-link">📖 ラーの太陽の旅を読む</a>
+                        <a href="#" class="book-link">📝 作品解説</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特徴 -->
+        <section class="features" id="features">
+            <h2>エジプト神話の特徴</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">☀️</div>
+                    <h3>太陽信仰</h3>
+                    <p>太陽神ラーを中心とした宇宙観。毎日の太陽の運行が死と再生のサイクルを象徴</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>マアト（真理と正義）</h3>
+                    <p>宇宙の秩序と道徳の基準。死後の審判で心臓がマアトの羽と比較される</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏛️</div>
+                    <h3>神殿と儀式</h3>
+                    <p>神々と人間を結ぶ神聖な空間。ファラオが神官として神々に仕える</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👁️</div>
+                    <h3>象形文字の力</h3>
+                    <p>文字自体が魔法的な力を持つ。名前を記すことで永遠の生命を得る</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 関連物語 -->
+        <section class="related-works" id="stories">
+            <h2>主要な神話物語</h2>
+            <div class="story-grid">
+                <div class="story-card" onclick="location.href='isis-osiris-story-ja.html'">
+                    <h4>イシスとオシリス</h4>
+                    <p>愛と復活の物語</p>
+                </div>
+                <div class="story-card" onclick="location.href='ra-sun-journey-story-ja.html'">
+                    <h4>ラー神の太陽之旅</h4>
+                    <p>永遠の光の航海</p>
+                </div>
+                <div class="story-card" onclick="location.href='anubis-judgment-story-ja.html'">
+                    <h4>アヌビス神の審判</h4>
+                    <p>死者の魂を導く者</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 永遠のナイルが語る不朽の物語を探求しましょう。</p>
+    </footer>
+
+    <script>
+        // 砂塵エフェクト
+        function createSandParticles() {
+            const container = document.getElementById('sandParticles');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = Math.random() * 10 + 20 + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        createSandParticles();
+
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

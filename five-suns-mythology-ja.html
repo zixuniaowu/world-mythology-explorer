@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五つの太陽 - アステカ・マヤ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #541690 50%, #8B0000 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 太陽の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ffd700 0%, #8B0000 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '☀️ 🌪️ 🔥 💧';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffffe0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ffd700;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(139, 0, 0, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffd700;
+        }
+
+        .sun-era {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .sun-era h4 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 回転する太陽たち */
+        .rotating-suns {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sun-cycle {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 60%;
+            border: 2px solid rgba(255, 215, 0, 0.1);
+            border-radius: 50%;
+            animation: rotateSuns 30s linear infinite;
+        }
+
+        .sun-symbol {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+
+        .sun1 { top: 0%; left: 50%; transform: translateX(-50%); }
+        .sun2 { top: 25%; right: 0%; transform: translateY(-50%); }
+        .sun3 { bottom: 0%; left: 50%; transform: translateX(-50%); }
+        .sun4 { top: 25%; left: 0%; transform: translateY(-50%); }
+        .sun5 { top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; opacity: 0.3; }
+
+        @keyframes rotateSuns {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 破壊のエフェクト */
+        .destruction-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .destruction-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: destructionFall 12s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes destructionFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 中央の太陽石 */
+        .aztec-sun-stone {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: pulseStone 8s infinite;
+        }
+
+        @keyframes pulseStone {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.05; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.1; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 回転する太陽たち -->
+    <div class="rotating-suns">
+        <div class="sun-cycle">
+            <div class="sun-symbol sun1">🌊</div>
+            <div class="sun-symbol sun2">🌪️</div>
+            <div class="sun-symbol sun3">🔥</div>
+            <div class="sun-symbol sun4">💨</div>
+            <div class="sun-symbol sun5">☀️</div>
+        </div>
+    </div>
+    
+    <!-- 破壊のエフェクト -->
+    <div class="destruction-effects" id="destructionEffects"></div>
+    
+    <!-- アステカ太陽石 -->
+    <div class="aztec-sun-stone">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2"/>
+            <circle cx="100" cy="100" r="10" fill="rgba(255, 215, 0, 0.2)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>五つの太陽</h1>
+            <p>Five Suns - 世界創造と破壊の循環</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffd700; text-decoration: none; font-size: 1.5rem;">☀️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aztec-maya-mythology-index-ja.html">アステカ・マヤ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>宇宙の創造と破壊の循環</h2>
+            
+            <p>
+                アステカ神話において最も壮大で深遠な物語の一つが「五つの太陽」の神話です。この物語は、現在の世界が五回目の創造であり、これまでに四つの世界が創られては破壊されてきたことを語っています。それぞれの時代は異なる神によって統治され、異なる方法で終焉を迎えました。
+            </p>
+
+            <p>
+                この神話は単なる創世記ではありません。時間の循環性、宇宙の調和、そして神々の永続的な闘争を表現した、メソアメリカ文明の世界観の根幹をなす物語なのです。
+            </p>
+
+            <div class="highlight">
+                五つの太陽は、それぞれ異なる元素と方向を表している：<br>
+                第一の太陽（東）= 水・海<br>
+                第二の太陽（北）= 風・空<br>
+                第三の太陽（南）= 火・山<br>
+                第四の太陽（西）= 土・大地<br>
+                第五の太陽（中央）= 動き・地震
+            </div>
+
+            <h3>神々の会議</h3>
+            <p>
+                太古の昔、宇宙には四大神がいました：テスカトリポカ（煙る鏡）、ケツァルコアトル（羽毛の蛇）、トラロック（雨神）、そしてチャルチウトリクエ（ヒスイのスカート）。彼らは世界を創造し、人類を作ることに合意しましたが、誰が太陽となって世界を照らすかで対立しました。
+            </p>
+
+            <p>
+                「力ある者が太陽となるべきだ」とテスカトリポカが主張すれば、「知恵ある者こそふさわしい」とケツァルコアトルが反論しました。結局、彼らは交代で太陽となることで合意し、最初の世界が始まりました。
+            </p>
+
+            <h3>第一の太陽：ナワイ・オセロトル（四つのジャガー）</h3>
+            <div class="sun-era">
+                <h4>統治者：テスカトリポカ　期間：676年</h4>
+                <p>
+                    最初の太陽の時代、テスカトリポカが太陽となって世界を照らしました。この時代の人間たちは巨人でしたが、トウモロコシではなくドングリを食べて生活していました。しかし、テスカトリポカとケツァルコアトルの争いが激しくなり、ケツァルコアトルは棒でテスカトリポカを空から打ち落としました。
+                </p>
+                <p>
+                    怒ったテスカトリポカは巨大なジャガーに変身し、地上の巨人たちを全て食い尽くしました。世界は暗闇に包まれ、第一の太陽の時代は終わりました。
+                </p>
+            </div>
+
+            <h3>第二の太陽：ナワイ・エエカトル（四つの風）</h3>
+            <div class="sun-era">
+                <h4>統治者：ケツァルコアトル　期間：364年</h4>
+                <p>
+                    今度はケツァルコアトルが太陽となり、新しい人類を創造しました。この時代の人間たちはより小さく、松の実を主食として生活していました。平和で知的な時代でしたが、テスカトリポカの復讐心は消えていませんでした。
+                </p>
+                <p>
+                    テスカトリポカはケツァルコアトルを空から引きずり降ろし、巨大な嵐を起こしました。強烈な風が全てを吹き飛ばし、人間たちは猿に変えられました。現在の猿たちは、この時代の人間の末裔だと言われています。
+                </p>
+            </div>
+
+            <h3>第三の太陽：ナワイ・キアウイトル（四つの雨）</h3>
+            <div class="sun-era">
+                <h4>統治者：トラロック　期間：312年</h4>
+                <p>
+                    三番目の太陽は雨神トラロックが統治しました。この時代の人間たちは水生植物を食べ、豊富な雨に恵まれた湿潤な世界で暮らしていました。トラロックは慈悲深い神でしたが、愛する妻をテスカトリポカに奪われてしまいました。
+                </p>
+                <p>
+                    悲しみと怒りに打ち震えたトラロックは、雨を降らせることをやめました。すると今度はケツァルコアトルが太陽を盗み、人々を救おうとしました。激怒したトラロックは溶岩の雨を降らせ、世界を火山の噴火で焼き尽くしました。生き残った人間たちは七面鳥に変えられました。
+                </p>
+            </div>
+
+            <h3>第四の太陽：ナワイ・アトル（四つの水）</h3>
+            <div class="sun-era">
+                <h4>統治者：チャルチウトリクエ　期間：676年</h4>
+                <p>
+                    四番目の太陽は水の女神チャルチウトリクエが統治しました。この時代の人間たちは野生の種子を食べて生活し、水と調和した文明を築きました。女神の統治は平和でしたが、男性神たちの嫉妬を招きました。
+                </p>
+                <p>
+                    ついにテスカトリポカとケツァルコアトルが協力してチャルチウトリクエを空から引きずり降ろしました。怒った女神は天から大洪水を降らせ、52年間雨を降らせ続けました。山々も水没し、人間たちは魚に変えられました。ただし、一組の夫婦（ナタとネナ）だけが舟で生き延び、現在の人類の祖先となったと言われています。
+                </p>
+            </div>
+
+            <h3>第五の太陽：ナワイ・オリン（四つの動き）</h3>
+            <div class="sun-era">
+                <h4>統治者：ウィツィロポチトリ（現在の太陽）</h4>
+                <p>
+                    テオティワカンで神々が集まり、新しい太陽を決める会議が開かれました。裕福だが臆病なテクシステカトルと、貧しいが勇敢なナナワツィンが太陽になることを志願しました。二人は神聖な火に身を投げることになりましたが、テクシステカトルは熱さに怖気づきました。
+                </p>
+                <p>
+                    ナナワツィンが先に火に飛び込むと太陽となり、後から飛び込んだテクシステカトルは月になりました。しかし太陽は動きませんでした。神々は自らの血を捧げて太陽を動かしました。こうして現在の第五の太陽の時代が始まったのです。
+                </p>
+                <p>
+                    この時代の人間はトウモロコシから作られ、現在も続いています。しかし予言によれば、この世界もいずれは巨大な地震によって破壊される運命にあります。
+                </p>
+            </div>
+
+            <div class="highlight">
+                第五の太陽の予言：<br>
+                現在の世界は「ナワイ・オリン」（四つの動き/地震）によって終わりを迎える。しかし破壊の後には必ず新しい創造が続く。これは終末ではなく、永遠の循環の一部なのである。
+            </div>
+
+            <h3>太陽石の秘密</h3>
+            <p>
+                アステカの首都テノチティトランの中央神殿には、巨大な「太陽石」（カレンダー・ストーン）が置かれていました。この石には五つの太陽の物語が彫り込まれ、中央には現在の太陽神の顔が刻まれています。
+            </p>
+
+            <p>
+                この石は単なる装飾品ではありません。時間の概念、宇宙の構造、そして人間の運命を表現した、アステカ文明の叡智が結晶化した聖なる文書なのです。
+            </p>
+
+            <div class="highlight">
+                五つの太陽の物語が現代に伝えること：<br>
+                歴史は直線的ではなく循環的である。破壊は終わりではなく、新しい始まりの前奏曲。人間は自然の一部であり、宇宙の大きなリズムの中で生きている。そして真の知恵とは、この循環を理解し、それに調和して生きることである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 五つの太陽の教えに耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // 破壊エフェクト
+        function createDestructionEffects() {
+            const container = document.getElementById('destructionEffects');
+            const effects = ['💥', '⚡', '🔥', '💧', '🌪️', '🪨', '💀'];
+            
+            function addEffect() {
+                const effect = document.createElement('div');
+                effect.className = 'destruction-particle';
+                effect.innerHTML = effects[Math.floor(Math.random() * effects.length)];
+                effect.style.left = Math.random() * 100 + '%';
+                effect.style.animationDelay = Math.random() * 5 + 's';
+                effect.style.animationDuration = (8 + Math.random() * 8) + 's';
+                container.appendChild(effect);
+                
+                setTimeout(() => {
+                    if (container.contains(effect)) {
+                        container.removeChild(effect);
+                    }
+                }, 12000);
+            }
+            
+            // 定期的に破壊エフェクトを追加
+            setInterval(addEffect, 2000);
+            
+            // 初期のエフェクトを追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addEffect, i * 1000);
+            }
+        }
+        
+        createDestructionEffects();
+    </script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イシスとオシリス - エジプト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #e67e22 50%, #f39c12 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* エジプトの砂漠 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(230, 126, 34, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(230, 126, 34, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🏺 👁️ 🪶 ⚱️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff8dc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #f39c12;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #f39c12;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #f39c12;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.2), rgba(243, 156, 18, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .ancient-spell {
+            background: rgba(230, 126, 34, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(230, 126, 34, 0.3);
+            font-style: italic;
+        }
+
+        .ancient-spell h4 {
+            color: #e67e22;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* エジプト装飾エフェクト */
+        .hieroglyphs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hieroglyph {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: hieroglyphFloat 25s linear infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes hieroglyphFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .ankh-symbol {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 100px;
+            height: 150px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: ankhGlow 20s infinite;
+        }
+
+        @keyframes ankhGlow {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.1); }
+        }
+
+        .pyramid-silhouette {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        .isis-wings {
+            position: fixed;
+            top: 50%;
+            left: 30px;
+            width: 150px;
+            height: 100px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: wingSpread 15s infinite;
+        }
+
+        @keyframes wingSpread {
+            0%, 100% { transform: translateY(-50%) scaleX(1); }
+            50% { transform: translateY(-50%) scaleX(1.3); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヒエログリフ -->
+    <div class="hieroglyphs" id="hieroglyphs"></div>
+    
+    <!-- アンク記号 -->
+    <div class="ankh-symbol">
+        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- アンクの輪 -->
+            <circle cx="50" cy="30" r="20" fill="none" stroke="rgba(243, 156, 18, 0.4)" stroke-width="4"/>
+            <!-- アンクの十字 -->
+            <line x1="50" y1="50" x2="50" y2="130" stroke="rgba(243, 156, 18, 0.4)" stroke-width="6"/>
+            <line x1="30" y1="70" x2="70" y2="70" stroke="rgba(243, 156, 18, 0.4)" stroke-width="6"/>
+        </svg>
+    </div>
+    
+    <!-- イシスの翼 -->
+    <div class="isis-wings">
+        <svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- 左の翼 -->
+            <path d="M20,50 Q10,30 5,20 Q15,40 30,45 Q40,50 30,55 Q15,60 5,80 Q10,70 20,50" 
+                  fill="rgba(230, 126, 34, 0.3)"/>
+            <!-- 右の翼 -->
+            <path d="M130,50 Q140,30 145,20 Q135,40 120,45 Q110,50 120,55 Q135,60 145,80 Q140,70 130,50" 
+                  fill="rgba(230, 126, 34, 0.3)"/>
+            <!-- 体 -->
+            <ellipse cx="75" cy="50" rx="25" ry="8" fill="rgba(243, 156, 18, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- ピラミッドシルエット -->
+    <div class="pyramid-silhouette">
+        <svg viewBox="0 0 1000 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 大ピラミッド -->
+            <path d="M100,150 L200,50 L300,150 Z" fill="rgba(230, 126, 34, 0.2)"/>
+            <!-- 中ピラミッド -->
+            <path d="M350,150 L420,70 L490,150 Z" fill="rgba(230, 126, 34, 0.15)"/>
+            <!-- 小ピラミッド -->
+            <path d="M550,150 L600,90 L650,150 Z" fill="rgba(230, 126, 34, 0.1)"/>
+            <!-- 砂丘 -->
+            <path d="M0,120 Q200,100 400,120 T800,120 T1000,120 L1000,150 L0,150 Z" 
+                  fill="rgba(243, 156, 18, 0.1)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>イシスとオシリス</h1>
+            <p>Isis and Osiris - 愛と復活の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #f39c12; text-decoration: none; font-size: 1.5rem;">🏺 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="egyptian-mythology-index-ja.html">エジプト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>永遠の愛が生んだ奇跡</h2>
+            
+            <p>
+                イシス（Isis）とオシリス（Osiris）の物語は、エジプト神話の中でも最も重要で感動的な神話の一つです。この物語は、愛、裏切り、死、そして復活という人類普遍のテーマを扱い、古代エジプト人の死生観と来世への信念を形作りました。イシスの不屈の愛とオシリスの復活は、ナイル川の氾濫と農業の循環、そして人間の魂の不滅を象徴し、何千年にもわたってエジプト文明の精神的支柱となりました。
+            </p>
+
+            <h3>神々の黄金時代</h3>
+            <p>
+                太古の昔、地上の王としてオシリスが統治していた時代がありました。オシリスは大地の神ゲブと空の女神ヌトの息子で、賢明で慈悲深い支配者でした。彼は人々に農業を教え、法を制定し、文明をもたらしました。人々は彼を心から愛し、エジプトは平和と繁栄に満ちていました。
+            </p>
+
+            <p>
+                オシリスの妻イシスは、魔法と知恵の女神でした。彼女もまたゲブとヌトの娘で、オシリスの妹でもありました（古代エジプトでは、神々の近親結婚は普通のことでした）。イシスは美しく聡明で、強力な魔法の力を持っていました。彼女は人々を病気から守り、出産を助け、すべての生きとし生けるものの母として慕われていました。
+            </p>
+
+            <p>
+                二人の愛は深く純粋で、彼らの統治の下、エジプトは神々の時代の理想郷でした。ナイル川は規則正しく氾濫し、豊かな実りをもたらしました。人々は争うことなく、平和に暮らしていました。しかし、この幸福な時代に暗い影が忍び寄っていました。
+            </p>
+
+            <div class="ancient-spell">
+                <h4>古代の賛美歌</h4>
+                <p>
+                「オシリス、緑なる神よ、生命の主よ<br>
+                あなたの息により穀物は実り<br>
+                あなたの恵みにより川は流れる<br>
+                イシス、偉大なる魔法の女神よ<br>
+                あなたの愛により死者も蘇る」
+                </p>
+            </div>
+
+            <h3>セトの嫉妬と陰謀</h3>
+            <p>
+                オシリスには弟セト（Set）がいました。セトは砂漠と嵐の神で、その性格は兄とは正反対でした。彼は嫉妬深く、暴力的で、兄の人気と権力を妬んでいました。セトは自分こそが王になるべきだと信じており、オシリスの優しさを弱さと見なしていました。
+            </p>
+
+            <p>
+                セトの嫉妬は日を追うごとに激しくなりました。人々が兄を讃える声を聞くたびに、彼の心は怒りで燃え上がりました。ついに彼は、兄を排除して王位を奪うという恐ろしい計画を立てました。
+            </p>
+
+            <p>
+                セトは72人の共謀者を集め、巧妙な罠を仕掛けました。彼は美しく装飾された棺を作らせました。それはオシリスの体にぴったりと合うよう設計されていました。そして盛大な宴会を開き、オシリスを招待しました。
+            </p>
+
+            <p>
+                宴会が最高潮に達した時、セトは美しい棺を披露し、冗談めかして言いました：「この棺に最もよく合う者に、これを贈り物として差し上げよう」。何人かの客が試した後、オシリスが横になりました。棺は彼の体に完璧に合いました。
+            </p>
+
+            <p>
+                その瞬間、共謀者たちが蓋を閉め、釘で封じ、溶かした鉛を流し込みました。オシリスは棺の中に封じ込められ、やがて息絶えました。セトたちは棺をナイル川に投げ込み、それは地中海まで流されていきました。
+            </p>
+
+            <h3>イシスの悲嘆と探索</h3>
+            <p>
+                夫の死を知ったイシスの悲しみは、言葉では言い表せないほど深いものでした。彼女は髪を切り、衣を裂き、大地に響くほどの悲鳴を上げました。しかし、愛する夫を失った悲しみの中でも、イシスは諦めませんでした。彼女はオシリスの遺体を見つけて、適切に埋葬しようと決意しました。
+            </p>
+
+            <p>
+                イシスは鳥の姿に変身し、エジプト中を飛び回ってオシリスを探しました。彼女の嘆きの声は風となって大地を吹き抜け、すべての生き物がその悲しみを共有しました。ナイル川は氾濫を止め、花は枯れ、世界は喪に服しているかのようでした。
+            </p>
+
+            <p>
+                長い探索の末、イシスはついに手がかりを得ました。棺は地中海を渡り、フェニキア（現在のレバノン）のビブロスという町に流れ着いていました。そこで棺は巨大なタマリスクの木に埋もれ、木は急速に成長して棺を包み込んでいました。
+            </p>
+
+            <p>
+                ビブロスの王はその美しい木に感動し、宮殿の柱として使いました。イシスは侍女に変装して宮殿に潜入し、王妃の乳母となりました。やがて彼女は正体を明かし、王に事情を説明して柱を譲り受けました。
+            </p>
+
+            <h3>一時的な復活</h3>
+            <p>
+                イシスはオシリスの遺体をエジプトに持ち帰り、ナイル川のデルタ地帯の湿地に隠しました。そして強力な魔法を使って、夫を一時的に蘇らせました。この奇跡の夜、二人は愛し合い、イシスはホルスを身ごもりました。
+            </p>
+
+            <p>
+                しかし、セトはオシリスが復活したことを知りました。激怒した彼は遺体を見つけ出し、今度は14の断片に切り刻んで、エジプト全土に散らばらせました。こうすることで、二度と復活することはないだろうと考えたのです。
+            </p>
+
+            <div class="highlight">
+                イシスの誓い：<br>
+                「愛する夫よ、あなたの体が砕かれようとも、私の愛は決して砕かれない。たとえ世界の果てまで行こうとも、あなたのすべての断片を集め、再びあなたを完全な姿にしてみせる。我らの愛は死をも超越するのだ」
+            </div>
+
+            <h3>完全復活の奇跡</h3>
+            <p>
+                イシスは再び長い旅に出ました。今度は妹のネフティス（セトの妻でもありましたが、イシスに同情していました）と共に、オシリスの断片を一つずつ探し回りました。彼女たちは湿地をくまなく探し、魔法を使って断片の在り処を見つけ出しました。
+            </p>
+
+            <p>
+                一つの断片を見つけるたびに、イシスはそこに小さな神殿を建てました。これがエジプト各地にオシリス神殿が建てられた起源だとされています。ついに13の断片を見つけましたが、最後の一つ—男性器の部分—は、ナイル川の魚に食べられていて見つかりませんでした。
+            </p>
+
+            <p>
+                イシスは金で男性器を作り、最も強力な復活の魔法を使いました。彼女は鷹の姿になって夫の体の上を舞い、翼で風を起こし、呪文を唱えました。この魔法により、オシリスは完全に復活しましたが、もはや地上の世界で生きることはできませんでした。代わりに、彼は死後の世界ドゥアトの王となり、死者の審判を司ることになりました。
+            </p>
+
+            <h3>ホルスの成長と復讐</h3>
+            <p>
+                一方、イシスはナイル川のデルタで息子ホルスを秘密に育てていました。ホルスは鷹の神で、父の正当な後継者でした。イシスは息子に魔法と戦闘技術を教え、いつかセトから王位を取り戻すよう教育しました。
+            </p>
+
+            <p>
+                ホルスが成人すると、彼は叔父セトに正式に王位継承を要求しました。これにより神々の法廷で長い裁判が始まりました。審理は80年間続きましたが、最終的にホルスの正当性が認められ、彼はエジプトの王となりました。セトは砂漠に追放され、嵐の神として留まることになりました。
+            </p>
+
+            <h3>永遠の意味</h3>
+            <p>
+                この物語は古代エジプト人にとって、単なる神話以上の意味を持っていました。オシリスの死と復活は、毎年のナイル川の氾濫と農業の循環を表していました。川が引いた後に肥沃な土地が現れ、新しい作物が育つ様子は、まさにオシリスの再生そのものでした。
+            </p>
+
+            <p>
+                また、この物語は人間の死後の世界への希望も表していました。オシリスが死後の世界の王となったことで、すべての人間も死後に新しい生命を得る可能性があると信じられました。これがエジプトの複雑な来世信仰と、ミイラ化による死体保存技術の発達につながりました。
+            </p>
+
+            <p>
+                イシスは理想的な妻と母の象徴となり、その魔法の力は治癒と保護の源とされました。彼女への信仰はエジプトを超えて地中海世界全体に広がり、ローマ時代まで続きました。
+            </p>
+
+            <div class="highlight">
+                イシスとオシリスの物語が現代に伝えること：<br>
+                真の愛は死をも超越する力を持つ。困難に直面しても、希望を失わず努力し続けることの大切さ。嫉妬と憎しみは最終的に自分自身を破滅させる。家族の絆と忠誠心の価値。そして、終わりは新しい始まりでもあり、死は完全な終末ではないという希望。これらの教えは、数千年を経た今でも、人々の心に深く響いている。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 永遠の愛と復活の力を信じて。</p>
+    </footer>
+
+    <script>
+        // ヒエログリフエフェクト
+        function createHieroglyphs() {
+            const container = document.getElementById('hieroglyphs');
+            const hieroglyphs = ['𓀀', '𓀁', '𓀂', '𓀃', '𓀄', '𓁶', '𓁷', '𓂀', '𓂁', '𓂂'];
+            
+            function addHieroglyph() {
+                const hieroglyph = document.createElement('div');
+                hieroglyph.className = 'hieroglyph';
+                hieroglyph.innerHTML = hieroglyphs[Math.floor(Math.random() * hieroglyphs.length)];
+                hieroglyph.style.left = Math.random() * 100 + '%';
+                hieroglyph.style.animationDelay = Math.random() * 10 + 's';
+                hieroglyph.style.animationDuration = (20 + Math.random() * 10) + 's';
+                container.appendChild(hieroglyph);
+                
+                setTimeout(() => {
+                    if (container.contains(hieroglyph)) {
+                        container.removeChild(hieroglyph);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的にヒエログリフを追加
+            setInterval(addHieroglyph, 3000);
+            
+            // 初期のヒエログリフを追加
+            for (let i = 0; i < 8; i++) {
+                setTimeout(addHieroglyph, i * 2000);
+            }
+        }
+        
+        createHieroglyphs();
+    </script>
+</body>
+</html>

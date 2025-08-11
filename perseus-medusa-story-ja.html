@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ペルセウスとメドゥーサ - ギリシャ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #c9302c 50%, #449d44 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 英雄の空 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(201, 48, 44, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(68, 157, 68, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #c9302c 0%, #449d44 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(201, 48, 44, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🛡️ ⚔️ 🐍 👁️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f8bbd0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #c9302c;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(201, 48, 44, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #c9302c;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #c9302c;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(201, 48, 44, 0.2), rgba(68, 157, 68, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #c9302c;
+        }
+
+        .prophecy-oracle {
+            background: rgba(68, 157, 68, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(68, 157, 68, 0.3);
+            font-style: italic;
+        }
+
+        .prophecy-oracle h4 {
+            color: #449d44;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* メドゥーサの視線エフェクト */
+        .medusa-gaze {
+            position: fixed;
+            top: 25%;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: gazeStare 15s infinite;
+        }
+
+        @keyframes gazeStare {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.1; }
+            25% { transform: scale(1.1) rotate(5deg); opacity: 0.15; }
+            50% { transform: scale(0.9) rotate(0deg); opacity: 0.12; }
+            75% { transform: scale(1.05) rotate(-5deg); opacity: 0.18; }
+        }
+
+        .snake-hair {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snake {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: snakeSlither 20s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes snakeSlither {
+            0% {
+                transform: translateX(-100px) translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100vw) translateY(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .aegis-shield {
+            position: fixed;
+            bottom: 50px;
+            left: 30px;
+            width: 100px;
+            height: 100px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: shieldShine 10s infinite;
+        }
+
+        @keyframes shieldShine {
+            0%, 100% { opacity: 0.1; transform: rotate(-10deg); }
+            50% { opacity: 0.25; transform: rotate(10deg); }
+        }
+
+        .winged-sandals {
+            position: fixed;
+            top: 60%;
+            left: 50%;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: sandalsFly 25s infinite;
+        }
+
+        @keyframes sandalsFly {
+            0% { transform: translate(-50%, 0) rotate(0deg); }
+            25% { transform: translate(-100%, -50px) rotate(90deg); }
+            50% { transform: translate(-50%, -100px) rotate(180deg); }
+            75% { transform: translate(0%, -50px) rotate(270deg); }
+            100% { transform: translate(-50%, 0) rotate(360deg); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- メドゥーサの視線 -->
+    <div class="medusa-gaze">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 目 -->
+            <ellipse cx="75" cy="75" rx="40" ry="25" fill="rgba(201, 48, 44, 0.3)"/>
+            <circle cx="75" cy="75" r="20" fill="rgba(201, 48, 44, 0.4)"/>
+            <circle cx="75" cy="75" r="10" fill="rgba(255, 255, 255, 0.8)"/>
+            <!-- 瞳孔 -->
+            <ellipse cx="75" cy="75" rx="5" ry="10" fill="rgba(0, 0, 0, 0.8)"/>
+            <!-- 蛇の髪（簡略化） -->
+            <path d="M40,40 Q30,20 20,15" stroke="rgba(68, 157, 68, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M110,40 Q120,20 130,15" stroke="rgba(68, 157, 68, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M75,30 Q75,10 75,5" stroke="rgba(68, 157, 68, 0.3)" stroke-width="3" fill="none"/>
+        </svg>
+    </div>
+    
+    <!-- 蛇の髪 -->
+    <div class="snake-hair" id="snakeHair"></div>
+    
+    <!-- アイギスの盾 -->
+    <div class="aegis-shield">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- 盾の本体 -->
+            <circle cx="50" cy="50" r="45" fill="rgba(255, 215, 0, 0.2)" stroke="rgba(255, 215, 0, 0.4)" stroke-width="3"/>
+            <!-- 内側の円 -->
+            <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255, 215, 0, 0.3)" stroke-width="2"/>
+            <!-- メドゥーサの頭（中央） -->
+            <circle cx="50" cy="50" r="15" fill="rgba(201, 48, 44, 0.3)"/>
+            <!-- 装飾模様 -->
+            <path d="M50,20 L60,40 L80,40 L65,55 L70,75 L50,65 L30,75 L35,55 L20,40 L40,40 Z" 
+                  fill="rgba(255, 215, 0, 0.2)"/>
+        </svg>
+    </div>
+    
+    <!-- 翼のサンダル -->
+    <div class="winged-sandals">👟</div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ペルセウスとメドゥーサ</h1>
+            <p>Perseus and Medusa - 英雄と怪物の対決</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #c9302c; text-decoration: none; font-size: 1.5rem;">⚔️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="greek-mythology-index-ja.html">ギリシャ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>石化の視線を持つ怪物との戦い</h2>
+            
+            <p>
+                ペルセウスとメドゥーサの物語は、ギリシャ神話の中でも最も有名な英雄譚の一つです。この物語は、運命に立ち向かう勇気、神々の援助、そして知恵と策略の重要性を描いています。一人の若者が不可能と思われた任務を成し遂げ、真の英雄となる過程は、困難に直面する人々に勇気と希望を与え続けています。
+            </p>
+
+            <h3>黄金の雨の子</h3>
+            <p>
+                物語は、アルゴスの王アクリシオスの不吉な予言から始まります。デルフォイの神託所で、彼は恐ろしい予言を受けました：「汝は自分の孫によって殺されるであろう」。この予言に恐怖したアクリシオスは、唯一の娘ダナエを青銅の塔に幽閉し、どんな男も近づけないようにしました。
+            </p>
+
+            <p>
+                しかし、神々の王ゼウスは美しいダナエに恋をしました。青銅の塔も神の力を防ぐことはできません。ゼウスは黄金の雨に姿を変え、塔の天井の隙間から降り注ぎ、ダナエのもとに到達しました。やがてダナエは身ごもり、美しい男の子を産みました。その子こそペルセウスでした。
+            </p>
+
+            <p>
+                アクリシオスは孫の誕生を知って激怒しましたが、神の子を直接殺すことは恐れました。代わりに、彼はダナエとペルセウスを木箱に入れて海に流しました。しかし、ゼウスは彼らを守り、箱はセリポス島に漂着しました。漁師のディクテュスが母子を救い、親切に育てました。
+            </p>
+
+            <div class="prophecy-oracle">
+                <h4>デルフォイの神託</h4>
+                <p>
+                「アクリシオスよ、汝の血筋は続くが、それが汝の破滅となる。孫の手により汝は倒れ、新しい時代が始まるであろう」
+                </p>
+            </div>
+
+            <h3>無謀な挑戦</h3>
+            <p>
+                ペルセウスは立派な青年に成長しました。しかし、セリポスの王ポリュデクテスがダナエに恋をし、邪魔なペルセウスを排除しようと企みました。王は偽りの結婚の宴を開き、すべての客に馬を贈り物として求めました。貧しいペルセウスは馬を持っていなかったため、代わりに何でも望みのものを持ってくると申し出ました。
+            </p>
+
+            <p>
+                ポリュデクテスは冷笑を浮かべて言いました：「では、メドゥーサの首を持ってこい」。これは死の宣告に等しいものでした。メドゥーサは恐ろしいゴルゴン三姉妹の一人で、その視線を見た者は即座に石と化すと言われていました。かつては美しい女性だったメドゥーサは、アテナの神殿でポセイドンに犯されたため、怒ったアテナによって髪を蛇に変えられ、恐ろしい怪物となったのです。
+            </p>
+
+            <p>
+                しかし、ペルセウスは約束を守ることを誓いました。彼の決意と勇気は、オリュンポスの神々を感動させました。アテナとヘルメスが彼の前に現れ、この不可能な任務を助けることを申し出ました。
+            </p>
+
+            <h3>神々の贈り物</h3>
+            <p>
+                アテナはペルセウスに磨き上げられた青銅の盾を与えました。「この盾を鏡として使いなさい。メドゥーサを直接見てはいけません。反射した姿を見て戦うのです」と彼女は助言しました。ヘルメスは、どんなものでも切ることができるアダマスの鎌と、空を飛べる翼のついたサンダルを贈りました。
+            </p>
+
+            <p>
+                さらに神々は、ペルセウスをグライアイ（灰色の老女たち）のもとへ導きました。この三人の老女は一つの目と一つの歯を共有しており、ゴルゴンたちの居場所を知っていました。ペルセウスは彼女たちの目を奪い、情報と引き換えに返すことを約束しました。
+            </p>
+
+            <p>
+                グライアイから得た情報により、ペルセウスはニュンペーたちを訪れ、さらに三つの魔法の品を手に入れました：姿を消すことができるハデスの兜、どんなものでも入る魔法の袋（キビシス）、そして決して道に迷わない翼のついたサンダルでした。
+            </p>
+
+            <h3>ゴルゴンの巣へ</h3>
+            <p>
+                完全に武装したペルセウスは、世界の果て、夜と昼の境にあるゴルゴンたちの住処へと飛び立ちました。そこは荒涼とした場所で、石と化した人間や動物の像が散乱していました。これらはすべて、メドゥーサの視線の犠牲者でした。
+            </p>
+
+            <p>
+                ペルセウスは三人のゴルゴンが眠っているのを見つけました。ステンノとエウリュアレは不死身でしたが、メドゥーサだけは死すべき存在でした。アテナの指導に従い、ペルセウスは盾の反射を使って慎重に近づきました。蛇の髪がかすかに動き、シューシューと音を立てていました。
+            </p>
+
+            <p>
+                深呼吸をして、ペルセウスは素早く鎌を振り下ろしました。一撃でメドゥーサの首は切り落とされました。その瞬間、切り口から二つの存在が飛び出しました：翼を持つ馬ペガサスと、黄金の剣を持つ巨人クリューサーオールです。これらはメドゥーサがポセイドンの子を宿していた証でした。
+            </p>
+
+            <div class="highlight">
+                メドゥーサの最期の瞬間：<br>
+                恐ろしい怪物も、かつては美しい乙女でした。彼女の瞳には、怒りと悲しみ、そして解放への安堵が混在していました。ペルセウスは一瞬、彼女の運命に同情を感じましたが、使命を果たさなければなりませんでした。
+            </div>
+
+            <h3>帰路の冒険</h3>
+            <p>
+                メドゥーサの首を魔法の袋に入れ、ペルセウスは急いで逃げ出しました。目覚めた不死身の姉妹たちが激怒して追いかけてきましたが、ハデスの兜で姿を消したペルセウスを見つけることはできませんでした。
+            </p>
+
+            <p>
+                帰路、ペルセウスはエチオピアを通りかかりました。そこで彼は、海の怪物への生贄として岩に鎖でつながれた美しい王女アンドロメダを見つけました。彼女の母カシオペアが、自分の美しさを海の女神たちより上だと自慢したため、ポセイドンが罰として海の怪物を送ったのです。
+            </p>
+
+            <p>
+                ペルセウスはアンドロメダに一目惚れし、彼女を救うことを決意しました。海から現れた巨大な怪物ケートスに対し、ペルセウスはメドゥーサの首を取り出しました。怪物は即座に石と化し、海に沈んでいきました。感謝した王は、アンドロメダをペルセウスの花嫁として与えました。
+            </p>
+
+            <h3>予言の成就</h3>
+            <p>
+                セリポス島に戻ったペルセウスは、母ダナエがポリュデクテス王から逃れて神殿に隠れていることを知りました。怒りに燃えたペルセウスは王宮に乗り込み、集まっていた王と廷臣たちの前でメドゥーサの首を掲げました。全員が即座に石と化し、島は暴君から解放されました。
+            </p>
+
+            <p>
+                ペルセウスは神々に借りた品物を返却し、メドゥーサの首はアテナに献上しました。アテナはその首を自分の盾（アイギス）の中央に取り付け、強力な武器としました。
+            </p>
+
+            <p>
+                その後、ペルセウスは競技会に参加中、誤って投げた円盤が観客席にいた老人に当たってしまいました。その老人こそ、変装して孫の勇姿を見に来ていたアクリシオスでした。こうして予言は成就しましたが、それは故意ではなく運命の皮肉な巡り合わせによるものでした。
+            </p>
+
+            <h3>英雄の遺産</h3>
+            <p>
+                ペルセウスはアンドロメダと共にミケーネを建国し、偉大な王となりました。彼らの子孫からは、ギリシャ最大の英雄ヘラクレスが生まれることになります。死後、ペルセウスとアンドロメダは天に上げられ、星座となって永遠に輝いています。
+            </p>
+
+            <p>
+                この物語は、勇気と知恵、そして謙虚さの重要性を教えています。ペルセウスは単独で戦ったのではなく、神々の助けを受け入れ、与えられた道具を賢く使いました。また、力だけでなく策略も重要であることを示しています。
+            </p>
+
+            <div class="highlight">
+                ペルセウスの物語が現代に伝えること：<br>
+                不可能と思われる挑戦も、適切な準備と援助があれば達成できる。高慢は破滅を招くが、謙虚さは助けを引き寄せる。運命は避けられないが、それをどう迎えるかは自分次第である。真の英雄は力だけでなく、知恵と慈悲も持ち合わせている。そして、すべての怪物にも悲しい過去があることを忘れてはならない。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 英雄の勇気に学びましょう。</p>
+    </footer>
+
+    <script>
+        // 蛇の髪エフェクト
+        function createSnakeHair() {
+            const container = document.getElementById('snakeHair');
+            const snakes = ['🐍'];
+            
+            function addSnake() {
+                const snake = document.createElement('div');
+                snake.className = 'snake';
+                snake.innerHTML = snakes[0];
+                snake.style.top = Math.random() * 100 + '%';
+                snake.style.animationDelay = Math.random() * 5 + 's';
+                snake.style.animationDuration = (18 + Math.random() * 10) + 's';
+                container.appendChild(snake);
+                
+                setTimeout(() => {
+                    if (container.contains(snake)) {
+                        container.removeChild(snake);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に蛇を追加
+            setInterval(addSnake, 4000);
+            
+            // 初期の蛇を追加
+            for (let i = 0; i < 4; i++) {
+                setTimeout(addSnake, i * 2500);
+            }
+        }
+        
+        createSnakeHair();
+    </script>
+</body>
+</html>

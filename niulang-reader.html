@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>牛郎織女 - 七夕の愛の物語</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #0a0a2e 0%, #1a1a3e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 星空背景 */
+        .stars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* 天の川 */
+        .milky-way {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(-20deg);
+            width: 300%;
+            height: 100px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 20%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 80%,
+                transparent 100%);
+            filter: blur(20px);
+            z-index: -1;
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(10, 10, 46, 0.9) 0%, rgba(26, 26, 62, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 40px 20px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .hero-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #E0E0E0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #F5E6D3;
+            text-align: justify;
+        }
+        
+        .story-text h3 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin: 30px 0 20px;
+            text-align: center;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* キャラクターカード */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(255, 165, 0, 0.05) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .character-card:hover::before {
+            opacity: 1;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .character-role {
+            color: #FFA500;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* 七夕の風習 */
+        .customs-section {
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .customs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .custom-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .custom-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .custom-icon {
+            font-size: 3em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .custom-title {
+            font-size: 1.3em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .custom-text {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* タイムライン */
+        .timeline-section {
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #FFD700, #FFA500);
+        }
+        
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 40px;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+        
+        .timeline-content {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+        }
+        
+        .timeline-content h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 50%;
+            border: 3px solid #0a0a2e;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #0a0a2e;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .story-subtitle {
+                font-size: 1.2em;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 80px;
+                padding-right: 20px;
+                text-align: left !important;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-dot {
+                left: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars-background" id="starsContainer"></div>
+    <div class="milky-way"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="chinese-mythology-index.html" class="logo">中華神話大全</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="chinese-mythology-index.html">中華神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                    <li><a href="#customs">七夕の風習</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">牛郎織女</h1>
+            <p class="story-subtitle">天の川を隔てた永遠の愛</p>
+            <p class="hero-description">
+                毎年七月七日、カササギたちが天の川に橋をかけ、
+                一年に一度だけ会うことを許された恋人たち。
+                中国の七夕伝説として、千年以上愛され続ける物語。
+            </p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリー詳細 -->
+        <section class="story-section">
+            <h2 class="section-title">物語</h2>
+            <div class="story-text">
+                <h3>天上の織女</h3>
+                <p>
+                    天帝の孫娘である織女（織姫）は、天界で美しい雲錦を織る仕事をしていました。
+                    彼女の織る布は虹のように美しく、天界の神々の衣装となりました。
+                    織女は毎日熱心に機を織り、恋も遊びも知らずに過ごしていました。
+                </p>
+                
+                <h3>地上の牛郎</h3>
+                <p>
+                    一方、地上では両親を早くに亡くした牛郎（彦星）が、兄嫁からいじめられながら、
+                    老いた牛一頭だけを頼りに暮らしていました。
+                    ある日、その牛が突然人の言葉を話し始め、
+                    「明日、天女たちが銀河で水浴びをする。その中の織女の羽衣を隠せば、彼女はあなたの妻になるだろう」
+                    と告げました。
+                </p>
+                
+                <h3>運命の出会い</h3>
+                <p>
+                    牛の言葉通り、牛郎は織女の羽衣を隠し、天に帰れなくなった織女と結婚しました。
+                    二人は深く愛し合い、男の子と女の子を授かり、幸せな日々を送りました。
+                    織女は機織りを、牛郎は農耕をしながら、貧しくても愛情に満ちた生活を営んでいました。
+                </p>
+                
+                <h3>天帝の怒り</h3>
+                <p>
+                    しかし、織女が地上で人間と結婚したことを知った天帝は激怒しました。
+                    西王母を遣わして織女を天界に連れ戻させました。
+                    牛郎は子供たちを担いで、老牛の皮を着て天に昇り、織女を追いかけました。
+                </p>
+                
+                <h3>銀河の隔たり</h3>
+                <p>
+                    もう少しで織女に追いつくという時、西王母が金のかんざしで一筋の線を引くと、
+                    それは大きな銀河（天の川）となって二人を隔てました。
+                    牛郎と織女は銀河の両岸で泣き続け、その姿に心を打たれた天帝は、
+                    年に一度、七月七日だけ会うことを許しました。
+                </p>
+                
+                <h3>カササギの橋</h3>
+                <p>
+                    その日になると、世界中のカササギが飛んできて、
+                    天の川に橋をかけ、二人を会わせます。
+                    この日に雨が降ると、それは二人の涙だと言われています。
+                    こうして牛郎は牽牛星（アルタイル）に、織女は織女星（ベガ）となり、
+                    永遠に天の川を挟んで輝き続けているのです。
+                </p>
+            </div>
+        </section>
+        
+        <!-- キャラクター紹介 -->
+        <section id="characters" class="characters-section">
+            <h2 class="section-title">登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">織女（織姫）</h3>
+                    <p class="character-role">天帝の孫娘・織女星（ベガ）</p>
+                    <p class="character-description">
+                        天界一の機織りの名手。美しく心優しい天女で、
+                        地上での暮らしも厭わず牛郎を深く愛した。
+                        現在は織女星として夜空に輝いている。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👨‍🌾</span>
+                    <h3 class="character-name">牛郎（彦星）</h3>
+                    <p class="character-role">勤勉な農夫・牽牛星（アルタイル）</p>
+                    <p class="character-description">
+                        貧しいが誠実で勤勉な青年。老牛の助けで織女と結ばれ、
+                        妻を追って天に昇る勇気を持つ。
+                        現在は牽牛星として銀河の対岸で織女を見つめている。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐂</span>
+                    <h3 class="character-name">老牛</h3>
+                    <p class="character-role">神通力を持つ不思議な牛</p>
+                    <p class="character-description">
+                        牛郎の唯一の財産であり友。実は天界から落とされた神牛で、
+                        恩返しのため牛郎と織女を結びつける。
+                        死後もその皮で牛郎が天に昇れるよう助けた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">天帝</h3>
+                    <p class="character-role">天界の支配者</p>
+                    <p class="character-description">
+                        織女の祖父。天界の秩序を重んじ、
+                        当初は人間との結婚を許さなかったが、
+                        最後には二人の愛に心を動かされ、年に一度の逢瀬を許可した。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">西王母</h3>
+                    <p class="character-role">天界の女神</p>
+                    <p class="character-description">
+                        天帝の命を受けて織女を連れ戻した。
+                        金のかんざしで天の川を作り出し、
+                        二人を永遠に隔てた張本人。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐦</span>
+                    <h3 class="character-name">カササギたち</h3>
+                    <p class="character-role">愛の使者</p>
+                    <p class="character-description">
+                        二人の愛に同情し、毎年七月七日に集まって
+                        天の川に橋をかける。この橋は「鵲橋」と呼ばれ、
+                        二人の年に一度の逢瀬を可能にしている。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 物語の時系列 -->
+        <section class="timeline-section">
+            <h2 class="section-title">物語の展開</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>織女の日常</h3>
+                        <p>天界で美しい雲錦を織る毎日。恋も知らずに過ごす。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>牛郎の苦境</h3>
+                        <p>両親を亡くし、兄嫁にいじめられながら老牛と暮らす。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>運命の出会い</h3>
+                        <p>老牛の助言で織女の羽衣を隠し、二人は結ばれる。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>幸せな日々</h3>
+                        <p>二人の子供に恵まれ、貧しくも愛情深い生活を送る。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>天界の介入</h3>
+                        <p>天帝の怒りを買い、織女は天界に連れ戻される。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>永遠の別離</h3>
+                        <p>天の川によって隔てられ、年に一度だけの逢瀬を許される。</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 七夕の風習 -->
+        <section id="customs" class="customs-section">
+            <h2 class="section-title">七夕の風習と文化</h2>
+            <div class="customs-grid">
+                <div class="custom-item">
+                    <span class="custom-icon">🎋</span>
+                    <h3 class="custom-title">乞巧節</h3>
+                    <p class="custom-text">
+                        女性たちが織女に手芸の上達を願う日。
+                        針に糸を通す競争や、水に針を浮かべて
+                        技能を占う風習がある。
+                    </p>
+                </div>
+                
+                <div class="custom-item">
+                    <span class="custom-icon">🍉</span>
+                    <h3 class="custom-title">瓜果の供え物</h3>
+                    <p class="custom-text">
+                        庭に瓜や果物を供え、織女と牛郎の
+                        逢瀬を祝福する。月餅や巧果という
+                        特別なお菓子も作られる。
+                    </p>
+                </div>
+                
+                <div class="custom-item">
+                    <span class="custom-icon">✨</span>
+                    <h3 class="custom-title">星を見る</h3>
+                    <p class="custom-text">
+                        夏の大三角形を形成するベガ（織女星）と
+                        アルタイル（牽牛星）を探し、
+                        二人の逢瀬を見守る。
+                    </p>
+                </div>
+                
+                <div class="custom-item">
+                    <span class="custom-icon">💑</span>
+                    <h3 class="custom-title">恋愛成就の祈願</h3>
+                    <p class="custom-text">
+                        若い男女が良縁を願い、恋人たちは
+                        永遠の愛を誓う。中国のバレンタインデー
+                        とも呼ばれる。
+                    </p>
+                </div>
+                
+                <div class="custom-item">
+                    <span class="custom-icon">🎎</span>
+                    <h3 class="custom-title">日本の七夕</h3>
+                    <p class="custom-text">
+                        笹に短冊を飾り願い事をする風習は、
+                        この物語が日本に伝わって独自に
+                        発展したもの。
+                    </p>
+                </div>
+                
+                <div class="custom-item">
+                    <span class="custom-icon">🎭</span>
+                    <h3 class="custom-title">文化的影響</h3>
+                    <p class="custom-text">
+                        詩歌、戯曲、映画など様々な芸術作品の
+                        題材となり、東アジア全体で
+                        愛され続けている。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">牛郎織女 - 天の川を越えて永遠に続く愛の物語</p>
+            <p class="footer-text">© 2024 Chinese Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 星空を生成
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const numberOfStars = 200;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // ランダムな位置
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // ランダムなサイズ
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                // ランダムなアニメーション遅延
+                star.style.animationDelay = Math.random() * 3 + 's';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // ページ読み込み時に星を生成
+        window.addEventListener('load', createStars);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.character-card, .custom-item, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

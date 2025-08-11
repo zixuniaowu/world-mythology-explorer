@@ -1,0 +1,306 @@
+{
+  "chinese": {
+    "name": "中國神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 0
+    },
+    "storyTests": []
+  },
+  "japanese": {
+    "name": "日本神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 0
+    },
+    "storyTests": []
+  },
+  "greek": {
+    "name": "ギリシア神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "パンドラの箱",
+        "success": true,
+        "contentLength": 4095,
+        "url": "http://localhost:8000/pandora-box-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "norse": {
+    "name": "北欧神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "トールとヨルムンガンド",
+        "success": true,
+        "contentLength": 3603,
+        "url": "http://localhost:8000/thor-jormungandr-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "egyptian": {
+    "name": "エジプト神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "イシスとオシリス",
+        "success": true,
+        "contentLength": 4492,
+        "url": "http://localhost:8000/isis-osiris-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "indian": {
+    "name": "インド神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "クリシュナの物語",
+        "success": true,
+        "contentLength": 4662,
+        "url": "http://localhost:8000/krishna-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "mesopotamian": {
+    "name": "メソポタミア神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "ギルガメシュ叙事詩",
+        "success": true,
+        "contentLength": 5226,
+        "url": "http://localhost:8000/gilgamesh-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "native-american": {
+    "name": "ネイティブアメリカン神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "グレート・スピリットの教え",
+        "success": true,
+        "contentLength": 3009,
+        "url": "http://localhost:8000/great-spirit-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "aztec-maya": {
+    "name": "アステカ・マヤ神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "五つの太陽",
+        "success": true,
+        "contentLength": 3764,
+        "url": "http://localhost:8000/five-suns-mythology-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "celtic": {
+    "name": "ケルト神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "クー・フーリンの伝説",
+        "success": true,
+        "contentLength": 3244,
+        "url": "http://localhost:8000/cu-chulainn-legend-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "west-african": {
+    "name": "西アフリカ神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "アナンシの知恵",
+        "success": true,
+        "contentLength": 3084,
+        "url": "http://localhost:8000/anansi-spider-wisdom-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "aboriginal": {
+    "name": "オーストラリア原住民神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "ドリームタイムの創造物語",
+        "success": true,
+        "contentLength": 3606,
+        "url": "http://localhost:8000/dreamtime-creation-story-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  },
+  "polynesian": {
+    "name": "ポリネシア神話",
+    "indexPageTest": {
+      "success": true,
+      "errors": [],
+      "storyCardCount": 3
+    },
+    "storyTests": [
+      {
+        "title": "マウイの伝説",
+        "success": true,
+        "contentLength": 4416,
+        "url": "http://localhost:8000/maui-legends-ja.html"
+      },
+      {
+        "title": "卡片 2",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      },
+      {
+        "title": "卡片 3",
+        "success": false,
+        "error": "Protocol error (Runtime.callFunctionOn): Argument should belong to the same JavaScript world as target object"
+      }
+    ]
+  }
+}

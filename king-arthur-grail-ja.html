@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アーサー王と聖杯 - ケルト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4b0082 50%, #daa520 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 王国の光 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(218, 165, 32, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(75, 0, 130, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #daa520 0%, #4b0082 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '👑 ⚔️ 🏰 🏆';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #daa520;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #daa520;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #daa520;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(218, 165, 32, 0.2), rgba(75, 0, 130, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #daa520;
+        }
+
+        .knights-code {
+            background: rgba(75, 0, 130, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(75, 0, 130, 0.3);
+        }
+
+        /* 聖杯エフェクト */
+        .holy-grail {
+            position: fixed;
+            top: 25%;
+            right: 30px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: grailGlow 8s infinite;
+        }
+
+        @keyframes grailGlow {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+
+        .camelot-towers {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .round-table {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            height: 250px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: tableRotate 45s linear infinite;
+        }
+
+        @keyframes tableRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .excalibur-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .light-ray {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.2), transparent);
+            height: 3px;
+            animation: lightSweep 12s linear infinite;
+        }
+
+        @keyframes lightSweep {
+            0% { 
+                transform: translateX(-100px) rotate(45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateX(calc(100vw + 100px)) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 聖杯 -->
+    <div class="holy-grail">🏆</div>
+    
+    <!-- エクスカリバーの光 -->
+    <div class="excalibur-light" id="excaliburLight"></div>
+    
+    <!-- 円卓 -->
+    <div class="round-table">
+        <svg viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="125" cy="125" r="100" fill="none" stroke="rgba(218, 165, 32, 0.3)" stroke-width="4"/>
+            <circle cx="125" cy="125" r="70" fill="none" stroke="rgba(218, 165, 32, 0.2)" stroke-width="2"/>
+            <circle cx="125" cy="125" r="40" fill="none" stroke="rgba(218, 165, 32, 0.2)" stroke-width="2"/>
+            <!-- 12の席 -->
+            <g stroke="rgba(218, 165, 32, 0.2)" stroke-width="1">
+                <line x1="125" y1="25" x2="125" y2="45"/>
+                <line x1="186" y1="47" x2="174" y2="60"/>
+                <line x1="216" y1="125" x2="195" y2="125"/>
+                <line x1="186" y1="203" x2="174" y2="190"/>
+                <line x1="125" y1="225" x2="125" y2="205"/>
+                <line x1="64" y1="203" x2="76" y2="190"/>
+                <line x1="34" y1="125" x2="55" y2="125"/>
+                <line x1="64" y1="47" x2="76" y2="60"/>
+            </g>
+        </svg>
+    </div>
+    
+    <!-- キャメロット城 -->
+    <div class="camelot-towers">
+        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 城の塔 -->
+            <rect x="10" y="80" width="15" height="70" fill="rgba(218, 165, 32, 0.1)"/>
+            <rect x="35" y="60" width="20" height="90" fill="rgba(218, 165, 32, 0.1)"/>
+            <rect x="65" y="75" width="15" height="75" fill="rgba(218, 165, 32, 0.1)"/>
+            <!-- 旗 -->
+            <line x1="45" y1="60" x2="45" y2="40" stroke="rgba(218, 165, 32, 0.2)" stroke-width="1"/>
+            <polygon points="45,40 55,45 45,50" fill="rgba(218, 165, 32, 0.1)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>アーサー王と聖杯</h1>
+            <p>King Arthur and the Holy Grail - 円卓の騎士の伝説</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #daa520; text-decoration: none; font-size: 1.5rem;">👑 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="celtic-mythology-index-ja.html">ケルト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>永遠の王の物語</h2>
+            
+            <p>
+                アーサー王の伝説は、ケルト神話とキリスト教が融合した最も美しい物語の一つです。ブリテン島の統一、円卓の騎士、聖杯探求、そして永遠の王への昇華を描いたこの物語は、単なる英雄譚ではなく、理想の王国と完璧な騎士道を追求した人類の夢を表現しています。
+            </p>
+
+            <h3>石に刺さった剣</h3>
+            <p>
+                5世紀末のブリテン島は、ローマ帝国の撤退後、サクソン族の侵攻により混乱していました。人々は真の王の出現を待ち望んでいました。その時、ロンドンの大聖堂前に不思議な石が現れました。石には美しい剣が深く刺さっており、次のような言葉が刻まれていました。
+            </p>
+
+            <div class="highlight">
+                「この剣を石より抜き給う者こそ、<br>
+                全ブリテンの正統なる王たらん」<br>
+                - 運命の石の予言
+            </div>
+
+            <p>
+                多くの貴族や騎士が試しましたが、誰も剣を抜くことができませんでした。ところが、まだ15歳の少年アーサーが、何の努力もなしに剣をすらりと抜いたのです。彼こそ、先王ウーサー・ペンドラゴンの息子で、魔法使いマーリンによって密かに育てられていた真の王子でした。
+            </p>
+
+            <h3>エクスカリバーの獲得</h3>
+            <p>
+                王になったアーサーでしたが、石の剣は最初の戦いで折れてしまいました。マーリンは彼を神秘の湖に導きました。湖面に美しい腕が現れ、光り輝く剣を差し出しました。これが伝説の聖剣エクスカリバーでした。
+            </p>
+
+            <p>
+                湖の貴婦人（Lady of the Lake）が語りました：「この剣は決して欠けることなく、持つ者を勝利に導くでしょう。しかし、さらに貴重なのはこの鞘です。これを身につけている限り、あなたは決して血を流すことはありません」
+            </p>
+
+            <h3>キャメロット城と円卓の騎士</h3>
+            <p>
+                アーサーは理想の都キャメロットを建設し、そこに円卓を置きました。この円卓には序列がなく、全ての騎士が平等でした。150の席があり、そのうち1つは「危険な席」と呼ばれ、聖杯の騎士のみが座ることができる特別な席でした。
+            </p>
+
+            <p>
+                円卓の騎士たちには厳格な騎士道の掟がありました：正義を守り、弱者を助け、誠実であること、女性を敬うこと、そして神への信仰を保つこと。ランスロット、ガウェイン、パーシヴァル、ガラハドなど、伝説的な騎士たちが集いました。
+            </p>
+
+            <div class="knights-code">
+                <h4>円卓の騎士の掟</h4>
+                <p>
+                1. 正義のためにのみ剣を抜くこと<br>
+                2. 嘘や偽りを憎むこと<br>
+                3. 寛大であり、悪に対して無慈悲であること<br>
+                4. 弱い者や無防備な者を守ること<br>
+                5. 仲間を助けること<br>
+                6. 女性を敬い、守ること<br>
+                7. 真の愛以外に愛を語らぬこと<br>
+                8. 神を畏れ、その教えを守ること
+                </p>
+            </div>
+
+            <h3>聖杯の出現</h3>
+            <p>
+                ある聖霊降臨祭の夜、キャメロット城の大広間に神秘的な光が差し込みました。白い絹に覆われた聖杯が空中に現れ、騎士たちに天の恵みを与えました。しかし、誰も聖杯の真の姿を見ることはできませんでした。
+            </p>
+
+            <p>
+                この聖杯は、キリストが最後の晩餐で使った杯であり、十字架上でキリストの血を受けたアリマタヤのヨセフが持参したものと信じられていました。聖杯は完璧な純潔と信仰を持つ者にのみ、その真の姿を現すのです。
+            </p>
+
+            <h3>聖杯探求の旅</h3>
+            <p>
+                ガウェイン卿が立ち上がって宣言しました：「我々は聖杯を探し求める旅に出よう。1年と1日の後、再びこの円卓で会おう」多くの騎士たちがこの探求に参加しましたが、それは円卓の騎士団の終わりの始まりでもありました。
+            </p>
+
+            <p>
+                パーシヴァル、ガラハド、ボーズの3人だけが聖杯城にたどり着きました。特にガラハドは完璧な純潔の騎士として聖杯を見ることを許され、聖杯と共に天に昇ったと伝えられています。多くの騎士たちは旅路で命を落とし、円卓は次第に空席が増えていきました。
+            </p>
+
+            <h3>王国の黄昏</h3>
+            <p>
+                最愛の騎士ランスロットと妻グィネヴィアの不倫が発覚し、アーサーの心は深く傷つきました。また、魔女モルガン・ル・フェイとの間の息子モードレッドが反逆を企て、王国は内戦状態となりました。
+            </p>
+
+            <p>
+                最後の戦いカムランの戦いで、アーサーはモードレッドと一騎打ちを行いました。エクスカリバーでモードレッドを倒しましたが、自らも致命傷を負いました。死の間際、アーサーは忠臣ベディヴィアにエクスカリバーを湖に返すよう命じました。
+            </p>
+
+            <h3>アヴァロンへの旅立ち</h3>
+            <p>
+                瀕死のアーサー王のもとに、モルガン・ル・フェイを含む三人の女王が舟に乗って現れました。彼女たちはアーサーを神秘の島アヴァロンへ連れて行きました。アヴァロンでは時間が止まり、全ての傷が癒されると言われています。
+            </p>
+
+            <p>
+                アーサー王は死んだのではなく、アヴァロンで眠っているのです。ブリテンが真に危機に瀕した時、「再び帰りし王」（Rex quondam rexque futurus）として蘇り、民を救うと預言されています。
+            </p>
+
+            <div class="highlight">
+                アーサー王伝説が現代に伝えること：<br>
+                完璧な理想は達成困難だが、それを追求すること自体に価値がある。真のリーダーシップとは力ではなく奉仕の精神である。騎士道の精神 - 正義、誠実、勇気、慈悲 - は時代を超えて人類の指針となる。そして真の王国は外に築くものではなく、心の中に築くものである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 円卓の騎士の理想に学びましょう。</p>
+    </footer>
+
+    <script>
+        // エクスカリバーの光エフェクト
+        function createExcaliburLight() {
+            const container = document.getElementById('excaliburLight');
+            
+            function addLightRay() {
+                const ray = document.createElement('div');
+                ray.className = 'light-ray';
+                ray.style.width = (200 + Math.random() * 300) + 'px';
+                ray.style.top = Math.random() * 100 + '%';
+                ray.style.animationDelay = Math.random() * 5 + 's';
+                ray.style.animationDuration = (8 + Math.random() * 8) + 's';
+                container.appendChild(ray);
+                
+                setTimeout(() => {
+                    if (container.contains(ray)) {
+                        container.removeChild(ray);
+                    }
+                }, 12000);
+            }
+            
+            // 定期的に光線を追加
+            setInterval(addLightRay, 3000);
+            
+            // 初期の光線を追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addLightRay, i * 1500);
+            }
+        }
+        
+        createExcaliburLight();
+    </script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シヴァとパールヴァティーの物語 - インド神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2e2e2e 0%, #9c27b0 50%, #e1bee7 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 神聖な山の雰囲気 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(156, 39, 176, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(225, 190, 231, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #9c27b0 0%, #e1bee7 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(156, 39, 176, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🕉️ 🔱 🌙 🐍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f3e5f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #4a148c;
+            font-weight: 600;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #9c27b0;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(156, 39, 176, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #9c27b0;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #9c27b0;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(225, 190, 231, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .shiva-mantra {
+            background: rgba(156, 39, 176, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(156, 39, 176, 0.3);
+            font-style: italic;
+        }
+
+        .shiva-mantra h4 {
+            color: #4a148c;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* シヴァエフェクト */
+        .cosmic-dance {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: cosmicRotation 30s infinite;
+        }
+
+        @keyframes cosmicRotation {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .third-eye {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(156, 39, 176, 0.4), transparent);
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 1;
+            animation: eyeGlow 20s infinite;
+        }
+
+        @keyframes eyeGlow {
+            0%, 100% { opacity: 0.1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.3; transform: translateX(-50%) scale(1.5); }
+        }
+
+        .sacred-serpent {
+            position: fixed;
+            bottom: 20%;
+            left: 30px;
+            width: 200px;
+            height: 50px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: serpentMove 25s infinite;
+        }
+
+        @keyframes serpentMove {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-5px) rotate(-3deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .himalayan-peaks {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, rgba(46, 46, 46, 0.2), transparent);
+            z-index: 1;
+        }
+
+        .lotus-blossoms {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lotus {
+            position: absolute;
+            animation: lotusFloat 30s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes lotusFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 蓮の花 -->
+    <div class="lotus-blossoms" id="lotusBlossoms"></div>
+    
+    <!-- 宇宙の踊り -->
+    <div class="cosmic-dance">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- シヴァの輪 -->
+            <circle cx="75" cy="75" r="60" fill="none" stroke="rgba(156, 39, 176, 0.3)" stroke-width="3"/>
+            <!-- 火の輪 -->
+            <circle cx="75" cy="75" r="70" fill="none" stroke="rgba(255, 152, 0, 0.2)" stroke-width="2"/>
+            <!-- シヴァの姿 -->
+            <ellipse cx="75" cy="75" rx="15" ry="25" fill="rgba(156, 39, 176, 0.4)"/>
+            <!-- 腕 -->
+            <ellipse cx="60" cy="65" rx="6" ry="15" fill="rgba(156, 39, 176, 0.3)" transform="rotate(-30 60 65)"/>
+            <ellipse cx="90" cy="65" rx="6" ry="15" fill="rgba(156, 39, 176, 0.3)" transform="rotate(30 90 65)"/>
+            <ellipse cx="60" cy="85" rx="6" ry="15" fill="rgba(156, 39, 176, 0.3)" transform="rotate(-60 60 85)"/>
+            <ellipse cx="90" cy="85" rx="6" ry="15" fill="rgba(156, 39, 176, 0.3)" transform="rotate(60 90 85)"/>
+        </svg>
+    </div>
+    
+    <!-- 第三の目 -->
+    <div class="third-eye"></div>
+    
+    <!-- 聖なる蛇 -->
+    <div class="sacred-serpent">
+        <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,25 Q50,10 100,25 T190,25" stroke="rgba(156, 39, 176, 0.3)" stroke-width="8" fill="none"/>
+            <path d="M10,25 Q50,40 100,25 T190,25" stroke="rgba(225, 190, 231, 0.2)" stroke-width="4" fill="none"/>
+            <!-- 蛇の頭 -->
+            <ellipse cx="190" cy="25" rx="8" ry="6" fill="rgba(156, 39, 176, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- ヒマラヤの峰 -->
+    <div class="himalayan-peaks"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>シヴァとパールヴァティーの物語</h1>
+            <p>Shiva and Parvati - 破壊と創造の愛</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #9c27b0; text-decoration: none; font-size: 1.5rem;">🔱 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="indian-mythology-index-ja.html">インド神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>破壊神と女神の永遠の結合</h2>
+            
+            <p>
+                シヴァとパールヴァティーの物語は、ヒンドゥー教における最も神聖で深遠な愛の物語の一つです。破壊と創造の神シヴァと、母なる女神シャクティの化身であるパールヴァティーの結合は、宇宙の男性原理と女性原理の完璧な調和を表しています。この物語は、真の愛がいかに困難を乗り越え、宇宙の秩序を維持するかを教える、永遠の精神的教訓でもあります。
+            </p>
+
+            <h3>孤独な破壊神シヴァ</h3>
+            <p>
+                シヴァは三大神（トリムールティ）の一柱として、破壊と再生を司る神です。彼はカイラーサ山で瞑想に没頭し、物質世界から離れた存在として描かれます。長く絡まった髪、額の第三の目、首に巻いた毒蛇、虎の皮の腰衣など、その姿は世俗的な美しさを超越した神聖さを表しています。
+            </p>
+
+            <p>
+                シヴァは以前、ダクシャ王の娘サティーと結婚していました。しかし、父ダクシャがシヴァを侮辱したため、サティーは身を犠牲にして夫の名誉を守りました。この悲劇的な出来事の後、シヴァは深い悲嘆に沈み、世界から隠遁して厳しい苦行と瞑想に専念するようになりました。
+            </p>
+
+            <p>
+                何千年もの間、シヴァは愛や情熱からは距離を置き、純粋な意識と瞑想の世界に留まっていました。しかし、この隠遁生活は宇宙のバランスに影響を与え、創造のエネルギーが停滞していました。世界は新しい生命力と創造力を必要としていました。
+            </p>
+
+            <div class="shiva-mantra">
+                <h4>シヴァの瞑想</h4>
+                <p>
+                「オーム・ナマハ・シヴァーヤ<br>
+                破壊の向こうに創造あり<br>
+                静寂の中に宇宙の鼓動<br>
+                瞑想によって真理を見る<br>
+                我は宇宙、宇宙は我なり」
+                </p>
+            </div>
+
+            <h3>パールヴァティーの誕生と決意</h3>
+            <p>
+                ヒマラヤ山脈の王ヒマヴァーンと女神メーナカーの娘として、パールヴァティー（山の娘）が生まれました。彼女は幼い頃から美しく聡明で、特にシヴァに対する深い愛と献身を示しました。パールヴァティーは実は女神シャクティの再生であり、前世でサティーとしてシヴァと結ばれていました。
+            </p>
+
+            <p>
+                成長したパールヴァティーは、シヴァと再び結ばれることを強く望みました。しかし、瞑想に没頭するシヴァは物質世界に関心を示さず、彼女の存在にさえ気づきませんでした。パールヴァティーは、愛の力だけでは閉ざされた心を開くことができないと悟りました。
+            </p>
+
+            <p>
+                そこで彼女は、シヴァと同じ道を歩むことを決意しました。美しい衣装を脱ぎ捨て、贅沢な生活を放棄し、厳しい苦行の生活を始めました。彼女は山の洞窟で瞑想し、断食し、自然の厳しさに身をさらしました。この決意は、真の愛が相手の価値観を理解し、同じ高みを目指すことから始まることを示しています。
+            </p>
+
+            <h3>愛の神カーマとの試練</h3>
+            <p>
+                神々はシヴァとパールヴァティーの結合を望み、愛の神カーマ（カーマデーヴァ）にシヴァの心に恋情を呼び覚ますよう依頼しました。カーマは花の矢を放ってシヴァの瞑想を破ろうとしましたが、激怒したシヴァは第三の目を開き、その火でカーマを灰にしてしまいました。
+            </p>
+
+            <p>
+                この出来事により、パールヴァティーは外的な方法では真の愛を得ることはできないと理解しました。愛は強制されるものではなく、内なる純粋さと献身によってのみ生まれるものです。彼女はさらに厳しい苦行を続け、自己の内なる神性を高めることに専念しました。
+            </p>
+
+            <p>
+                パールヴァティーの苦行は何年も続きました。彼女は食事を断ち、木の葉だけで生活し（パルナーハーラ）、やがては水だけで生活し（ジャラーハーラ）、最終的には呼吸だけで生存する（ヴァーユーハーラ）段階に達しました。この極限の献身が、ついにシヴァの心を動かすことになりました。
+            </p>
+
+            <div class="highlight">
+                パールヴァティーの苦行：<br>
+                パールヴァティーの苦行は、真の愛が自己犠牲と精神的な成長を伴うことを示しています。彼女は外見の美しさや世俗的な魅力に頼らず、内なる純粋性と献身によってシヴァの心を動かそうとしました。これは、本当の愛が相手を理解し、相手と同じ価値観を共有することから生まれることを教えています。
+            </div>
+
+            <h3>シヴァの試練と認識</h3>
+            <p>
+                シヴァはパールヴァティーの献身を試すため、老いた修行者の姿に変身して彼女の前に現れました。老修行者は、シヴァの悪口を言い、彼のような風変わりで危険な神と結婚することの愚かさを説きました。しかし、パールヴァティーは激怒し、シヴァを擁護して老修行者を追い払おうとしました。
+            </p>
+
+            <p>
+                パールヴァティーの純粋で揺るぎない愛に感動したシヴァは、ついに正体を現しました。彼は、彼女の献身と純粋な愛が真のものであることを認識し、結婚を受け入れることにしました。この瞬間、宇宙は歓喜に包まれ、すべての創造力が再び動き始めました。
+            </p>
+
+            <p>
+                しかし、パールヴァティーはシヴァの試験に怒りを示し、彼もまた自分の価値を証明するべきだと要求しました。これにより、二人の関係は対等なパートナーシップに基づくものとなりました。真の結合は、一方的な献身ではなく、相互の尊敬と理解に基づくものでなければならないのです。
+            </p>
+
+            <h3>聖なる結婚式</h3>
+            <p>
+                シヴァとパールヴァティーの結婚式は、宇宙的な祝祭として行われました。すべての神々、聖者、天界の存在たちが参列し、ヒマラヤ山脈全体が歓喜に包まれました。ブラフマー神が司祭となり、ヴィシュヌ神とラクシュミー女神が立会人となりました。
+            </p>
+
+            <p>
+                結婚式では、七つの神聖な誓い（サプタパディー）が交わされました。二人は互いに、愛、尊敬、理解、支援、そして精神的な成長における協力を約束しました。この結婚は、個人的な幸福だけでなく、宇宙の調和と創造の継続のための神聖な結合でした。
+            </p>
+
+            <p>
+                結婚後、シヴァとパールヴァティーはカイラーサ山で幸福な生活を送りました。二人の間には息子ガネーシャ（象頭の神）とムルガン（戦いの神）が生まれ、ヒンドゥー教の重要な神々として崇拝されることになりました。
+            </p>
+
+            <h3>アルダナーリーシュヴァラ</h3>
+            <p>
+                シヴァとパールヴァティーの完璧な結合は、「アルダナーリーシュヴァラ」（半女神）という形で表現されます。これは、右半身がシヴァ、左半身がパールヴァティーという半男半女の神像です。この形態は、宇宙における男性原理（プルシャ）と女性原理（プラクリティ）の完全な統合を象徴しています。
+            </p>
+
+            <p>
+                アルダナーリーシュヴァラの概念は、真の愛において二人の個性が失われるのではなく、互いを補完し合いながらより高次の存在となることを示しています。男性性と女性性、破壊と創造、静寂と動力など、相反する要素が調和することで完全性が実現されます。
+            </p>
+
+            <p>
+                この結合により、シヴァは完全な破壊神から創造的な力も持つ存在となり、パールヴァティーは単なる美と愛の女神から、シャクティ（根源的エネルギー）の完全な表現となりました。二人の愛は個人的な感情を超越し、宇宙の根本原理となりました。
+            </p>
+
+            <h3>宇宙の母と父</h3>
+            <p>
+                シヴァとパールヴァティーは、すべての存在の宇宙的な父母として崇拝されています。シヴァは意識の象徴として、パールヴァティー（シャクティ）はエネルギーと創造力の象徴として、宇宙のあらゆる現象の根源となっています。
+            </p>
+
+            <p>
+                彼らの愛は時として激しく情熱的で、時として静寂で深遠です。この変化は、宇宙の創造、維持、破壊のサイクルを反映しています。二人の結合から生まれるエネルギーが、星々の誕生から人間の恋愛まで、あらゆる創造活動の源となっています。
+            </p>
+
+            <p>
+                また、シヴァとパールヴァティーの物語は、結婚生活の理想像も示しています。互いの個性を尊重し、精神的な成長を支援し合い、困難な時には団結して立ち向かう。彼らの関係は、人間の夫婦が目指すべき最高の形を表しています。
+            </p>
+
+            <div class="shiva-mantra">
+                <h4>シヴァ・シャクティの讃歌</h4>
+                <p>
+                「シヴァなきシャクティは力なく<br>
+                シャクティなきシヴァは空虚なり<br>
+                二つにして一つ、一つにして全て<br>
+                愛の結合により宇宙は生まれ<br>
+                永遠の舞踏が続けられる」
+                </p>
+            </div>
+
+            <h3>現代への教訓</h3>
+            <p>
+                シヴァとパールヴァティーの物語は、現代の恋愛と結婚に対する深い洞察を与えてくれます。まず、真の愛は相手を理解し、相手の価値観を共有することから始まることを教えています。パールヴァティーがシヴァと同じ精神的な高みを目指したように、愛は相手に合わせて自分も成長することを要求します。
+            </p>
+
+            <p>
+                また、この物語は結婚が個人的な幸福だけでなく、より大きな目的に奉仕する神聖な結合であることを示しています。現代の個人主義的な恋愛観とは対照的に、真の愛は社会や宇宙全体の調和に貢献するものです。
+            </p>
+
+            <p>
+                さらに、アルダナーリーシュヴァラの概念は、現代のジェンダー観にも重要な示唆を与えます。男性と女性は対立する存在ではなく、互いを補完し合う存在であり、完全な人間性は両方の要素を統合することで実現されるのです。
+            </p>
+
+            <div class="highlight">
+                シヴァとパールヴァティーが現代に伝えること：<br>
+                真の愛は相手を変えようとするのではなく、自分が相手に值する人間になることから始まる。結婚は個人の幸福を超えた神聖な使命である。対立する要素（男性性・女性性、静寂・動力）の調和こそが完全性をもたらす。愛における試練は関係を強化する成長の機会である。そして、最高の愛は個人を超越して宇宙的な意味を持つ。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. オーム・ナマハ・シヴァーヤ、永遠の愛と共に。</p>
+    </footer>
+
+    <script>
+        // 蓮の花エフェクト
+        function createLotusBlossoms() {
+            const container = document.getElementById('lotusBlossoms');
+            const lotusSymbols = ['🪷', '🌸', '🌺'];
+            
+            function addLotus() {
+                const lotus = document.createElement('div');
+                lotus.className = 'lotus';
+                lotus.innerHTML = lotusSymbols[Math.floor(Math.random() * lotusSymbols.length)];
+                lotus.style.left = Math.random() * 100 + '%';
+                lotus.style.fontSize = (25 + Math.random() * 15) + 'px';
+                lotus.style.animationDelay = Math.random() * 10 + 's';
+                lotus.style.animationDuration = (25 + Math.random() * 10) + 's';
+                container.appendChild(lotus);
+                
+                setTimeout(() => {
+                    if (container.contains(lotus)) {
+                        container.removeChild(lotus);
+                    }
+                }, 30000);
+            }
+            
+            // 定期的に蓮を追加
+            setInterval(addLotus, 4000);
+            
+            // 初期の蓮を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addLotus, i * 2000);
+            }
+        }
+        
+        createLotusBlossoms();
+
+        // OM音のシンボルエフェクト
+        function createOmEffect() {
+            setInterval(() => {
+                const om = document.createElement('div');
+                om.innerHTML = '🕉️';
+                om.style.position = 'fixed';
+                om.style.top = Math.random() * 100 + '%';
+                om.style.left = Math.random() * 100 + '%';
+                om.style.fontSize = '30px';
+                om.style.pointerEvents = 'none';
+                om.style.zIndex = '1';
+                om.style.opacity = '0';
+                om.style.color = 'rgba(156, 39, 176, 0.6)';
+                
+                document.body.appendChild(om);
+                
+                // フェードイン・アウト
+                let opacity = 0;
+                const fadeIn = setInterval(() => {
+                    opacity += 0.02;
+                    om.style.opacity = opacity;
+                    if (opacity >= 0.3) {
+                        clearInterval(fadeIn);
+                        setTimeout(() => {
+                            const fadeOut = setInterval(() => {
+                                opacity -= 0.02;
+                                om.style.opacity = opacity;
+                                if (opacity <= 0) {
+                                    clearInterval(fadeOut);
+                                    if (document.body.contains(om)) {
+                                        document.body.removeChild(om);
+                                    }
+                                }
+                            }, 100);
+                        }, 2000);
+                    }
+                }, 100);
+            }, 8000);
+        }
+        
+        createOmEffect();
+    </script>
+</body>
+</html>

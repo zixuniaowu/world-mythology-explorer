@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ワンジナ雲の精霊 - オーストラリア原住民神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #87CEEB 50%, #F0F8FF 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 雲の空 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(240, 248, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(135, 206, 235, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #87CEEB 0%, #F0F8FF 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(135, 206, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '☁️ 👁️ ⛈️ 🎨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #e6f3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #333;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #87CEEB;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(135, 206, 235, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #87CEEB;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #87CEEB;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(135, 206, 235, 0.2), rgba(240, 248, 255, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #87CEEB;
+        }
+
+        .rock-art-gallery {
+            background: rgba(240, 248, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(240, 248, 255, 0.3);
+        }
+
+        .rock-art-gallery h4 {
+            color: #F0F8FF;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ワンジナ霊エフェクト */
+        .wandjina-spirit {
+            position: fixed;
+            top: 25%;
+            left: 30px;
+            width: 200px;
+            height: 250px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: spiritWatch 18s infinite;
+        }
+
+        @keyframes spiritWatch {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.1; }
+            25% { transform: scale(1.1) rotate(2deg); opacity: 0.15; }
+            50% { transform: scale(0.9) rotate(0deg); opacity: 0.12; }
+            75% { transform: scale(1.05) rotate(-2deg); opacity: 0.18; }
+        }
+
+        .floating-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cloud-particle {
+            position: absolute;
+            font-size: 3rem;
+            animation: cloudFloat 30s linear infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes cloudFloat {
+            0% {
+                transform: translateX(-200px) translateY(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        .kimberley-landscape {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .lightning-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lightning {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(240, 248, 255, 0.4), transparent);
+            height: 2px;
+            animation: lightningStrike 12s infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightningStrike {
+            0%, 95% { opacity: 0; }
+            96% { opacity: 0.8; transform: scaleX(0.5); }
+            97% { opacity: 0; transform: scaleX(1); }
+            98% { opacity: 1; transform: scaleX(0.8); }
+            99% { opacity: 0; transform: scaleX(1); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ワンジナ霊 -->
+    <div class="wandjina-spirit">
+        <svg viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+            <!-- ワンジナの頭部 -->
+            <ellipse cx="100" cy="120" rx="70" ry="60" fill="rgba(240, 248, 255, 0.3)"/>
+            <!-- 大きな目 -->
+            <circle cx="80" cy="110" r="20" fill="rgba(135, 206, 235, 0.4)"/>
+            <circle cx="120" cy="110" r="20" fill="rgba(135, 206, 235, 0.4)"/>
+            <circle cx="80" cy="110" r="10" fill="rgba(255, 255, 255, 0.8)"/>
+            <circle cx="120" cy="110" r="10" fill="rgba(255, 255, 255, 0.8)"/>
+            <!-- 鼻がない（ワンジナの特徴） -->
+            <!-- 口 -->
+            <ellipse cx="100" cy="140" rx="15" ry="8" fill="rgba(135, 206, 235, 0.4)"/>
+            <!-- ヘイロー（後光） -->
+            <path d="M40,80 Q100,40 160,80" stroke="rgba(240, 248, 255, 0.4)" stroke-width="3" fill="none"/>
+            <!-- 肩 -->
+            <rect x="70" y="180" width="60" height="40" rx="30" fill="rgba(240, 248, 255, 0.2)"/>
+        </svg>
+    </div>
+    
+    <!-- 浮かぶ雲 -->
+    <div class="floating-clouds" id="floatingClouds"></div>
+    
+    <!-- キンバリーの風景 -->
+    <div class="kimberley-landscape">
+        <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 赤い岩肌 -->
+            <path d="M0,150 L50,100 L100,120 L150,80 L200,110 L250,70 L300,100 L300,150 Z" 
+                  fill="rgba(139, 69, 19, 0.2)"/>
+            <!-- 洞窟 -->
+            <ellipse cx="100" cy="130" rx="20" ry="15" fill="rgba(0, 0, 0, 0.3)"/>
+            <ellipse cx="200" cy="125" rx="15" ry="12" fill="rgba(0, 0, 0, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- 雷光 -->
+    <div class="lightning-flash" id="lightningFlash"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ワンジナ雲の精霊</h1>
+            <p>Wandjina Cloud Spirits - キンバリーの守護者</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #87CEEB; text-decoration: none; font-size: 1.5rem;">☁️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aboriginal-mythology-index-ja.html">オーストラリア原住民神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>岩壁に宿る古の霊</h2>
+            
+            <p>
+                ワンジナ（Wandjina）は、オーストラリア北西部キンバリー地方のアボリジニに信仰されている雲と雨の精霊です。この神秘的な存在は、何千年もの間、洞窟や岩壁に描かれた壁画として人々を見守り続けています。ワンジナは単なる神話上の存在ではなく、現在でもこの地域の人々の精神的支柱であり、自然との調和を象徴する重要な文化的アイコンです。
+            </p>
+
+            <h3>ドリームタイムからの使者</h3>
+            <p>
+                ドリームタイムの時代、天空には無数のワンジナたちが住んでいました。彼らは巨大な頭と大きな目を持つ霊的存在で、雲を操り、雨を降らせ、稲妻を放つ力を持っていました。ワンジナたちの最も特徴的な外見は、鼻がないことです。これは、もし彼らに鼻があったら、あまりにも強い風を吹かせて世界を破壊してしまうからだと言われています。
+            </p>
+
+            <p>
+                ワンジナたちは天空から大地を見下ろし、そこに住む生き物たちが調和を保って生きているかを監視していました。彼らは特に水の分配に責任を持ち、どの地域にいつ雨を降らせるかを決めていました。乾季が続きすぎると生き物が苦しみ、雨が多すぎると洪水が起こる。ワンジナたちはこの微妙なバランスを保つことで、生態系の調和を維持していたのです。
+            </p>
+
+            <h3>地上への降臨</h3>
+            <p>
+                ある時、ワンジナたちは人間がまだ法と秩序を知らずに混乱していることを知りました。彼らは地上に降りて、直接人間たちを教導することにしました。最初に降臨したのは、ワンジナの長である偉大なナマラリ（Namarali）でした。
+            </p>
+
+            <p>
+                ナマラリは現在のキンバリー地方に降り立ち、人々に雨の大切さ、季節の巡り、動植物との共存の方法を教えました。彼は特に、各部族がどの土地を管理し、どの聖地を守るべきかを定めました。また、結婚のルール、儀式の方法、そして最も重要な「カウンテリー」（Country）の概念 - つまり人間と土地の精神的なつながりについて教えました。
+            </p>
+
+            <div class="rock-art-gallery">
+                <h4>ワンジナ岩絵の特徴</h4>
+                <p>
+                ・巨大な頭部（時に3メートルを超える）<br>
+                ・大きく見開かれた目<br>
+                ・鼻がない顔<br>
+                ・白いオーカー（白土）で描かれた体<br>
+                ・頭部を取り囲む放射状の線（雲や稲妻を表現）<br>
+                ・赤と黄色のオーカーによる装飾模様
+                </p>
+            </div>
+
+            <h3>岩壁への刻印</h3>
+            <p>
+                教えを終えたワンジナたちは、自分たちの使命を完了したと感じました。しかし、彼らは完全に天に帰るのではなく、人々を永遠に見守るために特別な方法を選びました。各ワンジナは、自分が最も愛する場所、最も神聖だと思う洞窟や岩壁に自分の姿を刻み込んだのです。
+            </p>
+
+            <p>
+                この過程は神秘的でした。ワンジナたちは岩壁に体を横たえ、深い瞑想に入りました。すると、彼らの霊的エネルギーが岩に染み込み、美しい壁画として永遠に残ったのです。この時から、ワンジナたちは岩絵として存在し続け、季節の変化と共に雨を降らせ、干ばつの時には人々の祈りに応えるようになりました。
+            </p>
+
+            <h3>壁画の維持と再生儀式</h3>
+            <p>
+                ワンジナの岩絵は時間と共に色褪せていきます。しかし、これは単なる劣化ではありません。アボリジニの人々にとって、壁画の維持と再描画は最も神聖な儀式の一つです。乾季の終わりに、選ばれた長老たちが洞窟を訪れ、古い壁画の上に新しい顔料を塗り重ねます。
+            </p>
+
+            <p>
+                この儀式は単純な修復作業ではありません。絵を描き直すことで、ワンジナの力を再び活性化させ、新しい雨季の到来を促すのです。長老たちは祖先から受け継いだ正確な技法を使い、白いオーカー、赤いオーカー、黄色いオーカー、そして炭を用いて、数千年間変わらない方法で壁画を再生します。
+            </p>
+
+            <p>
+                この儀式の間、長老たちは特別な歌を歌います。これらの歌は、ワンジナに雨を降らせるよう請願するものであり、同時に若い世代にワンジナの物語を伝える教育的な役割も果たしています。儀式が終わると、通常数週間以内に雨が降り始めると信じられています。
+            </p>
+
+            <h3>現代科学との出会い</h3>
+            <p>
+                20世紀後半、ワンジナの岩絵は考古学者や人類学者の注目を集めました。放射性炭素年代測定により、最古のワンジナ壁画は4万年以上前に描かれたことが判明し、これは人類最古の宗教的芸術の一つとされています。
+            </p>
+
+            <p>
+                興味深いことに、ワンジナの描写には現代人が「宇宙人」を連想させるような特徴があります。大きな頭、巨大な目、鼻のない顔は、一部の研究者やSF愛好家の想像力をかき立てました。しかし、伝統的な所有者であるアボリジニの人々にとって、ワンジナは明確に地球の、そして彼らの土地の精霊なのです。
+            </p>
+
+            <div class="highlight">
+                ワンジナの祈り：<br>
+                「雲の長老よ、あなたの目で私たちを見てください<br>
+                あなたの力で雨を送ってください<br>
+                大地が渇き、動物たちが水を求めています<br>
+                私たちは古い約束を守ります<br>
+                あなたの画を新しく描き直し<br>
+                あなたの歌を歌い続けます」
+            </div>
+
+            <h3>文化的所有権と現代の課題</h3>
+            <p>
+                近年、ワンジナの画像が商業的に利用されることが問題となっています。Tシャツ、絵葉書、土産物などに無断でワンジナの画像が使用され、伝統的所有者であるアボリジニのコミュニティが反発しています。彼らにとって、ワンジナは単なるデザインやシンボルではなく、生きた霊的存在なのです。
+            </p>
+
+            <p>
+                この問題は、先住民の文化的権利と知的財産権に関する重要な議論を引き起こしました。オーストラリア政府は現在、先住民の文化的表現を保護するための法整備を進めており、ワンジナのケースは重要な判例となっています。
+            </p>
+
+            <h3>気候変動時代のワンジナ</h3>
+            <p>
+                現在、キンバリー地方は気候変動の影響を受けています。降雨パターンの変化、異常気象の増加、海水面の上昇などが、ワンジナの聖地にも影響を与えています。一部の洞窟では、洪水により古い壁画が損傷を受けており、保存の緊急性が高まっています。
+            </p>
+
+            <p>
+                しかし、アボリジニのコミュニティは、ワンジナの教えが気候変動への対処にも有効だと信じています。持続可能な土地利用、自然との調和、長期的な視点での環境管理など、ワンジナが教えた価値観は、現代の環境問題解決のヒントを提供しています。
+            </p>
+
+            <p>
+                現在、多くの研究機関がアボリジニのコミュニティと協力して、ワンジナ壁画のデジタル保存や、伝統的知識を活用した環境管理手法の開発に取り組んでいます。古代の知恵と現代の技術が融合することで、ワンジナの遺産は新たな形で次世代に継承されようとしています。
+            </p>
+
+            <div class="highlight">
+                ワンジナが現代に伝えること：<br>
+                芸術は単なる装飾ではなく、精神世界と現実世界をつなぐ架け橋である。自然は人間の都合で変えられるものではなく、人間が自然のリズムに合わせて生きるべきである。文化的遺産は過去の遺物ではなく、現在を生き、未来を導く生きた力である。真の豊かさは物質的な所有ではなく、精神的なつながりと責任感にある。そして知識は独占するものではなく、適切な敬意と理解をもって分かち合うべきものである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ワンジナの眼差しに見守られましょう。</p>
+    </footer>
+
+    <script>
+        // 浮かぶ雲エフェクト
+        function createFloatingClouds() {
+            const container = document.getElementById('floatingClouds');
+            const clouds = ['☁️', '🌤️', '⛅', '🌦️', '⛈️'];
+            
+            function addCloud() {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud-particle';
+                cloud.innerHTML = clouds[Math.floor(Math.random() * clouds.length)];
+                cloud.style.top = Math.random() * 60 + '%';
+                cloud.style.animationDelay = Math.random() * 5 + 's';
+                cloud.style.animationDuration = (25 + Math.random() * 15) + 's';
+                container.appendChild(cloud);
+                
+                setTimeout(() => {
+                    if (container.contains(cloud)) {
+                        container.removeChild(cloud);
+                    }
+                }, 30000);
+            }
+            
+            // 定期的に雲を追加
+            setInterval(addCloud, 8000);
+            
+            // 初期の雲を追加
+            for (let i = 0; i < 3; i++) {
+                setTimeout(addCloud, i * 3000);
+            }
+        }
+        
+        // 雷光エフェクト
+        function createLightning() {
+            const container = document.getElementById('lightningFlash');
+            
+            function addLightning() {
+                const lightning = document.createElement('div');
+                lightning.className = 'lightning';
+                lightning.style.width = (30 + Math.random() * 40) + '%';
+                lightning.style.left = Math.random() * 70 + '%';
+                lightning.style.top = Math.random() * 50 + '%';
+                lightning.style.animationDelay = Math.random() * 8 + 's';
+                container.appendChild(lightning);
+                
+                setTimeout(() => {
+                    if (container.contains(lightning)) {
+                        container.removeChild(lightning);
+                    }
+                }, 12000);
+            }
+            
+            // 定期的に雷光を追加
+            setInterval(addLightning, 15000);
+            
+            // 初期の雷光を追加
+            for (let i = 0; i < 2; i++) {
+                setTimeout(addLightning, i * 8000);
+            }
+        }
+        
+        createFloatingClouds();
+        createLightning();
+    </script>
+</body>
+</html>

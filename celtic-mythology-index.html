@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ケルト神話大全 - 古代ヨーロッパの魔法と伝説</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #0f3460 0%, #16537e 50%, #2a5d31 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 森のパーティクルエフェクト */
+        .mystical-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .mystical-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #32cd32, #228b22);
+            border-radius: 50%;
+            animation: mystical-float 12s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes mystical-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* ケルト結びモチーフ */
+        .celtic-knot {
+            position: fixed;
+            top: 15%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(50, 205, 50, 0.6);
+            border-radius: 50%;
+            z-index: 2;
+            animation: knot-spin 20s linear infinite;
+        }
+        
+        .celtic-knot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(255, 215, 0, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes knot-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(15, 52, 96, 0.9) 0%, rgba(42, 93, 49, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #32CD32;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-menu a:hover {
+            color: #32CD32;
+            transform: translateY(-2px);
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #32CD32;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #32CD32;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(50, 205, 50, 0.6);
+            animation: title-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes title-glow {
+            from { text-shadow: 0 0 30px rgba(50, 205, 50, 0.6); }
+            to { text-shadow: 0 0 50px rgba(50, 205, 50, 0.9), 0 0 70px rgba(255, 215, 0, 0.3); }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-description {
+            max-width: 800px;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #E0E0E0;
+            margin-bottom: 50px;
+        }
+        
+        /* 神話カテゴリーグリッド */
+        .mythology-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .mythology-card {
+            background: linear-gradient(135deg, rgba(15, 52, 96, 0.8) 0%, rgba(42, 93, 49, 0.6) 100%);
+            border: 2px solid rgba(50, 205, 50, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .mythology-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(50, 205, 50, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .mythology-card:hover::before {
+            left: 100%;
+        }
+        
+        .mythology-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #32CD32;
+            box-shadow: 0 20px 40px rgba(50, 205, 50, 0.3);
+        }
+        
+        .card-icon {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .card-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #32CD32;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-description {
+            color: #E0E0E0;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .card-features li {
+            color: #B0B0B0;
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .card-features li::before {
+            content: '🍀';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 特殊効果 */
+        .enchanted-border {
+            position: relative;
+        }
+        
+        .enchanted-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #32CD32, #228B22, #FFD700, #32CD32);
+            border-radius: 22px;
+            z-index: -1;
+            animation: border-glow 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mythology-card:hover .enchanted-border::after {
+            opacity: 1;
+        }
+        
+        @keyframes border-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(15, 52, 96, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(50, 205, 50, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #B0B0B0;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .mythology-grid {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+            }
+            
+            .mythology-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 神秘的なパーティクル -->
+    <div class="mystical-particles" id="mysticalParticles"></div>
+    
+    <!-- ケルト結び -->
+    <div class="celtic-knot"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">ケルト神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">メインマップ</a></li>
+                    <li><a href="greek-mythology-index.html">ギリシャ神話</a></li>
+                    <li><a href="norse-mythology-index.html">北欧神話</a></li>
+                    <li><a href="chinese-mythology-index.html">中華神話</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <h1 class="hero-title">ケルト神話の世界</h1>
+        <p class="hero-subtitle">森と魔法の古代ヨーロッパ神話</p>
+        <div class="hero-description">
+            ブリテン島とアイルランドに根ざしたケルト民族の神話は、自然崇拝と魔法に満ちた世界観を持っています。
+            妖精、ドルイド、勇敢な戦士、そして神秘的な「異界」への扉が開かれる物語をご紹介します。
+            森の奥深くに隠された知恵と、永遠に語り継がれる英雄の冒険をお楽しみください。
+        </div>
+    </section>
+    
+    <!-- 神話カテゴリー -->
+    <section class="mythology-grid">
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">🌳</div>
+            <h2 class="card-title">トゥアハ・デ・ダナーン</h2>
+            <p class="card-description">
+                アイルランドの神族。光と技芸の神々として知られ、
+                魔法の四つの秘宝を持つとされる。
+            </p>
+            <ul class="card-features">
+                <li>ルー - 光と技芸の神</li>
+                <li>ブリギッド - 詩と鍛冶の女神</li>
+                <li>ダグダ - 善なる神、豊穣の神</li>
+                <li>モリガン - 戦いと運命の女神</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">⚔️</div>
+            <h2 class="card-title">アルスター物語群</h2>
+            <p class="card-description">
+                赤枝騎士団の英雄クー・フーリンを中心とした
+                アイルランド最古の英雄叙事詩。
+            </p>
+            <ul class="card-features">
+                <li>クー・フーリン - 光の子、不敗の戦士</li>
+                <li>コンホヴァル王 - アルスターの王</li>
+                <li>デアドラ - 悲劇の美女</li>
+                <li>牛争い戦争の物語</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">👑</div>
+            <h2 class="card-title">アーサー王伝説</h2>
+            <p class="card-description">
+                ブリテン島の伝説の王と円卓の騎士たち。
+                聖杯探求と騎士道の理想を描いた物語。
+            </p>
+            <ul class="card-features">
+                <li>アーサー王 - ブリテンの王</li>
+                <li>マーリン - 偉大な魔法使い</li>
+                <li>円卓の騎士たち</li>
+                <li>聖杯とエクスカリバー</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">🧚</div>
+            <h2 class="card-title">妖精と異界</h2>
+            <p class="card-description">
+                シー（妖精）たちが住む異界「ティル・ナ・ノーグ」
+                への扉と、人間との交流の物語。
+            </p>
+            <ul class="card-features">
+                <li>ティル・ナ・ノーグ - 永遠の若さの国</li>
+                <li>バンシー - 死を告げる妖精</li>
+                <li>レプラコーン - 靴作りの妖精</li>
+                <li>シー・マウンド - 妖精の丘</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">🌿</div>
+            <h2 class="card-title">ドルイドの知恵</h2>
+            <p class="card-description">
+                ケルト社会の神官階級ドルイドが伝えた
+                自然魔法と古代の知識体系。
+            </p>
+            <ul class="card-features">
+                <li>オガム文字 - 神聖な文字</li>
+                <li>樹木信仰 - 聖なる森</li>
+                <li>季節の祭り - サウィン、ベルテーン</li>
+                <li>薬草学と占い</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card enchanted-border" onclick="location.href='#'">
+            <div class="card-icon">🐉</div>
+            <h2 class="card-title">ウェールズ神話</h2>
+            <p class="card-description">
+                「マビノギオン」に収録されたウェールズの
+                古い神話と英雄譚の集成。
+            </p>
+            <ul class="card-features">
+                <li>プリデリ - 再生の神</li>
+                <li>マナウィダーン - 海の神</li>
+                <li>ライールとコルヴレン</li>
+                <li>四つの枝の物語</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">ケルト神話 - 森と魔法に満ちた古代ヨーロッパの伝承</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 神秘的なパーティクルを生成
+        function createMysticalParticles() {
+            const particlesContainer = document.getElementById('mysticalParticles');
+            const numberOfParticles = 25;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mystical-particle';
+                
+                // ランダムな位置とアニメーション
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                particle.style.animationDelay = Math.random() * 12 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // カードのホバーエフェクト
+        document.querySelectorAll('.mythology-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // ページ読み込み時の初期化
+        window.addEventListener('load', () => {
+            createMysticalParticles();
+            
+            // フェードインアニメーション
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // カードにフェードインを適用
+            document.querySelectorAll('.mythology-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(card);
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

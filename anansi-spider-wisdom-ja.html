@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アナンシの知恵 - 西アフリカ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #8B4513 50%, #228B22 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* アフリカの夕日 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(34, 139, 34, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FF8C00 0%, #228B22 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🕷️ 🌍 🥁 🌿';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF8C00;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF8C00;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF8C00;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(34, 139, 34, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF8C00;
+        }
+
+        .spider-web {
+            background: rgba(34, 139, 34, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(34, 139, 34, 0.3);
+        }
+
+        .spider-web h4 {
+            color: #228B22;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* スパイダーウェブエフェクト */
+        .web-decoration {
+            position: fixed;
+            top: 20%;
+            right: 50px;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: webSway 15s infinite;
+        }
+
+        @keyframes webSway {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            25% { transform: rotate(2deg) scale(1.05); }
+            50% { transform: rotate(-1deg) scale(0.95); }
+            75% { transform: rotate(3deg) scale(1.02); }
+        }
+
+        .african-pattern {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            opacity: 0.1;
+            z-index: 1;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(255, 140, 0, 0.2) 0px,
+                rgba(255, 140, 0, 0.2) 20px,
+                transparent 20px,
+                transparent 40px
+            );
+        }
+
+        .wisdom-spider {
+            position: fixed;
+            top: 30%;
+            left: 30px;
+            font-size: 5rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: spiderMove 20s infinite;
+        }
+
+        @keyframes spiderMove {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(20px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .drum-beats {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .drum-circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 140, 0, 0.1);
+            animation: drumPulse 4s infinite;
+        }
+
+        @keyframes drumPulse {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 知恵のスパイダー -->
+    <div class="wisdom-spider">🕷️</div>
+    
+    <!-- スパイダーウェブ装飾 -->
+    <div class="web-decoration">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- スパイダーウェブ -->
+            <g stroke="rgba(255, 140, 0, 0.3)" stroke-width="2" fill="none">
+                <circle cx="100" cy="100" r="80"/>
+                <circle cx="100" cy="100" r="60"/>
+                <circle cx="100" cy="100" r="40"/>
+                <circle cx="100" cy="100" r="20"/>
+                <line x1="100" y1="20" x2="100" y2="180"/>
+                <line x1="20" y1="100" x2="180" y2="100"/>
+                <line x1="38" y1="38" x2="162" y2="162"/>
+                <line x1="162" y1="38" x2="38" y2="162"/>
+            </g>
+        </svg>
+    </div>
+    
+    <!-- アフリカンパターン -->
+    <div class="african-pattern"></div>
+    
+    <!-- ドラムビート -->
+    <div class="drum-beats" id="drumBeats"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>アナンシの知恵</h1>
+            <p>Anansi's Wisdom - 蜘蛛神の知恵の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF8C00; text-decoration: none; font-size: 1.5rem;">🕷️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="west-african-mythology-index-ja.html">西アフリカ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>世界に知恵をもたらした蜘蛛</h2>
+            
+            <p>
+                アナンシ（Anansi）は、西アフリカのアカン族をはじめとする多くの部族に伝わる蜘蛛の神です。時にはトリックスター、時には知恵の神として描かれるアナンシは、人間に語り物や知恵を与えた存在として愛され続けています。彼の物語は口承文学として何世紀にもわたって受け継がれ、アフリカ系アメリカ人の文化にも深く根ざしています。
+            </p>
+
+            <h3>空の神ニャメの子</h3>
+            <p>
+                アナンシは天空神ニャメ（Nyame）の息子として生まれました。ニャメは世界を創造し、全ての知恵と物語を所有していました。しかし、それらの知恵は天の高い場所に隠されており、地上の人々はまだ物語や教訓を知らずに暮らしていました。
+            </p>
+
+            <p>
+                アナンシは小さな体でしたが、機知に富み、好奇心旺盛でした。彼は人間たちが無知のままでいることを悲しく思い、父なる神ニャメのところへ向かいました。「父上、なぜ人間たちには物語がないのですか？彼らにも知恵が必要です」とアナンシは尋ねました。
+            </p>
+
+            <div class="highlight">
+                ニャメの試練：<br>
+                「息子よ、物語は貴重なものだ。もし人間に与えたいなら、三つの不可能な課題を成し遂げよ」<br>
+                1. ヒョウのオシェボを生け捕りにすること<br>
+                2. スズメバチの群れマモロを集めること<br>
+                3. 妖精モマタイアを捕らえること
+            </div>
+
+            <h3>ヒョウの捕獲</h3>
+            <p>
+                最初の課題は、凶暴なヒョウのオシェボを生け捕りにすることでした。アナンシは力では勝てないことを知っていたので、知恵を使うことにしました。彼は森で一番深い穴を掘り、その上に細い枝を置いて落とし穴を作りました。
+            </p>
+
+            <p>
+                そして、ヒョウがよく通る道でこう大声で叫びました：「私の妻は、ヒョウのオシェボが森で一番賢いと言うが、私は彼が一番愚かだと思う！」怒ったオシェボは穴から這い出て、アナンシを追いかけました。しかし、アナンシが巧妙に設置した罠にかかり、穴に落ちてしまいました。
+            </p>
+
+            <h3>スズメバチの群れ</h3>
+            <p>
+                二つ目の課題は、危険なスズメバチの群れマモロを集めることでした。アナンシは大きなひょうたんに小さな穴を開け、蜂蜜を塗りました。そして、スズメバチの巣の近くで「雨が降ってきた！避難しなさい！」と叫びました。
+            </p>
+
+            <p>
+                親切心から、アナンシは「この乾いたひょうたんに入れば濡れませんよ」と提案しました。スズメバチたちは感謝してひょうたんに入りましたが、アナンシがすぐに穴を塞いでしまい、全ての蜂を捕らえることに成功しました。
+            </p>
+
+            <div class="spider-web">
+                <h4>アナンシの教え</h4>
+                <p>
+                力ではなく知恵で問題を解決せよ。<br>
+                相手の性格を理解し、それを利用せよ。<br>
+                時には親切心を装うことも必要である。<br>
+                しかし、最終的な目的は人々の幸福でなければならない。
+                </p>
+            </div>
+
+            <h3>妖精モマタイアの捕獲</h3>
+            <p>
+                最後の課題は、美しく狡猾な妖精モマタイアを捕らえることでした。彼女は極めて美しく、男性を魅了する力を持っていましたが、同時に非常に虚栄心が強いことでも知られていました。
+            </p>
+
+            <p>
+                アナンシは木の樹液で人形を作り、それを美しく飾りました。そして、妖精がよく現れる泉のほとりにその人形を置きました。モマタイアが現れると、人形に挨拶しましたが、人形は返事をしません。怒った妖精が人形を叩くと、手が樹液にくっついてしまいました。さらに足で蹴ると、今度は足もくっついて、完全に動けなくなりました。
+            </p>
+
+            <h3>物語の解放</h3>
+            <p>
+                三つの課題を見事に成し遂げたアナンシに、ニャメは約束通り全ての物語を与えました。しかし、アナンシは一つの問題に直面しました。無数の物語をどうやって地上に運ぶかということでした。
+            </p>
+
+            <p>
+                アナンシは大きな壺に全ての物語を詰め込み、木に登って地上を見下ろしました。しかし、重い壺を持ちながら木を降りるのは困難でした。何度も転びそうになったとき、下から息子が叫びました：「お父さん、壺を背中に背負えばいいじゃない！」
+            </p>
+
+            <p>
+                アナンシは恥ずかしくなりました。自分が知恵を独占しようとしていたのに、息子の方が賢いアイデアを思いついたからです。その瞬間、壺は手から滑り落ち、地面で割れました。知恵と物語は世界中に散らばり、全ての人間がそれを手に入れることができるようになったのです。
+            </p>
+
+            <h3>アナンシの遺産</h3>
+            <p>
+                アナンシの物語は、アフリカから世界各地に広がりました。奴隷貿易の時代に、アフリカ系の人々が新大陸に連れて行かれた際、彼らはアナンシの話を心の支えとして持ち続けました。カリブ海地域では「アナンシ」、アメリカ南部では「アンクル・リーマス」として親しまれています。
+            </p>
+
+            <p>
+                現代でも、アナンシの物語は重要な文化的意義を持っています。弱い者が知恵と機転で強い者に立ち向かうという主題は、抑圧された人々にとって希望の象徴となっています。また、物語を通じて教訓を伝えるという口承文学の伝統も、アナンシの影響によるものです。
+            </p>
+
+            <div class="highlight">
+                アナンシの物語が現代に伝えること：<br>
+                真の知恵は独占すべきものではなく、分かち合うべきもの。体の大きさや力の強さではなく、創造性と機知が最も価値ある武器である。困難に直面したとき、正面突破ではなく別の角度からのアプローチを考えよ。そして物語には人を変える力があり、文化を保存し伝承する最も強力な手段である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. アナンシの知恵の糸に導かれましょう。</p>
+    </footer>
+
+    <script>
+        // ドラムビートエフェクト
+        function createDrumBeats() {
+            const container = document.getElementById('drumBeats');
+            
+            function addDrumCircle() {
+                const circle = document.createElement('div');
+                circle.className = 'drum-circle';
+                circle.style.left = Math.random() * 100 + '%';
+                circle.style.top = Math.random() * 100 + '%';
+                circle.style.animationDelay = Math.random() * 3 + 's';
+                circle.style.animationDuration = (3 + Math.random() * 3) + 's';
+                container.appendChild(circle);
+                
+                setTimeout(() => {
+                    if (container.contains(circle)) {
+                        container.removeChild(circle);
+                    }
+                }, 6000);
+            }
+            
+            // 定期的にドラムサークルを追加
+            setInterval(addDrumCircle, 2000);
+            
+            // 初期のサークルを追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addDrumCircle, i * 800);
+            }
+        }
+        
+        createDrumBeats();
+    </script>
+</body>
+</html>

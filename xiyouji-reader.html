@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西遊記 - 孫悟空の大冒険</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 31, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .story-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 3em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .story-subtitle {
+            font-size: 1.3em;
+            color: #F5E6D3;
+            opacity: 0.9;
+        }
+        
+        /* チャプターセレクション */
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .chapter-card {
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 31, 0.8) 100%);
+            border: 2px solid #8B4513;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+        
+        .chapter-number {
+            font-size: 0.9em;
+            color: #DAA520;
+            margin-bottom: 10px;
+        }
+        
+        .chapter-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.4em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* キャラクター紹介 */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .character-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .character-name {
+            font-size: 1.3em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .character-role {
+            color: #F5E6D3;
+            font-size: 0.9em;
+        }
+        
+        /* ストーリーコンテンツ */
+        .story-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #F5E6D3;
+            text-align: justify;
+        }
+        
+        .story-text h3 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin: 30px 0 20px;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* 名場面ギャラリー */
+        .scenes-gallery {
+            margin-bottom: 60px;
+        }
+        
+        .scene-item {
+            background: linear-gradient(135deg, rgba(44, 24, 16, 0.9) 0%, rgba(74, 44, 31, 0.8) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #8B4513;
+        }
+        
+        .scene-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .scene-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #1a1a2e;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid #8B4513;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2em;
+            }
+            
+            .chapter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="chinese-mythology-index.html" class="logo">中華神話大全</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="chinese-mythology-index.html">中華神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                    <li><a href="#scenes">名場面</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリーヘッダー -->
+        <div class="story-header">
+            <h1 class="story-title">西遊記</h1>
+            <p class="story-subtitle">孫悟空と仲間たちの天竺への大冒険</p>
+        </div>
+        
+        <!-- チャプターセレクション -->
+        <section class="chapter-selection">
+            <h2 class="section-title">主要エピソード</h2>
+            <div class="chapter-grid">
+                <div class="chapter-card" onclick="showChapter(1)">
+                    <div class="chapter-number">第一章</div>
+                    <h3 class="chapter-title">石猿誕生</h3>
+                    <p class="chapter-description">花果山の石から生まれた猿が、美猴王となり、不老不死を求めて旅立つ物語の始まり。</p>
+                </div>
+                
+                <div class="chapter-card" onclick="showChapter(2)">
+                    <div class="chapter-number">第二章</div>
+                    <h3 class="chapter-title">大鬧天宮</h3>
+                    <p class="chapter-description">孫悟空が天界で大暴れし、玉皇大帝の軍勢と戦う壮大な戦いの物語。</p>
+                </div>
+                
+                <div class="chapter-card" onclick="showChapter(3)">
+                    <div class="chapter-number">第三章</div>
+                    <h3 class="chapter-title">五行山下</h3>
+                    <p class="chapter-description">如来仏の手のひらから逃れられず、五百年間山の下に封印される悟空。</p>
+                </div>
+                
+                <div class="chapter-card" onclick="showChapter(4)">
+                    <div class="chapter-number">第四章</div>
+                    <h3 class="chapter-title">取経之路</h3>
+                    <p class="chapter-description">三蔵法師と出会い、天竺への取経の旅が始まる。猪八戒、沙悟浄も仲間に。</p>
+                </div>
+                
+                <div class="chapter-card" onclick="showChapter(5)">
+                    <div class="chapter-number">第五章</div>
+                    <h3 class="chapter-title">妖怪退治</h3>
+                    <p class="chapter-description">白骨精、牛魔王、紅孩児など、数々の妖怪との戦いを繰り広げる。</p>
+                </div>
+                
+                <div class="chapter-card" onclick="showChapter(6)">
+                    <div class="chapter-number">第六章</div>
+                    <h3 class="chapter-title">西天取経</h3>
+                    <p class="chapter-description">ついに西天に到着し、真経を手に入れ、悟空は闘戦勝仏となる。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- キャラクター紹介 -->
+        <section id="characters" class="characters-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <div class="character-icon">🐵</div>
+                    <h3 class="character-name">孫悟空</h3>
+                    <p class="character-role">斉天大聖・美猴王<br>石から生まれた猿の王。如意金箍棒を武器に戦う</p>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">👨‍🦲</div>
+                    <h3 class="character-name">三蔵法師</h3>
+                    <p class="character-role">玄奘・唐僧<br>天竺へ経典を取りに行く高僧。慈悲深いが頑固な面も</p>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🐷</div>
+                    <h3 class="character-name">猪八戒</h3>
+                    <p class="character-role">天蓬元帥<br>元は天界の元帥。食欲旺盛で女好きだが憎めない性格</p>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🧔</div>
+                    <h3 class="character-name">沙悟浄</h3>
+                    <p class="character-role">巻簾大将<br>元天界の将軍。寡黙で真面目な性格の河童</p>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">🐉</div>
+                    <h3 class="character-name">白龍馬</h3>
+                    <p class="character-role">西海龍王三太子<br>三蔵法師の愛馬となった龍の王子</p>
+                </div>
+                
+                <div class="character-card">
+                    <div class="character-icon">👸</div>
+                    <h3 class="character-name">観世音菩薩</h3>
+                    <p class="character-role">慈悲の菩薩<br>取経の旅を導き、困難な時に助けてくれる</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ストーリー詳細 -->
+        <section class="story-content">
+            <h3>物語のあらすじ</h3>
+            <div class="story-text">
+                <p>
+                    遥か昔、花果山の頂上にあった仙石から一匹の石猿が生まれました。この猿は並外れた知恵と力を持ち、
+                    やがて猿たちの王「美猴王」となりました。不老不死を求めて須菩提祖師の元で修行を積み、
+                    「孫悟空」の名を授かります。
+                </p>
+                
+                <h3>天界での大暴れ</h3>
+                <p>
+                    悟空は東海龍王から如意金箍棒を奪い、地獄の生死簿から自分の名前を消し去りました。
+                    その横暴さに怒った玉皇大帝は悟空を天界に招きますが、弼馬温という低い地位に不満を持った悟空は
+                    「斉天大聖」を名乗り、天界で大暴れします。
+                </p>
+                
+                <h3>五百年の封印</h3>
+                <p>
+                    ついに如来仏が現れ、悟空と賭けをします。悟空は如来の手のひらから飛び出せず、
+                    五行山（五指山）の下に五百年間封印されてしまいます。
+                </p>
+                
+                <h3>取経の旅の始まり</h3>
+                <p>
+                    唐の太宗の時代、玄奘（三蔵法師）が仏教の経典を求めて西天（インド）へ向かう途中、
+                    観音菩薩の導きで五行山の悟空を解放します。頭に金箍児（きんこじ）をはめられた悟空は、
+                    三蔵法師の弟子となり護衛を務めることになります。
+                </p>
+                
+                <h3>仲間との出会い</h3>
+                <p>
+                    旅の途中、高老荘で豚の妖怪・猪八戒、流沙河で河童の妖怪・沙悟浄と出会い、
+                    彼らも三蔵法師の弟子となります。白龍馬も加わり、一行は西天を目指して数々の困難に立ち向かいます。
+                </p>
+                
+                <h3>八十一の難関</h3>
+                <p>
+                    十四年にわたる旅の間、一行は白骨精、牛魔王と鉄扇公主、紅孩児、金角・銀角大王など、
+                    数々の妖怪と戦い、八十一の難関を乗り越えます。悟空の知恵と力、八戒の憎めない性格、
+                    悟浄の誠実さが、幾度となく一行を救います。
+                </p>
+                
+                <h3>西天での成就</h3>
+                <p>
+                    ついに西天雷音寺に到着した一行は、如来仏から真経を授かります。
+                    帰路も無事に終え、悟空は「闘戦勝仏」、八戒は「浄壇使者」、悟浄は「金身羅漢」、
+                    白龍馬は「八部天龍」の位を授かり、それぞれが成仏を果たしました。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 名場面ギャラリー -->
+        <section id="scenes" class="scenes-gallery">
+            <h2 class="section-title">名場面集</h2>
+            
+            <div class="scene-item">
+                <h3 class="scene-title">🐵 花果山水簾洞</h3>
+                <div class="scene-content">
+                    石猿が勇敢に滝の裏側へ飛び込み、水簾洞を発見。猿たちの王となる運命的な瞬間。
+                    「進得来、出得去、就拝他為王」の約束通り、美猴王の誕生。
+                </div>
+            </div>
+            
+            <div class="scene-item">
+                <h3 class="scene-title">⚔️ 大鬧天宮</h3>
+                <div class="scene-content">
+                    十万の天兵天将を相手に、如意金箍棒を振り回して大暴れする悟空。
+                    「皇帝輪流做、明年到我家」と豪語し、天界を震撼させた伝説の戦い。
+                </div>
+            </div>
+            
+            <div class="scene-item">
+                <h3 class="scene-title">👻 三打白骨精</h3>
+                <div class="scene-content">
+                    白骨精が美女、老婆、老人に化けて三蔵法師を狙うが、悟空の火眼金睛はすべてを見破る。
+                    しかし、三蔵法師は悟空を信じず、緊箍咒を唱えて悟空を苦しめる悲劇的な場面。
+                </div>
+            </div>
+            
+            <div class="scene-item">
+                <h3 class="scene-title">🔥 火焰山</h3>
+                <div class="scene-content">
+                    芭蕉扇を借りるため、牛魔王、鉄扇公主と壮絶な戦い。
+                    悟空が牛魔王に変身したり、体を小さくして鉄扇公主の腹の中に入ったりする奇想天外な展開。
+                </div>
+            </div>
+            
+            <div class="scene-item">
+                <h3 class="scene-title">🎭 真假美猴王</h3>
+                <div class="scene-content">
+                    六耳猕猴が悟空に成りすまし、観音菩薩も見分けがつかない。
+                    最後は如来仏の前で真偽が明らかになる、もう一人の自分との戦い。
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">西遊記 - 中国四大名著の一つ、明代に成立した神魔小説の最高傑作</p>
+            <p class="footer-text">© 2024 Chinese Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        function showChapter(chapterNum) {
+            // ここでチャプターの詳細を表示する処理を実装
+            alert(`第${chapterNum}章の詳細ページは準備中です`);
+        }
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

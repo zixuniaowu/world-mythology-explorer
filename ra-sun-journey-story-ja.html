@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラー神の太陽之旅 - エジプト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #ff6b35 50%, #f7931e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 太陽の光 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 107, 53, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(247, 147, 30, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '☀️ 🛶 🐍 🦅';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ff6b35;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ff6b35;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(247, 147, 30, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .solar-hymn {
+            background: rgba(247, 147, 30, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(247, 147, 30, 0.3);
+            font-style: italic;
+        }
+
+        .solar-hymn h4 {
+            color: #f7931e;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 太陽船エフェクト */
+        .solar-barque {
+            position: fixed;
+            top: 10%;
+            right: 30px;
+            width: 150px;
+            height: 100px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: barqueJourney 30s linear infinite;
+        }
+
+        @keyframes barqueJourney {
+            0% { transform: translateX(0) translateY(0); opacity: 0.1; }
+            25% { transform: translateX(-50px) translateY(20px); opacity: 0.2; }
+            50% { transform: translateX(-100px) translateY(0); opacity: 0.15; }
+            75% { transform: translateX(-50px) translateY(-20px); opacity: 0.1; }
+            100% { transform: translateX(0) translateY(0); opacity: 0.15; }
+        }
+
+        .sun-rays {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ray {
+            position: absolute;
+            width: 3px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(255, 107, 53, 0.4), transparent);
+            transform-origin: center bottom;
+            animation: rayShine 20s linear infinite;
+        }
+
+        @keyframes rayShine {
+            0% { opacity: 0; transform: rotate(0deg); }
+            50% { opacity: 0.6; transform: rotate(180deg); }
+            100% { opacity: 0; transform: rotate(360deg); }
+        }
+
+        .apophis-serpent {
+            position: fixed;
+            bottom: 10%;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: serpentMove 25s linear infinite;
+        }
+
+        @keyframes serpentMove {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .solar-disk {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.3), rgba(247, 147, 30, 0.1));
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 1;
+            animation: solarPulse 15s infinite;
+        }
+
+        @keyframes solarPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.2; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 0.1; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 太陽円盤 -->
+    <div class="solar-disk"></div>
+    
+    <!-- 太陽船 -->
+    <div class="solar-barque">
+        <svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- 船体 -->
+            <path d="M20,70 Q75,50 130,70 L130,80 Q75,85 20,80 Z" 
+                  fill="rgba(255, 107, 53, 0.3)" stroke="rgba(247, 147, 30, 0.4)" stroke-width="2"/>
+            <!-- 太陽円盤 -->
+            <circle cx="75" cy="40" r="20" fill="rgba(247, 147, 30, 0.4)"/>
+            <!-- 太陽の光線 -->
+            <g stroke="rgba(255, 107, 53, 0.3)" stroke-width="2">
+                <line x1="75" y1="20" x2="75" y2="10"/>
+                <line x1="90" y1="25" x2="95" y2="15"/>
+                <line x1="95" y1="40" x2="105" y2="40"/>
+                <line x1="90" y1="55" x2="95" y2="65"/>
+                <line x1="75" y1="60" x2="75" y2="70"/>
+                <line x1="60" y1="55" x2="55" y2="65"/>
+                <line x1="55" y1="40" x2="45" y2="40"/>
+                <line x1="60" y1="25" x2="55" y2="15"/>
+            </g>
+            <!-- オールスマン -->
+            <ellipse cx="75" cy="65" rx="8" ry="12" fill="rgba(139, 69, 19, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- 太陽光線 -->
+    <div class="sun-rays" id="sunRays"></div>
+    
+    <!-- アポフィス蛇 -->
+    <div class="apophis-serpent">
+        <svg viewBox="0 0 1000 50" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,25 Q100,10 200,25 T400,25 T600,25 T800,25 T1000,25" 
+                  stroke="rgba(0, 0, 0, 0.3)" stroke-width="15" fill="none"/>
+            <path d="M0,25 Q100,35 200,25 T400,25 T600,25 T800,25 T1000,25" 
+                  stroke="rgba(139, 0, 0, 0.2)" stroke-width="8" fill="none"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ラー神の太陽之旅</h1>
+            <p>Ra's Journey Across the Sky - 永遠の光の航海</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ff6b35; text-decoration: none; font-size: 1.5rem;">☀️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="egyptian-mythology-index-ja.html">エジプト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>太陽神の永遠の航海</h2>
+            
+            <p>
+                ラー（Ra）神の太陽之旅は、古代エジプト神話の中核を成す物語です。太陽神ラーが毎日行う天空と地下世界の航海は、昼と夜、生と死、秩序と混沌の永続的な循環を表しています。この壮大な物語は、古代エジプト人の宇宙観と時間概念を形作り、ファラオの神性と、すべての生命が太陽の恵みに依存していることを示す重要な神話でした。
+            </p>
+
+            <h3>朝の誕生</h3>
+            <p>
+                毎朝、東の地平線からラー神が誕生します。彼は黄金の太陽円盤として現れ、鷹の頭を持つ男性の姿で描かれることもあります。この瞬間、彼は「ケペリ」（Khepri）という名で呼ばれ、スカラベ（フンコロガシ）の姿で表されることもあります。スカラベが糞球を転がす様子が、太陽が空を移動する様子に例えられたのです。
+            </p>
+
+            <p>
+                ラーの誕生は、原初の海ヌンからの創造を象徴しています。彼は自分自身から生まれ、言葉の力によって他の神々と世界を創造しました。「私は昨日から存在し、明日を知る者」と言われるラーは、時間そのものの化身でもありました。
+            </p>
+
+            <p>
+                朝のラーは希望と新たな始まりを表しています。農民たちは彼の光を待ち望み、神官たちは朝の礼拝で彼を迎えました。太陽の最初の光が神殿に差し込むとき、それは神の臨在の証とされました。
+            </p>
+
+            <div class="solar-hymn">
+                <h4>朝の太陽への賛美歌</h4>
+                <p>
+                「ラー神よ、東の地平線より立ち上がりたまえ<br>
+                あなたの光は闇を駆逐し<br>
+                あなたの暖かさは大地を目覚めさせる<br>
+                すべての生きとし生けるものが<br>
+                あなたの恵みに感謝する」
+                </p>
+            </div>
+
+            <h3>昼の栄光</h3>
+            <p>
+                正午に向かうにつれ、ラーは最も強大な力を発揮します。この時、彼は太陽船「マンジェト」（Mandjet）に乗って天空を航行します。この船には他の神々も同乗しており、特にトト神（知恵の神）とマアト女神（正義の女神）が重要な役割を果たします。
+            </p>
+
+            <p>
+                太陽船の航行は完璧に秩序づけられており、これが「マアト」（宇宙の秩序と正義）の概念を体現していました。ラーの光は世界のあらゆる隅々に届き、すべての生命に恵みをもたらします。農作物は成長し、ナイル川は輝き、人々の営みが続けられます。
+            </p>
+
+            <p>
+                正午のラーは「ラー・ホルアクティ」と呼ばれ、地平線のホルス神と融合した姿とされます。この時の太陽は最も高い位置にあり、影は最も短くなります。古代エジプト人はこの瞬間を神の力が最高潮に達する時と考えました。
+            </p>
+
+            <h3>夕暮れの変容</h3>
+            <p>
+                午後になると、ラーは徐々に老いていきます。夕方には「アトゥム」（Atum）という名前で呼ばれ、老人の姿で描かれることもあります。彼の光は柔らかくなり、空は金色から赤色に変わっていきます。
+            </p>
+
+            <p>
+                この時間帯はメランコリックな美しさに満ちており、古代エジプト人は夕日を神の深い知恵と慈悲の表れと見なしました。一日の労働を終えた人々は、太陽神の恵みに感謝の祈りを捧げました。
+            </p>
+
+            <p>
+                日没とともに、ラーは西の山々に消えていきます。この瞬間、彼は死の世界への入口に立ち、昼の船から夜の船「メセクテト」（Mesektet）に乗り換えます。これは生から死への移行を象徴する重要な転換点でした。
+            </p>
+
+            <h3>地下世界での戦い</h3>
+            <p>
+                夜になると、ラーは地下世界「ドゥアト」を航行します。ここは死者の魂が住む暗く危険な領域で、数多くの怪物や悪霊が待ち受けています。最も恐ろしいのは、巨大な蛇の怪物アポフィス（アペプ）です。
+            </p>
+
+            <p>
+                アポフィスは原始の混沌を体現する存在で、宇宙の秩序を破壊しようと常に狙っています。毎夜、ラーの太陽船を攻撃し、永遠の闇をもたらそうとします。この戦いは「終わりなき戦争」と呼ばれ、善と悪、秩序と混沌の根本的な対立を表しています。
+            </p>
+
+            <p>
+                しかし、ラーは一人で戦うわけではありません。セト神（通常は破壊的な存在ですが、この時は秩序の味方）、バステト女神（猫の女神）、そして死者の魂たちが彼を助けます。特に正当化された死者の魂は、永遠にラーの船の乗組員として彼を支援します。
+            </p>
+
+            <div class="highlight">
+                地下世界での戦い：<br>
+                アポフィスが太陽船に襲いかかると、天地は震え、雷鳴が轟きます。ラーは光の槍でアポフィスを貫き、セト神は怪物の頭を切り落とします。しかし、アポフィスは不死身であり、翌夜には再び蘇ります。この永遠の戦いが、太陽が毎日昇ることを保証しているのです。
+            </div>
+
+            <h3>夜明け前の復活</h3>
+            <p>
+                地下世界の最深部を通過したラーは、徐々に若さを取り戻していきます。地下世界の12の時間（古代エジプトでは夜を12時間に分けていました）を経て、彼は再び生命力に満ちた神となります。
+            </p>
+
+            <p>
+                この復活の過程は、死者の魂にとっても希望の象徴でした。ラーと共に地下世界を旅することで、魂もまた新しい生命を得ることができると信じられていました。これが古代エジプトの複雑な死後信仰の基礎となりました。
+            </p>
+
+            <p>
+                夜明け前の時間は最も神聖な時とされ、神官たちはこの時に最も重要な儀式を行いました。ラーの復活を助けるため、そして新しい一日の恵みを祈るためです。
+            </p>
+
+            <h3>永遠の循環</h3>
+            <p>
+                ラーの太陽之旅は決して終わることがありません。これは古代エジプト人にとって、時間が直線的ではなく循環的であることを意味していました。すべては繰り返され、すべてには再生の可能性があります。
+            </p>
+
+            <p>
+                この物語は季節の変化、ナイル川の氾濫周期、人間の生と死の循環とも結びついていました。農民は太陽の動きに従って作物を植え、神官は太陽暦に基づいて祭りを行い、王は自分をラーの息子として位置づけました。
+            </p>
+
+            <p>
+                ファラオもまた死後にラーの太陽船に乗り、永遠の航海を続けると信じられていました。これがピラミッド建設の動機の一つでもありました。ピラミッドは太陽の光を集める装置であり、死んだ王が太陽神と合一するための階段でもあったのです。
+            </p>
+
+            <h3>現代への影響</h3>
+            <p>
+                ラー神の物語は現代でも多くの影響を与えています。太陽崇拝の概念、光と闇の対立、死と再生の循環は、世界中の文化や宗教に見られる普遍的なテーマです。
+            </p>
+
+            <p>
+                また、古代エジプトの天文学と暦法の発達も、この神話と深く関連しています。太陽の動きを正確に観測し記録する技術は、ラー神への信仰から生まれ、後の科学的発展の基礎となりました。
+            </p>
+
+            <div class="highlight">
+                ラー神の太陽之旅が現代に伝えること：<br>
+                すべての生命は自然の循環の一部であり、個人の存在を超越した大きなリズムの中にある。光と闇、善と悪の闘争は永続的だが、最終的には秩序と生命が勝利する。困難な時期（夜）があっても、必ず新たな希望（夜明け）が訪れる。責任と義務を果たすことで、より大きな目的に貢献できる。そして、死は終わりではなく、新しい形の存在への移行である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 永遠の太陽と共に輝きましょう。</p>
+    </footer>
+
+    <script>
+        // 太陽光線エフェクト
+        function createSunRays() {
+            const container = document.getElementById('sunRays');
+            
+            for (let i = 0; i < 12; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'ray';
+                ray.style.left = Math.random() * 100 + '%';
+                ray.style.top = Math.random() * 50 + '%';
+                ray.style.animationDelay = Math.random() * 20 + 's';
+                ray.style.animationDuration = (15 + Math.random() * 10) + 's';
+                ray.style.transform = `rotate(${Math.random() * 360}deg)`;
+                container.appendChild(ray);
+            }
+        }
+        
+        createSunRays();
+    </script>
+</body>
+</html>

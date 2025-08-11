@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>グレート・スピリットの教え - ネイティブアメリカン神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 50%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 神聖な光の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 25% 75%, rgba(221, 160, 221, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ffd700 0%, #dda0dd 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌟 🕊️ 🌍 ☮️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ffd700;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(221, 160, 221, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffd700;
+        }
+
+        .prayer-section {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* 神聖な光のエフェクト */
+        .divine-light {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 5rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: divineGlow 10s infinite;
+        }
+
+        @keyframes divineGlow {
+            0%, 100% { opacity: 0.1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.3; transform: translateX(-50%) scale(1.2); }
+        }
+
+        .sacred-circle {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(255, 215, 0, 0.1);
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: 0;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .spirit-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: floatUp 12s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 神聖な光 -->
+    <div class="divine-light">✨</div>
+    
+    <!-- 聖なる円 -->
+    <div class="sacred-circle"></div>
+    
+    <!-- スピリットの粒子 -->
+    <div class="spirit-particles" id="spiritParticles"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>グレート・スピリットの教え</h1>
+            <p>Great Spirit's Teaching - 偉大なる精霊の知恵</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffd700; text-decoration: none; font-size: 1.5rem;">🌟 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="native-american-mythology-index-ja.html">ネイティブアメリカン神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>偉大なる精霊の教え</h2>
+            
+            <p>
+                「ワカン・タンカ」「マニトウ」「オレンダ」など、多くの名前で呼ばれるグレート・スピリット（偉大なる精霊）は、ネイティブアメリカンの信仰の中心的存在です。それは単なる神ではなく、宇宙のすべてを貫く神聖な力、生命の源、そして万物の調和を司る存在なのです。
+            </p>
+
+            <h3>すべてが繋がっている</h3>
+            <p>
+                グレート・スピリットの最も重要な教えは「すべてが繋がっている」ということです。人間も動物も、植物も岩も、河川も山々も、そして星々も、すべて同じ神聖な力によって生み出され、見えない糸で結ばれています。
+            </p>
+
+            <div class="prayer-section">
+                「すべての我が関係において」<br>
+                "Mitákuye Oyás'iŋ"<br><br>
+                これはラコタ族の神聖な言葉です。すべての存在との繋がりを認識し、敬意を表す祈りの言葉です。
+            </div>
+
+            <p>
+                ある老いた長老が若い戦士に教えました：「君が森で一本の木を切るとき、その木だけでなく、その木に住む鳥たちも、その木に依存する他の植物たちも影響を受ける。そしてそれは巡り巡って君自身にも帰ってくるのだ。」
+            </p>
+
+            <h3>聖なる輪（セイクリッド・サークル）</h3>
+            <p>
+                グレート・スピリットは宇宙を巨大な輪として創造しました。季節の循環、生と死の循環、昼と夜の循環―すべてが円を描いて回り続けています。ティピー（テント）が丸いのも、キャンプファイヤーを囲んで円座するのも、この神聖な形を模しているのです。
+            </p>
+
+            <div class="highlight">
+                「地球は円い。太陽も月も円い。季節は円を描いて巡る。鳥は円い巣を作る。すべての力は円の中で作用するのだ。」- ブラック・エルク（オグララ・ラコタ族の聖者）
+            </div>
+
+            <h3>四つの方向の教え</h3>
+            <p>
+                グレート・スピリットは四つの方向にそれぞれ特別な力と意味を与えました：
+            </p>
+
+            <p>
+                <strong>東（アースカ）</strong>：新しい始まり、希望、黄色の力。太陽が昇る方向で、新しい一日、新しい生命の誕生を象徴します。
+            </p>
+
+            <p>
+                <strong>南（イトカガ）</strong>：成長、情熱、赤の力。夏の暖かさ、青春の活力、心の情熱を表します。
+            </p>
+
+            <p>
+                <strong>西（ウィヨヒャンパタ）</strong>：内省、成熟、黒の力。太陽の沈む方向で、一日の終わり、人生の秋、深い思索の時を意味します。
+            </p>
+
+            <p>
+                <strong>北（ワジアタ）</strong>：知恵、清浄、白の力。冬の厳しさ、試練を乗り越える強さ、老いた者の知恵を表します。
+            </p>
+
+            <h3>動物たちの兄弟姉妹</h3>
+            <p>
+                グレート・スピリットは人間だけでなく、すべての動物たちにも魂を与えました。彼らは人間の兄弟姉妹であり、それぞれが特別な教えを持っています。
+            </p>
+
+            <p>
+                鷲は勇気と高い視点を教え、熊は力と保護を、亀は忍耐と長寿を、鹿は優しさと敏感さを教えてくれます。狼は忠誠と家族愛を、バッファローは神聖さと豊穣を象徴します。
+            </p>
+
+            <div class="highlight">
+                狩りをする時、戦士たちは動物の霊に感謝の祈りを捧げます：「兄弟よ、君の生命をいただくことを許してくれ。君の肉は我々の体を養い、君の皮は我々を寒さから守り、君の骨は道具となる。君の魂は偉大なる精霊のもとで安らかであれ。」
+            </div>
+
+            <h3>ビジョン・クエスト</h3>
+            <p>
+                グレート・スピリットと直接交流するため、多くの部族では「ビジョン・クエスト」（幻視の探求）という神聖な儀式を行います。若い男女が一人で聖地に赴き、数日間断食しながら瞑想し、精霊からのメッセージを受けるのです。
+            </p>
+
+            <p>
+                このビジョンの中で、グレート・スピリットは個人の守護霊（スピリット・ガイド）を示し、人生の道筋、特別な能力、部族での役割などを教えてくれます。動物の姿で現れることもあり、その人の一生を導く存在となります。
+            </p>
+
+            <h3>平和のパイプ</h3>
+            <p>
+                セイクリッド・パイプ（聖なるパイプ）は、グレート・スピリットとの対話の道具です。パイプを囲んで輪になり、四つの方向に煙を捧げ、天と地に感謝を表します。パイプが回る間、全員が兄弟姉妹として平等であり、真実のみを語ることが求められます。
+            </p>
+
+            <div class="prayer-section">
+                「ミタクエ・オヤシン」（すべての我が関係において）<br>
+                グレート・スピリットよ、天の父よ、大地の母よ<br>
+                四つの風の精霊よ、すべての生けるものよ<br>
+                我々に知恵を与え、正しい道を歩ませたまえ
+            </div>
+
+            <h3>現代への教え</h3>
+            <p>
+                グレート・スピリットの教えは現代でも深い意味を持ちます。環境破壊、戦争、分断の時代にあって、「すべてが繋がっている」という知恵は特に重要です。
+            </p>
+
+            <p>
+                私たちが自然を破壊すれば、それは最終的に人間自身に帰ってきます。他の民族や文化を尊重しなければ、平和は実現しません。動物たちを兄弟姉妹として扱わなければ、生態系のバランスは崩れてしまいます。
+            </p>
+
+            <div class="highlight">
+                グレート・スピリットの教えが現代に伝えること：<br>
+                すべての生命は神聖で繋がっており、相互に依存している。謙虚さ、感謝、調和を保ちながら生きることで、真の豊かさと平和を得ることができる。我々は地球の管理者であり、未来の世代のために美しい世界を守る責任がある。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. グレート・スピリットの導きに従いましょう。</p>
+    </footer>
+
+    <script>
+        // スピリットの粒子エフェクト
+        function createSpiritParticles() {
+            const container = document.getElementById('spiritParticles');
+            
+            function addParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 8) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 12000);
+            }
+            
+            // 定期的に粒子を追加
+            setInterval(addParticle, 1500);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 8; i++) {
+                setTimeout(addParticle, i * 500);
+            }
+        }
+        
+        createSpiritParticles();
+    </script>
+</body>
+</html>

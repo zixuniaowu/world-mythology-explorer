@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラグナロク - 北欧神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #8B0000 50%, #FF4500 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 終末の炎 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 69, 0, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #8B0000 0%, #FF4500 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(139, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🔥 ⚔️ 🐺 🌅';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffcccb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF4500;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(139, 0, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF4500;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF4500;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(255, 69, 0, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF4500;
+        }
+
+        .voluspa-prophecy {
+            background: rgba(139, 0, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(139, 0, 0, 0.3);
+            font-style: italic;
+        }
+
+        .voluspa-prophecy h4 {
+            color: #8B0000;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 炎のエフェクト */
+        .fire-particles {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flame {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #FF4500, #8B0000);
+            border-radius: 50%;
+            animation: fireRise 10s infinite;
+            opacity: 0;
+        }
+
+        @keyframes fireRise {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .fenrir-wolf {
+            position: fixed;
+            top: 30%;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: wolfHowl 20s infinite;
+        }
+
+        @keyframes wolfHowl {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(0.9) rotate(5deg); }
+            75% { transform: scale(1.05) rotate(-3deg); }
+        }
+
+        .surtr-sword {
+            position: fixed;
+            bottom: 10%;
+            left: 30px;
+            width: 100px;
+            height: 200px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: swordFlame 15s infinite;
+        }
+
+        @keyframes swordFlame {
+            0%, 100% { transform: rotate(-10deg); opacity: 0.1; }
+            50% { transform: rotate(10deg); opacity: 0.2; }
+        }
+
+        .bifrost-break {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 69, 0, 0.1), transparent);
+            opacity: 0.3;
+            z-index: 0;
+            animation: bifrostShatter 30s infinite;
+        }
+
+        @keyframes bifrostShatter {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 炎の粒子 -->
+    <div class="fire-particles" id="fireParticles"></div>
+    
+    <!-- フェンリル狼 -->
+    <div class="fenrir-wolf">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 狼の頭 -->
+            <ellipse cx="75" cy="75" rx="40" ry="50" fill="rgba(139, 0, 0, 0.3)"/>
+            <!-- 耳 -->
+            <path d="M50,40 L40,20 L55,35 Z" fill="rgba(139, 0, 0, 0.4)"/>
+            <path d="M100,40 L110,20 L95,35 Z" fill="rgba(139, 0, 0, 0.4)"/>
+            <!-- 目 -->
+            <circle cx="60" cy="70" r="5" fill="rgba(255, 69, 0, 0.8)"/>
+            <circle cx="90" cy="70" r="5" fill="rgba(255, 69, 0, 0.8)"/>
+            <!-- 口 -->
+            <path d="M55,90 Q75,100 95,90" stroke="rgba(255, 255, 255, 0.4)" stroke-width="3" fill="none"/>
+            <!-- 牙 -->
+            <path d="M60,90 L65,100 L70,90 M80,90 L85,100 L90,90" 
+                  stroke="rgba(255, 255, 255, 0.6)" stroke-width="2" fill="rgba(255, 255, 255, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- スルトの剣 -->
+    <div class="surtr-sword">
+        <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- 剣身 -->
+            <rect x="45" y="20" width="10" height="140" fill="rgba(255, 69, 0, 0.4)"/>
+            <!-- 炎の刃 -->
+            <path d="M40,20 L50,10 L60,20 L55,160 L50,170 L45,160 Z" 
+                  fill="rgba(255, 69, 0, 0.3)" stroke="rgba(139, 0, 0, 0.5)" stroke-width="2"/>
+            <!-- 柄 -->
+            <rect x="40" y="160" width="20" height="30" fill="rgba(139, 69, 19, 0.3)"/>
+            <!-- 護拳 -->
+            <rect x="30" y="155" width="40" height="8" rx="4" fill="rgba(139, 0, 0, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- ビフレストの崩壊 -->
+    <div class="bifrost-break"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ラグナロク</h1>
+            <p>Ragnarök - 神々の黄昏</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF4500; text-decoration: none; font-size: 1.5rem;">🔥 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="norse-mythology-index-ja.html">北欧神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>世界の終末と再生</h2>
+            
+            <p>
+                ラグナロク（Ragnarök）は、北欧神話における世界の終末を描いた壮大な物語です。「神々の運命」を意味するこの言葉は、アース神族とその敵対者たちの最終戦争、そして古い世界の崩壊と新しい世界の誕生を予言しています。この物語は、すべての始まりには終わりがあり、すべての終わりには新たな始まりがあるという、永遠の循環を教えています。
+            </p>
+
+            <h3>終末の前兆</h3>
+            <p>
+                ラグナロクの到来は、恐ろしい前兆によって告げられます。まず、「フィンブルの冬」と呼ばれる三年間の厳しい冬が世界を覆います。雪は絶え間なく降り続け、太陽は力を失い、すべての方角から凍てつく風が吹き荒れます。夏は訪れず、作物は育たず、人々は飢えと寒さに苦しみます。
+            </p>
+
+            <p>
+                この恐ろしい冬の間、人間社会の秩序は崩壊します。兄弟は兄弟を殺し、父は息子と戦い、すべての誓いと約束は破られます。戦争と略奪が世界中に広がり、道徳と法は意味を失います。これは「斧の時代、剣の時代」と呼ばれ、人間性の最も暗い側面が解き放たれる時期です。
+            </p>
+
+            <p>
+                そして、ある朝、雄鶏が三度鳴きます。ヘルヘイムで赤い雄鶏が、ヨトゥンヘイムで錆色の雄鶏が、そしてアースガルドで黄金の雄鶏グリンカムビが鳴き声を上げます。これが最後の戦いの合図となります。
+            </p>
+
+            <div class="voluspa-prophecy">
+                <h4>ヴォルスパーの予言</h4>
+                <p>
+                「兄弟は争い、互いを殺し合う<br>
+                姉妹の子らは、親族の絆を断つ<br>
+                世は厳しく、姦淫が蔓延る<br>
+                斧の時代、剣の時代、盾は裂かれ<br>
+                風の時代、狼の時代、世界が沈むまで」
+                </p>
+            </div>
+
+            <h3>束縛からの解放</h3>
+            <p>
+                地震が世界を揺るがし、長い間束縛されていた恐ろしい存在たちが解放されます。巨狼フェンリルは、ついに魔法の鎖グレイプニルを引きちぎり、自由の身となります。その巨大な顎は天と地に届くほど大きく開かれ、すべてを飲み込もうとします。
+            </p>
+
+            <p>
+                地下深くに鎖でつながれていたロキも、ついに束縛から逃れます。彼の怒りと復讐心は、長い苦痛の年月によってさらに激しくなっています。死者の国から、彼の娘ヘルが死者の軍勢を率いて現れます。
+            </p>
+
+            <p>
+                東の海では、世界蛇ヨルムンガンドが激しく身をよじり、巨大な津波を引き起こします。その毒の息は空と海を汚染し、魚は死に、鳥は空から落ちます。ムスペルヘイムからは、炎の巨人スルトが燃え盛る剣を持って進軍してきます。
+            </p>
+
+            <h3>最後の戦い</h3>
+            <p>
+                神々と巨人たちは、ヴィーグリーズの野に集結します。オーディンは黄金の兜と鎧を身にまとい、槍グングニルを携えて戦場に立ちます。トールはミョルニルを振りかざし、フレイは輝く剣を持ち（しかし、かつて恋のために手放した魔剣ではありません）、すべての神々が最後の戦いに臨みます。
+            </p>
+
+            <p>
+                オーディンは真っ先にフェンリルと対峙します。激しい戦いが繰り広げられますが、ついに巨狼はオーディンを飲み込んでしまいます。しかし、オーディンの息子ヴィーダルが、特別に作られた厚い靴でフェンリルの下顎を踏みつけ、上顎をつかんで引き裂き、父の仇を討ちます。
+            </p>
+
+            <p>
+                トールとヨルムンガンドの宿命の対決も遂に実現します。雷神は全力でミョルニルを振るい、ついに世界蛇の頭を砕きます。しかし、死に際のヨルムンガンドが吐いた毒により、トールも九歩歩いた後に倒れ、息を引き取ります。
+            </p>
+
+            <div class="highlight">
+                神々の最期：<br>
+                フレイは炎の剣を持つスルトと戦いますが、魔剣を失っていたため敗れます。テュールと地獄の番犬ガルムは相討ちとなります。ヘイムダルとロキも激しく戦い、互いに致命傷を与え合います。こうして、古い世界の守護者たちは一人また一人と倒れていきます。
+            </div>
+
+            <h3>世界の崩壊</h3>
+            <p>
+                スルトは燃え盛る剣を振り上げ、世界に火を放ちます。世界樹ユグドラシルさえも炎に包まれ、九つの世界すべてが燃え上がります。山は崩れ、大地は裂け、海は沸騰します。星々は空から落ち、太陽と月は狼に飲み込まれて消えます。
+            </p>
+
+            <p>
+                ついに、焼け尽くされた大地は海に沈みます。すべての生命は失われ、神々も巨人も人間も、すべてが無に帰します。宇宙は再び、創世以前の原初の混沌、ギンヌンガガプのような虚無に戻ります。
+            </p>
+
+            <h3>新世界の誕生</h3>
+            <p>
+                しかし、物語はここで終わりません。やがて、海から新しい大地が浮かび上がります。それは緑に覆われ、種をまかなくても作物が実る豊かな土地です。滝は清らかな水を注ぎ、鷲が空を舞い、新しい生命が芽生えます。
+            </p>
+
+            <p>
+                わずかな神々が生き残ります。オーディンの息子ヴィーダルとヴァーリ、トールの息子モージとマグニ（彼らは父のミョルニルを受け継ぎます）、そして光の神バルドルと盲目の神ホズが死者の国から戻ってきます。彼らは新しいアースガルドで平和に暮らします。
+            </p>
+
+            <p>
+                人間もまた、リーヴとリーヴスラシルという一組の男女が、世界樹の中に隠れて生き延びます。彼らは朝露を食べて生き延び、新しい人類の祖先となります。太陽の娘が母の軌道を継ぎ、新しい太陽として世界を照らします。
+            </p>
+
+            <div class="voluspa-prophecy">
+                <h4>新世界の予言</h4>
+                <p>
+                「私は大地が再び立ち上がるのを見る<br>
+                海から緑に覆われて美しく<br>
+                滝は流れ、鷲は飛ぶ<br>
+                山の魚を狩りながら<br>
+                神々はイダヴォルに集い<br>
+                過去の出来事を語り合う」
+                </p>
+            </div>
+
+            <h3>永遠の循環</h3>
+            <p>
+                ラグナロクの物語は、破壊と創造、死と再生の永遠の循環を示しています。それは絶望的な終末の物語であると同時に、希望に満ちた再生の物語でもあります。古いものが滅びることで、新しいものが生まれる余地ができるのです。
+            </p>
+
+            <p>
+                この神話は、変化は避けられないものであり、どんなに強大な力も永遠ではないことを教えています。しかし同時に、完全な終わりというものは存在せず、常に新しい始まりの可能性があることも示しています。
+            </p>
+
+            <div class="highlight">
+                ラグナロクが現代に伝えること：<br>
+                すべての文明には寿命があり、永遠に続くものはない。しかし、終わりは新たな始まりの前提条件である。破壊的な変化の中でも、希望と再生の種は保存される。私たちは過去から学び、より良い未来を築く責任がある。そして、最も暗い時にこそ、新しい光が生まれる可能性を信じることが重要である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 終わりは新たな始まり。</p>
+    </footer>
+
+    <script>
+        // 炎のエフェクト
+        function createFireParticles() {
+            const container = document.getElementById('fireParticles');
+            
+            function addFlame() {
+                const flame = document.createElement('div');
+                flame.className = 'flame';
+                flame.style.left = Math.random() * 100 + '%';
+                flame.style.animationDelay = Math.random() * 10 + 's';
+                flame.style.animationDuration = (8 + Math.random() * 7) + 's';
+                flame.style.width = (15 + Math.random() * 15) + 'px';
+                flame.style.height = flame.style.width;
+                container.appendChild(flame);
+                
+                setTimeout(() => {
+                    if (container.contains(flame)) {
+                        container.removeChild(flame);
+                    }
+                }, 10000);
+            }
+            
+            // 定期的に炎を追加
+            setInterval(addFlame, 500);
+            
+            // 初期の炎を追加
+            for (let i = 0; i < 20; i++) {
+                setTimeout(addFlame, i * 200);
+            }
+        }
+        
+        createFireParticles();
+    </script>
+</body>
+</html>

@@ -78,6 +78,38 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            background: rgba(102, 126, 234, 0.8);
+            color: #fff;
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
 
         /* Main Container */
         .main-container {
@@ -553,6 +585,11 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="神話を検索...">
                 <span class="search-icon">🔍</span>
             </div>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="ja" onclick="changeLanguage('ja')">日本語</button>
+                <button class="lang-btn" data-lang="zh" onclick="changeLanguage('zh')">中文</button>
+                <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">English</button>
+            </div>
         </div>
     </header>
 
@@ -629,9 +666,135 @@
         </div>
     </div>
 
+    <!-- Canvas Performance Optimization -->
+    <script src="canvas-performance-optimizations.js"></script>
     <script>
         // Current language state
-        // Language is fixed to Japanese
+        let currentLanguage = localStorage.getItem('preferredLanguage') || 'ja';
+        
+        // Language data for UI elements
+        const translations = {
+            ja: {
+                title: "世界神話の旅",
+                subtitle: "地域をクリックして神話の宝物を探索",
+                search: "神話を検索...",
+                categories: {
+                    'east-asia': "東アジア神話",
+                    'south-asia': "南アジア神話",
+                    'europe': "ヨーロッパ神話",
+                    'middle-east': "中東神話",
+                    'africa': "アフリカ神話",
+                    'americas': "アメリカ神話",
+                    'oceania': "オセアニア神話"
+                },
+                aboutTitle: "世界神話について",
+                aboutText1: "人間の想像力の豊かなタペストリーを旅しましょう。メソポタミアの古代の物語から太平洋諸島の鮮やかな物語まで、さまざまな文化が神話を通じて存在の神秘をどのように説明してきたかを探ります。",
+                aboutText2: "各神話は単なる物語ではなく、文明の魂を表しています - 彼らの価値観、恐れ、希望、そして宇宙への理解。任意の地域をクリックして、その神話の遺産を発見してください。",
+                links: {
+                    aiAnimation: "AIアニメーションツール",
+                    simpleAnimation: "シンプルアニメーション",
+                    community: "コミュニティフォーラム"
+                }
+            },
+            zh: {
+                title: "世界神话之旅",
+                subtitle: "点击地区探索神话宝藏",
+                search: "搜索神话...",
+                categories: {
+                    'east-asia': "东亚神话",
+                    'south-asia': "南亚神话",
+                    'europe': "欧洲神话",
+                    'middle-east': "中东神话",
+                    'africa': "非洲神话",
+                    'americas': "美洲神话",
+                    'oceania': "大洋洲神话"
+                },
+                aboutTitle: "关于世界神话",
+                aboutText1: "踏上人类想象力丰富的旅程。从美索不达米亚的古代故事到太平洋岛屿的生动传说，探索不同文化如何通过神话来解释存在的奥秘。",
+                aboutText2: "每个神话不仅仅是一个故事，更代表着文明的灵魂——他们的价值观、恐惧、希望以及对宇宙的理解。点击任意地区，发现其神话遗产。",
+                links: {
+                    aiAnimation: "AI动画工具",
+                    simpleAnimation: "简单动画",
+                    community: "社区论坛"
+                }
+            },
+            en: {
+                title: "Journey Through World Mythology",
+                subtitle: "Click on regions to explore mythological treasures",
+                search: "Search mythology...",
+                categories: {
+                    'east-asia': "East Asian Mythology",
+                    'south-asia': "South Asian Mythology",
+                    'europe': "European Mythology",
+                    'middle-east': "Middle Eastern Mythology",
+                    'africa': "African Mythology",
+                    'americas': "American Mythology",
+                    'oceania': "Oceanian Mythology"
+                },
+                aboutTitle: "About World Mythology",
+                aboutText1: "Journey through the rich tapestry of human imagination. From the ancient tales of Mesopotamia to the vibrant stories of Pacific islands, explore how different cultures have explained the mysteries of existence through mythology.",
+                aboutText2: "Each mythology is more than just stories - they represent the soul of civilizations, their values, fears, hopes, and understanding of the cosmos. Click on any region to discover its mythological heritage.",
+                links: {
+                    aiAnimation: "AI Animation Tool",
+                    simpleAnimation: "Simple Animation",
+                    community: "Community Forum"
+                }
+            }
+        };
+        
+        // Change language function
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+            
+            // Update UI text
+            updateUILanguage();
+            
+            // Update markers
+            createMythologyMarkers();
+        }
+        
+        // Update UI text based on current language
+        function updateUILanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update page title and subtitle
+            const pageTitle = document.querySelector('#mainTitle');
+            const pageSubtitle = document.querySelector('#subtitle');
+            if (pageTitle) pageTitle.textContent = t.title;
+            if (pageSubtitle) pageSubtitle.textContent = t.subtitle;
+            
+            // Update search placeholder
+            const searchInput = document.querySelector('#searchInput');
+            if (searchInput) searchInput.placeholder = t.search;
+            
+            // Update legend items
+            document.querySelectorAll('.legend-item').forEach(item => {
+                const region = item.getAttribute('data-region');
+                if (region && t.categories[region]) {
+                    const textElement = item.querySelector('.legend-text');
+                    if (textElement) textElement.textContent = t.categories[region];
+                }
+            });
+            
+            // Update about section
+            const aboutTitle = document.querySelector('.about-section h2');
+            const aboutTexts = document.querySelectorAll('.about-content p');
+            if (aboutTitle) aboutTitle.textContent = t.aboutTitle;
+            if (aboutTexts[0]) aboutTexts[0].textContent = t.aboutText1;
+            if (aboutTexts[1]) aboutTexts[1].textContent = t.aboutText2;
+            
+            // Update links
+            const linkBtns = document.querySelectorAll('.link-btn');
+            if (linkBtns[0]) linkBtns[0].textContent = t.links.aiAnimation;
+            if (linkBtns[1]) linkBtns[1].textContent = t.links.simpleAnimation;
+            if (linkBtns[2]) linkBtns[2].textContent = t.links.community;
+        }
         
         // Update legend text to Japanese
         function updateLegendLanguage() {
@@ -906,46 +1069,34 @@
             }
         };
 
-        // Language translations
-        const translations = {
-            en: {
-                title: "Journey Through World Mythologies",
-                subtitle: "Click on any region to explore its mythological treasures",
-                search: "Search mythologies...",
-                explore: "Explore",
-                about: "About World Mythology Explorer",
-                aboutText1: "Embark on a journey through the rich tapestry of human imagination. From the ancient tales of Mesopotamia to the vibrant stories of the Pacific Islands, explore how different cultures have explained the mysteries of existence through mythology.",
-                aboutText2: "Each mythology represents not just stories, but the soul of a civilization - their values, fears, hopes, and understanding of the cosmos. Click on any region to discover its mythological heritage."
-            },
-            zh: {
-                title: "世界神话之旅",
-                subtitle: "点击任意地区探索其神话宝藏",
-                search: "搜索神话...",
-                explore: "探索",
-                about: "关于世界神话探索者",
-                aboutText1: "踏上人类想象力丰富织锦的旅程。从美索不达米亚的古老传说到太平洋岛屿的生动故事，探索不同文化如何通过神话解释存在的奥秘。",
-                aboutText2: "每个神话不仅代表故事，更代表一个文明的灵魂——他们的价值观、恐惧、希望和对宇宙的理解。点击任意地区发现其神话遗产。"
-            },
-            ja: {
-                title: "世界神話の旅",
-                subtitle: "地域をクリックして神話の宝物を探索",
-                search: "神話を検索...",
-                explore: "探索",
-                about: "世界神話エクスプローラーについて",
-                aboutText1: "人間の想像力の豊かなタペストリーを旅しましょう。メソポタミアの古代の物語から太平洋諸島の鮮やかな物語まで、さまざまな文化が神話を通じて存在の神秘をどのように説明してきたかを探ります。",
-                aboutText2: "各神話は単なる物語ではなく、文明の魂を表しています - 彼らの価値観、恐れ、希望、そして宇宙への理解。任意の地域をクリックして、その神話の遺産を発見してください。"
-            }
-        };
 
         let currentLang = 'ja';
         let canvas, ctx;
         let mapImage;
         let canvasWidth, canvasHeight;
+        let canvasOptimizer;
+        let isMapDirty = true;
 
         // Initialize canvas and load map
         function initializeMap() {
             canvas = document.getElementById('worldMapCanvas');
-            ctx = canvas.getContext('2d');
+            
+            // Initialize canvas optimizer if available
+            if (typeof WorldMapCanvasOptimizer !== 'undefined') {
+                try {
+                    canvasOptimizer = new WorldMapCanvasOptimizer(canvas, {
+                        enableOffscreenCanvas: true,
+                        enableImageSmoothing: true,
+                        frameRate: 30
+                    });
+                    ctx = canvasOptimizer.ctx;
+                } catch (error) {
+                    console.warn('Canvas optimizer failed to initialize:', error);
+                    ctx = canvas.getContext('2d');
+                }
+            } else {
+                ctx = canvas.getContext('2d');
+            }
             
             // Create world map image
             mapImage = new Image();
@@ -1153,33 +1304,74 @@
             ctx.setLineDash([]);
         }
 
-        // Draw the map with overlay
+        // Optimized draw function
         function drawMap() {
+            if (canvasOptimizer && canvasOptimizer.batchDraw) {
+                canvasOptimizer.batchDraw((ctx) => {
+                    drawMapContent(ctx);
+                });
+            } else {
+                drawMapContent(ctx);
+            }
+        }
+        
+        // Draw map content with performance optimizations
+        function drawMapContent(context) {
             // Clear canvas
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            context.clearRect(0, 0, canvasWidth, canvasHeight);
             
             // Draw base map
-            ctx.drawImage(mapImage, 0, 0, canvasWidth, canvasHeight);
+            context.drawImage(mapImage, 0, 0, canvasWidth, canvasHeight);
             
-            // Add mystical overlay with aurora effect
-            const overlay = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, 0, canvasWidth/2, canvasHeight/2, canvasWidth/2);
-            overlay.addColorStop(0, 'rgba(102, 126, 234, 0.15)');
-            overlay.addColorStop(0.3, 'rgba(118, 75, 162, 0.1)');
-            overlay.addColorStop(0.6, 'rgba(238, 90, 111, 0.05)');
-            overlay.addColorStop(1, 'transparent');
-            ctx.fillStyle = overlay;
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            
-            // Add animated stars
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * canvasWidth;
-                const y = Math.random() * canvasHeight;
-                const size = Math.random() * 2;
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
+            // Create overlay gradient once and reuse
+            if (!window.mapOverlayGradient || window.lastCanvasSize !== canvasWidth) {
+                window.mapOverlayGradient = context.createRadialGradient(
+                    canvasWidth/2, canvasHeight/2, 0, 
+                    canvasWidth/2, canvasHeight/2, canvasWidth/2
+                );
+                window.mapOverlayGradient.addColorStop(0, 'rgba(102, 126, 234, 0.15)');
+                window.mapOverlayGradient.addColorStop(0.3, 'rgba(118, 75, 162, 0.1)');
+                window.mapOverlayGradient.addColorStop(0.6, 'rgba(238, 90, 111, 0.05)');
+                window.mapOverlayGradient.addColorStop(1, 'transparent');
+                window.lastCanvasSize = canvasWidth;
             }
+            
+            context.fillStyle = window.mapOverlayGradient;
+            context.fillRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Optimized star rendering - reduce number and use batching
+            drawOptimizedStars(context);
+        }
+        
+        // Pre-generate star positions for better performance
+        let starPositions = [];
+        function generateStarPositions() {
+            starPositions = [];
+            for (let i = 0; i < 30; i++) { // Reduced from 50 to 30
+                starPositions.push({
+                    x: Math.random() * canvasWidth,
+                    y: Math.random() * canvasHeight,
+                    size: Math.random() * 1.5 + 0.5,
+                    opacity: Math.random() * 0.6 + 0.4
+                });
+            }
+        }
+        
+        function drawOptimizedStars(context) {
+            if (starPositions.length === 0) {
+                generateStarPositions();
+            }
+            
+            // Batch star drawing
+            context.save();
+            starPositions.forEach(star => {
+                context.globalAlpha = star.opacity;
+                context.fillStyle = 'rgba(255, 255, 255, 1)';
+                context.beginPath();
+                context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                context.fill();
+            });
+            context.restore();
         }
 
         // Create mythology markers
@@ -1219,9 +1411,8 @@
             
             const label = document.createElement('div');
             label.className = 'marker-label';
-            const lang = 'ja';
-            const regionText = typeof location.region === 'object' ? location.region[lang] : location.region;
-            const nameText = typeof location.name === 'object' ? location.name[lang] : location.name;
+            const regionText = typeof location.region === 'object' ? location.region[currentLanguage] || location.region.ja : location.region;
+            const nameText = typeof location.name === 'object' ? location.name[currentLanguage] || location.name.ja : location.name;
             label.innerHTML = `<div style="font-size: 10px; opacity: 0.7; margin-bottom: 2px;">${regionText}</div><div style="font-size: 12px; font-weight: bold;">${nameText}</div>`;
             
             markerInner.appendChild(glow);
@@ -1301,7 +1492,10 @@
 
 
 
-        // Language is fixed to Japanese - no language switching needed
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLanguage);
+        });
 
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function(e) {
@@ -1429,18 +1623,18 @@
         function exploreMythology(region) {
             const mythologyPages = {
                 china: 'chinese-mythology-index.html',
-                greece: 'greek-mythology-index.html',
-                norse: 'norse-mythology-index.html',
-                egypt: 'egyptian-mythology-index.html',
-                india: 'indian-mythology-index.html',
+                greece: 'greek-mythology-index-ja.html',
+                norse: 'norse-mythology-index-ja.html',
+                egypt: 'egyptian-mythology-index-ja.html',
+                india: 'indian-mythology-index-ja.html',
                 japan: 'japanese-mythology-index.html',
-                mesopotamia: 'mesopotamian-mythology-index.html',
-                // celtic: 'celtic-mythology-reader.html',
-                // aztecMaya: 'aztec-maya-mythology-reader.html',
-                // nativeAmerican: 'native-american-mythology-reader.html',
-                // westAfrica: 'west-african-mythology-reader.html',
-                // aboriginal: 'aboriginal-mythology-reader.html',
-                // polynesian: 'polynesian-mythology-reader.html'
+                mesopotamia: 'mesopotamian-mythology-index-ja.html',
+                celtic: 'celtic-mythology-index-ja.html',
+                nativeAmerican: 'native-american-mythology-index-ja.html',
+                aztecMaya: 'aztec-maya-mythology-index-ja.html',
+                westAfrica: 'west-african-mythology-index-ja.html',
+                aboriginal: 'aboriginal-mythology-index-ja.html',
+                polynesian: 'polynesian-mythology-index-ja.html'
             };
             
             if (mythologyPages[region]) {
@@ -1461,8 +1655,9 @@
             
             // Update legend text
             updateLegendLanguage();
+            updateUILanguage();
             
-            // Create markers with Japanese language
+            // Create markers with current language
             createMythologyMarkers();
         }
         

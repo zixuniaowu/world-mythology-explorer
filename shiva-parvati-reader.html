@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シヴァとパールヴァティー - 破壊と創造の神聖な愛</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2F1B69 0%, #8A2BE2 30%, #DA70D6 70%, #FFA500 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 聖なる炎のエフェクト */
+        .sacred-flames {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .flame {
+            position: absolute;
+            bottom: 0;
+            width: 20px;
+            height: 60px;
+            background: linear-gradient(to top, #FF4500, #FF6347, #FFA500, transparent);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flame-dance 2s ease-in-out infinite alternate;
+            opacity: 0.8;
+        }
+        
+        @keyframes flame-dance {
+            0% {
+                transform: scaleY(1) scaleX(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scaleY(1.2) scaleX(0.8);
+                opacity: 1;
+            }
+        }
+        
+        /* 第三の目 */
+        .third-eye {
+            position: fixed;
+            top: 20%;
+            right: 15%;
+            width: 80px;
+            height: 50px;
+            background: radial-gradient(ellipse, #FF4500 20%, #8A2BE2 50%, transparent 70%);
+            border-radius: 50%;
+            z-index: 2;
+            animation: eye-blink 8s ease-in-out infinite;
+            box-shadow: 0 0 30px #FF4500;
+        }
+        
+        .third-eye::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes eye-blink {
+            0%, 90%, 100% { 
+                opacity: 0.8;
+                transform: scaleY(1);
+            }
+            95% { 
+                opacity: 1;
+                transform: scaleY(0.1);
+            }
+        }
+        
+        /* 蓮の花びらエフェクト */
+        .lotus-shower {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .lotus-petal {
+            position: absolute;
+            color: rgba(218, 112, 214, 0.7);
+            font-size: 2.5em;
+            animation: petal-shower linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes petal-shower {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) translateX(80px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* ダマル（シヴァの太鼓） */
+        .damaru {
+            position: fixed;
+            top: 10%;
+            left: 15%;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #8A2BE2, #DA70D6);
+            border-radius: 50%;
+            z-index: 2;
+            animation: damaru-spin 6s linear infinite;
+            box-shadow: 0 0 20px #8A2BE2;
+        }
+        
+        .damaru::before, .damaru::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: #FFA500;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .damaru::after {
+            width: 15px;
+            height: 15px;
+            background: #2F1B69;
+        }
+        
+        @keyframes damaru-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(47, 27, 105, 0.9) 0%, rgba(138, 43, 226, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFA500;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #DA70D6;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #DA70D6;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(218, 112, 214, 0.8), 0 0 50px rgba(138, 43, 226, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: divine-union-glow 6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes divine-union-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(218, 112, 214, 0.8), 0 0 30px rgba(138, 43, 226, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(218, 112, 214, 1), 0 0 60px rgba(138, 43, 226, 0.8), 0 0 80px rgba(255, 165, 0, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F8F8FF;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 112, 214, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #DA70D6;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #DA70D6, transparent);
+        }
+        
+        /* エピソードカード */
+        .episode-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .episode-card {
+            background: linear-gradient(135deg, rgba(218, 112, 214, 0.1) 0%, rgba(138, 43, 226, 0.1) 100%);
+            border: 2px solid rgba(218, 112, 214, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #DA70D6, #8A2BE2, #DA70D6);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .episode-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(218, 112, 214, 0.4);
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #DA70D6;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .episode-icon {
+            font-size: 1.5em;
+        }
+        
+        .episode-content {
+            color: #F8F8FF;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 宇宙舞踏セクション */
+        .cosmic-dance-section {
+            background: rgba(255, 69, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .dance-icon {
+            font-size: 6em;
+            color: #FF4500;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #FF4500);
+            animation: cosmic-dance 8s ease-in-out infinite;
+        }
+        
+        @keyframes cosmic-dance {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+            }
+            25% { 
+                transform: rotate(90deg) scale(1.1);
+            }
+            50% { 
+                transform: rotate(180deg) scale(1);
+            }
+            75% { 
+                transform: rotate(270deg) scale(1.1);
+            }
+        }
+        
+        .dance-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #F8F8FF;
+        }
+        
+        .dance-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FF4500;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(218, 112, 214, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(218, 112, 214, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #DA70D6;
+            box-shadow: 0 15px 40px rgba(218, 112, 214, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #DA70D6;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #F8F8FF;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(47, 27, 105, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(218, 112, 214, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F8F8FF;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .third-eye {
+                width: 60px;
+                height: 35px;
+                top: 15%;
+                right: 5%;
+            }
+            
+            .damaru {
+                width: 40px;
+                height: 40px;
+                top: 8%;
+                left: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 蓮の花びら -->
+    <div class="lotus-shower" id="lotusShower"></div>
+    
+    <!-- 聖なる炎 -->
+    <div class="sacred-flames" id="sacredFlames"></div>
+    
+    <!-- 第三の目 -->
+    <div class="third-eye"></div>
+    
+    <!-- ダマル（太鼓） -->
+    <div class="damaru"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="indian-mythology-index.html" class="logo">インド神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="indian-mythology-index.html">インド神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">シヴァとパールヴァティー</h1>
+            <p class="story-subtitle">破壊と創造、そして永遠の愛が織りなす神聖な結合</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">神聖なる愛の物語</h2>
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🏔️</span>
+                        シヴァの瞑想と世界の危機
+                    </h3>
+                    <div class="episode-content">
+                        破壊神シヴァは、最初の妻サティーを失った悲しみから、
+                        ヒマラヤの山中で長い瞑想に入っていました。しかし、この時世界は大きな危機に直面していました。
+                        阿修羅（悪魔）の王タラカースラが、「シヴァの息子にしか殺されない」という恩恵を
+                        ブラフマーから得て、天界を支配していたのです。神々は困り果て、
+                        シヴァに新たな妻を娶ってもらい、息子を産んでもらう必要がありました。
+                        しかし、深い瞑想に入ったシヴァを目覚めさせることは不可能に思われました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🌸</span>
+                        パールヴァティーの誕生と修行
+                    </h3>
+                    <div class="episode-content">
+                        ヒマラヤ山脈の王ヒマヴァーンと女王メーナーの間に、美しい娘パールヴァティーが生まれました。
+                        彼女は実は、サティーの転生でした。成長したパールヴァティーは、
+                        シヴァに対する深い愛を抱くようになりました。彼女は毎日シヴァの瞑想場所を訪れ、
+                        花や果物を供え、献身的に仕えました。しかし、シヴァは瞑想に没頭して彼女に気づきませんでした。
+                        そこでパールヴァティーは、厳しい苦行を始めることにしました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🏹</span>
+                        愛の神カーマの犠牲
+                    </h3>
+                    <div class="episode-content">
+                        神々は愛の神カーマ（クーピッド）に、シヴァに恋の矢を射るよう頼みました。
+                        カーマは春の季節に、花々と共にシヴァの瞑想場所にやってきました。
+                        そして、シヴァが一瞬瞑想から目を開いた時、恋の矢を射ました。
+                        シヴァは確かにパールヴァティーに心を動かされましたが、すぐに何が起こったかを悟りました。
+                        怒ったシヴァは第三の目を開き、その炎でカーマを灰にしてしまいました。
+                        この出来事により、世界から愛が消え、カーマの妻ラティは夫の復活を懇願しました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🔥</span>
+                        パールヴァティーの厳格な苦行
+                    </h3>
+                    <div class="episode-content">
+                        カーマの死を知ったパールヴァティーは、シヴァの愛を得るためにはさらに厳しい修行が必要だと悟りました。
+                        彼女は森に入り、何年もの間、食べ物も水も摂らず、厳冬には薄着で、
+                        酷暑には火に囲まれて瞑想を続けました。その苦行の激しさは、
+                        宇宙全体を震撼させるほどでした。ついに、パールヴァティーの真の愛と献身を理解したシヴァは、
+                        老婆に変装して彼女の前に現れ、彼女の決意を試しました。
+                        パールヴァティーがどんな困難があってもシヴァへの愛を貫く意志を示すと、
+                        シヴァは本来の姿を現しました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">💒</span>
+                        神聖なる結婚式
+                    </h3>
+                    <div class="episode-content">
+                        シヴァはパールヴァティーの純粋な愛に深く感動し、彼女にプロポーズしました。
+                        宇宙で最も壮大な結婚式が準備されました。ブラフマー、ヴィシュヌをはじめとする
+                        すべての神々、聖仙、天界の存在たちが参列しました。シヴァは花婿として美しく装い、
+                        パールヴァティーは花嫁として最高の美しさで輝いていました。
+                        結婚式は7日7夜続き、宇宙全体が喜びに満たされました。
+                        この結合により、破壊と創造、男性原理と女性原理の完璧な調和が成し遂げられました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">👨‍👩‍👦</span>
+                        ガネーシャとカールッティケーヤの誕生
+                    </h3>
+                    <div class="episode-content">
+                        結婚後、シヴァとパールヴァティーの間に二人の息子が生まれました。
+                        まず、パールヴァティーが自分の体の汚れから作った息子ガネーシャが誕生しました。
+                        ガネーシャは障害を取り除く神として崇拝されるようになりました。
+                        次に、六つの顔と十二の腕を持つ戦神カールッティケーヤ（ムルガン）が生まれました。
+                        カールッティケーヤは成長すると、予言通りにタラカースラを倒し、世界に平和をもたらしました。
+                        こうして、シヴァとパールヴァティーの愛は、宇宙の調和と平和に貢献したのです。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🌅</span>
+                        永遠の愛と宇宙の調和
+                    </h3>
+                    <div class="episode-content">
+                        シヴァとパールヴァティーの結合は、単なる恋愛を超えた宇宙的な意味を持っています。
+                        シヴァは純粋意識を、パールヴァティーは神聖なエネルギー（シャクティ）を表現しています。
+                        二人の愛は、静寂と動き、永遠と時間、精神と物質の完璧な統合を象徴しています。
+                        彼らの家庭生活は理想的な夫婦関係の模範とされ、時には遊び心に満ちた夫婦げんかもしますが、
+                        それも宇宙の創造的なエネルギーの一部なのです。愛の神カーマも最終的に復活し、
+                        世界に再び愛が戻りました。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 宇宙舞踏 -->
+        <section class="cosmic-dance-section">
+            <h2 class="section-title">ナタラージャ - 宇宙の舞踏</h2>
+            <div class="dance-icon">💃</div>
+            <div class="dance-content">
+                <h3>破壊と創造の舞</h3>
+                <p>
+                    シヴァの「ナタラージャ」（舞踏王）としての姿は、宇宙の創造、維持、破壊の
+                    永遠の循環を表現しています。彼の舞踏は宇宙のリズムそのものであり、
+                    すべての存在がこのリズムに合わせて生まれ、成長し、消滅していきます。
+                </p>
+                
+                <h3>神聖なるエネルギーの統合</h3>
+                <p>
+                    パールヴァティーはシヴァの舞踏を見守り、時には一緒に踊ります。
+                    彼女のエネルギー（シャクティ）がなければ、シヴァは動くことができません。
+                    この神聖な結合により、宇宙は常に生命力に満ちた動的な存在として維持されています。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🔱</span>
+                    <h3 class="character-name">シヴァ</h3>
+                    <p class="character-description">
+                        破壊と再生の神、宇宙の舞踏王。
+                        第三の目を持ち、瞑想と踊りを通じて
+                        宇宙の秩序を維持する。
+                        アディヨーギ（最初のヨーガ行者）。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌺</span>
+                    <h3 class="character-name">パールヴァティー</h3>
+                    <p class="character-description">
+                        山の王女、母なる女神。
+                        サティーの転生で、シヴァの妻。
+                        シャクティ（神聖なエネルギー）の
+                        体現者として崇拝される。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐘</span>
+                    <h3 class="character-name">ガネーシャ</h3>
+                    <p class="character-description">
+                        象の頭を持つ神、障害除去の神。
+                        パールヴァティーが創造した息子で、
+                        学問と商業の守護神として
+                        広く愛されている。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🦚</span>
+                    <h3 class="character-name">カールッティケーヤ</h3>
+                    <p class="character-description">
+                        戦神、六面十二臂の神。
+                        孔雀に乗り、タラカースラを
+                        倒して世界を救った。
+                        南インドでムルガンとして崇拝。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🏹</span>
+                    <h3 class="character-name">カーマ</h3>
+                    <p class="character-description">
+                        愛と欲望の神。
+                        シヴァに恋の矢を射たが、
+                        第三の目の炎で焼かれた。
+                        後に復活し、愛を世界に戻した。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👹</span>
+                    <h3 class="character-name">タラカースラ</h3>
+                    <p class="character-description">
+                        強大な阿修羅（悪魔）の王。
+                        「シヴァの息子にしか殺されない」
+                        という恩恵により天界を支配したが、
+                        カールッティケーヤに倒された。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">シヴァとパールヴァティー - 宇宙の調和を象徴する神聖な愛</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 蓮の花びらを生成
+        function createLotusShower() {
+            const lotusContainer = document.getElementById('lotusShower');
+            const numberOfPetals = 15;
+            
+            for (let i = 0; i < numberOfPetals; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'lotus-petal';
+                petal.innerHTML = '🌺';
+                
+                // ランダムな位置とアニメーション
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 18 + 12) + 's';
+                petal.style.animationDelay = Math.random() * 12 + 's';
+                
+                lotusContainer.appendChild(petal);
+            }
+        }
+        
+        // 聖なる炎を生成
+        function createSacredFlames() {
+            const flamesContainer = document.getElementById('sacredFlames');
+            const numberOfFlames = 20;
+            
+            for (let i = 0; i < numberOfFlames; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'flame';
+                
+                // ランダムな位置とサイズ
+                flame.style.left = Math.random() * 100 + '%';
+                flame.style.animationDelay = Math.random() * 2 + 's';
+                flame.style.height = (Math.random() * 40 + 40) + 'px';
+                flame.style.width = (Math.random() * 15 + 15) + 'px';
+                
+                flamesContainer.appendChild(flame);
+            }
+        }
+        
+        // ページ読み込み時にエフェクトを生成
+        window.addEventListener('load', () => {
+            createLotusShower();
+            createSacredFlames();
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.episode-card, .character-card, .dance-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .dance-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

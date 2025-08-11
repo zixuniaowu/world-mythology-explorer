@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モアナと海の航海者 - ポリネシア神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #006994 50%, #20B2AA 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 太平洋の海 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(32, 178, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(0, 105, 148, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #20B2AA 0%, #006994 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(32, 178, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌊 ⛵ 🗿 ⭐';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #e0ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #20B2AA;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(32, 178, 170, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #20B2AA;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #20B2AA;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.2), rgba(0, 105, 148, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #20B2AA;
+        }
+
+        .navigation-wisdom {
+            background: rgba(0, 105, 148, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 105, 148, 0.3);
+        }
+
+        .navigation-wisdom h4 {
+            color: #006994;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 海の波エフェクト */
+        .ocean-spirits {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spirit-wave {
+            position: absolute;
+            font-size: 3rem;
+            animation: spiritFlow 25s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes spiritFlow {
+            0% {
+                transform: translateX(-200px) translateY(20px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-20px);
+                opacity: 0;
+            }
+        }
+
+        .polynesian-canoe {
+            position: fixed;
+            bottom: 20%;
+            right: 50px;
+            width: 200px;
+            height: 100px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: canoeRock 12s infinite;
+        }
+
+        @keyframes canoeRock {
+            0%, 100% { transform: rotate(-2deg) translateY(0px); }
+            25% { transform: rotate(1deg) translateY(-10px); }
+            50% { transform: rotate(0deg) translateY(0px); }
+            75% { transform: rotate(-1deg) translateY(10px); }
+        }
+
+        .te-fiti-heart {
+            position: fixed;
+            top: 30%;
+            left: 30px;
+            font-size: 4rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: heartPulse 8s infinite;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.12; }
+            50% { transform: scale(1.3); opacity: 0.25; }
+        }
+
+        .star-compass {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: compassRotate 60s linear infinite;
+        }
+
+        @keyframes compassRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- テ・フィティの心 -->
+    <div class="te-fiti-heart">💚</div>
+    
+    <!-- 海のスピリット -->
+    <div class="ocean-spirits" id="oceanSpirits"></div>
+    
+    <!-- ポリネシアカヌー -->
+    <div class="polynesian-canoe">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- カヌーの船体 -->
+            <path d="M20,70 Q50,50 100,55 Q150,50 180,70 L180,80 Q150,85 100,85 Q50,85 20,80 Z" 
+                  fill="rgba(32, 178, 170, 0.2)"/>
+            <!-- アウトリガー -->
+            <line x1="40" y1="60" x2="40" y2="40" stroke="rgba(32, 178, 170, 0.2)" stroke-width="2"/>
+            <ellipse cx="40" cy="35" rx="15" ry="4" fill="rgba(32, 178, 170, 0.1)"/>
+            <!-- セイル -->
+            <path d="M100,55 L100,20 Q120,25 130,20 L130,55" 
+                  fill="rgba(0, 105, 148, 0.2)" stroke="rgba(0, 105, 148, 0.2)" stroke-width="1"/>
+        </svg>
+    </div>
+    
+    <!-- 星の羅針盤 -->
+    <div class="star-compass">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- 主要な方角 -->
+            <g stroke="rgba(32, 178, 170, 0.3)" stroke-width="2" fill="none">
+                <circle cx="150" cy="150" r="120"/>
+                <circle cx="150" cy="150" r="80"/>
+                <circle cx="150" cy="150" r="40"/>
+                <line x1="150" y1="30" x2="150" y2="270"/>
+                <line x1="30" y1="150" x2="270" y2="150"/>
+                <line x1="63" y1="63" x2="237" y2="237"/>
+                <line x1="237" y1="63" x2="63" y2="237"/>
+            </g>
+            <!-- 星座の位置 -->
+            <g fill="rgba(32, 178, 170, 0.2)">
+                <circle cx="150" cy="50" r="3"/>  <!-- 北極星 -->
+                <circle cx="220" cy="100" r="2"/> <!-- 東の星 -->
+                <circle cx="150" cy="250" r="3"/> <!-- 南十字星 -->
+                <circle cx="80" cy="100" r="2"/>  <!-- 西の星 -->
+            </g>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>モアナと海の航海者</h1>
+            <p>Moana and Ocean Voyagers - 波を越えた勇者たち</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #20B2AA; text-decoration: none; font-size: 1.5rem;">🌊 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="polynesian-mythology-index-ja.html">ポリネシア神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>海に選ばれし者たちの物語</h2>
+            
+            <p>
+                モアナ（Moana、地域によってはVaiana）の物語は、ポリネシア全域に伝わる海の航海者たちの伝説を基にしています。「モアナ」は多くのポリネシア語で「海」を意味し、この名前を持つ女性たちは海と特別な絆を持つと信じられています。彼女たちの物語は、勇気、冒険心、そして自然との調和を象徴し、ポリネシアの島々を発見し定住した偉大な航海者たちの精神を表現しています。
+            </p>
+
+            <h3>海に選ばれた少女</h3>
+            <p>
+                モアナは太平洋の小さな島、モトゥヌイの族長の娘として生まれました。幼い頃から、彼女は海に特別な愛着を感じていました。他の子供たちが陸で遊ぶ中、モアナだけは波打ち際で時間を過ごし、海の声に耳を傾けていました。
+            </p>
+
+            <p>
+                ある日、幼いモアナが浜辺で遊んでいると、海そのものが生きているかのように彼女に近づいてきました。海は壁のように立ち上がり、その中でモアナを包み込みましたが、彼女は恐れることなく、海と戯れました。この時、海はモアナを「選ばれし者」として認識し、緑の石を彼女に託しました。
+            </p>
+
+            <p>
+                この石は、創造の女神テ・フィティの心でした。半神マウイがこの心を盗んだため、世界に闇が広がり始めていました。作物は枯れ、魚は姿を消し、島々は生命力を失いつつありました。海はモアナに、この心をテ・フィティに返すという使命を託したのです。
+            </p>
+
+            <div class="navigation-wisdom">
+                <h4>ポリネシア航海者の知恵</h4>
+                <p>
+                星座の動きで方角を知る<br>
+                波の形で島の位置を判断する<br>
+                鳥の飛行パターンで陸地を発見する<br>
+                海の色と匂いで深さを測る<br>
+                風と潮流の変化を読み取る<br>
+                直感と経験を統合して航路を決める
+                </p>
+            </div>
+
+            <h3>祖母タラの教え</h3>
+            <p>
+                モアナの祖母タラは、島で唯一海の古い物語を覚えている人でした。彼女はモアナに、かつてポリネシアの人々が偉大な航海者だったこと、広大な太平洋を渡って新しい島々を発見したことを教えました。
+            </p>
+
+            <p>
+                「私たちは航海者だった」とタラは語りました。「しかし、マウイがテ・フィティの心を盗んでから、海は危険になり、人々は航海をやめてしまった。でも、あなたは違う。海があなたを選んだのよ」
+            </p>
+
+            <p>
+                タラはモアナに、島の洞窟に隠された古代の航海カヌーを見せました。そこには、祖先たちが使った美しく巨大なカヌーが保存されており、壁には星図や航海図が描かれていました。これを見たモアナは、自分の運命を理解しました。
+            </p>
+
+            <h3>マウイとの出会い</h3>
+            <p>
+                危険を冒してカヌーで海に漕ぎ出したモアナは、嵐に遭い、無人島に漂着しました。そこで彼女は、半神マウイと出会いました。マウイは自分の魔法の釣り針を失い、千年間その島に閉じ込められていました。
+            </p>
+
+            <p>
+                最初、マウイはモアナを軽視し、「海は間違いを犯した」と言いました。しかし、モアナの強い意志と決意を見て、次第に彼女を認めるようになりました。マウイは自分の過ちを認め、テ・フィティの心を返すためにモアナと共に旅をすることを決意しました。
+            </p>
+
+            <p>
+                マウイはモアナに航海の技術を教えました。星を読む方法、風を感じる方法、そして最も重要なのは、「海を友として扱う」方法でした。「海は道だ」とマウイは教えました。「恐れるものではなく、導いてくれるものなのだ」
+            </p>
+
+            <h3>テ・カの試練</h3>
+            <p>
+                テ・フィティの島に近づくと、彼らは巨大な溶岩の魔物テ・カと遭遇しました。テ・カは怒りと破壊の化身で、心を失ったテ・フィティが変化した姿でした。激しい戦いの中で、マウイは魔法の釣り針を失い、変身能力を失ってしまいました。
+            </p>
+
+            <p>
+                一度は諦めかけたモアナでしたが、祖母タラの霊的な導きを受け、自分の内なる力を発見しました。彼女は理解しました：テ・カは敵ではなく、心を失って苦しんでいる存在だったのです。
+            </p>
+
+            <p>
+                モアナは勇気を振り絞り、単独でテ・カに近づきました。そして、愛と理解の心で、テ・フィティの心を返しました。すると、テ・カは本来の美しく慈愛に満ちたテ・フィティの姿に戻り、島々に再び生命が戻りました。
+            </p>
+
+            <h3>古代ポリネシア航海者の実像</h3>
+            <p>
+                モアナの物語は、実際の歴史に基づいています。紀元前1000年頃から1300年頃にかけて、ポリネシアの人々は驚異的な航海技術により、太平洋の島々を次々と発見し、植民しました。彼らは羅針盤やGPSなしで、数千キロメートルの海を渡りました。
+            </p>
+
+            <p>
+                彼らが使用したワカ（vaka、双胴カヌー）は、波の激しい太平洋を安全に航海できるよう設計されていました。また、航海者たちは「ウェイファインダー」と呼ばれ、星座、波のパターン、鳥の行動、雲の形成などを総合的に読み取って航路を決定していました。
+            </p>
+
+            <p>
+                これらの知識は「ナ・ポエ・カラカ」（航海者の歌）として口承で伝えられ、選ばれた者だけに伝授されました。現在でも、ハワイやタヒチでは、この古代の航海術を復活させる運動が続いています。
+            </p>
+
+            <div class="highlight">
+                海の誓い（ポリネシア航海者の心得）：<br>
+                「海は我らの道、星は我らの案内人<br>
+                風は我らの友、波は我らの歌<br>
+                我らは恐れない、海に選ばれし者<br>
+                新しい島を求め、永遠に航海を続ける<br>
+                祖先の知恵を胸に、未来への道を切り開く」
+            </div>
+
+            <h3>現代の航海復活運動</h3>
+            <p>
+                1970年代から、ハワイを中心として古代ポリネシア航海術の復活運動が始まりました。「ホクレア」号という伝統的なカヌーが建造され、古代の方法だけで太平洋を横断することに成功しました。この成功は、ポリネシアの人々に大きな誇りをもたらしました。
+            </p>
+
+            <p>
+                現在、「ポリネシア・ボヤージング・ソサエティ」などの組織が、若い世代に航海術を教えています。これは単なる技術の継承ではなく、海との精神的なつながり、自然への敬意、そして探検精神の復活を目的としています。
+            </p>
+
+            <h3>環境保護への貢献</h3>
+            <p>
+                モアナの物語は、現代の海洋環境保護運動とも深く結びついています。太平洋の島々は気候変動により海面上昇の脅威にさらされており、海洋汚染も深刻な問題となっています。
+            </p>
+
+            <p>
+                ポリネシアの人々は、「海は生きている」という古代の信念に基づき、海洋保護活動を積極的に行っています。彼らにとって、海は単なる資源ではなく、祖先から受け継がれた神聖な存在なのです。
+            </p>
+
+            <h3>女性のリーダーシップ</h3>
+            <p>
+                モアナの物語は、ポリネシア文化における女性の重要な役割も反映しています。伝統的に、ポリネシアの島々では女性も航海に参加し、時には船団のリーダーを務めることもありました。女性の直感と包容力は、危険な航海において重要な役割を果たしていました。
+            </p>
+
+            <p>
+                現代でも、多くのポリネシア系女性が海洋科学、環境保護、文化保存の分野でリーダーシップを発揮しています。彼女たちは「現代のモアナ」として、祖先の精神を現代に伝えています。
+            </p>
+
+            <div class="highlight">
+                モアナの物語が現代に伝えること：<br>
+                真の勇気は恐れないことではなく、恐れがあっても正しいことを行うこと。個人の運命は共同体の福祉と分離できない。自然は征服するものではなく、協力し調和するもの。古代の知恵は現代の問題解決にも有効である。女性の直感と決断力は世界を変える力を持つ。そして海は全ての生命をつなぐ共通の遺産である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 海の呼び声に従いましょう。</p>
+    </footer>
+
+    <script>
+        // 海のスピリットエフェクト
+        function createOceanSpirits() {
+            const container = document.getElementById('oceanSpirits');
+            const spirits = ['🌊', '🐚', '🐠', '🌴', '⭐', '🌙'];
+            
+            function addSpiritWave() {
+                const spirit = document.createElement('div');
+                spirit.className = 'spirit-wave';
+                spirit.innerHTML = spirits[Math.floor(Math.random() * spirits.length)];
+                spirit.style.top = Math.random() * 80 + 10 + '%';
+                spirit.style.animationDelay = Math.random() * 5 + 's';
+                spirit.style.animationDuration = (20 + Math.random() * 15) + 's';
+                container.appendChild(spirit);
+                
+                setTimeout(() => {
+                    if (container.contains(spirit)) {
+                        container.removeChild(spirit);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的にスピリットを追加
+            setInterval(addSpiritWave, 5000);
+            
+            // 初期のスピリットを追加
+            for (let i = 0; i < 4; i++) {
+                setTimeout(addSpiritWave, i * 3000);
+            }
+        }
+        
+        createOceanSpirits();
+    </script>
+</body>
+</html>

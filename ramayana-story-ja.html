@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラーマーヤナの物語 - インド神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family+Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffeb3b 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 森と宮殿の雰囲気 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 235, 59, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #ffeb3b 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🏹 🐒 🌺 🏛️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff3e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #d84315;
+            font-weight: 600;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ff6b35;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ff6b35;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 235, 59, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .rama-verse {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            font-style: italic;
+        }
+
+        .rama-verse h4 {
+            color: #d84315;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ラーマーヤナエフェクト */
+        .divine-arrows {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 40px;
+            height: 4px;
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.3), rgba(255, 235, 59, 0.3));
+            animation: arrowFly 15s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes arrowFly {
+            0% {
+                transform: translateX(-50px) translateY(50vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(110vw) translateY(-10vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .hanuman-silhouette {
+            position: fixed;
+            bottom: 10%;
+            right: 50px;
+            width: 100px;
+            height: 120px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: hanumanLeap 25s infinite;
+        }
+
+        @keyframes hanumanLeap {
+            0%, 100% { transform: scale(1) translateY(0); }
+            25% { transform: scale(1.2) translateY(-20px); }
+            50% { transform: scale(0.8) translateY(-10px); }
+            75% { transform: scale(1.1) translateY(-30px); }
+        }
+
+        .golden-deer {
+            position: fixed;
+            top: 40%;
+            left: 20px;
+            width: 80px;
+            height: 60px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: deerRun 20s infinite;
+        }
+
+        @keyframes deerRun {
+            0% { transform: translateX(0) scaleX(1); }
+            50% { transform: translateX(100px) scaleX(1); }
+            51% { transform: translateX(100px) scaleX(-1); }
+            100% { transform: translateX(0) scaleX(-1); }
+        }
+
+        .forest-background {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, rgba(76, 175, 80, 0.1), transparent);
+            z-index: 1;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 神聖な矢 -->
+    <div class="divine-arrows" id="divineArrows"></div>
+    
+    <!-- ハヌマーン -->
+    <div class="hanuman-silhouette">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- 体 -->
+            <ellipse cx="50" cy="80" rx="20" ry="25" fill="rgba(255, 107, 53, 0.3)"/>
+            <!-- 頭 -->
+            <circle cx="50" cy="40" r="20" fill="rgba(255, 107, 53, 0.3)"/>
+            <!-- 尻尾 -->
+            <path d="M70,90 Q90,70 85,50 Q80,30 75,40" stroke="rgba(255, 107, 53, 0.3)" stroke-width="4" fill="none"/>
+            <!-- 腕 -->
+            <ellipse cx="30" cy="70" rx="8" ry="15" fill="rgba(255, 107, 53, 0.3)"/>
+            <ellipse cx="70" cy="70" rx="8" ry="15" fill="rgba(255, 107, 53, 0.3)"/>
+            <!-- 足 -->
+            <ellipse cx="40" cy="105" rx="6" ry="10" fill="rgba(255, 107, 53, 0.3)"/>
+            <ellipse cx="60" cy="105" rx="6" ry="10" fill="rgba(255, 107, 53, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- 黄金の鹿 -->
+    <div class="golden-deer">
+        <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+            <!-- 体 -->
+            <ellipse cx="50" cy="40" rx="25" ry="15" fill="rgba(255, 235, 59, 0.3)"/>
+            <!-- 頭 -->
+            <ellipse cx="20" cy="30" rx="12" ry="10" fill="rgba(255, 235, 59, 0.3)"/>
+            <!-- 角 -->
+            <path d="M15,25 L10,15 M15,25 L8,20 M25,25 L30,15 M25,25 L32,20" 
+                  stroke="rgba(255, 235, 59, 0.4)" stroke-width="2"/>
+            <!-- 足 -->
+            <rect x="30" y="50" width="3" height="8" fill="rgba(255, 235, 59, 0.3)"/>
+            <rect x="40" y="50" width="3" height="8" fill="rgba(255, 235, 59, 0.3)"/>
+            <rect x="50" y="50" width="3" height="8" fill="rgba(255, 235, 59, 0.3)"/>
+            <rect x="60" y="50" width="3" height="8" fill="rgba(255, 235, 59, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- 森の背景 -->
+    <div class="forest-background"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ラーマーヤナの物語</h1>
+            <p>Ramayana Story - 理想の王と永遠の愛</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ff6b35; text-decoration: none; font-size: 1.5rem;">🏹 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="indian-mythology-index-ja.html">インド神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>理想の王子の壮大な物語</h2>
+            
+            <p>
+                『ラーマーヤナ』（Ramayana）は、古代インドの大叙事詩の一つで、理想的な王子ラーマの生涯を描いた不朽の名作です。ヴァールミーキ仙人によって編纂されたこの物語は、愛、忠誠、義務、そして善と悪の永遠の闘いを主題とし、インド文化の道徳的基盤を形成しています。24,000の詩節からなるこの叙事詩は、ヒンドゥー教の聖典として崇敬されるとともに、東南アジア全域にわたって愛され続けています。
+            </p>
+
+            <h3>アヨーディヤーの理想的王子</h3>
+            <p>
+                コーサラ国の都アヨーディヤーを統治するダシャラタ王には、三人の妃との間に四人の息子がいました。最高神ヴィシュヌの化身である長男ラーマ、弟ラクシュマナ、バラタ、シャトルグナです。中でもラーマは、美貌、知性、武勇、そして高い道徳性を兼ね備えた理想的な王子として人々に愛されていました。
+            </p>
+
+            <p>
+                ラーマは幼い頃から、すべての学問と武芸に秀でていました。ヴィシュヴァーミトラ仙人の指導の下で、神聖な武器の使い方を学び、悪魔たちから聖者たちを守りました。彼の品格と能力は、すでに次期国王にふさわしいものでした。
+            </p>
+
+            <p>
+                成人したラーマは、ミティラー国のスヴァヤンヴァラ（王女自身が夫を選ぶ儀式）に参加しました。そこで、シヴァ神の巨大な弓を引くことができた唯一の王子として、美しく賢いシーターと結婚しました。この結婚は、両国に平和と繁栄をもたらしました。
+            </p>
+
+            <div class="rama-verse">
+                <h4>ラーマの理想</h4>
+                <p>
+                「正義は私の道、真実は私の言葉<br>
+                父への孝行、民への慈悲<br>
+                これらが私の王としての務め<br>
+                個人的な幸福より公の利益を<br>
+                常に優先することが王の道」
+                </p>
+            </div>
+
+            <h3>森への追放</h3>
+            <p>
+                ダシャラタ王は老齢に達し、ラーマに王位を譲ろうと決めました。しかし、第二妃カイケーイーが過去に受けた恩恵の約束を持ち出し、自分の息子バラタを王にし、ラーマを14年間森に追放するよう要求しました。
+            </p>
+
+            <p>
+                この突然の要求に宮廷は混乱しましたが、ラーマは父との約束を重んじ、一切の不平を言わずに追放を受け入れました。彼は王としての権力よりも、息子としての義務と父の名誉を選んだのです。シーターと弟ラクシュマナも、彼に従って森へ向かいました。
+            </p>
+
+            <p>
+                この追放は、ラーマの人格の高さを示す最初の大きな試練でした。権力への執着を持たず、個人的な感情よりも道徳的義務を優先する彼の姿は、理想的な人間像として後世に伝えられることになりました。
+            </p>
+
+            <h3>森での生活と試練</h3>
+            <p>
+                森での14年間、ラーマ、シーター、ラクシュマナの三人は、質素ながらも平和な生活を送りました。ラーマは聖者たちを悪魔から守り、森の動物たちと親しみ、自然と調和した生活を実践しました。これは、理想的な統治者が自然や弱者をいかに保護すべきかを示しています。
+            </p>
+
+            <p>
+                しかし、平和は長続きしませんでした。ランカー島の十の頭を持つ魔王ラーヴァナの妹シュールパナカーが、ラーマに求婚して拒絶されると、復讐のためにラーヴァナにシーターの美しさを讃えて報告しました。
+            </p>
+
+            <p>
+                ラーヴァナは黄金の鹿に変身した悪魔マリーチャを使って、ラーマとラクシュマナを住処から遠ざけ、その隙にシーターを誘拐しました。シーターの悲痛な叫び声が森に響く中、彼女はランカー島に連れ去られてしまいました。
+            </p>
+
+            <div class="highlight">
+                シーターの誘拐：<br>
+                この出来事は、物語の大きな転換点です。それまでの平穏な森の生活から、善と悪の壮大な戦いへと物語は発展します。シーターの誘拐は単なる個人的な悲劇ではなく、宇宙的な善悪の闘争の始まりを象徴しています。また、これによってラーマの真の力と決意が試されることになります。
+            </div>
+
+            <h3>ハヌマーンとの出会い</h3>
+            <p>
+                シーターを探すラーマは、猿の王国キシュキンダーでスグリーヴァ王と同盟を結びました。そこで出会ったのが、ハヌマーンでした。風神ヴァーユの息子であるハヌマーンは、無限の力と知恵を持ちながら、ラーマに対する絶対的な献身を示しました。
+            </p>
+
+            <p>
+                ハヌマーンはラーマへの愛によって、自分の中に眠っていた神聖な力を発見しました。彼は空を飛び、山を運び、体を自在に変化させることができました。しかし、これらの超自然的な力は、すべてラーマへの奉仕のためにのみ使われました。
+            </p>
+
+            <p>
+                ハヌマーンは単身でランカー島に飛び、シーターを発見してラーマの指輪を渡し、彼女の居場所をラーマに報告しました。この行為は、真の献身がいかに不可能を可能にするかを示しています。
+            </p>
+
+            <h3>ランカー島での大戦争</h3>
+            <p>
+                ラーマは猿の軍勢と共にランカー島に向かいました。海を渡るため、ハヌマーンと猿たちは巨大な橋を建設しました。これは現在でも「ラーマ・セートゥ」（ラーマの橋）と呼ばれ、インドとスリランカの間の浅瀬として残っています。
+            </p>
+
+            <p>
+                ランカーでは、善と悪の壮大な戦いが繰り広げられました。ラーヴァナは十の頭と二十の腕を持つ強大な魔王でしたが、同時に学識と権力を兼ね備えた悲劇的な人物でもありました。彼の傲慢さと欲望が、最終的に自らの破滅を招きました。
+            </p>
+
+            <p>
+                戦いの中で、ラクシュマナが毒矢で倒れるという危機もありましたが、ハヌマーンがヒマラヤから薬草の山を丸ごと運んできて彼を救いました。このエピソードは、愛と献身の力がいかに強大かを示しています。
+            </p>
+
+            <h3>シーターの試練</h3>
+            <p>
+                ラーヴァナを倒し、シーターを救出したラーマでしたが、人々の疑念を晴らすため、シーターに貞節の証明を求めました。シーターは火の試練（アグニ・パリークシャー）を受け、火神アグニによってその純潔が証明されました。
+            </p>
+
+            <p>
+                しかし、アヨーディヤーに戻った後も民衆の噂は続き、ついにラーマは重い心でシーターを森に送らざるを得ませんでした。これは、個人的な感情よりも王としての責任を優先するラーマの苦悩を示しています。
+            </p>
+
+            <p>
+                森でシーターは双子の息子ラヴァとクシャを産み、ヴァールミーキ仙人のもとで育てました。息子たちは後に、父ラーマの前で『ラーマーヤナ』を朗誦し、家族の再会が実現しました。しかし、シーターは再度の貞節の証明を求められると、大地母神に呼びかけて地中に消えてしまいました。
+            </p>
+
+            <h3>永遠の教訓</h3>
+            <p>
+                『ラーマーヤナ』は、理想的な人間関係のモデルを提示しています。ラーマは理想的な息子、夫、兄、王として描かれ、シーターは忠実で献身的な妻の理想像として、ラクシュマナは兄への忠誠の象徴として、ハヌマーンは完全な献身の模範として描かれています。
+            </p>
+
+            <p>
+                この物語は、個人の欲望と社会的義務の間で生じる葛藤についても深く考察しています。ラーマが直面した困難な選択は、現代においても多くの人が経験する道徳的ジレンマと共通しています。
+            </p>
+
+            <p>
+                また、『ラーマーヤナ』は、真の力は武力ではなく道徳的な強さから生まれることを教えています。ラーマの勝利は、彼の武勇だけでなく、正義への献身と周囲の人々との信頼関係によってもたらされました。
+            </p>
+
+            <div class="rama-verse">
+                <h4>ラーマーヤナの教え</h4>
+                <p>
+                「真の勝利は敵を倒すことにあらず<br>
+                自己の欲望と怒りに打ち勝つこと<br>
+                愛は献身によって完成され<br>
+                義務は個人的な幸福を超越する<br>
+                これが人間の歩むべき道」
+                </p>
+            </div>
+
+            <div class="highlight">
+                ラーマーヤナが現代に伝えること：<br>
+                理想を追求することの困難さとその価値。個人の幸福と社会的責任の間でのバランス。真の愛は試練を通じて深まる。権力は奉仕のためにあり、個人の利益のためではない。献身と忠誠は最も強い力を生み出す。そして、完璧な人生など存在しないが、理想を追求し続けることに意味がある。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ラーマの理想と共に歩みましょう。</p>
+    </footer>
+
+    <script>
+        // 神聖な矢エフェクト
+        function createDivineArrows() {
+            const container = document.getElementById('divineArrows');
+            
+            function addArrow() {
+                const arrow = document.createElement('div');
+                arrow.className = 'arrow';
+                arrow.style.top = Math.random() * 100 + '%';
+                arrow.style.animationDelay = Math.random() * 5 + 's';
+                arrow.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(arrow);
+                
+                setTimeout(() => {
+                    if (container.contains(arrow)) {
+                        container.removeChild(arrow);
+                    }
+                }, 15000);
+            }
+            
+            // 定期的に矢を追加
+            setInterval(addArrow, 2000);
+            
+            // 初期の矢を追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addArrow, i * 1000);
+            }
+        }
+        
+        createDivineArrows();
+
+        // 花びらエフェクト
+        function createFlowerPetals() {
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.innerHTML = '🌸';
+                petal.style.position = 'fixed';
+                petal.style.top = '-50px';
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.fontSize = '20px';
+                petal.style.pointerEvents = 'none';
+                petal.style.zIndex = '1';
+                petal.style.opacity = '0.6';
+                
+                document.body.appendChild(petal);
+                
+                let position = -50;
+                const fallInterval = setInterval(() => {
+                    position += 2;
+                    petal.style.top = position + 'px';
+                    petal.style.transform = `rotate(${position}deg)`;
+                    
+                    if (position > window.innerHeight) {
+                        clearInterval(fallInterval);
+                        if (document.body.contains(petal)) {
+                            document.body.removeChild(petal);
+                        }
+                    }
+                }, 50);
+            }, 4000);
+        }
+        
+        createFlowerPetals();
+    </script>
+</body>
+</html>

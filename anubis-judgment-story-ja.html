@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アヌビス神の審判 - エジプト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #8b4513 50%, #daa520 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 来世の神秘 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(218, 165, 32, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #8b4513 0%, #daa520 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '⚖️ 🐺 👁️ 🪶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f4d03f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #daa520;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(139, 69, 19, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #daa520;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #daa520;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.2), rgba(218, 165, 32, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #daa520;
+        }
+
+        .judgment-ritual {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(139, 69, 19, 0.3);
+            font-style: italic;
+        }
+
+        .judgment-ritual h4 {
+            color: #8b4513;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* アヌビスエフェクト */
+        .anubis-figure {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 120px;
+            height: 200px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: anubisWatch 25s infinite;
+        }
+
+        @keyframes anubisWatch {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .scales-of-justice {
+            position: fixed;
+            top: 30%;
+            left: 30px;
+            width: 150px;
+            height: 100px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: scaleBalance 20s infinite;
+        }
+
+        @keyframes scaleBalance {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .golden-scales {
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: weighHeart 30s infinite;
+        }
+
+        @keyframes weighHeart {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            25% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+            75% { transform: translateX(-50%) scale(0.9) rotate(-2deg); }
+        }
+
+        .afterlife-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 60%, rgba(218, 165, 32, 0.05) 100%);
+            pointer-events: none;
+            z-index: 1;
+            animation: afterlifeShimmer 40s infinite;
+        }
+
+        @keyframes afterlifeShimmer {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- アヌビス神 -->
+    <div class="anubis-figure">
+        <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- 体 -->
+            <rect x="45" y="80" width="30" height="80" fill="rgba(139, 69, 19, 0.3)"/>
+            <!-- 頭（ジャッカル） -->
+            <ellipse cx="60" cy="50" rx="25" ry="35" fill="rgba(0, 0, 0, 0.4)"/>
+            <!-- 耳 -->
+            <path d="M40,30 L35,15 L50,25 Z" fill="rgba(0, 0, 0, 0.5)"/>
+            <path d="M80,30 L85,15 L70,25 Z" fill="rgba(0, 0, 0, 0.5)"/>
+            <!-- 鼻 -->
+            <ellipse cx="60" cy="55" rx="8" ry="12" fill="rgba(0, 0, 0, 0.6)"/>
+            <!-- 目 -->
+            <circle cx="55" cy="40" r="3" fill="rgba(218, 165, 32, 0.6)"/>
+            <circle cx="65" cy="40" r="3" fill="rgba(218, 165, 32, 0.6)"/>
+            <!-- アンクを持つ腕 -->
+            <rect x="75" y="90" width="15" height="5" fill="rgba(139, 69, 19, 0.3)"/>
+            <!-- アンク -->
+            <circle cx="95" cy="85" r="6" fill="none" stroke="rgba(218, 165, 32, 0.4)" stroke-width="2"/>
+            <rect x="93" y="91" width="4" height="15" fill="rgba(218, 165, 32, 0.4)"/>
+            <rect x="88" y="95" width="14" height="3" fill="rgba(218, 165, 32, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- 天秤 -->
+    <div class="scales-of-justice">
+        <svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- 支柱 -->
+            <rect x="72" y="20" width="6" height="60" fill="rgba(139, 69, 19, 0.4)"/>
+            <!-- 横棒 -->
+            <rect x="30" y="25" width="90" height="4" fill="rgba(139, 69, 19, 0.4)"/>
+            <!-- 左の皿 -->
+            <ellipse cx="45" cy="40" rx="15" ry="8" fill="rgba(218, 165, 32, 0.3)"/>
+            <!-- 右の皿 -->
+            <ellipse cx="105" cy="35" rx="15" ry="8" fill="rgba(218, 165, 32, 0.3)"/>
+            <!-- 吊り糸 -->
+            <line x1="45" y1="29" x2="45" y2="32" stroke="rgba(139, 69, 19, 0.4)" stroke-width="1"/>
+            <line x1="105" y1="29" x2="105" y2="27" stroke="rgba(139, 69, 19, 0.4)" stroke-width="1"/>
+            <!-- 心臓（左の皿） -->
+            <path d="M40,38 Q42,35 45,38 Q48,35 50,38 Q47,42 45,45 Q43,42 40,38 Z" 
+                  fill="rgba(220, 20, 60, 0.5)"/>
+            <!-- マアトの羽（右の皿） -->
+            <path d="M100,33 Q105,30 110,33 Q108,37 105,35 Q102,37 100,33 Z" 
+                  fill="rgba(255, 255, 255, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- 黄金の天秤 -->
+    <div class="golden-scales">
+        <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 台座 -->
+            <rect x="85" y="130" width="30" height="20" fill="rgba(218, 165, 32, 0.3)"/>
+            <!-- メインポール -->
+            <rect x="97" y="50" width="6" height="80" fill="rgba(218, 165, 32, 0.4)"/>
+            <!-- 横のバー -->
+            <rect x="40" y="55" width="120" height="5" fill="rgba(218, 165, 32, 0.4)"/>
+            <!-- 左の皿 -->
+            <ellipse cx="60" cy="80" rx="20" ry="10" fill="rgba(218, 165, 32, 0.2)"/>
+            <!-- 右の皿 -->
+            <ellipse cx="140" cy="75" rx="20" ry="10" fill="rgba(218, 165, 32, 0.2)"/>
+            <!-- チェーン -->
+            <line x1="60" y1="60" x2="60" y2="70" stroke="rgba(218, 165, 32, 0.4)" stroke-width="2"/>
+            <line x1="140" y1="60" x2="140" y2="65" stroke="rgba(218, 165, 32, 0.4)" stroke-width="2"/>
+        </svg>
+    </div>
+    
+    <!-- 来世の輝き -->
+    <div class="afterlife-glow"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>アヌビス神の審判</h1>
+            <p>The Judgment of Anubis - 死者の魂を導く者</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #daa520; text-decoration: none; font-size: 1.5rem;">⚖️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="egyptian-mythology-index-ja.html">エジプト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>死後の魂の永遠の裁き</h2>
+            
+            <p>
+                アヌビス（Anubis）神の審判は、古代エジプト人の死生観の核心を成す重要な概念です。ジャッカルの頭を持つ死と埋葬の神アヌビスは、死者の魂を来世へと導き、その心臓の重さを測ることで魂の運命を決定する役割を担っていました。この神聖な審判の儀式は、「心臓の重さ測定」または「マアトの羽根との比較」として知られ、古代エジプト人にとって死後の最も重要な試練でした。
+            </p>
+
+            <h3>死の神アヌビス</h3>
+            <p>
+                アヌビスは古代エジプト神話において最も古い神の一人で、元々は死者の王として崇拝されていました。後にオシリスがその役割を継承すると、アヌビスは死者の守護者、ミイラ化の神、そして来世への案内者として重要な地位を占めるようになりました。
+            </p>
+
+            <p>
+                彼の外見は人間の体にジャッカルの頭という独特なもので、これは砂漠の墓地をさまようジャッカルから着想を得たと考えられています。ジャッカルは腐肉を食べる動物として知られていましたが、逆説的に死体を守る存在としても見なされ、アヌビスの神聖な象徴となりました。
+            </p>
+
+            <p>
+                アヌビスは完全に黒い肌で描かれることが多く、これは腐敗に対する勝利と復活を象徴していました。また、ナイル川の肥沃な黒土も連想させ、死から新しい生命が生まれることを表現していました。
+            </p>
+
+            <div class="judgment-ritual">
+                <h4>アヌビスの祈り</h4>
+                <p>
+                「アヌビス、山の主、墓地の守護者よ<br>
+                あなたの導きによって死者は平安を得る<br>
+                あなたの天秤によって魂は測られ<br>
+                正しい者は永遠の生命を受ける」
+                </p>
+            </div>
+
+            <h3>死後の旅路</h3>
+            <p>
+                古代エジプト人の信念によれば、人が死ぬと魂（バー）は危険に満ちた死後の世界「ドゥアト」を旅しなければなりませんでした。この旅路には数多くの試練と怪物が待ち受けており、死者は『死者の書』に記された呪文や護符に頼って進まなければなりませんでした。
+            </p>
+
+            <p>
+                旅の途中で、魂は様々な神々と出会い、それぞれの試練を乗り越える必要がありました。門番の神々に正しい名前を告げ、危険な蛇や悪霊から身を守り、迷路のような地下世界を進まなければなりませんでした。
+            </p>
+
+            <p>
+                最終的に、魂はオシリスが統治する審判の間「マアティの間」に到着します。ここで、アヌビスによる最後にして最も重要な試練が待っていました。この審判の結果によって、魂の永遠の運命が決定されるのです。
+            </p>
+
+            <h3>心臓の重さ測定</h3>
+            <p>
+                審判の間では、アヌビスが精巧な黄金の天秤を用意していました。この天秤は完璧に均衡を保っており、わずかな重さの違いも正確に測定することができました。死者の心臓が左の皿に、真理と正義の女神マアトの羽根が右の皿に置かれました。
+            </p>
+
+            <p>
+                古代エジプト人は、心臓が感情と道徳の座であり、その人の生涯の行いがすべて記録されていると信じていました。嘘、盗み、殺人、その他の罪は心臓を重くし、親切、正直、慈悲などの善行は心臓を軽くすると考えられていました。
+            </p>
+
+            <p>
+                測定の間、死者は「否定告白」と呼ばれる42の罪の否認を行わなければなりませんでした。「私は殺していない」「私は盗んでいない」「私は嘘をついていない」など、生前の行いについて神々に対して誓いを立てるのです。
+            </p>
+
+            <div class="highlight">
+                審判の瞬間：<br>
+                天秤の針がゆっくりと動く時、審判の間は深い沈黙に包まれます。オシリス、イシス、ネフティス、そして42人の審判官が見つめる中、心臓とマアトの羽根の重さが比較されます。この瞬間こそが、魂の永遠の運命を決定する神聖な時です。
+            </div>
+
+            <h3>三つの運命</h3>
+            <p>
+                心臓の重さによって、死者には三つの運命が待っていました。最も望ましいのは、心臓がマアトの羽根と同じ重さか、それより軽い場合です。この場合、死者は「正当化された者」（マア・ケルウ）として認められ、オシリスの王国で永遠の生命を得ることができました。
+            </p>
+
+            <p>
+                しかし、心臓が羽根よりも重い場合、つまり罪の重みが勝った場合、恐ろしい運命が待っていました。心臓は「アメミット」と呼ばれる怪物に食べられてしまいます。アメミットはワニの頭、ライオンの胴体、カバの後ろ脚を持つ恐ろしい存在で、「魂を食らう者」として恐れられていました。
+            </p>
+
+            <p>
+                心臓を失った魂は二度目の死を迎え、完全に消滅してしまいます。これは古代エジプト人にとって想像できる最悪の運命でした。なぜなら、彼らは来世での存在継続を最も重要視していたからです。
+            </p>
+
+            <h3>正当化の恵み</h3>
+            <p>
+                審判に合格した魂は、オシリスから祝福を受けます。オシリスは緑の肌と王の装束を身にまとい、生命のアンクと支配の杖を持って玉座に座っています。彼の言葉により、死者は正式に来世の住人として認められます。
+            </p>
+
+            <p>
+                正当化された魂は、「アアル野」と呼ばれる楽園で永遠の幸福を享受できます。ここは理想化されたナイル川流域で、作物は自然に育ち、すべての欲求が満たされる場所です。死者は現世での最も幸せだった姿で復活し、愛する人たちとの再会を果たします。
+            </p>
+
+            <p>
+                また、正当化された魂は太陽神ラーの船に乗って毎日の太陽の航海に参加することもできます。これは古代エジプト人にとって最高の栄誉であり、神々と共に宇宙の秩序維持に貢献することを意味していました。
+            </p>
+
+            <h3>生者への教訓</h3>
+            <p>
+                アヌビスの審判の物語は、生きている間の行いの重要性を強調していました。古代エジプト人は死後の審判を恐れることで、道徳的な生活を送るよう励まされていました。この信念は社会の秩序と正義の維持に大きく貢献しました。
+            </p>
+
+            <p>
+                『死者の書』には、審判に備えるための詳細な指示が記されていました。護符、呪文、そして道徳的な教えが含まれており、死者の家族はこれらを墓に納めることで愛する人の来世での成功を祈りました。
+            </p>
+
+            <p>
+                特に重要だったのは「マアト」の概念です。真理、正義、調和、宇宙の秩序を意味するマアトは、古代エジプト文明の根幹をなす思想でした。人々はマアトに従って生きることで、審判での成功と来世での幸福を確実にしようとしました。
+            </p>
+
+            <div class="judgment-ritual">
+                <h4>否定告白の一部</h4>
+                <p>
+                「偉大なる神よ、私は罪を犯していません<br>
+                私は人を殺していません<br>
+                私は盗みを働いていません<br>
+                私は嘘をついていません<br>
+                私は神々を冒瀆していません<br>
+                私の心は真実です」
+                </p>
+            </div>
+
+            <h3>永遠の意義</h3>
+            <p>
+                アヌビスの審判の概念は、後の宗教や哲学に大きな影響を与えました。最後の審判、死後の裁き、道徳的行為に基づく来世での報いといった思想は、多くの文明に受け継がれていきました。
+            </p>
+
+            <p>
+                この物語は、正義と道徳の普遍的な重要性を教えています。地位や富に関係なく、すべての人が同じ基準で裁かれるという考えは、古代世界では革命的でした。ファラオも庶民も、同じアヌビスの天秤で測られるのです。
+            </p>
+
+            <div class="highlight">
+                アヌビスの審判が現代に伝えること：<br>
+                私たちの行動には責任が伴い、いつか必ず結果に直面する。真の価値は外見や地位ではなく、心の純粋さにある。正義と真理は永遠の基準であり、時代を超えて変わらない。死は終わりではなく、真の人生の始まりかもしれない。そして、愛と善行は最も軽やかで美しい贈り物である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 真実の羽根のように軽やかな心で。</p>
+    </footer>
+
+    <script>
+        // 来世の粒子エフェクト
+        function createAfterlifeParticles() {
+            const container = document.body;
+            
+            function addGoldenParticle() {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '3px';
+                particle.style.height = '3px';
+                particle.style.background = 'rgba(218, 165, 32, 0.6)';
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100vh';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '1';
+                
+                const duration = 15 + Math.random() * 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.animation = `goldenFloat ${duration}s linear ${delay}s infinite`;
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, (duration + delay) * 1000);
+            }
+            
+            // CSS keyframes を動的に追加
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes goldenFloat {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 0.8;
+                    }
+                    90% {
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(-100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 定期的に粒子を追加
+            setInterval(addGoldenParticle, 2000);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 10; i++) {
+                setTimeout(addGoldenParticle, i * 1000);
+            }
+        }
+        
+        createAfterlifeParticles();
+    </script>
+</body>
+</html>

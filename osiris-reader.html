@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オシリス神話 - 死と復活の永遠の物語</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2C1810 0%, #8B4513 50%, #DAA520 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 砂塵エフェクト */
+        .sand-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .sand-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(218, 165, 32, 0.6);
+            border-radius: 50%;
+            animation: sandstorm linear infinite;
+        }
+        
+        @keyframes sandstorm {
+            0% {
+                transform: translateX(-100px) translateY(100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-100px);
+                opacity: 0;
+            }
+        }
+        
+        /* ヒエログリフの背景 */
+        .hieroglyphs-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 100px,
+                rgba(218, 165, 32, 0.1) 100px,
+                rgba(218, 165, 32, 0.1) 120px
+            );
+            z-index: 0;
+            animation: hieroglyph-scroll 30s linear infinite;
+        }
+        
+        @keyframes hieroglyph-scroll {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.9) 0%, rgba(139, 69, 19, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            background: radial-gradient(ellipse at center, rgba(218, 165, 32, 0.2) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: golden-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes golden-glow {
+            from { 
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(218, 165, 32, 0.6);
+                filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 165, 32, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        /* エピソードカード */
+        .episode-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .episode-card {
+            background: linear-gradient(135deg, rgba(218, 165, 32, 0.1) 0%, rgba(139, 69, 19, 0.1) 100%);
+            border: 2px solid rgba(218, 165, 32, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #DAA520, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .episode-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(218, 165, 32, 0.4);
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .episode-icon {
+            font-size: 1.5em;
+        }
+        
+        .episode-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(218, 165, 32, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 永遠の意味セクション */
+        .meaning-section {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .meaning-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #F5E6D3;
+        }
+        
+        .meaning-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(44, 24, 16, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(218, 165, 32, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 砂塵エフェクト -->
+    <div class="sand-container" id="sandContainer"></div>
+    
+    <!-- ヒエログリフ背景 -->
+    <div class="hieroglyphs-bg"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="egyptian-mythology-index.html" class="logo">エジプト神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="egyptian-mythology-index.html">エジプト神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">オシリス神話</h1>
+            <p class="story-subtitle">死と復活、永遠の生命をめぐる古代エジプトの根幹神話</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">死と復活の物語</h2>
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">👑</span>
+                        オシリスの統治
+                    </h3>
+                    <div class="episode-content">
+                        太古の昔、エジプトを治めていたのは大地の神ゲブと天空の女神ヌートの息子、オシリスでした。
+                        オシリスは慈悲深く賢明な王で、エジプトの人々に農業や法律、文明を教えました。
+                        妻である魔術の女神イシスと共に、エジプトに平和と繁栄をもたらしていました。
+                        人々はオシリスを心から愛し、敬っていました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">😈</span>
+                        セトの嫉妬と陰謀
+                    </h3>
+                    <div class="episode-content">
+                        しかし、オシリスの弟であるセトは、兄の成功と人気を妬んでいました。
+                        砂漠と混沌の神であるセトは、オシリスの王座を奪おうと陰謀を企てました。
+                        セトは72人の共謀者と共に、精巧に作られた美しい棺を用意しました。
+                        この棺はオシリスの体にぴったりと合うように作られていました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">⚰️</span>
+                        騙し討ちと殺害
+                    </h3>
+                    <div class="episode-content">
+                        セトは宴会を開き、美しい棺を見せながら「この棺に最もぴったり合う者に贈ろう」と提案しました。
+                        何人かが試した後、オシリスが棺に横たわると、セトと共謀者たちは素早く蓋を閉じ、釘で打ち付けました。
+                        さらに鉛を流し込んで密封し、棺をナイル川に投げ込みました。
+                        オシリスは溺死し、エジプト初の死者となりました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🔍</span>
+                        イシスの探索
+                    </h3>
+                    <div class="episode-content">
+                        夫の死を知ったイシスは深く悲しみ、オシリスの遺体を探してエジプト中を旅しました。
+                        ついに、棺はフェニキアのビブロスの海岸に流れ着き、大きなタマリスクの木に包まれていることを発見しました。
+                        その木は宮殿の柱として使われていましたが、イシスは女王の侍女となって仕え、
+                        ついに棺を取り戻すことに成功しました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🔪</span>
+                        セトの再度の妨害
+                    </h3>
+                    <div class="episode-content">
+                        イシスがオシリスの遺体を隠していると、狩りをしていたセトが偶然それを発見しました。
+                        激怒したセトは、オシリスの遺体を14の部分に切り裂き、エジプト全土にばらまきました。
+                        これにより、オシリスの復活を完全に阻止しようとしたのです。
+                        イシスは再び絶望に陥りましたが、夫への愛は諦めることを知りませんでした。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🪄</span>
+                        魔術による復活
+                    </h3>
+                    <div class="episode-content">
+                        イシスは妹のネフティスと共に、オシリスの体の断片を一つずつ探し集めました。
+                        13の部分を見つけ出したイシス（一部分は魚に食べられていた）は、強力な魔術を使って
+                        オシリスの体を再構成しました。包帯で巻いて最初のミイラを作り、
+                        生命の呪文を唱えてオシリスを蘇らせました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🦅</span>
+                        ホルスの誕生と冥界の王
+                    </h3>
+                    <div class="episode-content">
+                        復活したオシリスとイシスの間に息子ホルスが生まれました。
+                        しかし、オシリスは完全に現世に戻ることはできず、冥界の王となって死者を裁く役割を担いました。
+                        ホルスは成長してセトと戦い、父の復讐を果たして正当なエジプト王となりました。
+                        オシリスは死後の世界で永遠に統治し、死者たちに永遠の生命を与え続けています。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">オシリス</h3>
+                    <p class="character-description">
+                        大地と農業の神、エジプトの王。
+                        慈悲深く賢明な統治者として人々に愛されたが、
+                        弟セトに殺され、冥界の王となった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🔮</span>
+                    <h3 class="character-name">イシス</h3>
+                    <p class="character-description">
+                        魔術と母性の女神。オシリスの妻。
+                        強力な魔術で夫を蘇らせ、
+                        理想的な妻と母の象徴として崇拝された。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐍</span>
+                    <h3 class="character-name">セト</h3>
+                    <p class="character-description">
+                        砂漠と混沌の神。オシリスの弟。
+                        嫉妬から兄を殺害し、エジプトに混乱をもたらした
+                        悪の象徴として描かれる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🦅</span>
+                    <h3 class="character-name">ホルス</h3>
+                    <p class="character-description">
+                        隼の神。オシリスとイシスの息子。
+                        成長してセトに復讐し、正当な王位を取り戻した。
+                        ファラオの守護神として崇拝された。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌙</span>
+                    <h3 class="character-name">ネフティス</h3>
+                    <p class="character-description">
+                        イシスの妹、セトの妻。
+                        しかし姉を愛し、オシリスの遺体を探す
+                        手助けをした。死者の守護女神でもある。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">⚖️</span>
+                    <h3 class="character-name">アヌビス</h3>
+                    <p class="character-description">
+                        ジャッカルの頭を持つ死と埋葬の神。
+                        オシリスの最初のミイラ作りを手伝い、
+                        死者の魂を冥界へ導く役割を担う。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 永遠の意味 -->
+        <section class="meaning-section">
+            <h2 class="section-title">永遠の教え</h2>
+            <div class="meaning-content">
+                <h3>死と復活の意味</h3>
+                <p>
+                    オシリス神話は、古代エジプト人の死生観の根幹を成しています。
+                    死は終わりではなく、新たな始まりであり、正しい手順を踏めば永遠の生命を得られると信じられていました。
+                </p>
+                
+                <h3>愛の力</h3>
+                <p>
+                    イシスの夫への深い愛と献身は、死をも超越する力を持っていました。
+                    彼女の行動は、愛が最も強力な魔術であることを示しています。
+                </p>
+                
+                <h3>善悪の永遠の戦い</h3>
+                <p>
+                    オシリスとセト、ホルスとセトの対立は、善と悪、秩序と混沌の永遠の戦いを表現しています。
+                    最終的に善が勝利することで、正義と秩序の重要性を教えています。
+                </p>
+                
+                <h3>王権の神聖性</h3>
+                <p>
+                    この神話により、ファラオはホルスの化身として神聖な存在とされ、
+                    死後はオシリスとして冥界を統治すると信じられました。
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">オシリス神話 - 古代エジプトの死と復活をめぐる永遠の物語</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 砂塵エフェクトを生成
+        function createSandstorm() {
+            const sandContainer = document.getElementById('sandContainer');
+            const numberOfParticles = 50;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'sand-particle';
+                
+                // ランダムな開始位置とアニメーション
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                
+                sandContainer.appendChild(particle);
+            }
+        }
+        
+        // ページ読み込み時に砂塵を生成
+        window.addEventListener('load', createSandstorm);
+        
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .story-text p, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.episode-card, .character-card, .meaning-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+</body>
+</html>

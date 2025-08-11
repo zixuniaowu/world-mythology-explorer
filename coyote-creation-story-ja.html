@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コヨーテの創世記 - ネイティブアメリカン神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 大地と空の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 184, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #00b8d4 0%, #8b4513 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 184, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🐺 🌕 🏔️ 🦅';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #b3e5fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #00b8d4;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0, 184, 212, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #00b8d4;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #00b8d4;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(0, 184, 212, 0.2), rgba(139, 69, 19, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #00b8d4;
+        }
+
+        /* 特別エフェクト */
+        .coyote-howl {
+            position: fixed;
+            top: 20%;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: howl 8s infinite;
+        }
+
+        @keyframes howl {
+            0%, 100% { transform: scale(1) rotate(-5deg); opacity: 0.1; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.3; }
+        }
+
+        .wind-spirit {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .wind-particle {
+            position: absolute;
+            width: 3px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.3), transparent);
+            animation: windFlow 15s linear infinite;
+        }
+
+        @keyframes windFlow {
+            0% { transform: translateX(-100px) translateY(100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(100px) translateY(-100px); opacity: 0; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- コヨーテの遠吠え -->
+    <div class="coyote-howl">🐺</div>
+    
+    <!-- 風のスピリット -->
+    <div class="wind-spirit" id="windSpirit"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>コヨーテの創世記</h1>
+            <p>Coyote Creation Story - トリックスターの世界創造</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #00b8d4; text-decoration: none; font-size: 1.5rem;">🌍 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="native-american-mythology-index-ja.html">ネイティブアメリカン神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>コヨーテと世界の始まり</h2>
+            
+            <p>
+                太古の昔、この世界がまだ暗闇に包まれていた時代のことです。空には月も星も太陽もなく、大地には何も生えておらず、川も山も存在しませんでした。そこには偉大なる創造主と、一匹のコヨーテだけがいました。
+            </p>
+
+            <h3>光の誕生</h3>
+            <p>
+                創造主は世界に秩序をもたらそうと考えました。しかし、コヨーテは好奇心旺盛で、いつも創造主の仕事を「手伝おう」として、結果的に混乱を招いてしまうのでした。
+            </p>
+
+            <p>
+                創造主が空に太陽を置こうとした時、コヨーテが口を出しました。「太陽を二つ作ってはどうでしょう？そうすれば昼も夜も明るくて便利ですよ！」
+            </p>
+
+            <div class="highlight">
+                創造主は首を振りました。「コヨーテよ、すべてには適切な時があるのだ。光には闇が必要で、昼には夜が必要なのだ。」
+            </div>
+
+            <p>
+                しかしコヨーテは聞く耳を持ちませんでした。創造主が眠っている間に、こっそりと太陽の作りかけの袋を開けてしまったのです。すると、中から無数の光の破片が飛び散り、夜空に散らばって星になりました。
+            </p>
+
+            <h3>動物たちの誕生</h3>
+            <p>
+                創造主は怒るどころか、微笑みました。「コヨーテよ、君の好奇心も悪くないな。星々は夜の旅人たちの道しるべになるだろう。」
+            </p>
+
+            <p>
+                そして創造主は、コヨーテの助けを借りて動物たちを作り始めました。最初にワシを作り、空の王様にしました。次にクマを作り、山の守護者にしました。バッファローは平原の主、サケは川の案内人となりました。
+            </p>
+
+            <p>
+                コヨーテは動物作りに夢中になり、「私も何か作らせてください！」と頼みました。創造主が許すと、コヨーテは一生懸命に土をこねて、自分に似た動物を作りました。それが最初の犬でした。
+            </p>
+
+            <h3>人間の創造</h3>
+            <p>
+                最後に、創造主は特別な存在を作ろうと決めました。「コヨーテよ、今度は君も手伝ってくれ。しかし、今度は私の言うとおりに行うのだ。」
+            </p>
+
+            <p>
+                創造主とコヨーテは力を合わせて粘土を捏ね、最初の人間を作りました。創造主は彼らに知恵を与え、コヨーテは好奇心と冒険心を吹き込みました。火を使う技術、狩りの方法、植物の育て方を教えました。
+            </p>
+
+            <div class="highlight">
+                「人間には選択の自由を与えよう」と創造主は言いました。「善いことも悪いことも選べるように。そうすれば、彼らは真の知恵を学ぶだろう。」
+            </div>
+
+            <h3>コヨーテの教え</h3>
+            <p>
+                こうして世界が完成した後、コヨーテは人間たちの間を歩き回るようになりました。時には親切な案内人として、時には困難をもたらすトリックスターとして。人間が困難に直面した時、コヨーテは現れて、狡猾な方法で解決策を教えました。
+            </p>
+
+            <p>
+                しかし、コヨーテの教えには必ず代償がありました。簡単な道を選べば、後で大きな困難が待っているかもしれません。しかし困難な道を選んで乗り越えれば、真の知恵と力を得ることができるのです。
+            </p>
+
+            <p>
+                今でも夜中にコヨーテの遠吠えが聞こえる時、先住民たちは言います。「コヨーテが私たちに何かを教えようとしている。よく聞いて、よく考えるのだ。」
+            </p>
+
+            <div class="highlight">
+                コヨーテの物語が教えてくれること：<br>
+                完璧でなくても良い。失敗から学び、好奇心を持ち続け、自然と調和して生きることの大切さ。そして、どんな困難も知恵と勇気があれば乗り越えられるということです。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. コヨーテの知恵に耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // 風のスピリット エフェクト
+        function createWindSpirit() {
+            const container = document.getElementById('windSpirit');
+            
+            function addWindParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'wind-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に風の粒子を追加
+            setInterval(addWindParticle, 1000 + Math.random() * 2000);
+        }
+        
+        createWindSpirit();
+    </script>
+</body>
+</html>

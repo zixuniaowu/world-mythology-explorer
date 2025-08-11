@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トールとヨルムンガンド - 北欧神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #34495e 50%, #95a5a6 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 北欧の嵐 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(52, 73, 94, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(149, 165, 166, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #95a5a6 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(52, 73, 94, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '⚡ 🔨 🐍 ⚔️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ecf0f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(52, 73, 94, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #3498db;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #3498db;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(149, 165, 166, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .norse-prophecy {
+            background: rgba(52, 73, 94, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(52, 73, 94, 0.3);
+            font-style: italic;
+        }
+
+        .norse-prophecy h4 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ミョルニルエフェクト */
+        .mjolnir-hammer {
+            position: fixed;
+            top: 25%;
+            right: 30px;
+            width: 100px;
+            height: 120px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: hammerSwing 15s infinite;
+        }
+
+        @keyframes hammerSwing {
+            0%, 100% { transform: rotate(-10deg); }
+            25% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg) scale(1.1); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        .lightning-bolts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lightning {
+            position: absolute;
+            font-size: 3rem;
+            animation: lightningStrike 8s infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightningStrike {
+            0%, 90% { opacity: 0; }
+            91% { opacity: 0.8; transform: scale(1); }
+            92% { opacity: 0; }
+            93% { opacity: 1; transform: scale(1.2); }
+            94% { opacity: 0; }
+            95% { opacity: 0.6; }
+            96%, 100% { opacity: 0; }
+        }
+
+        .world-serpent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: serpentMove 30s linear infinite;
+        }
+
+        @keyframes serpentMove {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .yggdrasil-tree {
+            position: fixed;
+            top: 50%;
+            left: 30px;
+            width: 150px;
+            height: 200px;
+            opacity: 0.08;
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ミョルニル -->
+    <div class="mjolnir-hammer">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- ハンマーの頭 -->
+            <rect x="20" y="20" width="60" height="40" rx="5" fill="rgba(52, 152, 219, 0.3)"/>
+            <!-- ハンマーの柄 -->
+            <rect x="45" y="60" width="10" height="50" fill="rgba(139, 69, 19, 0.3)"/>
+            <!-- 装飾 -->
+            <circle cx="50" cy="40" r="8" fill="rgba(255, 215, 0, 0.3)"/>
+            <!-- ルーン文字 -->
+            <path d="M35,35 L40,30 L40,50 M60,30 L65,35 L60,50" 
+                  stroke="rgba(255, 255, 255, 0.3)" stroke-width="2" fill="none"/>
+        </svg>
+    </div>
+    
+    <!-- 雷光 -->
+    <div class="lightning-bolts" id="lightningBolts"></div>
+    
+    <!-- 世界蛇 -->
+    <div class="world-serpent">
+        <svg viewBox="0 0 1000 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 蛇の体 -->
+            <path d="M0,100 Q100,50 200,100 T400,100 T600,100 T800,100 T1000,100" 
+                  stroke="rgba(52, 73, 94, 0.3)" stroke-width="20" fill="none"/>
+            <!-- 鱗 -->
+            <pattern id="scales" width="20" height="20" patternUnits="userSpaceOnUse">
+                <circle cx="10" cy="10" r="8" fill="rgba(52, 73, 94, 0.2)"/>
+            </pattern>
+            <path d="M0,100 Q100,50 200,100 T400,100 T600,100 T800,100 T1000,100" 
+                  stroke="url(#scales)" stroke-width="30" fill="none" opacity="0.5"/>
+        </svg>
+    </div>
+    
+    <!-- ユグドラシル -->
+    <div class="yggdrasil-tree">
+        <svg viewBox="0 0 150 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- 幹 -->
+            <rect x="65" y="80" width="20" height="120" fill="rgba(139, 69, 19, 0.2)"/>
+            <!-- 枝と葉 -->
+            <ellipse cx="75" cy="60" rx="60" ry="50" fill="rgba(46, 125, 50, 0.1)"/>
+            <ellipse cx="50" cy="80" rx="30" ry="25" fill="rgba(46, 125, 50, 0.1)"/>
+            <ellipse cx="100" cy="80" rx="30" ry="25" fill="rgba(46, 125, 50, 0.1)"/>
+            <!-- 根 -->
+            <path d="M75,200 L60,180 M75,200 L90,180 M75,200 L75,180" 
+                  stroke="rgba(139, 69, 19, 0.2)" stroke-width="3" fill="none"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>トールとヨルムンガンド</h1>
+            <p>Thor and Jormungandr - 雷神と世界蛇の宿命</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #3498db; text-decoration: none; font-size: 1.5rem;">⚡ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="norse-mythology-index-ja.html">北欧神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>宿敵との三度の邂逅</h2>
+            
+            <p>
+                トール（Thor）とヨルムンガンド（Jörmungandr）の物語は、北欧神話における最も重要な対立の一つです。雷神トールと、世界を取り巻く巨大な蛇ヨルムンガンドとの三度にわたる遭遇は、力と知恵、運命と自由意志の永遠の闘争を描いています。この宿命的な対立は、最終的にラグナロクでの相討ちという悲劇的な結末を迎えることが予言されています。
+            </p>
+
+            <h3>世界蛇の誕生</h3>
+            <p>
+                ヨルムンガンドは、トリックスターの神ロキと巨人の女アングルボザの間に生まれた三人の恐ろしい子供の一人でした。その兄弟は、巨狼フェンリルと死の女神ヘルです。生まれた時から、これらの子供たちは神々に恐れられていました。予言によれば、彼らは神々に大きな災いをもたらすとされていたからです。
+            </p>
+
+            <p>
+                最高神オーディンは、これらの子供たちを見て、将来の脅威を感じ取りました。ヘルは死者の国ヘルヘイムの支配者とされ、フェンリルは鎖で縛られました。そしてヨルムンガンドは、まだ小さかった頃に、オーディンによって深い海に投げ込まれました。
+            </p>
+
+            <p>
+                しかし、この行為は逆効果でした。海の中でヨルムンガンドは急速に成長し、ついにはミッドガルド（人間の世界）を完全に取り囲むほどの巨大な蛇となりました。その尾を口にくわえて輪を作り、「ミッドガルドの蛇」として知られるようになりました。ヨルムンガンドが身動きすると、巨大な波が起こり、海は荒れ狂いました。
+            </p>
+
+            <div class="norse-prophecy">
+                <h4>ヴォルスパの予言</h4>
+                <p>
+                「海の底より、毒を吐く蛇が現れる<br>
+                雷神の鎚が蛇の頭を打ち砕く時<br>
+                神々の黄昏が始まり<br>
+                古き世界は終わりを告げる」
+                </p>
+            </div>
+
+            <h3>第一の遭遇：巨人ウトガルドでの試練</h3>
+            <p>
+                トールとヨルムンガンドの最初の出会いは、トールが従者のシャールヴィと共に巨人の国を訪れた時でした。巨人の王ウトガルド・ロキは、神々を試すために様々な試練を用意していました。
+            </p>
+
+            <p>
+                トールは力比べの一つとして、猫を持ち上げる挑戦を受けました。一見簡単そうに見えたこの試練でしたが、トールが全力を出しても、猫の片足を地面から離すことしかできませんでした。巨人たちは笑いましたが、実はトールは騙されていたのです。
+            </p>
+
+            <p>
+                後にウトガルド・ロキが明かしたところによると、その「猫」は魔法で変装したヨルムンガンドでした。トールは実際には、世界を取り巻く巨大な蛇を持ち上げようとしていたのです。トールが蛇の一部を持ち上げただけでも、巨人たちは恐怖に震えました。なぜなら、それは想像を絶する怪力の証だったからです。
+            </p>
+
+            <h3>第二の遭遇：釣りの冒険</h3>
+            <p>
+                二度目の遭遇は、トールが巨人ヒュミルと釣りに出かけた時でした。トールは普通の魚では満足せず、より大きな獲物を求めました。彼は巨大な牛の頭を餌として使い、船を沖へと漕ぎ出しました。
+            </p>
+
+            <p>
+                やがて、釣り糸に信じられないほどの重さがかかりました。トールが全力で引き上げると、海から巨大な蛇の頭が現れました。それはヨルムンガンドでした。雷神と世界蛇は、初めて真正面から向き合いました。ヨルムンガンドは毒を吐き、トールはミョルニルを振り上げました。
+            </p>
+
+            <p>
+                まさにトールがヨルムンガンドの頭を打ち砕こうとした瞬間、恐怖に駆られたヒュミルが釣り糸を切ってしまいました。ヨルムンガンドは海の深みへと逃げ去り、トールは激怒しました。一説によると、トールはミョルニルを投げつけ、ヨルムンガンドに傷を負わせたとも言われていますが、致命傷には至りませんでした。
+            </p>
+
+            <div class="highlight">
+                海での対峙：<br>
+                二つの巨大な力が向き合った時、世界は震えました。トールの目には雷光が宿り、ヨルムンガンドの口からは死の毒が滴りました。この瞬間、運命の糸が一本、また結ばれたのです。二人の最後の戦いへの道筋が、より明確になりました。
+            </div>
+
+            <h3>ラグナロクでの最終決戦</h3>
+            <p>
+                三度目にして最後の遭遇は、神々の黄昏ラグナロクの時に訪れます。世界の終末が始まると、ヨルムンガンドは海から這い上がり、毒を吐きながら陸地を荒らし回ります。その巨体が動くたびに、大地は震え、海は荒れ狂います。
+            </p>
+
+            <p>
+                トールとヨルムンガンドは、ヴィーグリーズの野で最後の戦いを繰り広げます。激しい戦いの末、トールはついにミョルニルでヨルムンガンドの頭を砕き、宿敵を倒します。しかし、勝利の代償は大きすぎました。
+            </p>
+
+            <p>
+                死に際のヨルムンガンドが吐いた毒は、あまりにも強力でした。トールは九歩後退した後、毒に侵されて倒れ、命を落とします。こうして、雷神と世界蛇の長い因縁は、両者の死という形で終わりを迎えるのです。
+            </p>
+
+            <h3>対立の象徴的意味</h3>
+            <p>
+                トールとヨルムンガンドの対立は、北欧神話における秩序と混沌の永遠の闘争を象徴しています。トールは神々の世界アースガルドと人間の世界ミッドガルドの守護者であり、秩序の擁護者です。一方、ヨルムンガンドは原初の混沌を体現し、世界の境界を脅かす存在です。
+            </p>
+
+            <p>
+                また、この物語は避けられない運命（ウルズ）の概念も示しています。トールもヨルムンガンドも、自分たちの最期を知りながら、その運命から逃れることはできません。しかし、彼らは運命に立ち向かい、最後まで戦い抜きます。これは北欧の戦士文化の理想を反映しています。
+            </p>
+
+            <h3>現代への影響</h3>
+            <p>
+                トールとヨルムンガンドの物語は、現代のポップカルチャーにも大きな影響を与えています。マーベル・コミックスや映画では、この古代の対立が新しい形で再話されています。また、多くのファンタジー作品において、英雄と巨大な蛇や竜との戦いのモチーフとして使われています。
+            </p>
+
+            <p>
+                環境問題の文脈では、ヨルムンガンドは時として、人間の活動によって目覚めさせられた自然の怒りの象徴として解釈されることもあります。世界を取り巻く蛇は、地球環境の相互連結性を表し、一箇所での行動が世界全体に影響を与えることを示唆しています。
+            </p>
+
+            <div class="highlight">
+                トールとヨルムンガンドの物語が現代に伝えること：<br>
+                大きな力には大きな責任が伴う。秩序と混沌は永遠に対立するが、両方とも世界の一部である。運命は避けられないかもしれないが、どう立ち向かうかは自分次第である。勝利には常に代償が伴い、時にはその代償は勝利そのものよりも重い。そして、真の勇気とは、結果を知りながらも正しいことのために戦うことである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 雷鳴と共に、勇気を持って進みましょう。</p>
+    </footer>
+
+    <script>
+        // 雷光エフェクト
+        function createLightning() {
+            const container = document.getElementById('lightningBolts');
+            const positions = [
+                {x: 20, y: 10},
+                {x: 50, y: 20},
+                {x: 80, y: 15},
+                {x: 35, y: 30},
+                {x: 65, y: 25}
+            ];
+            
+            positions.forEach((pos, i) => {
+                const lightning = document.createElement('div');
+                lightning.className = 'lightning';
+                lightning.innerHTML = '⚡';
+                lightning.style.left = pos.x + '%';
+                lightning.style.top = pos.y + '%';
+                lightning.style.animationDelay = (i * 1.5) + 's';
+                container.appendChild(lightning);
+            });
+        }
+        
+        createLightning();
+    </script>
+</body>
+</html>

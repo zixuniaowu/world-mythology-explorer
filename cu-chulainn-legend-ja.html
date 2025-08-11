@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クー・フーリンの伝説 - ケルト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d5016 50%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* ケルトの霧 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(106, 90, 205, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(50, 205, 50, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #6a5acd 0%, #32cd32 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(106, 90, 205, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '⚔️ 🍀 🐉 🛡️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0fff0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #6a5acd;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(106, 90, 205, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #6a5acd;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #6a5acd;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(106, 90, 205, 0.2), rgba(50, 205, 50, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #6a5acd;
+        }
+
+        .geas-section {
+            background: rgba(50, 205, 50, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(50, 205, 50, 0.3);
+            font-style: italic;
+        }
+
+        /* ケルトの戦士エフェクト */
+        .celtic-warrior {
+            position: fixed;
+            top: 20%;
+            right: 20px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: warriorStance 10s infinite;
+        }
+
+        @keyframes warriorStance {
+            0%, 100% { transform: scale(1) rotate(-5deg); opacity: 0.1; }
+            25% { transform: scale(1.1) rotate(0deg); opacity: 0.15; }
+            50% { transform: scale(1.2) rotate(5deg); opacity: 0.2; }
+            75% { transform: scale(1.1) rotate(0deg); opacity: 0.15; }
+        }
+
+        .celtic-mist {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .mist-particle {
+            position: absolute;
+            background: rgba(106, 90, 205, 0.1);
+            border-radius: 50%;
+            animation: mistFlow 20s linear infinite;
+        }
+
+        @keyframes mistFlow {
+            0% {
+                transform: translateX(-100px) translateY(100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100px) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        .celtic-knot {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: knotRotate 30s linear infinite;
+        }
+
+        @keyframes knotRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ケルトの戦士 -->
+    <div class="celtic-warrior">⚔️</div>
+    
+    <!-- ケルトの霧 -->
+    <div class="celtic-mist" id="celticMist"></div>
+    
+    <!-- ケルト結び -->
+    <div class="celtic-knot">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 50 Q100 25 150 50 Q175 100 150 150 Q100 175 50 150 Q25 100 50 50" 
+                  fill="none" stroke="rgba(106, 90, 205, 0.3)" stroke-width="3"/>
+            <path d="M75 75 Q100 50 125 75 Q150 100 125 125 Q100 150 75 125 Q50 100 75 75" 
+                  fill="none" stroke="rgba(50, 205, 50, 0.3)" stroke-width="3"/>
+            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(106, 90, 205, 0.2)" stroke-width="2"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>クー・フーリンの伝説</h1>
+            <p>Cú Chulainn Legend - アルスターの猛犬戦士</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #6a5acd; text-decoration: none; font-size: 1.5rem;">🍀 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="celtic-mythology-index-ja.html">ケルト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>アルスターの猛犬</h2>
+            
+            <p>
+                クー・フーリン（Cú Chulainn）は、アイルランドのアルスター伝説群（アルスター・サイクル）に登場する最も有名な英雄戦士です。「アルスターの猛犬」と呼ばれた彼の名前は、「クランの猛犬」という意味で、その驚異的な戦闘能力と悲劇的な運命で知られています。
+            </p>
+
+            <h3>セタンタの幼少期</h3>
+            <p>
+                彼の本名はセタンタ（Sétanta）といいました。光の神ルーと、アルスター王コンホヴァル・マク・ネサの妹デクテレとの間に生まれた半神の子でした。幼い頃から並外れた力と勇気を示し、7歳の時にはすでに150人の少年と対等に戦えるほどでした。
+            </p>
+
+            <p>
+                ある日、鍛冶師クランの館に招かれたコンホヴァル王に、セタンタも同行することになりました。しかし彼は仲間との遊戯に夢中で遅れてしまいました。クランの猛犬が夜警をしていることを知らずに、セタンタは一人で館に向かいました。
+            </p>
+
+            <div class="highlight">
+                「その犬は三つの鎖につながれ、三人の男でやっと制御できる獰猛な獣だった。その瞳は燃える炭のように赤く、牙は剃刀のように鋭く、百人の戦士に匹敵する力を持っていた」
+            </div>
+
+            <h3>クー・フーリンの誕生</h3>
+            <p>
+                館に近づくと、巨大な猟犬が襲いかかってきました。セタンタは恐れることなく、素手でその犬と戦いました。ハーリングボール（アイルランドの伝統スポーツの球）を犬の喉に投げ込み、その後頭部を掴んで地面に叩きつけて殺しました。
+            </p>
+
+            <p>
+                クランは大切な番犬を失って悲しみました。セタンタは「私がその犬の代わりをしましょう。新しい犬が育つまで、あなたの館を守ります」と申し出ました。この時からドルイドのカスヴァドが「クー・フーリン」（クランの猛犬）という名前を与えました。
+            </p>
+
+            <h3>戦士としての訓練</h3>
+            <p>
+                クー・フーリンは女戦士スカーハのもとで戦技を学びました。スカーハはスカイ島の影の国に住む不死の戦士で、世界で最も優れた武術の師でした。彼女から究極の武器「ゲイ・ボルガ」（刺突の槍）を授かりました。
+            </p>
+
+            <p>
+                この槍は30の棘を持つ特別な武器で、敵の体内に入ると無数の棘が広がり、取り除くことは不可能でした。また、スカーハから「リアスタラド」（戦士の変身）という秘技も学びました。
+            </p>
+
+            <div class="geas-section">
+                <h4>クー・フーリンのゲッシュ（禁忌）</h4>
+                <p>
+                運命の糸として、クー・フーリンには数々のゲッシュ（魔法的禁忌）がかけられていました：<br>
+                - 犬の肉を食べてはならない<br>
+                - 客人の招待を断ってはならない<br>
+                - 自分の名前を名乗ることを拒んではならない<br>
+                - 戦いから逃げてはならない
+                </p>
+            </div>
+
+            <h3>タイン・ボー・クアルンゲ（牛追いの戦争）</h3>
+            <p>
+                クー・フーリンの最も有名な戦いは「タイン・ボー・クアルンゲ」（クアルンゲの雄牛争奪戦）でした。コナハト女王メイヴが、アルスターの神聖な雄牛ドン・クアルンゲを奪おうとして大軍を率いて侵攻してきました。
+            </p>
+
+            <p>
+                その時、アルスターの戦士たちは「マハの呪い」により戦闘不能状態でした。クー・フーリンは一人でアルスター全土を守らなければなりませんでした。彼は一騎打ちの古い法に従い、毎日一人ずつ敵の勇士と戦いました。
+            </p>
+
+            <p>
+                戦いの最中、クー・フーリンは「リアスタラド」（戦士の変身）を発動しました。彼の体は巨大化し、髪は逆立ち、一つの目は頭の奥深くに沈み、もう一つの目は頬まで飛び出し、口は耳まで裂けて牙が露わになりました。この恐ろしい姿は敵軍を震え上がらせました。
+            </p>
+
+            <h3>フェルディアとの決闘</h3>
+            <p>
+                最も悲劇的だったのは、親友フェルディアとの戦いでした。フェルディアもスカーハの弟子で、クー・フーリンの義兄弟でした。メイヴ女王の策略により、二人は戦わざるを得なくなりました。
+            </p>
+
+            <p>
+                三日間の激闘の末、クー・フーリンは愛用の「ゲイ・ボルガ」でフェルディアを倒しましたが、友の死を深く悲しみ、「私の心は血の塊のようだ。今日から私は半人前の戦士だ」と嘆きました。
+            </p>
+
+            <div class="highlight">
+                フェルディアの死を悼むクー・フーリンの言葉：<br>
+                「昨日までフェルディアは生きていた、<br>
+                今日、彼は私よりも勇敢だった者として死んだ。<br>
+                我が心は傷ついた獣のよう、<br>
+                決して癒えることはない」
+            </div>
+
+            <h3>クー・フーリンの最期</h3>
+            <p>
+                クー・フーリンは27歳の若さで戦死しました。彼を憎む魔法使いたちが巧妙な罠を仕掛けたのです。彼らは老婆に化けて犬の肉を料理し、「客人の招待を断ってはならない」というゲッシュを利用して彼に犬の肉を食べさせました。
+            </p>
+
+            <p>
+                力が弱まったクー・フーリンは、敵軍との最後の戦いで重傷を負いました。それでも彼は立ち石に自分を縛り付け、立ったまま死ぬことを選びました。敵兵たちは、カラスが彼の肩に止まるまで近づこうとしませんでした。それが彼の死を示す合図だったからです。
+            </p>
+
+            <p>
+                光の神ルーが息子の死を悼み、クー・フーリンの魂を永遠の戦場「ティル・ナ・ノーグ」（常若の国）へ迎え入れました。そこで彼は永遠に戦い続け、アイルランドの守護者として存在しています。
+            </p>
+
+            <div class="highlight">
+                クー・フーリン伝説が現代に伝えること：<br>
+                真の英雄は力だけでなく忠誠心と名誉を重んじる。運命は変えられないが、その運命をどう生きるかは自分で選べる。友情と義理は時として自分を苦しめるが、それこそが人間の美しさである。そして真の勇気とは、恐れを知らないことではなく、恐れを知りながらも正しいことのために立ち上がることである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ケルトの戦士の勇気に学びましょう。</p>
+    </footer>
+
+    <script>
+        // ケルトの霧エフェクト
+        function createCelticMist() {
+            const container = document.getElementById('celticMist');
+            
+            function addMistParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'mist-particle';
+                particle.style.width = (20 + Math.random() * 40) + 'px';
+                particle.style.height = (20 + Math.random() * 40) + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に霧粒子を追加
+            setInterval(addMistParticle, 2000);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 8; i++) {
+                setTimeout(addMistParticle, i * 1000);
+            }
+        }
+        
+        createCelticMist();
+    </script>
+</body>
+</html>

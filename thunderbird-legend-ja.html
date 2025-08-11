@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サンダーバード伝説 - ネイティブアメリカン神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0c1445 50%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 雷雲と稲妻の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 223, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ffdf00 0%, #8a2be2 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 223, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '⚡ 🦅 ⛈️ 🌩️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff8dc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffdf00;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 223, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ffdf00;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ffdf00;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 223, 0, 0.2), rgba(138, 43, 226, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffdf00;
+        }
+
+        /* 雷のエフェクト */
+        .lightning-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+        }
+
+        .thunderbird-wings {
+            position: fixed;
+            top: 10%;
+            right: 10px;
+            font-size: 4rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: wingFlap 6s infinite;
+        }
+
+        @keyframes wingFlap {
+            0%, 100% { transform: scale(1) rotate(-10deg); }
+            25% { transform: scale(1.2) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(10deg); }
+            75% { transform: scale(1.3) rotate(0deg); }
+        }
+
+        .storm-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(100, 100, 100, 0.1);
+            border-radius: 50px;
+            animation: driftClouds 20s linear infinite;
+        }
+
+        @keyframes driftClouds {
+            0% { transform: translateX(-200px); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 雷の光 -->
+    <div class="lightning-flash" id="lightningFlash"></div>
+    
+    <!-- サンダーバードの翼 -->
+    <div class="thunderbird-wings">🦅</div>
+    
+    <!-- 嵐の雲 -->
+    <div class="storm-clouds" id="stormClouds"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>サンダーバード伝説</h1>
+            <p>Thunderbird Legend - 雷を呼ぶ巨鳥の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffdf00; text-decoration: none; font-size: 1.5rem;">⚡ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="native-american-mythology-index-ja.html">ネイティブアメリカン神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>雷を統べる巨鳥</h2>
+            
+            <p>
+                太平洋岸北西部から大平原に住む多くのネイティブアメリカンの部族に伝わる、最も偉大で神聖な存在の物語です。サンダーバードは空の支配者であり、雷と嵐を自在に操る巨大な鳥です。その翼を羽ばたかせれば雷鳴が轟き、目を光らせれば稲妻が走ります。
+            </p>
+
+            <h3>サンダーバードの誕生</h3>
+            <p>
+                世界が若かった頃、悪霊たちが人間世界を脅かしていました。特に恐ろしかったのは、深い湖や海の底に住む巨大な水蛇や水怪物たちでした。彼らは嵐を起こし、洪水を引き起こし、人々の村を破壊していました。
+            </p>
+
+            <p>
+                グレート・スピリット（偉大なる精霊）は、この悪を退治するために特別な存在を創造することを決めました。最も純粋な雲の精から、最も神聖な風の力から、そして最も正義に燃える雷の魂から、サンダーバードが生まれました。
+            </p>
+
+            <div class="highlight">
+                サンダーバードの翼は山ほど大きく、羽ばたくたびに雷鳴が響いた。その鋭い目からは稲妻が放たれ、足の爪は岩をも砕いた。首にかかる羽毛は虹色に輝き、嘴は最も鋭い黒曜石でできていた。
+            </div>
+
+            <h3>水蛇との戦い</h3>
+            <p>
+                サンダーバードが最初に戦ったのは、ピュージェット湾の深淵に住む巨大な水蛇でした。この蛇は海を荒らし、鯨を丸呑みし、漁師たちの船を沈めていました。人々の祈りを聞いたサンダーバードは、大空から舞い降りて水蛇に戦いを挑みました。
+            </p>
+
+            <p>
+                戦いは三日三晩続きました。サンダーバードが翼を広げれば嵐が起こり、稲妻で水蛇を攻撃しました。水蛇は巨大な波を起こして反撃しました。山々が揺れ、森が倒れ、大地が震えました。
+            </p>
+
+            <p>
+                ついにサンダーバードは水蛇を空高く持ち上げ、山の峰に叩きつけました。水蛇の体は石となり、今でもその山々に見ることができます。人々はその山を「サンダーバード・マウンテン」と呼びました。
+            </p>
+
+            <h3>干ばつの救い主</h3>
+            <p>
+                別の年、大地は長い干ばつに苦しんでいました。雨が降らず、川は干上がり、作物は枯れ、動物たちは死んでいきました。悪い水の精霊たちが雨雲を隠していたのです。
+            </p>
+
+            <p>
+                人々がサンダーバードに祈ると、大空から雷鳴が聞こえました。サンダーバードは悪い精霊たちと戦い、隠された雨雲を解放しました。その時の雷雨は激しく、大地に生命の水をもたらしました。
+            </p>
+
+            <div class="highlight">
+                先住民たちは今でも、雷雨の時にはサンダーバードが空を飛んでいると信じています。雷の音は翼の音、稲妻は目の光、そして雨は祝福の涙なのです。
+            </div>
+
+            <h3>サンダーバードの教え</h3>
+            <p>
+                サンダーバードは力強い存在ですが、決して力を濫用しません。正義のためにのみその力を使い、自然の調和を守ります。時には嵐をもたらして破壊することもありますが、それは新しい生命を育むための清浄化でもあります。
+            </p>
+
+            <p>
+                多くの部族では、サンダーバードを戦士の守護霊として崇めています。勇敢さ、正義感、そして自然との調和の象徴なのです。戦闘前には、サンダーバードの加護を祈り、その力強さにあやかろうとします。
+            </p>
+
+            <h3>現代への伝承</h3>
+            <p>
+                今でもネイティブアメリカンのアートや工芸品には、サンダーバードの図案が頻繁に用いられます。特に太平洋岸北西部のトーテムポールには、翼を広げたサンダーバードの姿が彫られています。
+            </p>
+
+            <p>
+                雷雨の夜、人々は空を見上げてサンダーバードを思い出します。その雷鳴の中に、遠い昔から続く保護者の声を聞くのです。現代でも、サンダーバードは正義と自然保護の象徴として、多くの人々に愛され続けています。
+            </p>
+
+            <div class="highlight">
+                サンダーバード伝説が教えてくれること：<br>
+                真の力は正義のために使われるべきであり、自然との調和を保ちながら、弱い者を守り、悪と戦う勇気を持つことの大切さです。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. サンダーバードの雷鳴に耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // 雷のエフェクト
+        function createLightning() {
+            const flash = document.getElementById('lightningFlash');
+            
+            function lightning() {
+                flash.style.opacity = '1';
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                }, 150);
+            }
+            
+            // ランダムな間隔で雷光を作る
+            setInterval(() => {
+                if (Math.random() < 0.1) { // 10%の確率
+                    lightning();
+                }
+            }, 1000);
+        }
+        
+        // 雲のエフェクト
+        function createStormClouds() {
+            const container = document.getElementById('stormClouds');
+            
+            function addCloud() {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.width = (50 + Math.random() * 100) + 'px';
+                cloud.style.height = (30 + Math.random() * 50) + 'px';
+                cloud.style.top = Math.random() * 50 + '%';
+                cloud.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(cloud);
+                
+                setTimeout(() => {
+                    if (container.contains(cloud)) {
+                        container.removeChild(cloud);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的に雲を追加
+            setInterval(addCloud, 3000);
+        }
+        
+        createLightning();
+        createStormClouds();
+    </script>
+</body>
+</html>

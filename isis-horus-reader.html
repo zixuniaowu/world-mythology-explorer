@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イシスとホルスの復讐 - 母の愛と息子の使命</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #4B0082 0%, #8B008B 30%, #DC143C 70%, #DAA520 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 魔術の粒子エフェクト */
+        .magic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .magic-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            border-radius: 50%;
+            animation: magic-float 8s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes magic-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* ホルスの目のシンボル */
+        .eye-of-horus {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 80px;
+            height: 50px;
+            background: radial-gradient(ellipse, #FFD700 20%, transparent 50%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            z-index: 2;
+            animation: eye-pulse 4s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        .eye-of-horus::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: #4B0082;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes eye-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        /* 古代の巻物背景 */
+        .papyrus-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 40px,
+                rgba(218, 165, 32, 0.1) 40px,
+                rgba(218, 165, 32, 0.1) 42px
+            );
+            z-index: 0;
+            animation: scroll-papyrus 25s linear infinite;
+        }
+        
+        @keyframes scroll-papyrus {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(42px); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(75, 0, 130, 0.9) 0%, rgba(139, 0, 139, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: mystical-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes mystical-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(139, 0, 139, 0.5);
+            }
+            to { 
+                text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 40px rgba(139, 0, 139, 0.8), 0 0 50px rgba(75, 0, 130, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        /* エピソードカード */
+        .episode-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .episode-card {
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.2) 0%, rgba(139, 0, 139, 0.2) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #8B008B, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .episode-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+        
+        .chapter-number {
+            display: inline-block;
+            background: #8B008B;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .episode-icon {
+            font-size: 1.5em;
+        }
+        
+        .episode-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* バトルセクション */
+        .battle-section {
+            background: rgba(220, 20, 60, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .battle-icon {
+            font-size: 6em;
+            color: #DC143C;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #DC143C);
+            animation: battle-pulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes battle-pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        .battle-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #F5E6D3;
+        }
+        
+        .battle-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #DC143C;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(75, 0, 130, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .eye-of-horus {
+                width: 60px;
+                height: 35px;
+                top: 12%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 魔術の粒子 -->
+    <div class="magic-particles" id="magicParticles"></div>
+    
+    <!-- 巻物背景 -->
+    <div class="papyrus-bg"></div>
+    
+    <!-- ホルスの目 -->
+    <div class="eye-of-horus"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="egyptian-mythology-index.html" class="logo">エジプト神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="egyptian-mythology-index.html">エジプト神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">イシスとホルスの復讐</h1>
+            <p class="story-subtitle">母の愛に支えられた息子の正義の戦い</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">復讐と正義の物語</h2>
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <span class="chapter-number">第一章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">👶</span>
+                        ホルスの誕生と隠遁
+                    </h3>
+                    <div class="episode-content">
+                        オシリスを蘇らせたイシスは、夫との間に息子ホルスを授かりました。
+                        しかし、セトが再び襲来することを恐れたイシスは、ナイル川デルタの湿地帯に隠れ住み、
+                        一人でホルスを育てることにしました。彼女は魔術の力で身を隠し、
+                        息子が成長するまでセトの目から逃れ続けました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第二章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🐍</span>
+                        毒蛇からの守護
+                    </h3>
+                    <div class="episode-content">
+                        ある日、幼いホルスが毒蛇に咬まれて瀕死の状態に陥りました。
+                        絶望したイシスは天に向かって泣き叫び、太陽神ラーに助けを求めました。
+                        ラーは使者のトト神を遣わし、強力な治癒の魔術でホルスを救いました。
+                        この出来事により、ホルスの神性がより一層強化されました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第三章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">⚔️</span>
+                        成人したホルスの挑戦
+                    </h3>
+                    <div class="episode-content">
+                        成人したホルスは、父オシリスの正当な後継者として王位を要求しました。
+                        しかし、叔父セトは「力こそが王の証」だと主張し、王位を渡すことを拒否しました。
+                        神々の法廷「エンネアド」が開かれ、どちらが真の王にふさわしいかを決める
+                        長い裁判が始まりました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第四章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🏺</span>
+                        種子の競争
+                    </h3>
+                    <div class="episode-content">
+                        セトは卑劣な手段でホルスを辱めようと画策しました。彼はホルスを誘惑し、
+                        その後、自分の体液をホルスの食事に混入させて神々の前で屈辱を与えようとしました。
+                        しかし、賢母イシスは息子の危機を察知し、魔術でセトの計画を逆手に取り、
+                        セトこそが屈辱を受けることになりました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第五章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🛥️</span>
+                        石の船レース
+                    </h3>
+                    <div class="episode-content">
+                        神々はホルスとセトに石の船でレースをするよう命じました。
+                        セトは本当に石で船を作りましたが、すぐに沈んでしまいました。
+                        一方、ホルスは母イシスの助言に従い、木の船に石膏を塗って石に見せかけ、
+                        見事にレースに勝利しました。この勝利により、ホルスの知恵が証明されました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第六章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">👁️</span>
+                        目をかけた戦い
+                    </h3>
+                    <div class="episode-content">
+                        ついに両者は直接戦闘に臨みました。激しい戦いの中で、
+                        セトはホルスの左目（月の目）を奪い、ホルスはセトの男性器を奪いました。
+                        トト神がホルスの目を治療し、完全に回復させました。
+                        この「ホルスの目」は後に「ウジャト」として、保護と治癒のシンボルとなりました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="chapter-number">第七章</span>
+                    <h3 class="episode-title">
+                        <span class="episode-icon">👑</span>
+                        王座の継承
+                    </h3>
+                    <div class="episode-content">
+                        80年に及ぶ争いの末、ついに神々の法廷は判決を下しました。
+                        オシリスの霊も冥界から証言し、ホルスこそが正当な後継者であることを証明しました。
+                        ラー神の最終裁定により、ホルスはエジプトの王となり、セトは砂漠の神として
+                        上エジプトを治めることになりました。イシスの母としての愛と献身が勝利をもたらしたのです。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 戦いの意味 -->
+        <section class="battle-section">
+            <h2 class="section-title">永遠の戦いの意味</h2>
+            <div class="battle-icon">⚖️</div>
+            <div class="battle-content">
+                <h3>秩序対混沌</h3>
+                <p>
+                    ホルスとセトの戦いは、単なる王位継承争いではなく、
+                    宇宙の根本的な対立「マアト（秩序・正義・真理）対イスフェト（混沌・無秩序）」を象徴しています。
+                    この戦いは永遠に続き、常に秩序が勝利することでエジプトの安定が保たれると信じられていました。
+                </p>
+                
+                <h3>母の愛の力</h3>
+                <p>
+                    イシスの無条件の愛と保護は、どんな困難も乗り越える力を持っています。
+                    彼女の魔術と知恵は、息子を守り、最終的な勝利へと導きました。
+                    これは理想的な母性の象徴として、古代エジプト全土で崇拝されました。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🔮</span>
+                    <h3 class="character-name">イシス</h3>
+                    <p class="character-description">
+                        魔術と母性の女神。オシリスの妻、ホルスの母。
+                        息子を守り育て、知恵と魔術で勝利に導く
+                        理想的な母親として崇拝された。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🦅</span>
+                    <h3 class="character-name">ホルス</h3>
+                    <p class="character-description">
+                        隼の神、空と王権の神。オシリスの息子。
+                        セトとの80年の戦いに勝利し、
+                        エジプトの正当な王となった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐍</span>
+                    <h3 class="character-name">セト</h3>
+                    <p class="character-description">
+                        砂漠と混沌の神。オシリスを殺した張本人。
+                        力と暴力を信奉し、甥ホルスと王位を巡って
+                        長期間戦った。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">オシリス</h3>
+                    <p class="character-description">
+                        冥界の王、ホルスの父。死後も霊として
+                        息子の正当性を証言し、
+                        最終的な勝利に貢献した。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🪶</span>
+                    <h3 class="character-name">トト</h3>
+                    <p class="character-description">
+                        知恵と月の神。法廷の書記として
+                        戦いの記録を取り、ホルスの目を
+                        治療した医術の神でもある。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">☀️</span>
+                    <h3 class="character-name">ラー</h3>
+                    <p class="character-description">
+                        太陽神、神々の王。最終的な裁定者として
+                        ホルスの王位継承を承認し、
+                        エジプトの新しい秩序を確立した。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">イシスとホルスの復讐 - 母の愛が導いた正義の勝利</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 魔術の粒子を生成
+        function createMagicParticles() {
+            const particlesContainer = document.getElementById('magicParticles');
+            const numberOfParticles = 30;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'magic-particle';
+                
+                // ランダムな位置とアニメーション
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // ページ読み込み時に魔術の粒子を生成
+        window.addEventListener('load', createMagicParticles);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.episode-card, .character-card, .battle-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .battle-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エヌマ・エリシュ - メソポタミア神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #000428 0%, #004e92 50%, #009ffd 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 原初の混沌 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(0, 78, 146, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(0, 159, 253, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #004e92 0%, #009ffd 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 78, 146, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌊 🐉 ⚡ 🌟';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #e3f2fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #e3f2fd;
+            font-weight: 600;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #009ffd;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0, 159, 253, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #009ffd;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #009ffd;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(0, 78, 146, 0.2), rgba(0, 159, 253, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #009ffd;
+        }
+
+        .creation-verse {
+            background: rgba(0, 78, 146, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 78, 146, 0.3);
+            font-style: italic;
+        }
+
+        .creation-verse h4 {
+            color: #004e92;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 創世エフェクト */
+        .primordial-waters {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .water-wave {
+            position: absolute;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, rgba(0, 159, 253, 0.1), transparent);
+            animation: waveMotion 20s linear infinite;
+        }
+
+        @keyframes waveMotion {
+            0% { transform: translateY(100vh); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .tiamat-dragon {
+            position: fixed;
+            bottom: 20%;
+            right: 30px;
+            width: 200px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: dragonFloat 30s infinite;
+        }
+
+        @keyframes dragonFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            25% { transform: translateY(-20px) rotate(0deg); }
+            50% { transform: translateY(0) rotate(5deg); }
+            75% { transform: translateY(-10px) rotate(0deg); }
+        }
+
+        .marduk-lightning {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 200px;
+            opacity: 0;
+            z-index: 1;
+            animation: lightningFlash 8s infinite;
+        }
+
+        @keyframes lightningFlash {
+            0%, 95% { opacity: 0; }
+            96%, 98% { opacity: 0.6; }
+            100% { opacity: 0; }
+        }
+
+        .cosmic-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 原初の水 -->
+    <div class="primordial-waters" id="primordialWaters"></div>
+    
+    <!-- ティアマト -->
+    <div class="tiamat-dragon">
+        <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 竜の体 -->
+            <path d="M20,100 Q50,80 100,90 T180,100 Q190,110 180,120 Q100,130 20,120 Z" 
+                  fill="rgba(0, 78, 146, 0.3)"/>
+            <!-- 頭 -->
+            <ellipse cx="20" cy="100" rx="15" ry="20" fill="rgba(0, 78, 146, 0.4)"/>
+            <!-- 翼 -->
+            <path d="M60,90 Q70,60 90,70 Q80,80 70,90 Q60,80 60,90" 
+                  fill="rgba(0, 159, 253, 0.2)"/>
+            <path d="M100,90 Q110,60 130,70 Q120,80 110,90 Q100,80 100,90" 
+                  fill="rgba(0, 159, 253, 0.2)"/>
+            <!-- 目 -->
+            <circle cx="15" cy="95" r="3" fill="rgba(255, 0, 0, 0.4)"/>
+        </svg>
+    </div>
+    
+    <!-- マルドゥクの雷 -->
+    <div class="marduk-lightning">
+        <svg viewBox="0 0 50 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M25,0 L15,70 L30,70 L20,140 L35,140 L10,200" 
+                  stroke="rgba(255, 255, 255, 0.8)" stroke-width="3" fill="none"/>
+            <path d="M25,0 L15,70 L30,70 L20,140 L35,140 L10,200" 
+                  stroke="rgba(0, 159, 253, 0.6)" stroke-width="6" fill="none" filter="blur(2px)"/>
+        </svg>
+    </div>
+    
+    <!-- 宇宙の星 -->
+    <div class="cosmic-stars" id="cosmicStars"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>エヌマ・エリシュ</h1>
+            <p>Enuma Elish - バビロニア創世記</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #009ffd; text-decoration: none; font-size: 1.5rem;">🌊 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="mesopotamian-mythology-index-ja.html">メソポタミア神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>天と地が分かれる前の物語</h2>
+            
+            <p>
+                『エヌマ・エリシュ』（「天空において」の意）は、バビロニアの創世神話であり、紀元前12世紀頃に成立した宇宙創成の壮大な叙事詩です。この物語は、原初の混沌から秩序ある宇宙が生まれるまでの過程と、若き神マルドゥクが最高神となる経緯を描いています。毎年の新年祭（アキートゥ）において朗誦されたこの神話は、バビロンの正統性とマルドゥク信仰の根拠を示す重要な宗教文学でした。
+            </p>
+
+            <div class="creation-verse">
+                <h4>冒頭の詩句</h4>
+                <p>
+                「エヌマ・エリシュ・ラー・ナブー・シャマーム<br>
+                （天空がまだ名づけられていなかった時）<br>
+                シャプリトゥ・アンマトゥム・シュマ・ラー・ザクラト<br>
+                （下なる大地もその名を呼ばれていなかった時）<br>
+                アプスー・リーシュトゥ・ザールーシュン<br>
+                （原初のアプスーこそが彼らの父であり）<br>
+                ムンム・ティアマト・ムアッリダト・ギムリシュン<br>
+                （生みの親ティアマトが彼らすべての母であった）」
+                </p>
+            </div>
+
+            <h3>原初の混沌</h3>
+            <p>
+                物語は、宇宙が存在する前の状態から始まります。天も地もなく、ただ二つの原初の水だけが存在していました。淡水の神アプスーと塩水の女神ティアマトです。この二つの水が混ざり合い、最初の神々が生まれました。ラフムとラハム、そしてアンシャルとキシャルが誕生し、さらに彼らから天の神アヌが生まれました。
+            </p>
+
+            <p>
+                新しい世代の神々は活発で騒々しく、アプスーの平穏を乱しました。アプスーは宰相ムンムと相談し、若い神々を滅ぼして原初の静寂を取り戻そうと計画しました。しかし、知恵の神エアがこの陰謀を察知し、呪文によってアプスーを眠らせて殺してしまいました。エアはアプスーの上に自分の聖所を築き、そこで息子マルドゥクが生まれました。
+            </p>
+
+            <p>
+                マルドゥクは生まれながらにして並外れた存在でした。完璧な体格、四つの耳と四つの目を持ち、口から火を吐くことができました。祖父アヌは孫の偉大さに感動し、四つの風を贈り物として与えました。マルドゥクはこれらの風で遊び、ティアマトの水を撹拌しました。
+            </p>
+
+            <h3>ティアマトの怒りと怪物軍団</h3>
+            <p>
+                夫アプスーの死と若い神々の騒がしさに耐えかねたティアマトは、ついに激怒しました。古い世代の神々に煽られた彼女は、若い神々を滅ぼすことを決意し、恐ろしい怪物軍団を創造しました。十一体の怪物には、巨大な蛇、竜、獅子人間、蠍人間、魚人間などが含まれていました。
+            </p>
+
+            <p>
+                ティアマトは新しい夫キングーを軍団の指揮官に任命し、運命の石板（天命を決定する力を持つ神聖な物）を彼の胸に置きました。この強大な軍勢を前に、若い神々は恐怖に震えました。エアもアヌも、ティアマトに立ち向かう勇気を持てませんでした。
+            </p>
+
+            <p>
+                絶望的な状況の中、若きマルドゥクが前に進み出ました。彼は神々に条件を提示しました：もし自分がティアマトを倒したら、神々の王として認め、運命を決定する権限を与えること。窮地に立たされた神々は、この条件を受け入れました。
+            </p>
+
+            <div class="highlight">
+                マルドゥクの条件：<br>
+                この場面は、メソポタミア社会における契約と権力の重要性を反映しています。マルドゥクは単なる英雄的行為ではなく、正当な報酬と権威を要求しました。これは、バビロンの主神マルドゥクが他の都市の神々より優位に立つ神学的根拠となりました。
+            </div>
+
+            <h3>宇宙的な戦い</h3>
+            <p>
+                マルドゥクは戦いの準備を整えました。弓と矢、棍棒、網、そして四つの風を武器として携え、さらに七つの破壊的な風を創造しました。稲妻を身にまとい、恐ろしい光輝を放ちながら、彼は戦車に乗ってティアマトに向かいました。
+            </p>
+
+            <p>
+                両者が対峙すると、ティアマトは呪文を唱えてマルドゥクを混乱させようとしました。しかし、マルドゥクは動じることなく、ティアマトに一騎打ちを挑みました。ティアマトが大きく口を開けてマルドゥクを飲み込もうとした瞬間、彼は悪風を送り込みました。風はティアマトの腹を膨張させ、彼女は口を閉じることができなくなりました。
+            </p>
+
+            <p>
+                その隙を突いて、マルドゥクは矢を放ち、ティアマトの心臓を貫きました。原初の母は倒れ、彼女の怪物軍団は散り散りに逃げ去りました。マルドゥクはキングーを捕らえ、運命の石板を奪い取って自分の胸に置きました。こうして、若き神は宇宙の支配者となったのです。
+            </p>
+
+            <h3>天地創造</h3>
+            <p>
+                マルドゥクはティアマトの巨大な死体を前に、創造的な計画を思いつきました。彼は彼女の体を二つに切り分け、上半分を持ち上げて天空としました。そこに番人を置いて、天の水が地上に落ちないようにしました。下半分は大地となり、山々と川が形成されました。
+            </p>
+
+            <p>
+                次に、マルドゥクは天に星座を配置し、月の満ち欠けで時を定め、太陽の道筋を決めました。ティアマトの目から流れ出た涙はチグリス川とユーフラテス川となりました。彼女の尾は天の川となり、乳房は山となりました。こうして、混沌から秩序ある宇宙が生まれたのです。
+            </p>
+
+            <p>
+                しかし、神々は労働から解放されることを望んでいました。そこでマルドゥクは、反逆者キングーを処刑し、その血から人間を創造することを提案しました。知恵の神エアがこの作業を実行し、人類が誕生しました。人間の使命は神々に仕え、神殿で祭儀を行い、供物を捧げることでした。
+            </p>
+
+            <div class="creation-verse">
+                <h4>人間創造の目的</h4>
+                <p>
+                「神々の労苦を負わせるために<br>
+                人間を創造しよう<br>
+                神々が安息を得られるように<br>
+                彼らに奉仕の軛を負わせよう<br>
+                永遠に神々の聖所を維持させ<br>
+                供物と祈りを絶やさぬように」
+                </p>
+            </div>
+
+            <h3>バビロンの建設とマルドゥクの栄光</h3>
+            <p>
+                感謝した神々は、マルドゥクのために壮大な都市バビロンを建設しました。その中心には、天と地を結ぶ巨大な神殿エサギラが建てられました。この神殿の頂上には、マルドゥクの聖所が設けられ、そこで神々の会議が開かれるようになりました。
+            </p>
+
+            <p>
+                完成を祝う宴会で、神々はマルドゥクに五十の名前を授けました。それぞれの名前は、彼の属性と権能を表していました。創造者、支配者、裁定者、戦士、知恵者など、あらゆる神的資質がマルドゥクに集約されました。こうして、彼は「神々の王」として永遠に崇拝されることになったのです。
+            </p>
+
+            <p>
+                物語の最後には、これらの名前を学び、記憶し、子供たちに教えるようにという教訓が付け加えられています。父は息子に語り継ぎ、羊飼いは羊の群れを守るようにこの知識を守るべきだと説かれています。
+            </p>
+
+            <h3>神話の意味と影響</h3>
+            <p>
+                『エヌマ・エリシュ』は、単なる創世神話以上の意味を持っています。それは、バビロンとその主神マルドゥクの正統性を確立する政治的・宗教的文書でもありました。メソポタミアの都市国家間の競争の中で、この神話はバビロンの優位性を神学的に正当化する役割を果たしました。
+            </p>
+
+            <p>
+                また、この物語は秩序と混沌の永遠の闘争というテーマを扱っています。ティアマトが象徴する原初の混沌は、常に文明を脅かす力として存在し続けます。マルドゥクの勝利は、理性と秩序が混沌に打ち勝つことを示していますが、それは継続的な努力と警戒を必要とします。
+            </p>
+
+            <p>
+                人間の創造に関する記述も重要です。人間は神々に奉仕するために作られたという思想は、メソポタミア文明の宗教観の基礎となりました。しかし同時に、人間は神の血から作られたという設定は、人間の尊厳と神聖さも暗示しています。
+            </p>
+
+            <div class="highlight">
+                エヌマ・エリシュが現代に伝えること：<br>
+                混沌から秩序を作り出すには、勇気と知恵が必要である。権力は責任を伴い、正当な手続きによって獲得されるべきである。創造は破壊から生まれることがある。人間には神聖な要素と奉仕の義務の両方がある。文明は常に混沌の脅威と向き合い、秩序を維持する努力を続けなければならない。そして、物語と記憶の継承は文化の存続に不可欠である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 原初の物語から学ぶ永遠の知恵。</p>
+    </footer>
+
+    <script>
+        // 原初の水エフェクト
+        function createPrimordialWaters() {
+            const container = document.getElementById('primordialWaters');
+            
+            for (let i = 0; i < 5; i++) {
+                const wave = document.createElement('div');
+                wave.className = 'water-wave';
+                wave.style.animationDelay = `${i * 4}s`;
+                wave.style.height = `${80 + Math.random() * 40}px`;
+                container.appendChild(wave);
+            }
+        }
+        
+        createPrimordialWaters();
+
+        // 宇宙の星エフェクト
+        function createCosmicStars() {
+            const container = document.getElementById('cosmicStars');
+            
+            function addStar() {
+                const star = document.createElement('div');
+                star.innerHTML = '✦';
+                star.style.position = 'absolute';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.fontSize = (10 + Math.random() * 20) + 'px';
+                star.style.color = 'rgba(255, 255, 255, 0.6)';
+                star.style.animation = 'twinkle 3s infinite';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+            
+            // CSS keyframes を追加
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes twinkle {
+                    0%, 100% { opacity: 0.2; transform: scale(1); }
+                    50% { opacity: 0.8; transform: scale(1.2); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 星を追加
+            for (let i = 0; i < 50; i++) {
+                addStar();
+            }
+        }
+        
+        createCosmicStars();
+
+        // 創造の光エフェクト
+        function createCreationLight() {
+            setInterval(() => {
+                const light = document.createElement('div');
+                light.style.position = 'fixed';
+                light.style.left = Math.random() * 100 + '%';
+                light.style.top = Math.random() * 100 + '%';
+                light.style.width = '100px';
+                light.style.height = '100px';
+                light.style.background = 'radial-gradient(circle, rgba(0, 159, 253, 0.3), transparent)';
+                light.style.borderRadius = '50%';
+                light.style.pointerEvents = 'none';
+                light.style.zIndex = '1';
+                light.style.opacity = '0';
+                
+                document.body.appendChild(light);
+                
+                // 膨張とフェード
+                let scale = 1;
+                let opacity = 0;
+                const expand = setInterval(() => {
+                    scale += 0.1;
+                    opacity = opacity < 0.3 ? opacity + 0.03 : opacity - 0.03;
+                    light.style.transform = `scale(${scale})`;
+                    light.style.opacity = opacity;
+                    
+                    if (scale > 3) {
+                        clearInterval(expand);
+                        if (document.body.contains(light)) {
+                            document.body.removeChild(light);
+                        }
+                    }
+                }, 100);
+            }, 5000);
+        }
+        
+        createCreationLight();
+    </script>
+</body>
+</html>

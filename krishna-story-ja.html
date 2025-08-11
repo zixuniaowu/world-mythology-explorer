@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クリシュナの物語 - インド神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #3f51b5 50%, #e8eaf6 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 神聖な雰囲気 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(63, 81, 181, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(232, 234, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #3f51b5 0%, #e8eaf6 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(63, 81, 181, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🪶 🦚 🌸 🕉️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #c5cae9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #3f51b5;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(63, 81, 181, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #3f51b5;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #3f51b5;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(63, 81, 181, 0.2), rgba(232, 234, 246, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #3f51b5;
+        }
+
+        .krishna-verse {
+            background: rgba(63, 81, 181, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(63, 81, 181, 0.3);
+            font-style: italic;
+        }
+
+        .krishna-verse h4 {
+            color: #1a237e;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* クリシュナエフェクト */
+        .peacock-feathers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .feather {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            animation: featherFloat 25s infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes featherFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .divine-light {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(63, 81, 181, 0.3), transparent);
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 1;
+            animation: divineGlow 15s infinite;
+        }
+
+        @keyframes divineGlow {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.5); opacity: 0.1; }
+        }
+
+        .flute-music {
+            position: fixed;
+            top: 30%;
+            left: 30px;
+            width: 120px;
+            height: 200px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: flutePlay 20s infinite;
+        }
+
+        @keyframes flutePlay {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .lotus-petals {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, rgba(232, 234, 246, 0.1), transparent);
+            z-index: 1;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 孔雀の羽 -->
+    <div class="peacock-feathers" id="peacockFeathers"></div>
+    
+    <!-- 神聖な光 -->
+    <div class="divine-light"></div>
+    
+    <!-- フルート -->
+    <div class="flute-music">
+        <svg viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- フルート本体 -->
+            <rect x="55" y="20" width="10" height="160" fill="rgba(139, 69, 19, 0.3)" rx="5"/>
+            <!-- 穴 -->
+            <circle cx="60" cy="50" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <circle cx="60" cy="70" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <circle cx="60" cy="90" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <circle cx="60" cy="110" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <circle cx="60" cy="130" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <circle cx="60" cy="150" r="3" fill="rgba(63, 81, 181, 0.4)"/>
+            <!-- 音符 -->
+            <text x="80" y="60" fill="rgba(232, 234, 246, 0.4)" font-size="20">♪</text>
+            <text x="30" y="80" fill="rgba(232, 234, 246, 0.4)" font-size="16">♫</text>
+            <text x="85" y="100" fill="rgba(232, 234, 246, 0.4)" font-size="18">♪</text>
+        </svg>
+    </div>
+    
+    <!-- 蓮の花びら -->
+    <div class="lotus-petals"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>クリシュナの物語</h1>
+            <p>Krishna's Story - 愛と知恵の化身</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #3f51b5; text-decoration: none; font-size: 1.5rem;">🪶 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="indian-mythology-index-ja.html">インド神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>神の化身の生涯</h2>
+            
+            <p>
+                クリシュナ（Krishna）は、ヒンドゥー教における最も愛され、崇拝されている神の一人です。最高神ヴィシュヌの第八の化身（アヴァターラ）とされるクリシュナは、愛、慈悲、知恵、そして神聖な遊戯の象徴として、インド文化の中核を成しています。彼の生涯は、幼少期の奇跡から青年期の英雄的行為、そして『バガヴァッド・ギーター』における深遠な教えまで、人間のすべての側面を包含しています。
+            </p>
+
+            <h3>神聖な誕生</h3>
+            <p>
+                クリシュナは、マトゥラーの監獄で、デーヴァキーとヴァスデーヴァの子として生まれました。この誕生の背景には、邪悪な王カムサの暴政がありました。カムサは予言により、デーヴァキーの八番目の子が自分を滅ぼすことを知り、彼女とその夫を監禁していました。
+            </p>
+
+            <p>
+                クリシュナが生まれた夜、奇跡が起こりました。監獄の扉が自然に開き、看守たちは深い眠りに落ち、ヴァスデーヴァはヤムナー川を渡って赤ん坊をゴークラ（ヴリンダーヴァン）の養父母ナンダとヤショーダーのもとに届けることができました。川の神が足元を支え、大蛇シェーシャが雨から守ったと言われています。
+            </p>
+
+            <p>
+                この物語は、神の意志の前では世俗的な力は無力であり、愛と義に基づく行動は常に守護されることを示しています。クリシュナの誕生そのものが、闇に対する光の勝利を象徴していました。
+            </p>
+
+            <div class="krishna-verse">
+                <h4>クリシュナ誕生の讃美歌</h4>
+                <p>
+                「暗闇を照らす光として<br>
+                愛の化身が降臨された<br>
+                牢獄の扉は開かれ<br>
+                川は道を作り給う<br>
+                この夜、神は人となられた」
+                </p>
+            </div>
+
+            <h3>童子期の奇跡と遊戯</h3>
+            <p>
+                ヴリンダーヴァンで育ったクリシュナは、幼い頃から数々の奇跡を行いました。しかし、これらの奇跡は威厳に満ちた神としての力の誇示ではなく、子どもらしい遊び心と愛情に満ちた行為として現れました。これを「リーラー」（神聖な遊戯）と呼びます。
+            </p>
+
+            <p>
+                最も有名なエピソードの一つは、バターを盗む話です。クリシュナは友達と一緒に家々からバターを盗み、村の女性たちを困らせました。しかし、その愛らしさのために誰も本当に怒ることができませんでした。この話は、神の愛は人間の小さな欠点をも愛おしく思うことを表しています。
+            </p>
+
+            <p>
+                また、ある時、養母ヤショーダーがクリシュナの口の中を覗くと、そこに全宇宙を見たという話も有名です。これは、神の化身でありながら人間として生きるクリシュナの真の本質を示すエピソードです。ヤショーダーは恐れおののきましたが、すぐにその記憶は神によって消され、母としての愛情に戻りました。
+            </p>
+
+            <h3>悪魔たちとの戦い</h3>
+            <p>
+                カムサは刺客を次々と送りましたが、幼いクリシュナはそのすべてを退けました。女悪魔プーターナーは毒を塗った乳房でクリシュナを殺そうとしましたが、逆に彼女の生命力が吸い取られてしまいました。竜巻の悪魔トリナーヴァルタも、クリシュナによって倒されました。
+            </p>
+
+            <p>
+                これらの戦いは、善と悪の永遠の闘争を象徴していますが、クリシュナの場合、それは暴力的な征服ではなく、愛の力による変容として描かれています。悪魔たちでさえ、クリシュナによって解放され、より高い存在に生まれ変わることができました。
+            </p>
+
+            <p>
+                最も壮大な奇跡の一つは、ゴーヴァルダナの丘を持ち上げた話です。インドラ神が村に大雨を降らせて罰しようとした時、クリシュナは丘全体を小指で持ち上げて、村人と牛たちを七日間守りました。これにより、インドラも彼の神性を認めざるを得ませんでした。
+            </p>
+
+            <h3>青年期と恋愛</h3>
+            <p>
+                青年になったクリシュナは、美しく魅力的な青年に成長しました。彼のフルート演奏は神聖で、その音色に誘われてゴーピー（牛飼いの少女たち）は夜中でも森に集まってきました。これらの恋愛の物語は、人間の魂と神との関係を象徴的に表現したものです。
+            </p>
+
+            <p>
+                特に有名なのは、ラーダーとの恋です。ラーダーはクリシュナの永遠の恋人とされ、彼女との関係は純粋で神聖な愛の極致を表しています。二人の愛は肉体を超越した魂の結合であり、ヒンドゥー教の信仰者にとって神への愛の理想像となっています。
+            </p>
+
+            <p>
+                満月の夜に行われる「ラーサ・リーラー」（円舞の遊戯）では、クリシュナが自分の分身を作り、それぞれのゴーピーと同時に踊ったと言われています。これは、神がすべての魂と個別に関係を持ち、それぞれを特別に愛していることを表現しています。
+            </p>
+
+            <div class="highlight">
+                ラーダーとクリシュナの愛：<br>
+                ラーダーとクリシュナの愛は、人間の魂（ジーヴァ）と最高神（パラマートマン）の関係を象徴しています。この愛は執着ではなく、完全な献身と自己放棄に基づいています。ラーダーの愛は純粋で無条件であり、それがクリシュナの心を完全に捉えるのです。この関係は、バクティ（献身）の道における理想的な姿とされています。
+            </div>
+
+            <h3>マハーバーラタとバガヴァッド・ギーター</h3>
+            <p>
+                クリシュナの最も重要な役割の一つは、大叙事詩『マハーバーラタ』における指導者としてのものです。クルクシェートラの戦場で、彼は戦士アルジュナの御者となり、戦いを前に迷うアルジュナに対して深遠な教えを説きました。これが『バガヴァッド・ギーター』です。
+            </p>
+
+            <p>
+                アルジュナが親族との戦いを躊躇した時、クリシュナは義務（ダルマ）の重要性、行為の結果への執着を捨てること（ニシュカーマ・カルマ）、そして最高の献身（バクティ）について説きました。この教えは、人生のあらゆる困難に直面する人々への普遍的な指針となっています。
+            </p>
+
+            <p>
+                特に有名な教えは「私に身を委ねよ」（サランアーガティ）です。クリシュナは、すべての宗教的義務を捨てて、ただ彼に帰依することで解脱を得られると教えました。これは恩寵の道（バクティ・マールガ）の核心となる思想です。
+            </p>
+
+            <div class="krishna-verse">
+                <h4>バガヴァッド・ギーターより</h4>
+                <p>
+                「すべての法を捨てて<br>
+                ただ私のみに身を委ねよ<br>
+                私はあなたをあらゆる罪から<br>
+                解放してあげよう<br>
+                悲しむことはない」
+                </p>
+            </div>
+
+            <h3>ドヴァーラカーの王</h3>
+            <p>
+                クリシュナは後に、黄金の都市ドヴァーラカーを建設し、そこの王となりました。彼は複数の妃を持ち、多くの子をもうけましたが、これらすべての関係においても神聖な愛と義務の模範を示しました。
+            </p>
+
+            <p>
+                ドヴァーラカーでのクリシュナは、理想的な統治者の姿を表しています。彼は正義を愛し、弱者を保護し、悪を懲らしめました。同時に、芸術と文化を奨励し、学問を重んじ、すべての宗教を尊重しました。
+            </p>
+
+            <p>
+                しかし、彼の人生は永遠ではありませんでした。カリ・ユガ（暗黒時代）の到来とともに、クリシュナもこの世を去る時が来ました。森で瞑想中、猟師の矢が足に当たって息を引き取ったとされています。これも神の意志による計画的な出来事でした。
+            </p>
+
+            <h3>現代への教訓</h3>
+            <p>
+                クリシュナの物語は、現代においても多くの教訓を与えてくれます。まず、どのような困難な状況でも愛と笑顔を失わないこと。子ども時代のクリシュナの遊び心は、人生を重く考えすぎずに楽しむことの大切さを教えています。
+            </p>
+
+            <p>
+                また、彼の青年期の恋愛は、純粋で献身的な愛の価値を示しています。現代の打算的な人間関係とは対照的に、クリシュナとラーダーの愛は無私で永遠でした。これは、真の愛がどのようなものかを教えてくれます。
+            </p>
+
+            <p>
+                そして『バガヴァッド・ギーター』の教えは、現代のストレス社会で生きる人々に向けた実践的な指針でもあります。結果を気にせずに最善を尽くすこと、困難に直面しても動揺しないこと、そして何よりも愛と献身を持って生きることの重要性を教えています。
+            </p>
+
+            <div class="highlight">
+                クリシュナが現代に伝えること：<br>
+                人生は神聖な遊戯であり、重要なのは結果ではなく過程である。真の愛は執着ではなく、相手の幸福を願う無私の心である。困難な時こそ、より高い目的を思い出し、義務を果たす必要がある。神聖さは遠いところにあるのではなく、日常の愛と献身の中にある。そして、子どものような純真な心を失わないことが、真の知恵への道である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ハレ・クリシュナ、永遠の愛と共に。</p>
+    </footer>
+
+    <script>
+        // 孔雀の羽エフェクト
+        function createPeacockFeathers() {
+            const container = document.getElementById('peacockFeathers');
+            const featherSymbols = ['🪶', '🦚'];
+            
+            function addFeather() {
+                const feather = document.createElement('div');
+                feather.className = 'feather';
+                feather.innerHTML = featherSymbols[Math.floor(Math.random() * featherSymbols.length)];
+                feather.style.left = Math.random() * 100 + '%';
+                feather.style.fontSize = (20 + Math.random() * 15) + 'px';
+                feather.style.animationDelay = Math.random() * 10 + 's';
+                feather.style.animationDuration = (20 + Math.random() * 10) + 's';
+                container.appendChild(feather);
+                
+                setTimeout(() => {
+                    if (container.contains(feather)) {
+                        container.removeChild(feather);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的に羽を追加
+            setInterval(addFeather, 3000);
+            
+            // 初期の羽を追加
+            for (let i = 0; i < 8; i++) {
+                setTimeout(addFeather, i * 1500);
+            }
+        }
+        
+        createPeacockFeathers();
+
+        // 蓮の花びらエフェクト
+        function createLotusEffect() {
+            const petals = document.createElement('div');
+            petals.style.position = 'fixed';
+            petals.style.bottom = '0';
+            petals.style.left = '50%';
+            petals.style.transform = 'translateX(-50%)';
+            petals.style.fontSize = '30px';
+            petals.style.opacity = '0.1';
+            petals.style.pointerEvents = 'none';
+            petals.style.zIndex = '1';
+            petals.innerHTML = '🪷';
+            
+            document.body.appendChild(petals);
+            
+            setInterval(() => {
+                petals.style.opacity = Math.random() * 0.2 + 0.05;
+            }, 2000);
+        }
+        
+        createLotusEffect();
+    </script>
+</body>
+</html>

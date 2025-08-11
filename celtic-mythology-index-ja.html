@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ケルト神話 - 世界神話探索者</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* ケルト風装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(156, 136, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(46, 125, 50, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル - ケルト風 */
+        .header {
+            background: linear-gradient(135deg, #9c88ff 0%, #2e7d32 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(156, 136, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* ケルト文様装飾 */
+        .header::before {
+            content: '☘️🌿🦌🏰';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #c8e6c9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .celtic-symbols {
+            font-size: 1.5rem;
+            color: #c8e6c9;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            letter-spacing: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーションバー */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #9c88ff;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* イントロセクション */
+        .intro {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(156, 136, 255, 0.2);
+        }
+
+        .intro h2 {
+            color: #9c88ff;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 地域グリッド */
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .region-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .region-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #9c88ff, #2e7d32, #9c88ff);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .region-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(156, 136, 255, 0.3);
+        }
+
+        .region-card h3 {
+            color: #9c88ff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .region-info {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .region-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .region-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .region-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #9c88ff 0%, #2e7d32 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .region-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(156, 136, 255, 0.4);
+        }
+
+        /* 特徴セクション */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #9c88ff;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(156, 136, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(156, 136, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(156, 136, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #9c88ff;
+            margin-bottom: 0.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 関連物語 */
+        .related-works {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+        }
+
+        .related-works h2 {
+            color: #9c88ff;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .story-card {
+            background: rgba(156, 136, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-card:hover {
+            transform: translateY(-3px);
+            background: rgba(156, 136, 255, 0.2);
+        }
+
+        .story-card h4 {
+            color: #9c88ff;
+            margin-bottom: 0.5rem;
+        }
+
+        .story-card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .regions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* アニメーション効果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .region-card:nth-child(1) { animation-delay: 0.1s; }
+        .region-card:nth-child(2) { animation-delay: 0.2s; }
+        .region-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* 霧エフェクト */
+        .mist {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .mist-layer {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(156, 136, 255, 0.03) 25%, 
+                rgba(46, 125, 50, 0.03) 50%, 
+                rgba(156, 136, 255, 0.03) 75%, 
+                transparent 100%);
+            animation: mistFlow 20s linear infinite;
+        }
+
+        @keyframes mistFlow {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        /* ケルト結び装飾 */
+        .celtic-knot {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 100px;
+            height: 100px;
+            opacity: 0.1;
+            z-index: 0;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 霧エフェクト -->
+    <div class="mist">
+        <div class="mist-layer"></div>
+    </div>
+    
+    <!-- ケルト結び装飾 -->
+    <div class="celtic-knot">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20,20 Q50,10 80,20 Q90,50 80,80 Q50,90 20,80 Q10,50 20,20" 
+                  fill="none" stroke="rgba(156, 136, 255, 0.3)" stroke-width="3"/>
+            <circle cx="30" cy="30" r="8" fill="none" stroke="rgba(46, 125, 50, 0.3)" stroke-width="2"/>
+            <circle cx="70" cy="70" r="8" fill="none" stroke="rgba(46, 125, 50, 0.3)" stroke-width="2"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="celtic-symbols">☘️ 🌿 🦌 🏰</div>
+            <h1>ケルト神話</h1>
+            <p>霧に包まれた異界と英雄たちの物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーションバー -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #9c88ff; text-decoration: none; font-size: 1.5rem;">🍀 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="#intro">はじめに</a></li>
+                <li><a href="#regions">地域と伝統</a></li>
+                <li><a href="#features">神話の特徴</a></li>
+                <li><a href="#stories">物語一覧</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <!-- 紹介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>ケルト神話について</h2>
+            <p>
+                ケルト神話は、古代ヨーロッパに広がっていたケルト民族の豊かな精神世界から生まれた神話体系です。アイルランド、ウェールズ、スコットランド、ブルターニュなどの地域に伝わる口承文学と中世の写本によって現代に伝えられています。霧深い森、神秘的な湖、そして異界（シド）への入り口が点在する幻想的な世界観が特徴です。
+            </p>
+            <p>
+                トゥアハ・デ・ダナーン（ダナ神族）、フィアナ騎士団、アーサー王伝説など、多層的で複雑な物語群が織りなす世界は、自然崇拝、祖先崇拝、そして戦士の名誉を重視するケルト文化の価値観を反映しています。これらの神話は、後のヨーロッパ文学、特に騎士道物語や妖精譚に大きな影響を与えました。
+            </p>
+        </section>
+
+        <!-- 地域と伝統 -->
+        <section id="regions">
+            <h2 style="text-align: center; color: #9c88ff; margin-bottom: 2rem; font-size: 2.5rem;">地域別神話伝統</h2>
+            <div class="regions-grid">
+                <!-- アイルランド神話 -->
+                <div class="region-card fade-in">
+                    <h3>アイルランド神話</h3>
+                    <div class="region-info">主要文献：『侵略の書』『レンスターの書』</div>
+                    <div class="region-description">
+                        最も体系的で豊富なケルト神話群。トゥアハ・デ・ダナーンの到来、フィン・マックールとフィアナ騎士団の冒険、クー・フーリンの英雄譚など。ティル・ナ・ノーグ（永遠の若さの国）やその他の異界への旅路が描かれる。
+                    </div>
+                    <div class="region-links">
+                        <a href="cu-chulainn-legend-ja.html" class="region-link">📖 神話を読む</a>
+                        <a href="#features" class="region-link">🏰 聖地について</a>
+                    </div>
+                </div>
+
+                <!-- ウェールズ神話 -->
+                <div class="region-card fade-in">
+                    <h3>ウェールズ神話（マビノギオン）</h3>
+                    <div class="region-info">主要文献：『マビノギオン』『赤本』</div>
+                    <div class="region-description">
+                        『マビノギオン』として知られる物語群。プイルの冥界訪問、ブランウェンの悲劇、マナウィダンの知恵、マースとギルヴァエスウィの魔法など。ケルトの古層を保持しながらも、中世の騎士道文化の影響も受けている。
+                    </div>
+                    <div class="region-links">
+                        <a href="king-arthur-grail-ja.html" class="region-link">📖 マビノギオンを読む</a>
+                        <a href="#features" class="region-link">🎭 登場人物</a>
+                    </div>
+                </div>
+
+                <!-- スコットランド神話 -->
+                <div class="region-card fade-in">
+                    <h3>スコットランド神話</h3>
+                    <div class="region-info">特色：ハイランドと島嶼部の伝承</div>
+                    <div class="region-description">
+                        ゲール語圏の口承文学とローランド地方のバラッド。セルキー（アザラシ人）、ケルピー（水馬）、バンシー（泣き女）などの超自然的存在。フィン・マックールの伝説がアイルランドと共有される一方、独自の地域色も強い。
+                    </div>
+                    <div class="region-links">
+                        <a href="brigid-goddess-flame-ja.html" class="region-link">📖 民間伝承を読む</a>
+                        <a href="#features" class="region-link">🌊 水の精霊</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特徴 -->
+        <section class="features" id="features">
+            <h2>ケルト神話の特徴</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🌫️</div>
+                    <h3>異界（オザーワールド）</h3>
+                    <p>現世と平行して存在する神秘的な世界。シド（妖精の丘）を通じて行き来可能</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🗡️</div>
+                    <h3>戦士の名誉</h3>
+                    <p>勇気、忠誠、名誉を重視する戦士文化。英雄的な死が最高の栄誉とされる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🧚</div>
+                    <h3>シー（妖精族）</h3>
+                    <p>美しく強力な超自然的存在。人間界に干渉し、時に友となり、時に敵となる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🍃</div>
+                    <h3>自然との一体性</h3>
+                    <p>森、湖、山などの自然が神聖視され、神々や精霊の住処とされる</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 関連物語 -->
+        <section class="related-works" id="stories">
+            <h2>主要な神話物語</h2>
+            <div class="story-grid">
+                <div class="story-card" onclick="window.location.href='cu-chulainn-legend-ja.html'">
+                    <h4>クー・フーリンの伝説</h4>
+                    <p>アルスターの猟犬戦士</p>
+                </div>
+                <div class="story-card" onclick="window.location.href='king-arthur-grail-ja.html'">
+                    <h4>アーサー王と聖杯</h4>
+                    <p>円卓の騎士の理想</p>
+                </div>
+                <div class="story-card" onclick="window.location.href='brigid-goddess-flame-ja.html'">
+                    <h4>ブリギッドの炎</h4>
+                    <p>三相女神の叡智</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 霧に包まれた異界の扉を開きましょう。</p>
+    </footer>
+
+    <script>
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 追加の霧レイヤー生成
+        function addMistLayers() {
+            const mistContainer = document.querySelector('.mist');
+            for (let i = 0; i < 3; i++) {
+                const layer = document.createElement('div');
+                layer.className = 'mist-layer';
+                layer.style.animationDelay = `${i * 7}s`;
+                layer.style.animationDuration = `${20 + i * 5}s`;
+                layer.style.opacity = 0.5 - (i * 0.1);
+                mistContainer.appendChild(layer);
+            }
+        }
+        
+        addMistLayers();
+    </script>
+</body>
+</html>

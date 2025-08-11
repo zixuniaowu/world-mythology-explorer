@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天照大神と岩戸隠れ - 太陽女神の物語</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 桜の花びらアニメーション */
+        .sakura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .sakura {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.8);
+            font-size: 20px;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 太陽の光エフェクト */
+        .sun-rays {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255, 223, 0, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(255, 107, 157, 0.9) 0%, rgba(196, 69, 105, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #FFF;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #FFF;
+        }
+        
+        .story-text h3 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin: 30px 0 20px;
+            text-align: center;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* エピソードカード */
+        .episode-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .episode-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .episode-card:hover::before {
+            left: 100%;
+        }
+        
+        .episode-card:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .episode-icon {
+            font-size: 1.2em;
+        }
+        
+        .episode-content {
+            color: #FFF;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .character-description {
+            color: #FFF;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* 神道の教え */
+        .teaching-section {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .teaching-content {
+            text-align: center;
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #FFF;
+        }
+        
+        .teaching-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(196, 69, 105, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #FFF;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 桜の花びら -->
+    <div class="sakura-container" id="sakuraContainer"></div>
+    
+    <!-- 太陽の光エフェクト -->
+    <div class="sun-rays"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="japanese-mythology-index.html" class="logo">日本神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="japanese-mythology-index.html">日本神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">天照大神と岩戸隠れ</h1>
+            <p class="story-subtitle">太陽女神が世界から光を奪い去った時</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">物語のあらすじ</h2>
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">⚡</span>
+                        須佐之男命の乱暴
+                    </h3>
+                    <div class="episode-content">
+                        天照大神の弟である須佐之男命は、父イザナギから海原を治めるよう命じられましたが、
+                        母イザナミが恋しくて泣き続けていました。ついに高天原に上がってきた須佐之男命は、
+                        姉の天照大神に別れの挨拶をしようとしましたが、その様子があまりにも荒々しかったため、
+                        天照大神は戦いを挑まれると誤解してしまいました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🏠</span>
+                        機織り小屋の悲劇
+                    </h3>
+                    <div class="episode-content">
+                        誤解が解けた後、須佐之男命は高天原に留まりました。しかし、次第に乱暴を働くようになり、
+                        ついには天照大神が機織りをしている神聖な機殿に、皮を剥いだ斑馬を投げ込みました。
+                        この暴挙に驚いた機織女（はたおりめ）は機に体をぶつけて命を落としてしまいました。
+                        天照大神は深く悲しみ、怒りを覚えました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🗿</span>
+                        天岩戸に隠れる
+                    </h3>
+                    <div class="episode-content">
+                        弟の度重なる乱暴に心を痛めた天照大神は、天岩戸という洞窟に隠れてしまいました。
+                        太陽の女神が隠れたため、高天原も葦原中国（地上世界）も真っ暗闇になってしまいました。
+                        闇に乗じて悪い神々が跋扈し、災いが次々と起こりました。
+                        八百万の神々は困り果て、何とか天照大神に出てきてもらおうと相談しました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🎭</span>
+                        アメノウズメの神楽
+                    </h3>
+                    <div class="episode-content">
+                        思金神の知恵により、神々は天岩戸の前で大きな祭りを開くことにしました。
+                        アメノウズメが桶の上で踊り始めると、その面白おかしい踊りに神々は大笑いしました。
+                        天岩戸の中で一人佇んでいた天照大神は、外の楽しそうな声を聞いて不思議に思いました。
+                        「私がいないのに、なぜ皆こんなに楽しそうなのだろう？」
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">🪞</span>
+                        八咫鏡の策略
+                    </h3>
+                    <div class="episode-content">
+                        天照大神がそっと岩戸を開けて覗いてみると、アメノウズメが「あなたより美しい神がいらっしゃいます」と言いました。
+                        タヂカラオが差し出した八咫鏡に映った自分の美しい姿を見て、天照大神がもう少し身を乗り出した瞬間、
+                        タヂカラオが天照大神の手を取って岩戸から引き出しました。
+                        すぐに天岩戸には注連縄が張られ、二度と隠れることができないようにされました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">
+                        <span class="episode-icon">☀️</span>
+                        光の復活
+                    </h3>
+                    <div class="episode-content">
+                        天照大神が天岩戸から出てくると、高天原も葦原中国も再び光に満ちました。
+                        悪い神々は逃げ散り、世界に平和が戻りました。須佐之男命は罪を償うため高天原から追放され、
+                        出雲の国へ降りて行きました。この出来事により、天照大神の偉大さがより一層明らかになり、
+                        太陽神としての地位が確立されました。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">☀️</span>
+                    <h3 class="character-name">天照大神</h3>
+                    <p class="character-description">
+                        太陽を司る最高神。高天原を統治する女神。
+                        優しく慈悲深いが、弟の乱暴に心を痛め
+                        天岩戸に隠れてしまう。日本の皇室の祖神。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">⚡</span>
+                    <h3 class="character-name">須佐之男命</h3>
+                    <p class="character-description">
+                        嵐と海を司る神。天照大神の弟。
+                        感情の起伏が激しく、時として乱暴を働く。
+                        後に出雲で八岐大蛇を退治する英雄となる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🎭</span>
+                    <h3 class="character-name">アメノウズメ</h3>
+                    <p class="character-description">
+                        芸能の女神。天岩戸の前で踊り、
+                        神々を笑わせて天照大神の関心を引いた。
+                        日本の芸能の始祖とされる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">💪</span>
+                    <h3 class="character-name">タヂカラオ</h3>
+                    <p class="character-description">
+                        力の神。天照大神を天岩戸から
+                        引き出した怪力の持ち主。
+                        相撲の神としても信仰されている。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🧠</span>
+                    <h3 class="character-name">思金神</h3>
+                    <p class="character-description">
+                        知恵の神。天照大神を岩戸から
+                        出すための作戦を考案した。
+                        学問と知恵を司る神として崇拝される。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🔨</span>
+                    <h3 class="character-name">イシコリドメ</h3>
+                    <p class="character-description">
+                        鏡作りの神。天照大神を誘い出すための
+                        八咫鏡を作った。金属工芸の神として
+                        職人たちに信仰されている。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 神道の教え -->
+        <section class="teaching-section">
+            <h2 class="section-title">この物語の意味</h2>
+            <div class="teaching-content">
+                <h3>光と闇の象徴</h3>
+                <p>
+                    この物語は、太陽の恵みがいかに大切かを教えています。
+                    天照大神が隠れることで世界が闇に包まれるのは、
+                    太陽なしには生命が存在できないことを表しています。
+                </p>
+                
+                <h3>協力の力</h3>
+                <p>
+                    八百万の神々が力を合わせて天照大神を岩戸から出したように、
+                    困難な問題も皆で協力すれば解決できることを示しています。
+                </p>
+                
+                <h3>芸能の起源</h3>
+                <p>
+                    アメノウズメの踊りは日本の芸能の始まりとされ、
+                    歌や踊りが人々の心を癒し、楽しませる力を持つことを物語っています。
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">天照大神と岩戸隠れ - 古事記・日本書紀に記された日本神話の根幹</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // 桜の花びらを生成
+        function createSakura() {
+            const sakuraContainer = document.getElementById('sakuraContainer');
+            const numberOfPetals = 20;
+            
+            for (let i = 0; i < numberOfPetals; i++) {
+                const sakura = document.createElement('div');
+                sakura.className = 'sakura';
+                sakura.innerHTML = '🌸';
+                
+                // ランダムな位置とアニメーション
+                sakura.style.left = Math.random() * 100 + '%';
+                sakura.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                sakura.style.animationDelay = Math.random() * 5 + 's';
+                
+                sakuraContainer.appendChild(sakura);
+            }
+        }
+        
+        // ページ読み込み時に桜を生成
+        window.addEventListener('load', createSakura);
+        
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .story-text p, .teaching-content p').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.episode-card, .character-card, .teaching-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

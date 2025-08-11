@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネイティブアメリカン神話 - 世界神話探索者</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* ネイティブアメリカン風装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(0, 184, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル - ネイティブアメリカン風 */
+        .header {
+            background: linear-gradient(135deg, #00b8d4 0%, #8b4513 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 184, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* 部族シンボル装飾 */
+        .header::before {
+            content: '🦅🐺🐻🦬';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #87ceeb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .tribal-symbols {
+            font-size: 1.5rem;
+            color: #87ceeb;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            letter-spacing: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーションバー */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #00b8d4;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* イントロセクション */
+        .intro {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0, 184, 212, 0.2);
+        }
+
+        .intro h2 {
+            color: #00b8d4;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 部族グリッド */
+        .tribes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tribe-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tribe-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00b8d4, #8b4513, #00b8d4);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .tribe-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .tribe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 184, 212, 0.3);
+        }
+
+        .tribe-card h3 {
+            color: #00b8d4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .tribe-info {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tribe-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .tribe-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tribe-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #00b8d4 0%, #8b4513 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tribe-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 212, 0.4);
+        }
+
+        /* 特徴セクション */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #00b8d4;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(0, 184, 212, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 184, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 184, 212, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #00b8d4;
+            margin-bottom: 0.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 関連物語 */
+        .related-works {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+        }
+
+        .related-works h2 {
+            color: #00b8d4;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .story-card {
+            background: rgba(0, 184, 212, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-card:hover {
+            transform: translateY(-3px);
+            background: rgba(0, 184, 212, 0.2);
+        }
+
+        .story-card h4 {
+            color: #00b8d4;
+            margin-bottom: 0.5rem;
+        }
+
+        .story-card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .tribes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* アニメーション効果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tribe-card:nth-child(1) { animation-delay: 0.1s; }
+        .tribe-card:nth-child(2) { animation-delay: 0.2s; }
+        .tribe-card:nth-child(3) { animation-delay: 0.3s; }
+        .tribe-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* 風エフェクト */
+        .wind-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .wind-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 184, 212, 0.3), transparent);
+            animation: wind 8s linear infinite;
+        }
+
+        @keyframes wind {
+            from {
+                transform: translateX(-100vw);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        /* ドリームキャッチャー装飾 */
+        .dreamcatcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.1;
+            z-index: 0;
+            animation: sway 6s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 風のエフェクト -->
+    <div class="wind-lines" id="windLines"></div>
+    
+    <!-- ドリームキャッチャー装飾 -->
+    <div class="dreamcatcher">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="35" fill="none" stroke="rgba(0, 184, 212, 0.5)" stroke-width="2"/>
+            <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(0, 184, 212, 0.3)" stroke-width="1"/>
+            <line x1="30" y1="30" x2="70" y2="70" stroke="rgba(0, 184, 212, 0.3)" stroke-width="1"/>
+            <line x1="70" y1="30" x2="30" y2="70" stroke="rgba(0, 184, 212, 0.3)" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="tribal-symbols">🦅 🐺 🐻 🦬</div>
+            <h1>ネイティブアメリカン神話</h1>
+            <p>聖なる大地と精霊たちの物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーションバー -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #00b8d4; text-decoration: none; font-size: 1.5rem;">🏹 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="#intro">はじめに</a></li>
+                <li><a href="#tribes">部族と伝統</a></li>
+                <li><a href="#features">神話の特徴</a></li>
+                <li><a href="#stories">物語一覧</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <!-- 紹介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>ネイティブアメリカン神話について</h2>
+            <p>
+                ネイティブアメリカンの神話は、北アメリカ大陸に数万年にわたって住み続けてきた先住民族の豊かな精神的伝統です。500を超える部族がそれぞれ独自の言語、文化、そして神話を持ち、口承によって世代から世代へと伝えられてきました。これらの物語は単なる娯楽ではなく、部族のアイデンティティ、価値観、そして自然との関係を表現した聖なる教えでもあります。
+            </p>
+            <p>
+                グレート・スピリット（偉大なる精霊）、コヨーテやカラスなどのトリックスター、サンダーバード、ホワイト・バッファロー・ウーマンなど、多様な神々と精霊が登場します。これらの神話は、人間と自然の調和、すべての生命の相互関係、そして大地への敬意という共通のテーマを持ちながら、地域や部族によって豊かな多様性を示しています。
+            </p>
+        </section>
+
+        <!-- 部族と伝統 -->
+        <section id="tribes">
+            <h2 style="text-align: center; color: #00b8d4; margin-bottom: 2rem; font-size: 2.5rem;">主要部族の神話伝統</h2>
+            <div class="tribes-grid">
+                <!-- ラコタ（スー族） -->
+                <div class="tribe-card fade-in">
+                    <h3>ラコタ・スー族</h3>
+                    <div class="tribe-info">地域：グレートプレーンズ | 聖なる動物：バッファロー</div>
+                    <div class="tribe-description">
+                        「ワカン・タンカ」（聖なる力）の概念を中心とした精神的世界観。ホワイト・バッファロー・ウーマンの教え、サンダー・ビーイング、そして聖なるパイプの物語など、大平原の生活と密接に結びついた神話を持つ。
+                    </div>
+                    <div class="tribe-links">
+                        <a href="great-spirit-story-ja.html" class="tribe-link">📖 神話を読む</a>
+                        <a href="#features" class="tribe-link">🎭 文化について</a>
+                    </div>
+                </div>
+
+                <!-- ナヴァホ -->
+                <div class="tribe-card fade-in">
+                    <h3>ナヴァホ（ディネ）</h3>
+                    <div class="tribe-info">地域：南西部 | 聖なる山々：四方位の山</div>
+                    <div class="tribe-description">
+                        四つの聖なる山に囲まれた土地での創世神話。第一の世界から現在の第五の世界への旅路、ホーリー・ピープル（聖なる人々）、そして砂絵や儀式と結びついた複雑で精緻な神話体系を持つ。
+                    </div>
+                    <div class="tribe-links">
+                        <a href="coyote-creation-story-ja.html" class="tribe-link">📖 創世神話を読む</a>
+                        <a href="#features" class="tribe-link">🎨 砂絵の意味</a>
+                    </div>
+                </div>
+
+                <!-- イロコイ連盟 -->
+                <div class="tribe-card fade-in">
+                    <h3>イロコイ連盟</h3>
+                    <div class="tribe-info">地域：北東部 | 象徴：平和の樹</div>
+                    <div class="tribe-description">
+                        天界から舞い落ちた女性の創世神話、大地を支える巨大な亀、三人姉妹（トウモロコシ、豆、カボチャ）の教えなど。平和と統一の象徴である「偉大なる平和の法」と結びついた政治的・精神的な神話。
+                    </div>
+                    <div class="tribe-links">
+                        <a href="great-spirit-story-ja.html" class="tribe-link">📖 天女の降下を読む</a>
+                        <a href="#features" class="tribe-link">🕊️ 平和の教え</a>
+                    </div>
+                </div>
+
+                <!-- ホピ族 -->
+                <div class="tribe-card fade-in">
+                    <h3>ホピ族</h3>
+                    <div class="tribe-info">地域：南西部 | 聖なる存在：カチナ</div>
+                    <div class="tribe-description">
+                        四つの世界を通じた人類の旅路、カチナ精霊たちとの関係、そして予言の石板が語る未来への警告。農業と儀式が一体となった循環的世界観と、地球への深い責任感を表現した神話。
+                    </div>
+                    <div class="tribe-links">
+                        <a href="thunderbird-legend-ja.html" class="tribe-link">📖 四つの世界を読む</a>
+                        <a href="#features" class="tribe-link">🎭 カチナ精霊</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特徴 -->
+        <section class="features" id="features">
+            <h2>ネイティブアメリカン神話の特徴</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <h3>母なる大地</h3>
+                    <p>地球は生きている存在として敬われ、すべての生命の源として大切にされる</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🦅</div>
+                    <h3>動物の精霊</h3>
+                    <p>すべての動物は精霊を持ち、人間に教えと力を与える存在として尊敬される</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h3>循環する時間</h3>
+                    <p>直線的でない時間概念。季節、世代、そして精神的な成長の循環</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👥</div>
+                    <h3>部族の絆</h3>
+                    <p>個人より共同体を重視し、祖先と未来の世代への責任を強調</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 関連物語 -->
+        <section class="related-works" id="stories">
+            <h2>主要な神話物語</h2>
+            <div class="story-grid">
+                <div class="story-card" onclick="window.location.href='great-spirit-story-ja.html'">
+                    <h4>グレート・スピリットの教え</h4>
+                    <p>偉大なる精霊の知恵</p>
+                </div>
+                <div class="story-card" onclick="window.location.href='coyote-creation-story-ja.html'">
+                    <h4>コヨーテの創造</h4>
+                    <p>トリックスターの物語</p>
+                </div>
+                <div class="story-card" onclick="window.location.href='thunderbird-legend-ja.html'">
+                    <h4>サンダーバード</h4>
+                    <p>嵐を呼ぶ巨大な鳥</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 聖なる大地の教えに耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // 風のエフェクト
+        function createWindLines() {
+            const container = document.getElementById('windLines');
+            
+            for (let i = 0; i < 8; i++) {
+                const line = document.createElement('div');
+                line.className = 'wind-line';
+                line.style.width = Math.random() * 300 + 100 + 'px';
+                line.style.top = Math.random() * 100 + '%';
+                line.style.animationDelay = Math.random() * 8 + 's';
+                line.style.animationDuration = Math.random() * 4 + 6 + 's';
+                container.appendChild(line);
+            }
+        }
+        
+        createWindLines();
+
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

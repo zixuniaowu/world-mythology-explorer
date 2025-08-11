@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パンドラの箱 - ギリシャ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #5f27cd 50%, #764ba2 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* オリュンポスの空 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(95, 39, 205, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #5f27cd 0%, #764ba2 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(95, 39, 205, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '📦 👩 🏛️ ⚡';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #e1bee7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #5f27cd;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(95, 39, 205, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #5f27cd;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #5f27cd;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(95, 39, 205, 0.2), rgba(118, 75, 162, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #5f27cd;
+        }
+
+        .divine-decree {
+            background: rgba(118, 75, 162, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(118, 75, 162, 0.3);
+            font-style: italic;
+        }
+
+        .divine-decree h4 {
+            color: #764ba2;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* パンドラの箱エフェクト */
+        .pandora-box {
+            position: fixed;
+            top: 30%;
+            right: 30px;
+            width: 150px;
+            height: 100px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: boxGlow 20s infinite;
+        }
+
+        @keyframes boxGlow {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            25% { opacity: 0.18; transform: scale(1.1); }
+            50% { opacity: 0.15; transform: scale(0.95); }
+            75% { opacity: 0.2; transform: scale(1.05); }
+        }
+
+        .evil-spirits {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .evil-spirit {
+            position: absolute;
+            font-size: 2rem;
+            animation: spiritEscape 15s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes spiritEscape {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hope-light {
+            position: fixed;
+            top: 40%;
+            left: 30px;
+            font-size: 4rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: hopeShine 12s infinite;
+        }
+
+        @keyframes hopeShine {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.3); }
+        }
+
+        .olympian-columns {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 100px;
+            opacity: 0.08;
+            z-index: 0;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- パンドラの箱 -->
+    <div class="pandora-box">
+        <svg viewBox="0 0 150 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- 箱の本体 -->
+            <rect x="25" y="40" width="100" height="50" rx="5" fill="rgba(95, 39, 205, 0.3)"/>
+            <!-- 箱の蓋 -->
+            <rect x="20" y="35" width="110" height="20" rx="5" fill="rgba(118, 75, 162, 0.3)"/>
+            <!-- 装飾模様 -->
+            <circle cx="75" cy="65" r="8" fill="rgba(255, 215, 0, 0.3)"/>
+            <rect x="70" y="60" width="10" height="10" fill="rgba(255, 215, 0, 0.2)"/>
+            <!-- 鍵穴 -->
+            <circle cx="75" cy="65" r="3" fill="rgba(0, 0, 0, 0.5)"/>
+        </svg>
+    </div>
+    
+    <!-- 悪霊たち -->
+    <div class="evil-spirits" id="evilSpirits"></div>
+    
+    <!-- 希望の光 -->
+    <div class="hope-light">✨</div>
+    
+    <!-- オリンピアの柱 -->
+    <div class="olympian-columns">
+        <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+            <g fill="rgba(95, 39, 205, 0.2)">
+                <rect x="50" y="20" width="20" height="80"/>
+                <rect x="120" y="15" width="20" height="85"/>
+                <rect x="190" y="25" width="20" height="75"/>
+                <rect x="260" y="20" width="20" height="80"/>
+                <rect x="330" y="18" width="20" height="82"/>
+            </g>
+            <!-- 柱頭 -->
+            <g fill="rgba(118, 75, 162, 0.2)">
+                <rect x="40" y="15" width="40" height="8"/>
+                <rect x="110" y="10" width="40" height="8"/>
+                <rect x="180" y="20" width="40" height="8"/>
+                <rect x="250" y="15" width="40" height="8"/>
+                <rect x="320" y="13" width="40" height="8"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>パンドラの箱</h1>
+            <p>Pandora's Box - 希望と絶望の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #5f27cd; text-decoration: none; font-size: 1.5rem;">🏛️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="greek-mythology-index-ja.html">ギリシャ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>好奇心が解き放った災い</h2>
+            
+            <p>
+                パンドラの箱の物語は、ギリシャ神話の中でも最も有名で哲学的な寓話の一つです。この物語は、人類に知識と災いがもたらされた起源を説明するとともに、希望の重要性と人間の好奇心の力について深い洞察を与えています。ヘシオドスの『仕事と日々』と『神統記』に記録されたこの神話は、なぜ人間の世界に苦悩があるのか、そして同時になぜ希望が存在するのかを説明する物語として、数千年にわたって人々に愛され続けています。
+            </p>
+
+            <h3>プロメテウスの反逆</h3>
+            <p>
+                物語の始まりは、ティタン族のプロメテウスの反逆にあります。プロメテウスは人類を深く愛し、まだ原始的な生活を送っていた人間たちを憐れに思いました。彼らは寒さに震え、暗闇を恐れ、野獣に怯えながら生きていました。プロメテウスは人間たちを助けるため、神々の領域から火を盗み、人類に与えました。
+            </p>
+
+            <p>
+                この火は単なる物理的な火ではありませんでした。それは知識、技術、文明の象徴でした。火を得た人間たちは、道具を作り、食べ物を調理し、金属を加工し、芸術を創造できるようになりました。人類は急速に発展し、神々に近い存在となり始めました。
+            </p>
+
+            <p>
+                しかし、この行為はオリュンポスの神々、特に主神ゼウスの怒りを買いました。ゼウスは人間が神々と同等の力を持つことを恐れ、プロメテウスの行為を神々への重大な背信と見なしました。「人間には火は必要ない。彼らは神々に従属すべき存在だ」とゼウスは激怒しました。
+            </p>
+
+            <div class="divine-decree">
+                <h4>ゼウスの宣告</h4>
+                <p>
+                「プロメテウスよ、汝の慈悲深い行為は神々の秩序を乱した。人間に与えた恵みに等しい災いを、我は人間に与えよう。そして汝自身にも、永遠の苦痛を与える」
+                </p>
+            </div>
+
+            <h3>美しき災いの創造</h3>
+            <p>
+                ゼウスは人類への罰として、特別な計画を立てました。彼は鍛冶神ヘパイストスに命じて、粘土から完璧に美しい女性を作らせました。この女性には、各々の神が特別な贈り物を与えました。アフロディテは美貌を、アテナは知恵と手芸の技を、ヘルメスは言葉の巧みさを、そして最後にゼウス自身が好奇心という特性を与えました。
+            </p>
+
+            <p>
+                この女性は「パンドラ」（すべての贈り物）と名付けられました。表面的には、彼女は神々からの素晴らしい贈り物のように見えました。しかし、ゼウスの真の意図は別にありました。パンドラの美しさと魅力は、人間を魅了し、彼女を受け入れさせるための罠だったのです。
+            </p>
+
+            <p>
+                ゼウスはさらに、美しく装飾された箱（実際には甕／ピトス）をパンドラに渡しました。「この箱は絶対に開けてはならない」とゼウスは厳しく命じました。しかし、彼は同時にパンドラに強烈な好奇心を植え付けていました。これは巧妙な罠でした。禁止されればされるほど、好奇心は強くなるという人間の心理を利用していたのです。
+            </p>
+
+            <h3>エピメテウスとの結婚</h3>
+            <p>
+                パンドラは、プロメテウスの弟エピメテウスのもとに送られました。エピメテウスは「後から考える者」という意味で、兄とは対照的に軽率で後先を考えない性格でした。プロメテウスは弟に「ゼウスからの贈り物は受け取るな」と警告していましたが、パンドラの美しさに魅了されたエピメテウスは、兄の警告を忘れて彼女と結婚してしまいました。
+            </p>
+
+            <p>
+                パンドラはエピメテウスと幸せに暮らしました。彼女は賢く、美しく、優しい妻でした。しかし、家の中には常にあの神秘的な箱がありました。ゼウスの警告にもかかわらず、日を追うごとにパンドラの好奇心は強くなっていきました。箱の中には何が入っているのか、なぜ開けてはいけないのか、疑問は膨らみ続けました。
+            </p>
+
+            <h3>運命の瞬間</h3>
+            <p>
+                ある日、エピメテウスが外出中に、パンドラはついに誘惑に負けてしまいました。「少しだけ覗いてみるだけなら…」と自分に言い聞かせながら、震える手で箱の蓋に触れました。最初はわずかに開けるつもりでしたが、蓋を持ち上げた瞬間、箱の中から恐ろしい力が噴出しました。
+            </p>
+
+            <p>
+                箱から飛び出してきたのは、人類が今まで経験したことのない災いでした。病気、老い、死、戦争、憎しみ、嫉妬、貪欲、絶望…これらすべてが黒い霧となって世界中に広がっていきました。パンドラは慌てて蓋を閉めようとしましたが、もう遅すぎました。災いたちは既に世界の隅々まで飛び散っていたのです。
+            </p>
+
+            <p>
+                パンドラは自分の行為を深く後悔しました。夫のエピメテウスが帰宅すると、彼女は泣きながら起こったことを告白しました。エピメテウスも最初は妻を責めましたが、やがて彼女の苦悩を理解し、共に悲しみました。世界は一変していました。人々は病気になり、争い、苦しむようになったのです。
+            </p>
+
+            <div class="highlight">
+                パンドラの嘆き：<br>
+                「私の好奇心が、なんと恐ろしい結果をもたらしたのでしょう。人類の幸福な時代を終わらせてしまいました。でも、私は知りたかっただけなのです…知ることがそんなに罪深いことなのでしょうか」
+            </div>
+
+            <h3>希望という最後の贈り物</h3>
+            <p>
+                しかし、物語はここで終わりません。数日後、パンドラは箱の中からかすかな音を聞きました。まだ何かが中に残っているようでした。恐る恐る箱を開けると、美しく輝く小さな存在が飛び出してきました。それは「希望」でした。
+            </p>
+
+            <p>
+                実は、ゼウスは完全に人類を絶望に陥れるつもりはありませんでした。災いと共に希望も箱に入れていたのです。これは慈悲なのか、それとも更なる罰なのか、議論は分かれるところです。なぜなら希望があるからこそ、人間は苦しみながらも生き続けなければならないからです。
+            </p>
+
+            <p>
+                希望が世界に広がると、苦しんでいた人々の心に光が灯りました。病気や災難は続きましたが、人々は「明日はもっと良くなるかもしれない」「いつか幸せが戻ってくるかもしれない」と考えるようになりました。希望は人間に困難を乗り越える力を与え、絶望の中でも生きる意味を見つけさせました。
+            </p>
+
+            <h3>パンドラのその後</h3>
+            <p>
+                パンドラとエピメテウスは、災いを世界にもたらした責任を感じながらも、希望という貴重な贈り物を人類に与えたことも理解していました。彼らは長い生涯を通じて、人間の本質について深く考え続けました。
+            </p>
+
+            <p>
+                パンドラは後に、人類最初の女性として、すべての女性の祖となったと言われています。彼女の物語は、女性の好奇心や知識欲が必ずしも悪いものではなく、時には新しい発見や進歩をもたらすものだという解釈もされています。
+            </p>
+
+            <h3>現代への教訓</h3>
+            <p>
+                パンドラの箱の物語は、現代でも多くの意味を持ち続けています。科学技術の発展、遺伝子工学、人工知能、核エネルギーなど、人類の「箱を開ける」行為は続いています。新しい知識や技術は常に両刃の剣であり、恩恵と危険を同時にもたらします。
+            </p>
+
+            <p>
+                しかし、この物語が教えてくれるのは、困難な状況でも希望を捨ててはいけないということです。人間の好奇心や知識欲は時として災いをもたらしますが、同時にそれは人類の進歩の原動力でもあります。重要なのは、責任を持って行動し、希望を失わないことなのです。
+            </p>
+
+            <div class="highlight">
+                パンドラの箱が現代に伝えること：<br>
+                知識は力であり、力には責任が伴う。好奇心は人間の本質的な特性であり、完全に抑制することはできない。災いと恩恵は表裏一体であり、新しい発見には常にリスクが伴う。しかし、どんな困難な状況でも希望は存在し、それが人間を前進させる。そして過ちを犯したとしても、償いと成長の機会は常に残されている。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 希望の光に導かれましょう。</p>
+    </footer>
+
+    <script>
+        // 悪霊エフェクト
+        function createEvilSpirits() {
+            const container = document.getElementById('evilSpirits');
+            const spirits = ['👹', '💀', '⚡', '🌪️', '🔥', '❄️'];
+            
+            function addSpirit() {
+                const spirit = document.createElement('div');
+                spirit.className = 'evil-spirit';
+                spirit.innerHTML = spirits[Math.floor(Math.random() * spirits.length)];
+                spirit.style.left = Math.random() * 100 + '%';
+                spirit.style.animationDelay = Math.random() * 5 + 's';
+                spirit.style.animationDuration = (12 + Math.random() * 8) + 's';
+                container.appendChild(spirit);
+                
+                setTimeout(() => {
+                    if (container.contains(spirit)) {
+                        container.removeChild(spirit);
+                    }
+                }, 15000);
+            }
+            
+            // 定期的に悪霊を追加
+            setInterval(addSpirit, 3000);
+            
+            // 初期の悪霊を追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addSpirit, i * 2000);
+            }
+        }
+        
+        createEvilSpirits();
+    </script>
+</body>
+</html>

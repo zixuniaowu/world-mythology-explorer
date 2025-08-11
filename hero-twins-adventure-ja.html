@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英雄双子の冒険 - アステカ・マヤ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #541690 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 冥界の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #ffc107 0%, #8a2be2 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '👥 🏹 💀 🌙';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff8dc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffc107;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ffc107;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ffc107;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(138, 43, 226, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .trial-section {
+            background: rgba(138, 43, 226, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+        }
+
+        /* 球戯のエフェクト */
+        .ballcourt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.3), rgba(138, 43, 226, 0.3));
+            border-radius: 10px;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .bouncing-ball {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffc107, #8a2be2);
+            border-radius: 50%;
+            z-index: 1;
+            animation: ballBounce 3s infinite;
+        }
+
+        @keyframes ballBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            25% { transform: translateX(-30%) translateY(-50px); }
+            50% { transform: translateX(0%) translateY(-100px); }
+            75% { transform: translateX(30%) translateY(-50px); }
+        }
+
+        .underworld-spirits {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spirit {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: spiritMove 20s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes spiritMove {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .twins-symbol {
+            position: fixed;
+            top: 15%;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: twinsRotate 12s infinite;
+        }
+
+        @keyframes twinsRotate {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 球戯場 -->
+    <div class="ballcourt"></div>
+    <div class="bouncing-ball"></div>
+    
+    <!-- 冥界の霊 -->
+    <div class="underworld-spirits" id="underworldSpirits"></div>
+    
+    <!-- 双子のシンボル -->
+    <div class="twins-symbol">👥</div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>英雄双子の冒険</h1>
+            <p>Hero Twins Adventure - ウナプーとイシュバランケの物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffc107; text-decoration: none; font-size: 1.5rem;">👥 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aztec-maya-mythology-index-ja.html">アステカ・マヤ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>シバルバへの挑戦</h2>
+            
+            <p>
+                マヤの聖典『ポポル・ヴー』に記された、最も有名で壮大な冒険譚の一つです。英雄双子ウナプー（フン・アハウ）とイシュバランケ（イシュバランケ）は、父と叔父の仇を討つため、死の国シバルバに挑みました。この物語は、生と死、光と闇、知恵と力の永遠の戦いを描いています。
+            </p>
+
+            <h3>双子の誕生</h3>
+            <p>
+                昔、フン・ウナプーとヴクブ・ウナプーという兄弟がいました。彼らは毎日球戯（ulama）に興じていましたが、その騒音が冥界シバルバの王たちを怒らせました。シバルバの王たちは兄弟を冥界に呼び寄せ、様々な試練を与えた末、二人を殺してしまいました。
+            </p>
+
+            <p>
+                フン・ウナプーの首は、シバルバの木に吊るされました。その木は美しい実をつけるようになりましたが、誰も近づいてはいけないと命じられていました。ところが、好奇心旺盛な少女イシュキクが木に近づき、首から唾を手に受けました。その瞬間、彼女は身籠もりました。
+            </p>
+
+            <p>
+                生まれてきた双子がウナプーとイシュバランケでした。彼らは父の血を受け継ぎ、球戯の天才であり、狩りの名手でもありました。しかし何より、知恵と勇気に満ちていました。
+            </p>
+
+            <div class="highlight">
+                双子の特徴：<br>
+                ウナプー = 太陽、昼、創造、生命<br>
+                イシュバランケ = 月、夜、破壊、再生<br>
+                二人で完全なる調和を表している
+            </div>
+
+            <h3>シバルバからの招待</h3>
+            <p>
+                双子が成長すると、彼らも父たちと同様に毎日球戯を楽しみました。再び騒音に悩まされたシバルバの王たちは、双子を冥界に呼び出しました。しかし今度は、双子の方が準備万端でした。
+            </p>
+
+            <p>
+                祖母に「私たちがシバルバから戻らなかったら、家の中央にトウモロコシを植えてください。それが枯れたら私たちは死に、再び緑になったら生き返ったとわかります」と告げて、双子は冥界への険しい道を歩み始めました。
+            </p>
+
+            <div class="trial-section">
+                <h4>シバルバへの道のり</h4>
+                <p>
+                川の急流を越え、血の川を渡り、膿の川を通り、針のような棘の道を歩き、最後に分かれ道で正しい方向を選ばなければなりません。多くの魂がここで道に迷い、永遠にシバルバをさまようのです。
+                </p>
+            </div>
+
+            <h3>シバルバでの試練</h3>
+            <p>
+                シバルバに着いた双子を待っていたのは、12人の死の王たちでした：病気の王、飢餓の王、恐怖の王、破壊の王、血の王、膿の王、黄疸の王、骨の王、そして最も強力な「ワン・デス」と「セヴン・デス」。
+            </p>
+
+            <p>
+                <strong>第一の試練 - 暗闇の家</strong><br>
+                双子は松明とタバコを渡され、「一晩中火を保ち続けよ。しかし松明もタバコも燃やし尽くしてはならない」と命じられました。双子は松明の先に赤いオウムの尾羽を、タバコの先に蛍を付けて、火が燃えているように見せかけました。
+            </p>
+
+            <p>
+                <strong>第二の試練 - 剃刀の家</strong><br>
+                無数の鋭いナイフが宙に舞う部屋で一夜を過ごさなければなりません。双子はナイフたちに話しかけ、「我々を殺してしまったら、もう動物の肉を切ることができなくなるぞ」と説得し、ナイフたちを静めました。
+            </p>
+
+            <p>
+                <strong>第三の試練 - 寒氷の家</strong><br>
+                凍える寒さの部屋で、双子は互いに体を温め合い、精神力で寒さに打ち勝ちました。
+            </p>
+
+            <p>
+                <strong>第四の試練 - ジャガーの家</strong><br>
+                飢えたジャガーたちがうごめく部屋で、双子は骨を投げ与えながら「我々の骨ではなく、これらの骨で満足せよ」と交渉しました。
+            </p>
+
+            <div class="highlight">
+                「力だけでは真の勝利は得られない。知恵と交渉、そして相手を理解することが最も強力な武器である」- 英雄双子の教え
+            </div>
+
+            <h3>最終決戦と復活</h3>
+            <p>
+                すべての試練を乗り越えた双子でしたが、最後の試練で一度は敗れました。しかし彼らには秘密の計画がありました。死を予見していた双子は、「我々を殺した後は、骨を粉にして川に流してほしい」と頼んでおいたのです。
+            </p>
+
+            <p>
+                川に流された骨の粉は、やがて魚となり、再び人の形を取り戻しました。双子は老人の姿に変装してシバルバに戻り、不思議な踊りを披露しました。人を殺して再び生き返らせる、建物を燃やして瞬時に再建する、そんな魔法の踊りでした。
+            </p>
+
+            <p>
+                感動したシバルバの王たちは「我々にもその踊りをしてくれ！我々を殺して、また生き返らせてみよ！」と頼みました。双子は王たちを殺しましたが、生き返らせませんでした。こうして冥界の王たちを倒し、父と叔父の仇を討ったのです。
+            </p>
+
+            <h3>天への昇天</h3>
+            <p>
+                任務を完了した双子は、地上に戻りました。家で待っていた祖母は、枯れていたトウモロコシが再び青々と育っているのを見て、双子の復活を知りました。
+            </p>
+
+            <p>
+                その後、双子は天に昇り、ウナプーは太陽に、イシュバランケは月になりました。彼らは今でも空から人類を見守り、生と死の循環、昼と夜の交代を司っています。
+            </p>
+
+            <div class="highlight">
+                英雄双子伝説が教えてくれること：<br>
+                死は終わりではなく、新しい始まりである。困難に直面した時は、力だけでなく知恵を使え。兄弟や仲間との協力があれば、どんな試練も乗り越えられる。そして真の英雄は、自分のためだけでなく、すべての人々のために戦う。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 英雄双子の勇気に学びましょう。</p>
+    </footer>
+
+    <script>
+        // 冥界の霊エフェクト
+        function createUnderworldSpirits() {
+            const container = document.getElementById('underworldSpirits');
+            const spirits = ['💀', '👻', '🌙', '⭐', '💫'];
+            
+            function addSpirit() {
+                const spirit = document.createElement('div');
+                spirit.className = 'spirit';
+                spirit.innerHTML = spirits[Math.floor(Math.random() * spirits.length)];
+                spirit.style.left = Math.random() * 100 + '%';
+                spirit.style.animationDelay = Math.random() * 10 + 's';
+                spirit.style.animationDuration = (15 + Math.random() * 15) + 's';
+                container.appendChild(spirit);
+                
+                setTimeout(() => {
+                    if (container.contains(spirit)) {
+                        container.removeChild(spirit);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に霊を追加
+            setInterval(addSpirit, 3000);
+            
+            // 初期の霊を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addSpirit, i * 1500);
+            }
+        }
+        
+        createUnderworldSpirits();
+    </script>
+</body>
+</html>

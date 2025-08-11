@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ペレ火山の女神 - ポリネシア神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #8B0000 50%, #FF6347 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 火山の炎 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 99, 71, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FF6347 0%, #8B0000 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 99, 71, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌋 🔥 💎 ⚡';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffe4e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF6347;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 99, 71, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF6347;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF6347;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 99, 71, 0.2), rgba(139, 0, 0, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF6347;
+        }
+
+        .hula-chant {
+            background: rgba(139, 0, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(139, 0, 0, 0.3);
+            font-style: italic;
+        }
+
+        .hula-chant h4 {
+            color: #8B0000;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 火山の炎エフェクト */
+        .volcanic-fire {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: volcanoRumble 8s infinite;
+        }
+
+        @keyframes volcanoRumble {
+            0%, 100% { opacity: 0.1; transform: translateY(0px); }
+            25% { opacity: 0.2; transform: translateY(-10px); }
+            50% { opacity: 0.15; transform: translateY(0px); }
+            75% { opacity: 0.25; transform: translateY(-5px); }
+        }
+
+        .lava-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .lava-drop {
+            position: absolute;
+            font-size: 2rem;
+            animation: lavaFall 12s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes lavaFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .kilauea-crater {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: craterGlow 20s infinite;
+        }
+
+        @keyframes craterGlow {
+            0%, 100% { opacity: 0.05; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.15; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .obsidian-shards {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            font-size: 4rem;
+            opacity: 0.12;
+            z-index: 1;
+            animation: shardsGlimmer 15s infinite;
+        }
+
+        @keyframes shardsGlimmer {
+            0%, 100% { opacity: 0.1; transform: rotate(0deg); }
+            25% { opacity: 0.18; transform: rotate(15deg); }
+            50% { opacity: 0.12; transform: rotate(0deg); }
+            75% { opacity: 0.2; transform: rotate(-15deg); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 火山の炎 -->
+    <div class="volcanic-fire">
+        <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- キラウエア火山 -->
+            <path d="M20,200 L30,180 Q35,170 40,160 L45,150 Q50,130 55,150 L60,160 Q65,170 70,180 L80,200 Z" 
+                  fill="rgba(139, 0, 0, 0.3)"/>
+            <!-- 溶岩流 -->
+            <path d="M45,150 Q50,140 55,130 Q60,125 65,130 Q70,140 75,150" 
+                  stroke="rgba(255, 99, 71, 0.4)" stroke-width="3" fill="none"/>
+            <!-- 噴煙 -->
+            <circle cx="50" cy="120" r="8" fill="rgba(139, 0, 0, 0.2)"/>
+            <circle cx="55" cy="110" r="10" fill="rgba(139, 0, 0, 0.1)"/>
+            <circle cx="60" cy="100" r="12" fill="rgba(139, 0, 0, 0.1)"/>
+        </svg>
+    </div>
+    
+    <!-- 溶岩の雫 -->
+    <div class="lava-flow" id="lavaFlow"></div>
+    
+    <!-- キラウエア火口 -->
+    <div class="kilauea-crater">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- 火口 -->
+            <ellipse cx="200" cy="150" rx="150" ry="100" fill="none" stroke="rgba(255, 99, 71, 0.3)" stroke-width="3"/>
+            <ellipse cx="200" cy="150" rx="100" ry="60" fill="none" stroke="rgba(139, 0, 0, 0.3)" stroke-width="2"/>
+            <ellipse cx="200" cy="150" rx="50" ry="30" fill="rgba(255, 99, 71, 0.2)"/>
+            <!-- 溶岩湖 -->
+            <ellipse cx="200" cy="160" rx="30" ry="18" fill="rgba(255, 99, 71, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- オブシディアンの破片 -->
+    <div class="obsidian-shards">💎</div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ペレ火山の女神</h1>
+            <p>Pele Volcano Goddess - キラウエアの炎の主</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF6347; text-decoration: none; font-size: 1.5rem;">🌋 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="polynesian-mythology-index-ja.html">ポリネシア神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>燃え盛る女神の愛と怒り</h2>
+            
+            <p>
+                ペレ（Pele）は、ハワイ諸島で最も恐れられ、同時に最も愛される女神です。火山、溶岩、稲妻、そして火の全てを司る彼女は、ハワイ島のキラウエア火山を住処とし、そこから島々を創造し続けています。ペレは創造と破壊の女神であり、激情的で嫉妬深い性格で知られていますが、同時に深い愛情と保護の心を持つ複雑な神格です。現在でも多くのハワイの人々が彼女への敬意を表し、キラウエアを訪れる際には適切な儀式を行います。
+            </p>
+
+            <h3>タヒチからの旅立ち</h3>
+            <p>
+                ペレの物語は、遥か南のタヒチから始まります。彼女は海の神カナロア（タンガロア）の娘として生まれましたが、激しい気性のため、故郷で問題を起こし続けていました。特に、姉のナマカ・オ・カハイ（海の女神）との激しい対立が絶えませんでした。
+            </p>
+
+            <p>
+                ついに姉との争いが頂点に達した時、ペレは故郷を離れることを決意しました。彼女は神聖なカヌーに乗り、忠実な兄弟たちと共に北へ向かって旅立ちました。その中には、フラダンスの神ヒイアカや、サメの神カモホアリイも含まれていました。
+            </p>
+
+            <p>
+                長い航海の末、ペレたちはハワイ諸島に到達しました。ペレは各島で自分の住処となる火山を探しましたが、姉ナマカが追いかけてきて、ペレの火を海水で消してしまいました。カウアイ島、オアフ島、マウイ島と、次々と住処を追われたペレは、ついにハワイ島（ビッグアイランド）のキラウエア火山にたどり着きました。
+            </p>
+
+            <div class="hula-chant">
+                <h4>ペレへの古謡（チャント）</h4>
+                <p>
+                「ペレ・エ、炎の女王よ<br>
+                キラウエアの深淵より立ち上がる<br>
+                あなたの息は溶岩となり<br>
+                あなたの涙は新しい大地となる<br>
+                アロハ・アクア、神なる炎よ」
+                </p>
+            </div>
+
+            <h3>キラウエアの女主人</h3>
+            <p>
+                キラウエア火山の火口（ハレマウマウ）にたどり着いたペレは、ここを永遠の住処と定めました。この火口は「ペレの家」と呼ばれ、現在でも活発に活動を続けています。ペレはここから新しい土地を創造し、ハワイ諸島を拡大し続けています。
+            </p>
+
+            <p>
+                ペレの創造活動は壮大でした。彼女の息は熱い溶岩となって流れ出し、海に触れると新しい土地となりました。彼女の髪は火山ガラス（ペレの髪）となって風に舞い、彼女の涙は美しいオリビン（かんらん石）となって海岸を彩りました。
+            </p>
+
+            <p>
+                しかし、ペレの力は創造だけではありませんでした。彼女が怒ると大噴火が起こり、溶岩流が森や村を飲み込みました。人々は彼女の気持ちを鎮めるために、フラを踊り、歌を歌い、供物を捧げました。特に、オヘロベリー（ハワイの聖なる果実）とジンを火口に投げ込む儀式は、現在でも行われています。
+            </p>
+
+            <h3>ロヒアウとの悲恋</h3>
+            <p>
+                ペレの最も有名な恋愛物語は、カウアイ島の美しい王子ロヒアウとの悲恋です。ある夜、ペレは霊魂の姿でカウアイ島を訪れ、フラを踊るロヒアウに恋をしました。彼の踊りはあまりにも美しく、ペレの心を完全に奪いました。
+            </p>
+
+            <p>
+                ペレは最愛の妹ヒイアカに頼みました：「カウアイ島に行って、ロヒアウを連れてきて。でも絶対に彼に愛の印のキスをしてはいけない」ヒイアカは姉の頼みを引き受け、長い旅に出発しました。
+            </p>
+
+            <p>
+                ヒイアカの旅は困難に満ちていました。道中で多くの魔物と戦い、様々な試練を乗り越えました。その間、ロヒアウとヒイアカは深い友情を育みましたが、ペレとの約束を守り、恋人にはなりませんでした。
+            </p>
+
+            <p>
+                しかし、旅が長引いたため、ペレは二人が裏切ったと誤解しました。嫉妬に狂ったペレは、ヒイアカが最も愛する友人ホポエを溶岩で殺し、美しい森を燃やし尽くしました。これを知ったヒイアカは絶望し、怒りに駆られて、ペレの見ている前でロヒアウにキスをしました。
+            </p>
+
+            <p>
+                ペレの怒りは頂点に達し、ロヒアウを溶岩で焼き殺してしまいました。しかし、愛する人を失った悲しみと、妹への後悔で、ペレも深く苦しみました。最終的に、ペレはロヒアウの魂を蘇らせ、彼をマウナ・ロア山の守護神としました。
+            </p>
+
+            <h3>現代のペレ信仰</h3>
+            <p>
+                現在でも、ペレはハワイの人々にとって生きた女神です。キラウエア火山が噴火する時、多くの人が「ペレが活動している」と表現します。観光客の中には、溶岩石を持ち帰る人がいますが、これは「ペレの呪い」をもたらすと信じられており、毎年多くの石が郵送で返却されています。
+            </p>
+
+            <p>
+                フラダンスの多くは、ペレの物語を表現したものです。踊り手たちは手の動きで溶岩の流れを表現し、体の動きで火山の爆発を表現します。これらの踊りは単なる芸能ではなく、ペレへの祈りと敬意の表現でもあります。
+            </p>
+
+            <p>
+                科学者たちもペレを敬っています。ハワイ火山観測所の研究者たちは、調査の前に必ずペレに敬意を表し、許可を求める儀式を行います。彼らは科学とスピリチュアリティが共存できることを示しています。
+            </p>
+
+            <div class="highlight">
+                ペレの警告：<br>
+                「私の島から何も取ってはならない<br>
+                私の火から何も盗んではならない<br>
+                敬意を払って訪れる者は歓迎する<br>
+                しかし貪欲な者は呪われるであろう<br>
+                私は創造の女神、破壊の女神<br>
+                私の力を侮る者はいない」
+            </div>
+
+            <h3>気候変動時代のペレ</h3>
+            <p>
+                近年、ペレの活動は気候変動や海面上昇とも関連づけて語られています。2018年の大噴火では、700以上の家屋が溶岩に飲み込まれましたが、同時に新たな土地も創造されました。この「破壊と創造」の循環は、ペレの本質を表していると多くの人が感じています。
+            </p>
+
+            <p>
+                また、ペレの物語は環境保護の重要性を教えてくれます。彼女が愛した美しい森や海岸を守ること、自然との調和を保つことの大切さを、現代の人々に思い起こさせています。
+            </p>
+
+            <h3>芸術と文学への影響</h3>
+            <p>
+                ペレは多くの芸術作品のインスピレーションとなっています。ハワイの画家たちは彼女を情熱的な女性として描き、詩人たちは彼女の愛と怒りを歌います。現代の映画や小説にも頻繁に登場し、その魅力は世界中に広がっています。
+            </p>
+
+            <p>
+                特に、女性の力強さと独立性の象徴として、ペレは現代のフェミニスト運動でも注目されています。彼女は誰にも支配されず、自分の意志で行動し、愛と創造の力を持つ女神として、多くの女性たちのロールモデルとなっています。
+            </p>
+
+            <div class="highlight">
+                ペレの物語が現代に伝えること：<br>
+                真の力は破壊ではなく創造にある。感情的な衝動も、適切にコントロールすれば創造的な力となる。愛は時に盲目で破壊的だが、それでも人生で最も価値あるもの。自然は恵みをもたらすと同時に厳しい試練も与える。女性は受け身な存在ではなく、世界を変える力を持つ。そして真の美しさは外見ではなく、内なる情熱と創造力にある。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ペレの炎に導かれましょう。</p>
+    </footer>
+
+    <script>
+        // 溶岩流エフェクト
+        function createLavaFlow() {
+            const container = document.getElementById('lavaFlow');
+            const lavaElements = ['🔥', '💎', '⚡', '🌋'];
+            
+            function addLavaDrops() {
+                const lava = document.createElement('div');
+                lava.className = 'lava-drop';
+                lava.innerHTML = lavaElements[Math.floor(Math.random() * lavaElements.length)];
+                lava.style.left = Math.random() * 100 + '%';
+                lava.style.animationDelay = Math.random() * 5 + 's';
+                lava.style.animationDuration = (10 + Math.random() * 6) + 's';
+                lava.style.fontSize = (1.5 + Math.random()) + 'rem';
+                container.appendChild(lava);
+                
+                setTimeout(() => {
+                    if (container.contains(lava)) {
+                        container.removeChild(lava);
+                    }
+                }, 12000);
+            }
+            
+            // 定期的に溶岩を追加
+            setInterval(addLavaDrops, 2000);
+            
+            // 初期の溶岩を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addLavaDrops, i * 1000);
+            }
+        }
+        
+        createLavaFlow();
+    </script>
+</body>
+</html>

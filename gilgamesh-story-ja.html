@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ギルガメシュ叙事詩 - メソポタミア神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #8d6e63 0%, #d7ccc8 50%, #ffc107 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 古代メソポタミアの雰囲気 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(141, 110, 99, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 193, 7, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #8d6e63 0%, #ffc107 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(141, 110, 99, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🏛️ ⚔️ 🦁 📜';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff8e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #5d4037;
+            font-weight: 600;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ffc107;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(141, 110, 99, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #ffc107;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #ffc107;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(141, 110, 99, 0.2), rgba(255, 193, 7, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .ancient-verse {
+            background: rgba(141, 110, 99, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(141, 110, 99, 0.3);
+            font-style: italic;
+        }
+
+        .ancient-verse h4 {
+            color: #8d6e63;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* メソポタミアエフェクト */
+        .cuneiform-tablets {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tablet {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            background: rgba(141, 110, 99, 0.2);
+            border-radius: 5px;
+            animation: tabletFloat 35s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes tabletFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .ziggurat-silhouette {
+            position: fixed;
+            bottom: 0;
+            right: 50px;
+            width: 200px;
+            height: 150px;
+            opacity: 0.08;
+            z-index: 1;
+        }
+
+        .cedar-forest {
+            position: fixed;
+            top: 40%;
+            left: 20px;
+            width: 100px;
+            height: 120px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: forestSway 20s infinite;
+        }
+
+        @keyframes forestSway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .euphrates-river {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to top, rgba(63, 81, 181, 0.1), transparent);
+            z-index: 1;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 楔形文字の粘土板 -->
+    <div class="cuneiform-tablets" id="cuneiformTablets"></div>
+    
+    <!-- ジッグラト -->
+    <div class="ziggurat-silhouette">
+        <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 基底層 -->
+            <rect x="20" y="120" width="160" height="30" fill="rgba(141, 110, 99, 0.2)"/>
+            <!-- 第二層 -->
+            <rect x="40" y="100" width="120" height="25" fill="rgba(141, 110, 99, 0.25)"/>
+            <!-- 第三層 -->
+            <rect x="60" y="80" width="80" height="20" fill="rgba(141, 110, 99, 0.3)"/>
+            <!-- 頂上神殿 -->
+            <rect x="80" y="60" width="40" height="20" fill="rgba(255, 193, 7, 0.2)"/>
+            <!-- 階段 -->
+            <rect x="85" y="80" width="30" height="40" fill="rgba(141, 110, 99, 0.15)"/>
+        </svg>
+    </div>
+    
+    <!-- 杉の森 -->
+    <div class="cedar-forest">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <!-- 木々 -->
+            <polygon points="20,100 10,120 30,120" fill="rgba(76, 175, 80, 0.2)"/>
+            <polygon points="40,90 30,120 50,120" fill="rgba(76, 175, 80, 0.25)"/>
+            <polygon points="60,95 50,120 70,120" fill="rgba(76, 175, 80, 0.2)"/>
+            <polygon points="80,100 70,120 90,120" fill="rgba(76, 175, 80, 0.2)"/>
+            <!-- 幹 -->
+            <rect x="17" y="110" width="6" height="10" fill="rgba(121, 85, 72, 0.3)"/>
+            <rect x="37" y="110" width="6" height="10" fill="rgba(121, 85, 72, 0.3)"/>
+            <rect x="57" y="110" width="6" height="10" fill="rgba(121, 85, 72, 0.3)"/>
+            <rect x="77" y="110" width="6" height="10" fill="rgba(121, 85, 72, 0.3)"/>
+        </svg>
+    </div>
+    
+    <!-- ユーフラテス川 -->
+    <div class="euphrates-river"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ギルガメシュ叙事詩</h1>
+            <p>The Epic of Gilgamesh - 人類最古の英雄譚</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #ffc107; text-decoration: none; font-size: 1.5rem;">🏛️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="mesopotamian-mythology-index-ja.html">メソポタミア神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>永遠を求めた王の物語</h2>
+            
+            <p>
+                『ギルガメシュ叙事詩』は、現存する世界最古の文学作品の一つであり、紀元前2100年頃のシュメール語版から始まり、後にアッカド語版として完成された不朽の名作です。古代メソポタミアのウルク王ギルガメシュの冒険と成長を描いたこの叙事詩は、友情、死への恐怖、永遠への憧憧、そして人間の限界の受容といった普遍的なテーマを扱い、現代においても深い感動と洞察を与えてくれます。
+            </p>
+
+            <h3>暴君から始まった物語</h3>
+            <p>
+                物語の主人公ギルガメシュは、古代都市ウルクの王で、神々と人間の血を引く半神半人の存在でした。彼の体格は巨大で、力は並外れており、知恵も深く、すべてにおいて常人を凌駕していました。しかし、その絶大な力ゆえに彼は傲慢になり、民を苦しめる暴君となっていました。
+            </p>
+
+            <p>
+                ギルガメシュは若い男性たちを戦いに駆り出し、花嫁から初夜の権利を奪うなど、王としての権力を濫用していました。苦しめられた民衆は天の神々に救いを求めて祈りました。神々はこの状況を憂慮し、ギルガメシュに匹敵する存在を作り出すことを決定しました。
+            </p>
+
+            <p>
+                大地の女神アルルが粘土から野人エンキドゥを創造しました。エンキドゥは森で動物たちと共に暮らし、人間の文明を知らない純粋な存在でした。彼は野生の力を持ち、ギルガメシュと対等に戦える唯一の存在として作られたのです。
+            </p>
+
+            <div class="ancient-verse">
+                <h4>ギルガメシュ讃歌</h4>
+                <p>
+                「見よ、ギルガメシュを<br>
+                神々が彼の美しさを完成させ<br>
+                シャマシュ神が彼に美貌を<br>
+                アダド神が彼に勇気を与えた<br>
+                偉大なる神々が彼を完全にした」
+                </p>
+            </div>
+
+            <h3>エンキドゥとの出会いと友情</h3>
+            <p>
+                エンキドゥがウルクに現れると、ついにギルガメシュとの対決が実現しました。二人は激しく戦い、建物が崩れ落ちるほどの激闘を繰り広げました。しかし、互いの力と勇気を認め合った二人は、戦いを止めて親友となりました。この瞬間から、ギルガメシュの人生は根本的に変わりました。
+            </p>
+
+            <p>
+                エンキドゥとの友情により、ギルガメシュは孤独から解放されました。初めて自分と対等に語り合える存在を得た彼は、民に対する態度も改め、より良い王になろうと努力するようになりました。エンキドゥもまた、文明社会を学び、野性的な力を建設的な目的に向けるようになりました。
+            </p>
+
+            <p>
+                二人の友情は理想的なものでした。ギルガメシュの知恵とエンキドゥの直感、王の権力と野人の自由、文明の利益と自然の純粋さが見事に調和していました。彼らは互いを補完し合い、どちらか一人では成し得ない偉大な冒険に挑むことになります。
+            </p>
+
+            <h3>杉の森への冒険</h3>
+            <p>
+                平和な日々を送る中、ギルガメシュは偉大な功績を残すために新たな冒険を企画しました。それは、恐ろしい怪物フワワ（フンババ）が守る神聖な杉の森への遠征でした。この森の杉は神々の所有物であり、フワワはその番人として選ばれた恐ろしい存在でした。
+            </p>
+
+            <p>
+                エンキドゥは最初この冒険に反対しました。フワワの恐ろしさを知っていた彼は、親友の身を案じたのです。しかし、ギルガメシュの決意は固く、最終的にエンキドゥも彼に従うことを決めました。二人は武器を準備し、神々の加護を求めて出発しました。
+            </p>
+
+            <p>
+                杉の森での戦いは壮絶でした。フワワは嵐と雷を操り、恐ろしい叫び声で山を震わせました。しかし、太陽神シャマシュの助けを借りた二人は、ついにフワワを倒すことに成功しました。彼らは貴重な杉を伐採し、いかだに組んでユーフラテス川を下り、凱旋しました。
+            </p>
+
+            <div class="highlight">
+                フワワとの戦い：<br>
+                この冒険は、ギルガメシュとエンキドゥの友情がいかに強力かを示すエピソードです。二人は互いを信頼し、困難な状況でも決して相手を見捨てませんでした。また、この冒険により、ギルガメシュは自分の力を正しい目的のために使うことを学びました。しかし、神々の所有物である森を荒らしたことは、後の悲劇の伏線ともなります。
+            </div>
+
+            <h3>イシュタルの求愛と拒絶</h3>
+            <p>
+                ウルクに帰還した後、愛と戦争の女神イシュタルがギルガメシュに求婚しました。彼女は美しく、強大な力を持つ女神でしたが、ギルガメシュは彼女の愛の歴史を知っていました。イシュタルは多くの恋人を持ちましたが、やがて彼らを見捨て、時には悲惨な運命に変えてしまいました。
+            </p>
+
+            <p>
+                ギルガメシュは勇敢にもイシュタルの求婚を拒絶し、彼女の過去の恋人たちの運命を列挙して彼女の愛の危険性を指摘しました。この拒絶に激怒したイシュタルは、父アヌ神に訴え、天の牡牛をウルクに送ってギルガメシュを懲らしめることを要求しました。
+            </p>
+
+            <p>
+                天の牡牛は恐ろしい怪物で、その鼻息だけで大勢の人々が死に、蹄の踏みつけで大地に深い穴が開きました。しかし、ギルガメシュとエンキドゥは力を合わせて牡牛と戦い、これを倒しました。エンキドゥは牡牛の後ろ足をイシュタルに投げつけて侮辱さえしました。
+            </p>
+
+            <h3>エンキドゥの死と深い悲しみ</h3>
+            <p>
+                神聖な森の破壊と天の牡牛の殺害により、神々はギルガメシュとエンキドゥを罰することを決めました。しかし、ギルガメシュは神の血を引くため直接は罰せられず、代わりにエンキドゥが死の運命を背負うことになりました。
+            </p>
+
+            <p>
+                エンキドゥは夢で自分の死を予見しました。彼は病気にかかり、十二日間苦しんだ末に息を引き取りました。ギルガメシュの悲しみは言葉では表現できないほど深く、彼は親友の死体を抱きしめて七日七夜泣き続けました。
+            </p>
+
+            <p>
+                エンキドゥの死により、ギルガメシュは初めて死の現実と向き合うことになりました。最も愛する友人が死んだということは、自分もいつか必ず死ぬということを意味していました。この認識は彼を深い恐怖と絶望に陥れ、不死を求める旅へと駆り立てました。
+            </p>
+
+            <div class="ancient-verse">
+                <h4>エンキドゥへの哀歌</h4>
+                <p>
+                「我が友エンキドゥよ<br>
+                速い牝鹿のように野を駆け<br>
+                野の動物と水を飲み<br>
+                野原を駆け抜けることを喜んだ者よ<br>
+                今、どのような眠りがお前を捉えたのか」
+                </p>
+            </div>
+
+            <h3>不死を求める旅</h3>
+            <p>
+                ギルガメシュは不死の秘密を求めて、大洪水を生き延びた唯一の人間ウトナピシュティム（ノアのモデル）を探す旅に出ました。この旅は困難を極め、彼は人跡未踏の荒野を旅し、恐ろしい怪物たちと戦い、神々の制止も無視して進み続けました。
+            </p>
+
+            <p>
+                旅路で彼は酒場の女主人シドゥリに出会いました。彼女はギルガメシュに、人間の運命は死ぬことであり、生きている間に人生を楽しむべきだと助言しました。しかし、親友の死の記憶に取り憑かれたギルガメシュは、この賢明な助言を受け入れることができませんでした。
+            </p>
+
+            <p>
+                ついにギルガメシュは死の海を渡り、ウトナピシュティムの住む島に到着しました。しかし、ウトナピシュティムは彼に不死は神々の特権であり、人間には与えられないと告げました。それでも諦めないギルガメシュのために、ウトナピシュティムは海底に生える若返りの草の存在を教えました。
+            </p>
+
+            <h3>永遠への諦めと成熟</h3>
+            <p>
+                ギルガメシュは苦労の末に海底から若返りの草を手に入れました。しかし、帰路の途中で水浴びをしている間に、蛇がその草を盗み食いしてしまいました。蛇は脱皮して新しい皮を得ましたが、ギルガメシュは永遠の若さを失ってしまったのです。
+            </p>
+
+            <p>
+                この出来事により、ギルガメシュはついに人間の限界を受け入れることを学びました。不死を得ることはできませんでしたが、彼は旅を通じて真の知恵を得ました。それは、死は避けられないものであり、重要なのは限りある人生をいかに意味深く生きるかということでした。
+            </p>
+
+            <p>
+                ウルクに帰還したギルガメシュは、城壁の美しさと街の繁栄を改めて眺めました。彼は理解したのです。真の不死は個人の永続ではなく、後世に残る業績と文明にあることを。彼が築いた城壁と王国こそが、彼の真の記念碑だったのです。
+            </p>
+
+            <h3>現代への普遍的メッセージ</h3>
+            <p>
+                『ギルガメシュ叙事詩』は、4000年以上前の作品でありながら、現代人の心に深く響く普遍的なテーマを扱っています。友情の価値、死への恐怖、永遠への憧れ、そして人間の限界の受容は、時代を超えた人間の根本的な体験です。
+            </p>
+
+            <p>
+                特にギルガメシュとエンキドゥの友情は、真の友情がいかに人生を豊かにし、困難を乗り越える力を与えるかを示しています。現代の個人主義社会において、この深い絆の描写は特に貴重な示唆を与えてくれます。
+            </p>
+
+            <p>
+                また、ギルガメシュの成長過程は、権力を持つ者が真のリーダーシップを身につける過程でもあります。初期の暴君から、友情を通じて他者への共感を学び、最終的に民のために尽くす賢明な王へと変貌する姿は、現代の指導者にとっても学ぶべき教訓に満ちています。
+            </p>
+
+            <div class="highlight">
+                ギルガメシュ叙事詩が現代に伝えること：<br>
+                真の友情は人生の最も貴重な宝である。死は人生に意味と緊迫感を与える。永遠を求めることよりも、限られた時間を大切に生きることが重要である。権力は責任を伴い、他者への奉仕のためにあるべきである。困難な体験こそが人間を成長させる。そして、個人の不死よりも、後世に残る業績と文明こそが真の永続である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 人類最古の物語と共に歩みましょう。</p>
+    </footer>
+
+    <script>
+        // 楔形文字の粘土板エフェクト
+        function createCuneiformTablets() {
+            const container = document.getElementById('cuneiformTablets');
+            
+            function addTablet() {
+                const tablet = document.createElement('div');
+                tablet.className = 'tablet';
+                tablet.style.left = Math.random() * 100 + '%';
+                tablet.style.animationDelay = Math.random() * 10 + 's';
+                tablet.style.animationDuration = (30 + Math.random() * 10) + 's';
+                
+                // 楔形文字のシンボルを追加
+                const symbols = ['𒀭', '𒈗', '𒀸', '𒌷', '𒍣'];
+                tablet.innerHTML = `<div style="font-size: 8px; color: rgba(141, 110, 99, 0.5); padding: 2px;">${symbols[Math.floor(Math.random() * symbols.length)]}</div>`;
+                
+                container.appendChild(tablet);
+                
+                setTimeout(() => {
+                    if (container.contains(tablet)) {
+                        container.removeChild(tablet);
+                    }
+                }, 35000);
+            }
+            
+            // 定期的に粘土板を追加
+            setInterval(addTablet, 3000);
+            
+            // 初期の粘土板を追加
+            for (let i = 0; i < 10; i++) {
+                setTimeout(addTablet, i * 1500);
+            }
+        }
+        
+        createCuneiformTablets();
+
+        // 古代の星エフェクト
+        function createAncientStars() {
+            setInterval(() => {
+                const star = document.createElement('div');
+                star.innerHTML = '✦';
+                star.style.position = 'fixed';
+                star.style.top = Math.random() * 50 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.fontSize = '20px';
+                star.style.color = 'rgba(255, 193, 7, 0.4)';
+                star.style.pointerEvents = 'none';
+                star.style.zIndex = '1';
+                star.style.opacity = '0';
+                
+                document.body.appendChild(star);
+                
+                // フェードイン・アウト
+                let opacity = 0;
+                const fadeIn = setInterval(() => {
+                    opacity += 0.02;
+                    star.style.opacity = opacity;
+                    if (opacity >= 0.4) {
+                        clearInterval(fadeIn);
+                        setTimeout(() => {
+                            const fadeOut = setInterval(() => {
+                                opacity -= 0.02;
+                                star.style.opacity = opacity;
+                                if (opacity <= 0) {
+                                    clearInterval(fadeOut);
+                                    if (document.body.contains(star)) {
+                                        document.body.removeChild(star);
+                                    }
+                                }
+                            }, 100);
+                        }, 3000);
+                    }
+                }, 100);
+            }, 6000);
+        }
+        
+        createAncientStars();
+    </script>
+</body>
+</html>

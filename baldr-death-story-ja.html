@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バルドルの死 - 北欧神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2c3e50 50%, #bdc3c7 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 光と影 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(241, 196, 15, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(44, 62, 80, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #f1c40f 0%, #2c3e50 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(241, 196, 15, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '☀️ 🌿 🏹 💀';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #f1c40f;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(241, 196, 15, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #f1c40f;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #f1c40f;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(241, 196, 15, 0.2), rgba(44, 62, 80, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #f1c40f;
+        }
+
+        .frigg-lament {
+            background: rgba(44, 62, 80, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(44, 62, 80, 0.3);
+            font-style: italic;
+        }
+
+        .frigg-lament h4 {
+            color: #95a5a6;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 光の粒子エフェクト */
+        .light-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(241, 196, 15, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .mistletoe-arrow {
+            position: fixed;
+            top: 30%;
+            right: 30px;
+            width: 100px;
+            height: 150px;
+            opacity: 0.12;
+            z-index: 1;
+            animation: arrowFloat 15s infinite;
+        }
+
+        @keyframes arrowFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .baldr-light {
+            position: fixed;
+            top: 20%;
+            left: 50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(241, 196, 15, 0.3), transparent);
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 1;
+            animation: lightPulse 10s infinite;
+        }
+
+        @keyframes lightPulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.3); opacity: 0.1; }
+        }
+
+        .hel-shadow {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+            z-index: 1;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 光の粒子 -->
+    <div class="light-particles" id="lightParticles"></div>
+    
+    <!-- ヤドリギの矢 -->
+    <div class="mistletoe-arrow">
+        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 矢じり -->
+            <path d="M45,20 L50,10 L55,20 L50,30 Z" fill="rgba(44, 62, 80, 0.4)"/>
+            <!-- 矢の軸 -->
+            <rect x="48" y="30" width="4" height="100" fill="rgba(139, 69, 19, 0.3)"/>
+            <!-- 矢羽 -->
+            <path d="M45,130 L40,140 L50,135 L60,140 L55,130" fill="rgba(255, 255, 255, 0.3)"/>
+            <!-- ヤドリギの葉 -->
+            <ellipse cx="35" cy="25" rx="8" ry="5" fill="rgba(46, 125, 50, 0.3)"/>
+            <ellipse cx="65" cy="25" rx="8" ry="5" fill="rgba(46, 125, 50, 0.3)"/>
+            <!-- ヤドリギの実 -->
+            <circle cx="50" cy="25" r="3" fill="rgba(255, 255, 255, 0.5)"/>
+        </svg>
+    </div>
+    
+    <!-- バルドルの光 -->
+    <div class="baldr-light"></div>
+    
+    <!-- ヘルの影 -->
+    <div class="hel-shadow"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>バルドルの死</h1>
+            <p>The Death of Baldr - 光の神の運命</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #f1c40f; text-decoration: none; font-size: 1.5rem;">☀️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="norse-mythology-index-ja.html">北欧神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>愛された神の悲劇的な終焉</h2>
+            
+            <p>
+                バルドル（Baldr）の死の物語は、北欧神話の中でも最も悲劇的で重要な出来事の一つです。光と美と正義の神として愛されたバルドルの死は、神々の世界に取り返しのつかない暗い影を落とし、最終的にラグナロク（神々の黄昏）への道を開くことになりました。この物語は、愛、嫉妬、運命の不可避性、そして小さな見落としが招く大きな悲劇について深い洞察を与えています。
+            </p>
+
+            <h3>不吉な夢の始まり</h3>
+            <p>
+                バルドルは、最高神オーディンと女神フリッグの息子で、アースガルドで最も愛された神でした。彼の美しさは太陽のように輝き、その性格は純粋で優しく、すべての者から慕われていました。彼の宮殿ブレイザブリクは、汚れや悪が決して入ることのできない場所として知られていました。
+            </p>
+
+            <p>
+                しかし、ある時からバルドルは恐ろしい夢に悩まされるようになりました。夢の中で、彼は自分の死を予感しました。暗闇が彼を包み込み、冷たい手が彼を引きずり込もうとしているのです。これらの夢は夜ごとに激しくなり、バルドルの輝きは日に日に弱まっていきました。
+            </p>
+
+            <p>
+                心配した母フリッグは、息子を守るための行動を起こしました。彼女は九つの世界すべてを巡り、あらゆる存在にバルドルを傷つけないという誓いを立てさせました。火も水も、鉄も石も、すべての病も、あらゆる動物も植物も、バルドルに危害を加えないことを誓いました。
+            </p>
+
+            <div class="frigg-lament">
+                <h4>フリッグの誓い</h4>
+                <p>
+                「生きとし生けるものよ、私の愛する息子バルドルに<br>
+                決して害を与えないと誓ってください<br>
+                彼は光、彼は希望、彼は神々の喜び<br>
+                この世界に彼の輝きが必要なのです」
+                </p>
+            </div>
+
+            <h3>唯一の例外</h3>
+            <p>
+                フリッグの努力により、バルドルは不死身となりました。神々はこれを祝い、バルドルに向かって武器を投げつける遊びを始めました。槍も剣も矢も、すべてバルドルに触れる前に方向を変えるか、無害に跳ね返りました。この光景は神々に大きな喜びをもたらしました。
+            </p>
+
+            <p>
+                しかし、トリックスターの神ロキだけは、この光景を苦々しく見ていました。嫉妬と悪意に満ちたロキは、老女に変装してフリッグのもとを訪れ、巧みな話術で秘密を聞き出しました。フリッグは無邪気にも、ヴァルハラの西に生えている若いヤドリギだけは、あまりに小さく無害に見えたので誓いを求めなかったと話してしまいました。
+            </p>
+
+            <p>
+                この情報を得たロキは、すぐにそのヤドリギを見つけ、それで矢を作りました。小さく柔らかいヤドリギが、どうして強大な神を傷つけることができるでしょうか？しかし、運命の皮肉はここにありました。最も取るに足らないものが、最も恐ろしい武器となったのです。
+            </p>
+
+            <h3>盲目の神の手による悲劇</h3>
+            <p>
+                神々がバルドルへの「攻撃」を楽しんでいる時、盲目の神ホズだけが参加していませんでした。ホズはバルドルの兄弟でしたが、目が見えないため、この遊びに加わることができなかったのです。
+            </p>
+
+            <p>
+                ロキは親切を装ってホズに近づき、言いました：「なぜ君も兄弟に敬意を表さないのか？私が手伝ってあげよう」。そして、ヤドリギの矢をホズの手に握らせ、バルドルの方向を教えて射させました。
+            </p>
+
+            <p>
+                矢は真っ直ぐに飛び、バルドルの胸を貫きました。光の神は驚きの表情を浮かべ、ゆっくりと地面に倒れました。その瞬間、アースガルドは沈黙に包まれました。神々は信じられない光景に凍りつき、フリッグの悲鳴が天地に響き渡りました。
+            </p>
+
+            <div class="highlight">
+                バルドルの最期：<br>
+                光の神が倒れた時、太陽は雲に隠れ、花は枯れ、鳥は歌うのをやめました。世界中が喪に服したかのようでした。バルドルの輝きと共に、世界から何か大切なものが永遠に失われたのです。それは純粋さであり、希望であり、神々の不死性への信頼でした。
+            </div>
+
+            <h3>ヘルへの旅</h3>
+            <p>
+                バルドルの死体は、最も美しい船スキーズブラズニルに安置されました。しかし、悲しみのあまり船を海に押し出す力が誰にもありませんでした。巨人の女性ヒュロッキンが呼ばれ、彼女は巨大な狼にまたがってやってきて、一押しで船を海に送り出しました。
+            </p>
+
+            <p>
+                オーディンは息子の耳に何かをささやき、自分の黄金の腕輪ドラウプニルを火葬の薪に置きました。バルドルの妻ナンナは、悲しみのあまり心臓が破れて死に、夫と共に荼毘に付されました。
+            </p>
+
+            <p>
+                一方、ヘルモーズがオーディンの八本足の馬スレイプニルに乗って、死者の国ヘルヘイムへと向かいました。九日九夜の旅の後、彼は死の女神ヘル（ロキの娘）のもとに到着し、バルドルの解放を懇願しました。
+            </p>
+
+            <h3>最後の希望と裏切り</h3>
+            <p>
+                ヘルは条件を提示しました：「もしすべての生きとし生けるものがバルドルのために涙を流すなら、彼を生者の国に返そう。しかし、一つでも泣かないものがあれば、彼は私のもとに留まる」
+            </p>
+
+            <p>
+                神々は使者を世界中に送り、すべての存在にバルドルのために泣くよう頼みました。人も動物も、石も木も、すべてがバルドルのために涙を流しました。朝露のように、世界は悲しみの涙で濡れていました。
+            </p>
+
+            <p>
+                しかし、ある洞窟で老婆ソックが見つかりました。彼女は冷たく言いました：「バルドルが生きていても死んでいても、私には何の益もない。ヘルに彼を持たせておけ」。この老婆は実はロキの変装でした。こうして、たった一人の拒絶により、バルドルは永遠に死者の国に留まることになりました。
+            </p>
+
+            <h3>復讐と結末</h3>
+            <p>
+                神々は真実を知り、ロキを捕らえました。彼は地下深くに鎖でつながれ、毒蛇が彼の顔の上で毒を滴らせる恐ろしい罰を受けました。ロキの妻シギュンは、夫への愛から毒を受ける椀を持ち続けましたが、椀がいっぱいになって空ける間、毒はロキの顔に落ち、彼の苦痛の叫びが地震を引き起こしました。
+            </p>
+
+            <p>
+                一方、オーディンは巨人の女リンドとの間に息子ヴァーリをもうけました。ヴァーリは生まれてすぐに成長し、ホズを殺してバルドルの仇を討ちました。しかし、この復讐も世界に平和をもたらすことはありませんでした。
+            </p>
+
+            <h3>ラグナロク後の希望</h3>
+            <p>
+                予言によれば、ラグナロクの後、新しい世界が生まれる時、バルドルは死者の国から戻ってくるとされています。彼は兄弟のホズと和解し、新しい世界で正義と平和の時代を築くでしょう。この希望が、北欧の人々にとって唯一の慰めでした。
+            </p>
+
+            <p>
+                バルドルの死は、完璧な世界など存在しないこと、最も小さな見落としが最大の悲劇を招くこと、そして嫉妬と悪意がいかに破壊的かを教えています。しかし同時に、愛と善は死を超えて生き続け、いつか必ず復活するという希望も示しています。
+            </p>
+
+            <div class="highlight">
+                バルドルの物語が現代に伝えること：<br>
+                完璧を求めることの限界と、小さな見落としの危険性。嫉妬と悪意は、どんなに強固な防御も突破する方法を見つける。純粋さと善良さは、この世界では脆弱だが、それゆえに貴重である。愛する者の死は避けられないが、その記憶と影響は永遠に続く。そして、最も暗い時にも、再生と復活の希望は残されている。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 光は影に勝ることを信じて。</p>
+    </footer>
+
+    <script>
+        // 光の粒子エフェクト
+        function createLightParticles() {
+            const container = document.getElementById('lightParticles');
+            
+            function addParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に粒子を追加
+            setInterval(addParticle, 1000);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 20; i++) {
+                setTimeout(addParticle, i * 500);
+            }
+        }
+        
+        createLightParticles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブリギッド女神の炎 - ケルト神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #8B4513 50%, #FF6347 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 聖なる炎 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 99, 71, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FF6347 0%, #FFD700 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 99, 71, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🔥 👸 🌾 ⚒️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fffacd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF6347;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 99, 71, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF6347;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF6347;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 99, 71, 0.2), rgba(255, 215, 0, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF6347;
+        }
+
+        .triple-goddess {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .triple-goddess h4 {
+            color: #FFD700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 聖なる炎エフェクト */
+        .sacred-flame {
+            position: fixed;
+            top: 30%;
+            right: 30px;
+            font-size: 5rem;
+            opacity: 0.15;
+            z-index: 1;
+            animation: flameFlicker 4s infinite;
+        }
+
+        @keyframes flameFlicker {
+            0%, 100% { opacity: 0.1; transform: scale(1) rotate(-2deg); }
+            25% { opacity: 0.2; transform: scale(1.1) rotate(1deg); }
+            50% { opacity: 0.15; transform: scale(1.05) rotate(-1deg); }
+            75% { opacity: 0.25; transform: scale(1.15) rotate(2deg); }
+        }
+
+        .flame-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flame-particle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: flameRise 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes flameRise {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .brigid-cross {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: crossRotate 60s linear infinite;
+        }
+
+        @keyframes crossRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .well-of-wisdom {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 50px;
+            border-radius: 50px 50px 0 0;
+            background: radial-gradient(ellipse at center, rgba(255, 99, 71, 0.1), transparent);
+            opacity: 0.3;
+            z-index: 1;
+            animation: wellRipple 6s infinite;
+        }
+
+        @keyframes wellRipple {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 聖なる炎 -->
+    <div class="sacred-flame">🔥</div>
+    
+    <!-- 炎の粒子 -->
+    <div class="flame-particles" id="flameParticles"></div>
+    
+    <!-- ブリギッドの十字架 -->
+    <div class="brigid-cross">
+        <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- ブリギッドクロス -->
+            <rect x="85" y="20" width="10" height="140" fill="rgba(255, 99, 71, 0.2)"/>
+            <rect x="20" y="85" width="140" height="10" fill="rgba(255, 99, 71, 0.2)"/>
+            <rect x="60" y="60" width="60" height="60" fill="none" stroke="rgba(255, 215, 0, 0.2)" stroke-width="2"/>
+            <circle cx="90" cy="90" r="15" fill="none" stroke="rgba(255, 99, 71, 0.3)" stroke-width="2"/>
+        </svg>
+    </div>
+    
+    <!-- 知恵の井戸 -->
+    <div class="well-of-wisdom"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ブリギッド女神の炎</h1>
+            <p>Brigid's Sacred Flame - 三相女神の叡智</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF6347; text-decoration: none; font-size: 1.5rem;">🔥 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="celtic-mythology-index-ja.html">ケルト神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>聖なる炎を守る女神</h2>
+            
+            <p>
+                ブリギッド（Brigid、Brighid、Bride）は、ケルト神話における最も愛され、崇敬された女神の一人です。彼女は火、鍛冶、詩、治癒、知恵の女神であり、後にキリスト教の聖ブリギッドとして取り込まれました。三相女神として、処女・母・老婆の三つの側面を持ち、人生の全ての段階を司る神聖な存在です。
+            </p>
+
+            <h3>トゥアハ・デ・ダナンの娘</h3>
+            <p>
+                ブリギッドは、神々の種族トゥアハ・デ・ダナン（ダーナ神族）の主神ダグザの娘として生まれました。誕生の瞬間、天と地を結ぶ光の柱が立ち上り、彼女の額には永遠に燃え続ける炎が宿りました。この炎は創造と破壊、生と死、知恵と愛を象徴していました。
+            </p>
+
+            <p>
+                幼い頃から、ブリギッドは並外れた能力を示しました。彼女の手が触れた場所には花が咲き、彼女の息がかかった金属は最も美しい装飾品に変わり、彼女の言葉は最も美しい詩となって人々の心を癒しました。
+            </p>
+
+            <div class="triple-goddess">
+                <h4>ブリギッドの三つの顔</h4>
+                <p>
+                <strong>乙女のブリギッド</strong>：春と新生の女神。詩と芸術のインスピレーションを与える。純潔と可能性の象徴。<br><br>
+                <strong>母なるブリギッド</strong>：豊穣と保護の女神。子供たちと家畜を守り、豊かな収穫をもたらす。創造力と育成の象徴。<br><br>
+                <strong>老婆のブリギッド</strong>：知恵と変容の女神。死と再生の秘密を知り、魂の旅路を導く。叡智と変容の象徴。
+                </p>
+            </div>
+
+            <h3>キルデアの聖なる炎</h3>
+            <p>
+                ブリギッドが地上に降りた時、彼女は現在のアイルランドのキルデア（Kildare - 「オークの教会」の意味）に神聖な神殿を建てました。そこで彼女は永遠の炎を灯し、19人の処女司祭に管理を託しました。この炎は決して消えることがなく、男性は神殿に立ち入ることを禁じられていました。
+            </p>
+
+            <p>
+                伝説によると、この炎は一度も薪を足すことなく燃え続けました。19人の司祭が順番に19日間ずつ炎を守り、20日目には「ブリギッド様ご自身」が炎の世話をすると信じられていました。炎の周りには見えない境界線があり、動物たちも決してそれを越えませんでした。
+            </p>
+
+            <h3>鍛冶と芸術の守護者</h3>
+            <p>
+                ブリギッドは優れた鍛冶師でもありました。彼女の鍛造した武器は決して外れることがなく、農具は豊かな実りをもたらし、装身具は身につける者を災いから守りました。火を通じて、彼女は金属を変容させ、新しい美しさを創造しました。
+            </p>
+
+            <p>
+                また、彼女は詩人と吟遊詩人の守護者でもありました。「アウェン」（霊感、神的インスピレーション）を与える女神として、芸術家たちは彼女に祈りを捧げました。美しい詩や音楽は、ブリギッドの息吹から生まれると信じられていました。
+            </p>
+
+            <div class="highlight">
+                ブリギッドへの祈り：<br>
+                「聖なる炎の女神よ、<br>
+                我らの心に創造の火を灯したまえ。<br>
+                我らの手に技術の知恵を与えたまえ。<br>
+                我らの魂に美の感覚を授けたまえ。<br>
+                そして我らを真実の道へと導きたまえ」
+            </div>
+
+            <h3>治癒と知恵の泉</h3>
+            <p>
+                ブリギッドは優れた治癒師でもありました。彼女の神殿には聖なる井戸があり、その水は病気を癒し、心の傷を慰める力がありました。特に、出産の際に女性たちがブリギッドの加護を求めました。彼女は母と子の両方を守護し、安全な出産を約束する女神でした。
+            </p>
+
+            <p>
+                知恵の女神として、ブリギッドは学問と手工芸の技術を人々に教えました。織物、陶芸、醸造、薬草学など、生活に必要な技能は全て彼女の教えによるものでした。特に「ブリギッドの十字架」を作る技術は、邪悪なものから家を守る重要な知識でした。
+            </p>
+
+            <h3>息子の死と母の嘆き</h3>
+            <p>
+                ブリギッドの人生には深い悲しみもありました。彼女の息子ルアダンは、敵対する部族との戦いで戦死しました。母としてのブリギッドは、初めて人間の「泣き悲しむ」という感情を世界にもたらしました。彼女の嘆きは天地を震わせ、その涙は癒しの泉となりました。
+            </p>
+
+            <p>
+                この体験により、ブリギッドは死別の痛みを知る母親たちの守護者となりました。彼女は失われた者を悼む全ての人々を慰め、死は終わりではなく変容であることを教えました。
+            </p>
+
+            <h3>聖ブリギッドへの変容</h3>
+            <p>
+                5世紀頃、キリスト教がアイルランドに広まると、ブリギッドの信仰も変容しました。キルデアに実在した修道院長ブリギッド（451-525年）と女神ブリギッドが習合し、聖ブリギッドとして崇敬されるようになりました。
+            </p>
+
+            <p>
+                聖ブリギッドは聖パトリック、聖コルンバと並んでアイルランドの守護聖人とされました。しかし、彼女の祭日（2月1日）は古代ケルトの祭り「インボルク」と同じであり、多くの古い習慣が保持されました。
+            </p>
+
+            <h3>現代への遺産</h3>
+            <p>
+                ブリギッドの影響は現代まで続いています。「ブリギッドの十字架」は今でもアイルランドの家庭で作られ、邪悪なものから家族を守る御守りとして飾られています。また、創造性、女性の権利、環境保護の象徴として、世界中で崇敬されています。
+            </p>
+
+            <p>
+                現代の詩人、芸術家、職人たちは今でもブリギッドにインスピレーションを求めます。彼女の聖なる炎は、人間の創造的精神の永遠の象徴として燃え続けているのです。
+            </p>
+
+            <div class="highlight">
+                ブリギッド女神が現代に伝えること：<br>
+                創造は破壊と表裏一体であり、真の芸術は魂の奥深くから生まれる。女性の力は単なる母性ではなく、創造、保護、変容の神聖な力である。知恵は本から学ぶものではなく、経験と直感から得られるもの。そして真の治癒は、身体だけでなく心と魂の全てを包含するものである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ブリギッドの聖なる炎に導かれましょう。</p>
+    </footer>
+
+    <script>
+        // 炎の粒子エフェクト
+        function createFlameParticles() {
+            const container = document.getElementById('flameParticles');
+            const flames = ['🔥', '✨', '🌟', '💫'];
+            
+            function addFlameParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'flame-particle';
+                particle.innerHTML = flames[Math.floor(Math.random() * flames.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 6) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 8000);
+            }
+            
+            // 定期的に炎の粒子を追加
+            setInterval(addFlameParticle, 1500);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addFlameParticle, i * 800);
+            }
+        }
+        
+        createFlameParticles();
+    </script>
+</body>
+</html>

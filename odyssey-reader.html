@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オデュッセイア - 英雄の帰還の旅</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #0a1628 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 海の波アニメーション */
+        .ocean-waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, rgba(0, 119, 190, 0.3), transparent);
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%230077be' opacity='0.3'/%3E%3C/svg%3E") repeat-x;
+            animation: wave 10s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(0, 119, 190, 0.9) 0%, rgba(0, 86, 138, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(0, 119, 190, 0.2) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* ジャーニーマップ */
+        .journey-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(0, 119, 190, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        /* アドベンチャーカード */
+        .adventures-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .adventure-card {
+            background: linear-gradient(135deg, rgba(0, 119, 190, 0.1) 0%, rgba(0, 86, 138, 0.1) 100%);
+            border: 2px solid rgba(0, 119, 190, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .adventure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 119, 190, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .adventure-card:hover::before {
+            left: 100%;
+        }
+        
+        .adventure-card:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+            box-shadow: 0 10px 30px rgba(0, 119, 190, 0.3);
+        }
+        
+        .adventure-number {
+            display: inline-block;
+            background: #0077be;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .adventure-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .adventure-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 119, 190, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(0, 119, 190, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #0a1628;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(0, 119, 190, 0.3);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 海の波エフェクト -->
+    <div class="ocean-waves">
+        <div class="wave"></div>
+    </div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="greek-mythology-index.html" class="logo">ギリシャ神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="greek-mythology-index.html">ギリシャ神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#adventures">冒険</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">オデュッセイア</h1>
+            <p class="story-subtitle">知恵と勇気の英雄、オデュッセウスの十年の帰還の旅</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の概要 -->
+        <section class="journey-section">
+            <h2 class="section-title">物語の始まり</h2>
+            <div style="font-size: 1.1em; line-height: 2; color: #F5E6D3; text-align: center; max-width: 800px; margin: 0 auto;">
+                <p>
+                    トロイア戦争を終えたオデュッセウスは、故郷イタケーへの帰路につきました。
+                    しかし、海神ポセイドンの怒りを買い、十年にわたる苦難の旅を強いられることになります。
+                    妻ペネロペーと息子テレマコスが待つ故郷へ、知恵と勇気で数々の試練を乗り越えていく壮大な冒険物語です。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要な冒険 -->
+        <section id="adventures" class="journey-section">
+            <h2 class="section-title">オデュッセウスの冒険</h2>
+            <div class="adventures-grid">
+                <div class="adventure-card">
+                    <span class="adventure-number">第1章</span>
+                    <h3 class="adventure-title">キュクロプスの洞窟</h3>
+                    <div class="adventure-content">
+                        一つ目の巨人ポリュペモスの洞窟に閉じ込められたオデュッセウスと部下たち。
+                        オデュッセウスは「誰でもない」と名乗り、巨人を酔わせて目を潰し、羊の腹にしがみついて脱出します。
+                        しかし、調子に乗って本名を明かしたため、ポリュペモスの父ポセイドンの怒りを買うことになります。
+                    </div>
+                </div>
+                
+                <div class="adventure-card">
+                    <span class="adventure-number">第2章</span>
+                    <h3 class="adventure-title">魔女キルケーの島</h3>
+                    <div class="adventure-content">
+                        美しい魔女キルケーは部下たちを豚に変えてしまいます。
+                        ヘルメスから魔法を防ぐ薬草をもらったオデュッセウスは、キルケーを屈服させ、部下たちを元に戻させます。
+                        一年間島に滞在し、キルケーから冥界への道と今後の旅の助言を得ます。
+                    </div>
+                </div>
+                
+                <div class="adventure-card">
+                    <span class="adventure-number">第3章</span>
+                    <h3 class="adventure-title">セイレーンの歌</h3>
+                    <div class="adventure-content">
+                        美しい歌声で船乗りを惑わし、破滅に導くセイレーンたち。
+                        オデュッセウスは部下たちの耳を蜜蝋で塞ぎ、自分は柱に縛り付けてもらいます。
+                        こうして歌を聞きながらも無事に通過することに成功します。
+                    </div>
+                </div>
+                
+                <div class="adventure-card">
+                    <span class="adventure-number">第4章</span>
+                    <h3 class="adventure-title">スキュラとカリュブディス</h3>
+                    <div class="adventure-content">
+                        六つの頭を持つ怪物スキュラと、すべてを飲み込む大渦カリュブディスの間の海峡を通過しなければなりません。
+                        オデュッセウスは苦渋の決断でスキュラ側を選び、六人の部下を犠牲にしながらも船を通過させます。
+                    </div>
+                </div>
+                
+                <div class="adventure-card">
+                    <span class="adventure-number">第5章</span>
+                    <h3 class="adventure-title">カリュプソーの島</h3>
+                    <div class="adventure-content">
+                        美しい女神カリュプソーに愛され、七年間島に留められます。
+                        不死を約束されても故郷への思いは消えず、ついにゼウスの命令で解放されます。
+                        カリュプソーの助けで筏を作り、再び海へ漕ぎ出します。
+                    </div>
+                </div>
+                
+                <div class="adventure-card">
+                    <span class="adventure-number">第6章</span>
+                    <h3 class="adventure-title">故郷への帰還</h3>
+                    <div class="adventure-content">
+                        パイアケス人に助けられ、ついに故郷イタケーに到着します。
+                        しかし、宮殿は妻ペネロペーに求婚する者たちに占拠されていました。
+                        乞食に変装し、息子テレマコスと共に求婚者たちを討ち、
+                        ペネロペーとの感動の再会を果たします。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section journey-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🧠</span>
+                    <h3 class="character-name">オデュッセウス</h3>
+                    <p class="character-description">
+                        イタケーの王。知恵と策略に優れた英雄。
+                        トロイの木馬を考案した功績で知られる。
+                        故郷への執着と家族への愛が彼を支える。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">ペネロペー</h3>
+                    <p class="character-description">
+                        オデュッセウスの忠実な妻。
+                        二十年間夫を待ち続け、求婚者たちを巧みにかわす。
+                        機織りの策略で時間を稼ぐ賢い女性。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">⚔️</span>
+                    <h3 class="character-name">テレマコス</h3>
+                    <p class="character-description">
+                        オデュッセウスとペネロペーの息子。
+                        父の不在の間に成長し、父を探す旅に出る。
+                        最後は父と共に求婚者たちと戦う。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🦉</span>
+                    <h3 class="character-name">アテナ</h3>
+                    <p class="character-description">
+                        知恵の女神。オデュッセウスの守護神。
+                        様々な姿で現れ、オデュッセウスと
+                        テレマコスを助ける。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🔱</span>
+                    <h3 class="character-name">ポセイドン</h3>
+                    <p class="character-description">
+                        海の神。息子ポリュペモスを傷つけられた恨みで
+                        オデュッセウスの帰還を妨げる。
+                        彼の怒りが十年の放浪の原因。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌊</span>
+                    <h3 class="character-name">カリュプソー</h3>
+                    <p class="character-description">
+                        美しい女神。オデュッセウスを愛し、
+                        七年間島に留める。不死を提供するも、
+                        彼の故郷への思いには勝てなかった。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">オデュッセイア - ホメロスが語る永遠の冒険と帰還の物語</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .story-text p, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

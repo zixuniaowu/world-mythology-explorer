@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スンジャータ王の叙事詩 - 西アフリカ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #8B4513 50%, #CD853F 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* サバンナの風景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(205, 133, 63, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(205, 133, 63, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🦁 👑 🥁 🏰';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f4e4bc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #CD853F;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(205, 133, 63, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #CD853F;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #CD853F;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(205, 133, 63, 0.2), rgba(139, 69, 19, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #CD853F;
+        }
+
+        .griot-song {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(139, 69, 19, 0.3);
+            font-style: italic;
+        }
+
+        .griot-song h4 {
+            color: #8B4513;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ライオンキングエフェクト */
+        .lion-king {
+            position: fixed;
+            top: 25%;
+            left: 30px;
+            font-size: 5rem;
+            opacity: 0.12;
+            z-index: 1;
+            animation: lionRoar 12s infinite;
+        }
+
+        @keyframes lionRoar {
+            0%, 90%, 100% { transform: scale(1) rotate(-5deg); opacity: 0.1; }
+            5%, 15% { transform: scale(1.2) rotate(5deg); opacity: 0.2; }
+            10% { transform: scale(1.1) rotate(0deg); opacity: 0.15; }
+        }
+
+        .baobab-tree {
+            position: fixed;
+            bottom: 0;
+            right: 50px;
+            width: 150px;
+            height: 200px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .mandinka-pattern {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: patternRotate 50s linear infinite;
+        }
+
+        @keyframes patternRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .griot-music {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .music-note {
+            position: absolute;
+            font-size: 2rem;
+            animation: musicFloat 15s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes musicFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ライオンキング -->
+    <div class="lion-king">🦁</div>
+    
+    <!-- グリオの音楽 -->
+    <div class="griot-music" id="griotMusic"></div>
+    
+    <!-- マンディンカ族のパターン -->
+    <div class="mandinka-pattern">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- 伝統的なアフリカンパターン -->
+            <g stroke="rgba(205, 133, 63, 0.3)" stroke-width="2" fill="none">
+                <circle cx="200" cy="200" r="150"/>
+                <circle cx="200" cy="200" r="100"/>
+                <circle cx="200" cy="200" r="50"/>
+                <!-- 8方向の線 -->
+                <line x1="200" y1="50" x2="200" y2="350"/>
+                <line x1="50" y1="200" x2="350" y2="200"/>
+                <line x1="92" y1="92" x2="308" y2="308"/>
+                <line x1="308" y1="92" x2="92" y2="308"/>
+                <!-- 装飾パターン -->
+                <polygon points="200,120 220,140 200,160 180,140" fill="rgba(139, 69, 19, 0.2)"/>
+                <polygon points="200,240 220,260 200,280 180,260" fill="rgba(139, 69, 19, 0.2)"/>
+                <polygon points="120,200 140,220 120,240 100,220" fill="rgba(139, 69, 19, 0.2)"/>
+                <polygon points="280,200 300,220 280,240 260,220" fill="rgba(139, 69, 19, 0.2)"/>
+            </g>
+        </svg>
+    </div>
+    
+    <!-- バオバブの木 -->
+    <div class="baobab-tree">
+        <svg viewBox="0 0 150 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- バオバブの木のシルエット -->
+            <rect x="70" y="120" width="10" height="80" fill="rgba(139, 69, 19, 0.2)"/>
+            <circle cx="75" cy="100" r="30" fill="rgba(139, 69, 19, 0.2)"/>
+            <g stroke="rgba(139, 69, 19, 0.3)" stroke-width="2">
+                <line x1="75" y1="70" x2="60" y2="40"/>
+                <line x1="75" y1="70" x2="90" y2="45"/>
+                <line x1="75" y1="70" x2="100" y2="55"/>
+                <line x1="75" y1="70" x2="50" y2="50"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>スンジャータ王の叙事詩</h1>
+            <p>Sundiata Epic - マリ帝国建国の英雄譚</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #CD853F; text-decoration: none; font-size: 1.5rem;">🦁 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="west-african-mythology-index-ja.html">西アフリカ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>ライオンキングの誕生</h2>
+            
+            <p>
+                スンジャータ・ケイタ（Sundiata Keita）の叙事詩は、13世紀のマリ帝国の創設者の物語として、西アフリカ全域で語り継がれている偉大な英雄譚です。この物語は「グリオ」と呼ばれる語り部たちによって口承で伝えられ、700年以上にわたってマンディンカ族の人々の心に生き続けています。スンジャータの名前は「ライオンの王子」を意味し、彼の生涯は神話と歴史が見事に織り合わされた壮大な叙事詩となっています。
+            </p>
+
+            <h3>予言された王子の誕生</h3>
+            <p>
+                物語は、マンディンカ王国の王ナレ・マガン・コナテが、神秘的な予言を受けるところから始まります。ある日、魔法の力を持つ狩人が王の前に現れ、醜い女性ソゴロン・ケジュを連れてきました。狩人は予言しました：「この女性から生まれる子供こそが、偉大な王となり、広大な帝国を築くであろう」
+            </p>
+
+            <p>
+                王は美しい第一夫人サスマ・ベレテがいたにも関わらず、予言に従ってソゴロンを第二夫人として迎えました。ソゴロンは水牛の精霊の化身であり、その力は新月の夜に最も強くなりました。やがて彼女は一人の男児を産み、その子をスンジャータと名づけました。
+            </p>
+
+            <div class="griot-song">
+                <h4>グリオの歌</h4>
+                <p>
+                「聞け、遠い国の人々よ！<br>
+                ライオンの子が生まれた日を語ろう<br>
+                星々が踊り、大地が震え<br>
+                バオバブの木々が頭を垂れた<br>
+                その名はスンジャータ、王の中の王！」
+                </p>
+            </div>
+
+            <h3>足の不自由な王子</h3>
+            <p>
+                しかし、スンジャータは生まれながらに足が不自由で、7歳になっても歩くことができませんでした。王の他の息子たちは彼を嘲笑し、第一夫人サスマ・ベレテは自分の息子ダンカラン・トゥマンが後継者になることを望んでいました。ソゴロンは息子の将来を案じ、毎日祈りを捧げました。
+            </p>
+
+            <p>
+                ある日、サスマ・ベレテがソゴロンを侮辱し、「あなたの息子は歩くこともできない無価値な子だ」と言いました。この侮辱に怒ったスンジャータは、初めて立ち上がろうと決意しました。彼は鍛冶師の作った鉄の杖にもたれ、全身の力を込めて立ち上がりました。その瞬間、杖は粉々に砕け、スンジャータは完全に歩けるようになりました。
+            </p>
+
+            <h3>亡命と修行の時代</h3>
+            <p>
+                父王が死去すると、サスマ・ベレテとダンカラン・トゥマンはスンジャータの命を狙うようになりました。母ソゴロンは息子の身の危険を感じ、夜陰に乗じて国を脱出しました。スンジャータは母、妹、そして忠実な家来たちと共に長い亡命生活を始めました。
+            </p>
+
+            <p>
+                亡命先のガーナ王国で、スンジャータは偉大な戦士として成長しました。彼は弓の名手となり、どんな獲物も仕留めることができました。また、様々な国の王たちから戦術と政治を学び、将来の統治者としての資質を磨きました。しかし、彼の心はいつも故郷マンディンカを思っていました。
+            </p>
+
+            <h3>ソソ王国の脅威</h3>
+            <p>
+                その頃、強力な魔法使い王スマンゴル（Sumanguru）が率いるソソ王国が、マンディンカ王国を含む周辺諸国を次々と征服していました。スマンゴルは人間の皮で太鼓を作り、敵の頭蓋骨で装飾した宮殿に住む恐ろしい暴君でした。彼の魔法の力は強大で、どんな武器も彼を傷つけることができませんでした。
+            </p>
+
+            <p>
+                マンディンカの人々は絶望に陥り、救世主の出現を祈りました。その時、一人の使者がスンジャータのもとを訪れ、「祖国があなたを呼んでいます。立ち上がり、民を救ってください」と懇願しました。スンジャータはついに帰国を決意しました。
+            </p>
+
+            <div class="highlight">
+                スンジャータの誓い：<br>
+                「私は故郷を見捨てない。母なる大地が涙を流している限り、私は戦い続ける。ライオンの血を受け継ぐ者として、民を守ることが私の運命だ。たとえ魔法使い王が相手でも、正義は必ず勝利する」
+            </div>
+
+            <h3>キリナの戦いとソソ王国の崩壊</h3>
+            <p>
+                1235年、スンジャータは大軍を率いて故郷に戻りました。各地の王たちが彼に合流し、スマンゴルとの決戦の場となったのがキリナ平原でした。この戦いは単なる軍事衝突ではなく、光と闇、正義と暴政の間の宿命的な対決でした。
+            </p>
+
+            <p>
+                スマンゴルの魔法の力は強大でしたが、スンジャータには秘密兵器がありました。スマンゴルの姪で魔女でもあった女性から、叔父の弱点を教えられていたのです。スマンゴルは白い雄鶏の鳴き声でその力を失うのでした。戦いの最中、スンジャータは矢じりに白い雄鶏の鶏冠をつけた矢を放ちました。矢はスマンゴルに命中し、魔法使い王は倒れました。
+            </p>
+
+            <h3>マリ帝国の誕生</h3>
+            <p>
+                スマンゴルを破ったスンジャータは、散らばった諸王国を統一し、マリ帝国を建国しました。彼は首都をニアニに定め、公正で寛大な統治を行いました。スンジャータは「マンデン憲章」として知られる法典を制定し、人権、女性の権利、自然保護などを定めました。これは世界最古の憲法の一つとされています。
+            </p>
+
+            <p>
+                スンジャータの治世下で、マリ帝国は西アフリカ最大の帝国となり、金と塩の交易で空前の繁栄を誇りました。彼の帝国はサハラ砂漠南縁から大西洋岸まで、そして現在のセネガルからニジェール川中流域まで広がりました。
+            </p>
+
+            <h3>永遠の王の遺産</h3>
+            <p>
+                スンジャータは25年間統治した後、神秘的な形で姿を消したと伝えられています。ある説では彼は大河に沈み、水の精霊となって帝国を永遠に見守っているとされます。別の説では、バオバブの木に変身し、今でもアフリカの大地で人々を見つめているとも言われます。
+            </p>
+
+            <p>
+                スンジャータの叙事詩は現代でも生きており、グリオたちによって語り継がれています。彼の物語は、身体的な不自由や社会的な困難を乗り越えて偉業を成し遂げることの可能性を示し、アフリカの人々にとって永続的な希望の源となっています。
+            </p>
+
+            <div class="highlight">
+                スンジャータ叙事詩が現代に伝えること：<br>
+                真の力は肉体的な強さではなく、精神的な意志の強さにある。逆境は人を強くし、苦難は偉大さへの階段である。良いリーダーシップとは支配することではなく奉仕すること。多様性こそが帝国の真の力の源泉である。そして物語こそが文化を保存し、世代から世代へと知恵を伝える最も強力な手段である。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. スンジャータ王の勇気に学びましょう。</p>
+    </footer>
+
+    <script>
+        // グリオの音楽エフェクト
+        function createGriotMusic() {
+            const container = document.getElementById('griotMusic');
+            const musicNotes = ['♪', '♫', '♬', '♩', '♭', '♯'];
+            
+            function addMusicNote() {
+                const note = document.createElement('div');
+                note.className = 'music-note';
+                note.innerHTML = musicNotes[Math.floor(Math.random() * musicNotes.length)];
+                note.style.left = Math.random() * 100 + '%';
+                note.style.animationDelay = Math.random() * 5 + 's';
+                note.style.animationDuration = (12 + Math.random() * 8) + 's';
+                note.style.color = `rgba(${139 + Math.random() * 116}, ${69 + Math.random() * 64}, 19, 0.3)`;
+                container.appendChild(note);
+                
+                setTimeout(() => {
+                    if (container.contains(note)) {
+                        container.removeChild(note);
+                    }
+                }, 15000);
+            }
+            
+            // 定期的に音符を追加
+            setInterval(addMusicNote, 3000);
+            
+            // 初期の音符を追加
+            for (let i = 0; i < 4; i++) {
+                setTimeout(addMusicNote, i * 2000);
+            }
+        }
+        
+        createGriotMusic();
+    </script>
+</body>
+</html>

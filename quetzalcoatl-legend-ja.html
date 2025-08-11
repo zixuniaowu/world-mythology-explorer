@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ケツァルコアトル伝説 - アステカ・マヤ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 羽毛蛇の装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 210, 211, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 193, 7, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #00d2d3 0%, #ffc107 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 210, 211, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🐍 ✨ 🌟 🪶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #fff3cd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #00d2d3;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(0, 210, 211, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #00d2d3;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #00d2d3;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(0, 210, 211, 0.2), rgba(255, 193, 7, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #00d2d3;
+        }
+
+        .prophecy-section {
+            background: rgba(255, 193, 7, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* 羽毛蛇のエフェクト */
+        .feathered-serpent {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .serpent-body {
+            position: absolute;
+            width: 200px;
+            height: 10px;
+            background: linear-gradient(90deg, 
+                rgba(0, 210, 211, 0.3) 0%, 
+                rgba(255, 193, 7, 0.3) 50%, 
+                rgba(0, 210, 211, 0.3) 100%);
+            border-radius: 5px;
+            animation: serpentMove 20s linear infinite;
+        }
+
+        @keyframes serpentMove {
+            0% { 
+                transform: translateX(-250px) translateY(20vh) rotate(0deg);
+                top: 10%;
+            }
+            25% { 
+                transform: translateX(50vw) translateY(30vh) rotate(90deg);
+                top: 25%;
+            }
+            50% { 
+                transform: translateX(80vw) translateY(40vh) rotate(180deg);
+                top: 50%;
+            }
+            75% { 
+                transform: translateX(30vw) translateY(60vh) rotate(270deg);
+                top: 75%;
+            }
+            100% { 
+                transform: translateX(-250px) translateY(80vh) rotate(360deg);
+                top: 90%;
+            }
+        }
+
+        .floating-feathers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .feather {
+            position: absolute;
+            font-size: 2rem;
+            animation: featherFloat 15s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes featherFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .wind-god {
+            position: fixed;
+            top: 20%;
+            right: 20px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: windBlow 8s infinite;
+        }
+
+        @keyframes windBlow {
+            0%, 100% { transform: scale(1) rotate(-10deg); opacity: 0.1; }
+            50% { transform: scale(1.3) rotate(10deg); opacity: 0.2; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 羽毛蛇 -->
+    <div class="feathered-serpent">
+        <div class="serpent-body"></div>
+    </div>
+    
+    <!-- 浮遊する羽毛 -->
+    <div class="floating-feathers" id="floatingFeathers"></div>
+    
+    <!-- 風の神 -->
+    <div class="wind-god">💨</div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ケツァルコアトル伝説</h1>
+            <p>Quetzalcoatl Legend - 羽毛の蛇神の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #00d2d3; text-decoration: none; font-size: 1.5rem;">🐍 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aztec-maya-mythology-index-ja.html">アステカ・マヤ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>羽毛の蛇 ケツァルコアトル</h2>
+            
+            <p>
+                ケツァルコアトル（Quetzalcoatl）は、メソアメリカ文明で最も重要で複雑な神の一つです。「ケツァル」は美しい羽毛を持つ鳥、「コアトル」は蛇を意味し、天と地、風と大地、精神と物質を結ぶ存在として崇拝されました。彼は知恵の神、風の神、学問の神、そして人類の創造者でもありました。
+            </p>
+
+            <h3>誕生と使命</h3>
+            <p>
+                太古の時代、世界には四つの方向を司る神々がいました。東の白いテスカトリポカ（ケツァルコアトル）、西の赤いテスカトリポカ、南の青いテスカトリポカ、そして北の黒いテスカトリポカです。これらの神々は宇宙の調和を保つために協力しなければなりませんでした。
+            </p>
+
+            <p>
+                ケツァルコアトルは創造主オメテオトルの子として生まれ、特別な使命を与えられました。それは人類に知識と文明を教え、彼らを暗黒から光へ導くことでした。彼の体は美しいケツァル鳥の緑の羽毛で覆われ、蛇のような長い体で空と地を自由に移動できました。
+            </p>
+
+            <div class="highlight">
+                ケツァルコアトルの象徴：<br>
+                羽毛 = 天空、精神性、自由<br>
+                蛇 = 大地、知恵、再生<br>
+                風 = 息、生命力、変化<br>
+                金星 = 暁の星、導きの光
+            </div>
+
+            <h3>人類の創造</h3>
+            <p>
+                第四の太陽の時代が終わり、世界は再び暗黒に包まれました。神々は新しい人類を創造しようと決めましたが、そのためには骨が必要でした。前の時代の人類の骨は、死の国ミクトランに保管されていました。
+            </p>
+
+            <p>
+                ケツァルコアトルは勇敢にもミクトランへ降り、死の王ミクトランテクトリと対峙しました。「人類を再び創造するため、古い骨を分けてください」と頼みました。死の王は条件を出しました：「私のほら貝を吹いて、4回この宮殿を回ることができれば、骨を渡そう」
+            </p>
+
+            <p>
+                しかし、ほら貝には穴がありませんでした。ケツァルコアトルは虫たちに頼んで穴を開けてもらい、蜂たちに中で羽音を響かせてもらいました。美しい音色が響くと、彼は約束通り宮殿を回りました。
+            </p>
+
+            <div class="prophecy-section">
+                「生命は死から生まれ、知恵は試練から生まれる。<br>
+                真の創造者は、不可能を可能に変える者なり」<br>
+                - ケツァルコアトルの教え
+            </div>
+
+            <h3>文明の伝授</h3>
+            <p>
+                骨を手に入れたケツァルコアトルは、女神コアトリクエと共に自分の血を骨に注ぎ、新しい人類を創造しました。しかし人類はまだ野蛮で、文明を知りませんでした。
+            </p>
+
+            <p>
+                ケツァルコアトルは人間の姿になって地上に降り、トルテカ族の王として統治しました。彼は人類に多くの知識を教えました：
+            </p>
+
+            <p>
+                <strong>農業</strong>：トウモロコシ、豆、カボチャの栽培方法<br>
+                <strong>暦法</strong>：正確な暦と天文学の知識<br>
+                <strong>芸術</strong>：織物、陶芸、金工の技術<br>
+                <strong>医学</strong>：薬草の使い方と治療法<br>
+                <strong>文字</strong>：記録と知識の保存方法
+            </p>
+
+            <p>
+                最も重要だったのは、人身御供を禁止したことです。ケツァルコアトルは「神々が求めるのは血ではなく、花と香、そして清らかな心だ」と教えました。
+            </p>
+
+            <h3>テスカトリポカとの対立</h3>
+            <p>
+                ケツァルコアトルの平和的な統治は、戦争と闇の神テスカトリポカの嫉妬を買いました。テスカトリポカは策略を使ってケツァルコアトルを堕落させようと企みました。
+            </p>
+
+            <p>
+                ある日、テスカトリポカは老人に化けて宮殿を訪れ、「王よ、あなたは不老不死の体をお持ちですが、この特別な酒を飲めばより強力になれるでしょう」と言いました。それは実はプルケ（発酵酒）でした。
+            </p>
+
+            <p>
+                酒に酔ったケツァルコアトルは過ちを犯してしまい、深く恥じました。彼は王位を捨て、東の海に向かって旅立ちました。「いつか金星となって戻ってくる」という予言を残して。
+            </p>
+
+            <div class="highlight">
+                ケツァルコアトルの別れの言葉：<br>
+                「私は今、東の海へ向かう。しかし心配することはない。暁の星となって、永遠に人類を見守ろう。白い肌の男たちが海からやってくる時、それが私の帰還の時だ」
+            </div>
+
+            <h3>金星への変身</h3>
+            <p>
+                東の海岸に着いたケツァルコアトルは、自らを炎で清めました。その炎は天高く舞い上がり、彼の心臓は金星となって空に輝きました。それ以来、金星は「ケツァルコアトルの星」と呼ばれ、暁と夕暮れに人々を見守っています。
+            </p>
+
+            <p>
+                マヤ文明では、彼はククルカン（羽毛の蛇）として崇拝され、チチェン・イツァのピラミッドには春分と秋分の日に蛇の影が現れる仕組みが作られました。これはケツァルコアトルの永遠の存在を表しています。
+            </p>
+
+            <h3>現代への影響</h3>
+            <p>
+                スペイン人の到来時、アステカ皇帝モクテスマはコルテスをケツァルコアトルの再来だと信じました。予言通り「白い肌の男が海からやってきた」からです。この誤解が、アステカ帝国滅亡の一因となりました。
+            </p>
+
+            <p>
+                しかし、ケツァルコアトルの教えは消えませんでした。知識の重要性、平和の価値、自然との調和、そして精神性の追求という彼のメッセージは、現代でも多くの人々に影響を与え続けています。
+            </p>
+
+            <div class="highlight">
+                ケツァルコアトル伝説が教えてくれること：<br>
+                真の指導者は力ではなく知恵で導く。文明の進歩は精神性と共になければならない。過ちを犯しても、それを認めて成長することで真の強さを得られる。そして愛と知識は永遠に人類を導き続ける。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 羽毛の蛇の知恵に学びましょう。</p>
+    </footer>
+
+    <script>
+        // 浮遊する羽毛エフェクト
+        function createFloatingFeathers() {
+            const container = document.getElementById('floatingFeathers');
+            const feathers = ['🪶', '🕊️', '✨', '💫'];
+            
+            function addFeather() {
+                const feather = document.createElement('div');
+                feather.className = 'feather';
+                feather.innerHTML = feathers[Math.floor(Math.random() * feathers.length)];
+                feather.style.left = Math.random() * 100 + '%';
+                feather.style.animationDelay = Math.random() * 5 + 's';
+                feather.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(feather);
+                
+                setTimeout(() => {
+                    if (container.contains(feather)) {
+                        container.removeChild(feather);
+                    }
+                }, 15000);
+            }
+            
+            // 定期的に羽毛を追加
+            setInterval(addFeather, 2000);
+            
+            // 初期の羽毛を追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addFeather, i * 1000);
+            }
+        }
+        
+        createFloatingFeathers();
+    </script>
+</body>
+</html>

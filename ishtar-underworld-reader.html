@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イシュタルの冥界下り - 愛と死の女神の試練</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #800080 0%, #4B0082 30%, #2F1B69 70%, #000000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 地下世界の影エフェクト */
+        .underworld-shadows {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .shadow {
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background: radial-gradient(ellipse, rgba(0, 0, 0, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: shadow-drift linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes shadow-drift {
+            0% {
+                transform: translateX(-200px) translateY(100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-100px);
+                opacity: 0;
+            }
+        }
+        
+        /* 七つの門 */
+        .seven-gates {
+            position: fixed;
+            left: 5%;
+            top: 20%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            z-index: 2;
+            opacity: 0.7;
+        }
+        
+        .gate {
+            width: 60px;
+            height: 8px;
+            background: linear-gradient(90deg, #800080, #4B0082, #800080);
+            border-radius: 4px;
+            animation: gate-glow 6s ease-in-out infinite;
+        }
+        
+        @keyframes gate-glow {
+            0%, 100% { 
+                opacity: 0.5;
+                box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 20px rgba(128, 0, 128, 0.8);
+            }
+        }
+        
+        /* イシュタルの星 */
+        .ishtar-star {
+            position: fixed;
+            top: 15%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            z-index: 2;
+            animation: star-rotation 12s linear infinite;
+        }
+        
+        .ishtar-star::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #FFD700 30%, #FF69B4 60%, transparent 80%);
+            transform: translate(-50%, -50%);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+        
+        @keyframes star-rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 冥界の炎 */
+        .underworld-flames {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .dark-flame {
+            position: absolute;
+            bottom: 0;
+            width: 15px;
+            height: 40px;
+            background: linear-gradient(to top, #4B0082, #800080, #FF69B4, transparent);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: dark-flame-dance 3s ease-in-out infinite alternate;
+            opacity: 0.8;
+        }
+        
+        @keyframes dark-flame-dance {
+            0% {
+                transform: scaleY(1) scaleX(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scaleY(1.3) scaleX(0.7);
+                opacity: 1;
+            }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(128, 0, 128, 0.9) 0%, rgba(75, 0, 130, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FF69B4;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #E6E6FA;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #FF69B4;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #FF69B4;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.8), 0 0 50px rgba(128, 0, 128, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: underworld-glow 7s ease-in-out infinite alternate;
+        }
+        
+        @keyframes underworld-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(255, 105, 180, 0.8), 0 0 30px rgba(128, 0, 128, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(255, 105, 180, 1), 0 0 60px rgba(128, 0, 128, 0.8), 0 0 80px rgba(75, 0, 130, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #E6E6FA;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FF69B4;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FF69B4, transparent);
+        }
+        
+        /* 七つの門カード */
+        .gates-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .gate-card {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .gate-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF69B4, #800080, #FF69B4);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gate-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .gate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.4);
+        }
+        
+        .gate-number {
+            display: inline-block;
+            background: #4B0082;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .gate-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FF69B4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .gate-icon {
+            font-size: 1.5em;
+        }
+        
+        .gate-content {
+            color: #E6E6FA;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 復活セクション */
+        .resurrection-section {
+            background: rgba(50, 205, 50, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .resurrection-icon {
+            font-size: 6em;
+            color: #32CD32;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #32CD32);
+            animation: resurrection-pulse 5s ease-in-out infinite;
+        }
+        
+        @keyframes resurrection-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .resurrection-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #E6E6FA;
+        }
+        
+        .resurrection-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #32CD32;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FF69B4;
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FF69B4;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #E6E6FA;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(128, 0, 128, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 105, 180, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #E6E6FA;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ishtar-star {
+                width: 60px;
+                height: 60px;
+                top: 12%;
+                right: 5%;
+            }
+            
+            .seven-gates {
+                left: 2%;
+                gap: 20px;
+            }
+            
+            .gate {
+                width: 40px;
+                height: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 地下世界の影 -->
+    <div class="underworld-shadows" id="underworldShadows"></div>
+    
+    <!-- 冥界の炎 -->
+    <div class="underworld-flames" id="underworldFlames"></div>
+    
+    <!-- 7つの門 -->
+    <div class="seven-gates">
+        <div class="gate"></div>
+        <div class="gate"></div>
+        <div class="gate"></div>
+        <div class="gate"></div>
+        <div class="gate"></div>
+        <div class="gate"></div>
+        <div class="gate"></div>
+    </div>
+    
+    <!-- イシュタルの星 -->
+    <div class="ishtar-star"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="mesopotamian-mythology-index.html" class="logo">メソポタミア神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="mesopotamian-mythology-index.html">メソポタミア神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">イシュタルの冥界下り</h1>
+            <p class="story-subtitle">愛と戦いの女神が挑む死の国への危険な旅路</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">七つの門の試練</h2>
+            <div class="gates-grid">
+                <div class="gate-card">
+                    <span class="gate-number">序章</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">🌟</span>
+                        イシュタルの決意
+                    </h3>
+                    <div class="gate-content">
+                        愛と美、戦争の女神イシュタルは、ある日突然、冥界へ下ることを決意しました。
+                        その理由については諸説ありますが、姉エレシュキガルが支配する死の国の秘密を知りたい、
+                        あるいは恋人タンムズ（ドゥムジ）を冥界から救い出すためだったとされています。
+                        イシュタルは最高の装身具で身を飾り、冥界の門に向かいました。
+                        しかし、生ある者が死の国に入ることは、大きな危険を伴う禁忌の行為でした。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第一の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">👑</span>
+                        大いなる冠の没収
+                    </h3>
+                    <div class="gate-content">
+                        冥界の第一の門で、門番ネティはイシュタルを止めました。
+                        「なぜ生者が死者の国に来るのか」と問われたイシュタルは、
+                        姉エレシュキガルの夫の葬儀に参列するためと答えました。
+                        ネティは女主人に報告し、エレシュキガルは「古来の掟に従って通せ」と命じました。
+                        第一の門を通る時、イシュタルは「大いなる冠」を取り上げられました。
+                        抗議するイシュタルに、門番は「これが冥界の掟だ」と告げました。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第二の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">👂</span>
+                        小さな真珠の耳飾り
+                    </h3>
+                    <div class="gate-content">
+                        第二の門では、イシュタルの美しい真珠の耳飾りが取り去られました。
+                        これらの耳飾りは彼女の聴覚と洞察力を象徴していました。
+                        門を一つ通るごとに、イシュタルは自分の力と権威の象徴を失っていきました。
+                        しかし、愛する者への想いと強い意志により、彼女は前進を続けました。
+                        冥界の掟は容赦なく、たとえ女神であっても例外は認められませんでした。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第三の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">📿</span>
+                        首飾りと胸飾り
+                    </h3>
+                    <div class="gate-content">
+                        第三の門で、イシュタルは首にかけた貴重な首飾りと胸を飾る宝石を失いました。
+                        これらの装身具は彼女の魅力と誘惑の力を表していました。
+                        段々と装身具を失っていくイシュタルは、天界での権威ある地位から、
+                        普通の存在へと変化していきました。しかし、内なる決意は変わることがありませんでした。
+                        冥界の暗闇が彼女を包み込んでいきます。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第四の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">💍</span>
+                        指輪と腕輪
+                    </h3>
+                    <div class="gate-content">
+                        第四の門では、指にはめた指輪と腕の腕輪を取り上げられました。
+                        これらは彼女の結束の力と手の技を象徴していました。
+                        イシュタルは次第に無力感を感じ始めましたが、それでも目的を諦めませんでした。
+                        冥界の奥深くに進むにつれて、生命力そのものが徐々に奪われていくのを感じました。
+                        しかし、愛の力が彼女を前に進ませ続けました。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第五の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">🎀</span>
+                        腰に巻いた飾り帯
+                    </h3>
+                    <div class="gate-content">
+                        第五の門で、イシュタルは腰を飾る美しい飾り帯を失いました。
+                        この帯は女性としての魅力と生殖力を象徴していました。
+                        これを失うことで、イシュタルは女神としての本質的な力の一部を失いました。
+                        冥界の冷たい風が彼女の肌を刺し、生きている世界の温もりが遠ざかっていくのを感じました。
+                        それでも彼女は歩み続けました。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第六の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">👗</span>
+                        胸当てと腰布
+                    </h3>
+                    <div class="gate-content">
+                        第六の門では、身を覆う胸当てと腰布を取り去られました。
+                        これにより、イシュタルはほぼ裸の状態になりました。
+                        物理的な保護を失うと同時に、精神的な防御も弱くなっていきました。
+                        冥界の闇の力が彼女を圧迫し、死の恐怖が心を支配し始めました。
+                        しかし、最後の門を前にして、彼女の意志は折れることがありませんでした。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">第七の門</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">🩱</span>
+                        最後の衣装
+                    </h3>
+                    <div class="gate-content">
+                        最後の第七の門で、イシュタルは残った最後の衣装も奪われ、完全に裸になりました。
+                        すべての権威、美、力を失った彼女は、一人の弱い存在として
+                        姉エレシュキガルの前に立つことになりました。この完全な無力化は、
+                        死の国における平等を表現していました。どんなに偉大な女神であっても、
+                        死の前では無力な存在に過ぎないのです。
+                        ついにイシュタルは冥界の玉座の間に到達しました。
+                    </div>
+                </div>
+                
+                <div class="gate-card">
+                    <span class="gate-number">最終章</span>
+                    <h3 class="gate-title">
+                        <span class="gate-icon">💀</span>
+                        死と復活
+                    </h3>
+                    <div class="gate-content">
+                        エレシュキガルはイシュタルを見るやいなや、怒りに燃えて彼女を殺しました。
+                        イシュタルの死体は釘に吊るされ、三日三晩放置されました。
+                        しかし、地上では愛と生殖力を司る女神の死により、すべての愛と生命活動が停止しました。
+                        動物は交尾をやめ、人間は恋をしなくなり、植物は枯れ始めました。
+                        困った神々はエア神に相談し、エアは美しい宦官ナムタルを冥界に送り、
+                        巧妙な策略でイシュタルを蘇らせることに成功しました。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 復活と再生 -->
+        <section class="resurrection-section">
+            <h2 class="section-title">愛と生命の復活</h2>
+            <div class="resurrection-icon">🌸</div>
+            <div class="resurrection-content">
+                <h3>季節の循環</h3>
+                <p>
+                    イシュタルの冥界下りと復活は、季節の変化を説明する神話でもあります。
+                    彼女の死は冬の到来を、復活は春の訪れを象徴しています。
+                    この物語は、自然界の死と再生の永遠の循環を表現しています。
+                </p>
+                
+                <h3>愛の不滅性</h3>
+                <p>
+                    どんなに困難な試練があっても、真実の愛は死をも乗り越える力を持っています。
+                    イシュタルの勇気ある冥界への旅は、愛のために命を賭ける意志の強さを示し、
+                    愛こそが生命の源であることを教えています。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">💃</span>
+                    <h3 class="character-name">イシュタル</h3>
+                    <p class="character-description">
+                        愛と美、戦争の女神。
+                        冥界への危険な旅に挑み、
+                        死と復活を経験することで
+                        生命力の源となった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">エレシュキガル</h3>
+                    <p class="character-description">
+                        冥界の女王、イシュタルの姉。
+                        死の国を支配し、厳格な掟で
+                        冥界の秩序を維持する
+                        恐ろしくも威厳ある存在。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🚪</span>
+                    <h3 class="character-name">ネティ</h3>
+                    <p class="character-description">
+                        冥界の門番、七つの門の守護者。
+                        冥界の掟に従い、イシュタルから
+                        一つずつ装身具を取り上げた
+                        忠実な従者。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌿</span>
+                    <h3 class="character-name">タンムズ（ドゥムジ）</h3>
+                    <p class="character-description">
+                        イシュタルの恋人、植物神。
+                        牧畜と農業の守護神で、
+                        季節の循環と関連付けられる
+                        美しい青年神。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🧠</span>
+                    <h3 class="character-name">エア</h3>
+                    <p class="character-description">
+                        知恵の神、イシュタル救出の立役者。
+                        巧妙な策略で冥界の女王を欺き、
+                        イシュタルの復活を
+                        可能にした知恵の神。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">✨</span>
+                    <h3 class="character-name">ナムタル</h3>
+                    <p class="character-description">
+                        エアが創造した美しい宦官。
+                        生命の水でイシュタルを蘇らせ、
+                        冥界から地上世界への
+                        帰還を助けた救世主。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">イシュタルの冥界下り - 愛と生命の永遠の力を描いた古代の傑作</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 地下世界の影を生成
+        function createUnderworldShadows() {
+            const shadowsContainer = document.getElementById('underworldShadows');
+            const numberOfShadows = 15;
+            
+            for (let i = 0; i < numberOfShadows; i++) {
+                const shadow = document.createElement('div');
+                shadow.className = 'shadow';
+                
+                // ランダムな位置とアニメーション
+                shadow.style.left = Math.random() * 100 + '%';
+                shadow.style.animationDuration = (Math.random() * 25 + 15) + 's';
+                shadow.style.animationDelay = Math.random() * 20 + 's';
+                
+                shadowsContainer.appendChild(shadow);
+            }
+        }
+        
+        // 冥界の炎を生成
+        function createUnderworldFlames() {
+            const flamesContainer = document.getElementById('underworldFlames');
+            const numberOfFlames = 25;
+            
+            for (let i = 0; i < numberOfFlames; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'dark-flame';
+                
+                // ランダムな位置とサイズ
+                flame.style.left = Math.random() * 100 + '%';
+                flame.style.animationDelay = Math.random() * 3 + 's';
+                flame.style.height = (Math.random() * 30 + 30) + 'px';
+                flame.style.width = (Math.random() * 10 + 10) + 'px';
+                
+                flamesContainer.appendChild(flame);
+            }
+        }
+        
+        // ページ読み込み時にエフェクトを生成
+        window.addEventListener('load', () => {
+            createUnderworldShadows();
+            createUnderworldFlames();
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.gate-card, .character-card, .resurrection-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.gate-content, .resurrection-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

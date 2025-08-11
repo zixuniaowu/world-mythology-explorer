@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レインボー・サーペントの伝説 - オーストラリア原住民神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #00CED1 50%, #FF1493 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 虹の光 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 206, 209, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FF1493 0%, #00CED1 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 20, 147, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌈 🐍 💧 ⛈️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF1493;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 20, 147, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF1493;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF1493;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 20, 147, 0.2), rgba(0, 206, 209, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF1493;
+        }
+
+        .water-cycle {
+            background: rgba(0, 206, 209, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 206, 209, 0.3);
+        }
+
+        .water-cycle h4 {
+            color: #00CED1;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* レインボー蛇エフェクト */
+        .rainbow-serpent {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 300px;
+            height: 400px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: serpentUndulate 25s infinite;
+        }
+
+        @keyframes serpentUndulate {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            25% { transform: translateY(-20px) rotate(5deg) scale(1.1); }
+            50% { transform: translateY(0px) rotate(0deg) scale(0.9); }
+            75% { transform: translateY(20px) rotate(-5deg) scale(1.1); }
+        }
+
+        .rainbow-arc {
+            position: fixed;
+            top: 10%;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            opacity: 0.1;
+            z-index: 1;
+            animation: rainbowShimmer 15s infinite;
+        }
+
+        @keyframes rainbowShimmer {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+        }
+
+        .water-drops {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .water-drop {
+            position: absolute;
+            font-size: 2rem;
+            animation: rainFall 8s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rainFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .sacred-waterhole {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 100px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: waterRipple 8s infinite;
+        }
+
+        @keyframes waterRipple {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.15; }
+            50% { transform: translateX(-50%) scale(1.1); opacity: 0.25; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- レインボー蛇 -->
+    <div class="rainbow-serpent">
+        <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- 蛇の体 -->
+            <path d="M150,50 Q100,100 150,150 Q200,200 150,250 Q100,300 150,350" 
+                  stroke="rgba(255, 20, 147, 0.4)" stroke-width="15" fill="none"/>
+            <path d="M150,50 Q120,80 150,120 Q180,160 150,200 Q120,240 150,280 Q180,320 150,350" 
+                  stroke="rgba(0, 206, 209, 0.4)" stroke-width="12" fill="none"/>
+            <path d="M150,50 Q130,70 150,100 Q170,130 150,160 Q130,190 150,220 Q170,250 150,280 Q130,310 150,350" 
+                  stroke="rgba(50, 205, 50, 0.4)" stroke-width="8" fill="none"/>
+            <!-- 蛇の頭 -->
+            <circle cx="150" cy="50" r="20" fill="rgba(255, 20, 147, 0.3)"/>
+            <circle cx="145" cy="45" r="3" fill="rgba(255, 255, 255, 0.8)"/>
+            <circle cx="155" cy="45" r="3" fill="rgba(255, 255, 255, 0.8)"/>
+        </svg>
+    </div>
+    
+    <!-- 虹のアーク -->
+    <div class="rainbow-arc">
+        <svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,200 Q50,50 90,200" stroke="rgba(255, 0, 0, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M12,200 Q50,55 88,200" stroke="rgba(255, 127, 0, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M14,200 Q50,60 86,200" stroke="rgba(255, 255, 0, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M16,200 Q50,65 84,200" stroke="rgba(0, 255, 0, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M18,200 Q50,70 82,200" stroke="rgba(0, 0, 255, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M20,200 Q50,75 80,200" stroke="rgba(75, 0, 130, 0.3)" stroke-width="3" fill="none"/>
+            <path d="M22,200 Q50,80 78,200" stroke="rgba(148, 0, 211, 0.3)" stroke-width="3" fill="none"/>
+        </svg>
+    </div>
+    
+    <!-- 水滴 -->
+    <div class="water-drops" id="waterDrops"></div>
+    
+    <!-- 聖なる水場 -->
+    <div class="sacred-waterhole">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="100" cy="70" rx="80" ry="25" fill="rgba(0, 206, 209, 0.3)"/>
+            <ellipse cx="100" cy="65" rx="60" ry="18" fill="rgba(0, 206, 209, 0.2)"/>
+            <ellipse cx="100" cy="60" rx="40" ry="12" fill="rgba(0, 206, 209, 0.1)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>レインボー・サーペントの伝説</h1>
+            <p>Rainbow Serpent Legend - 虹の大蛇の物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF1493; text-decoration: none; font-size: 1.5rem;">🌈 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aboriginal-mythology-index-ja.html">オーストラリア原住民神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>生命の源なる大蛇</h2>
+            
+            <p>
+                レインボー・サーペント（虹の蛇）は、オーストラリア全土の原住民に共通して信仰されている最も重要な創造祖先霊の一つです。この巨大な蛇は、虹のように美しい鱗を持ち、雨、川、湖、そして生命そのものを司る存在として崇敬されています。レインボー・サーペントの物語は地域によって異なりますが、水と生命の創造者、そして自然の法則の守護者としての役割は共通しています。
+            </p>
+
+            <h3>大地を創造した蛇の旅路</h3>
+            <p>
+                ドリームタイムの始まり、世界はまだ平らで乾いた大地でした。山も川も湖もなく、植物も動物もいませんでした。その時、地下の深い洞窟で眠っていた巨大なレインボー・サーペントが目を覚ましました。彼女の体は虹のように七色に輝き、その長さは測り知れませんでした。
+            </p>
+
+            <p>
+                レインボー・サーペントは地上に現れると、のたうちながら大陸を横断し始めました。彼女の巨大な体が通った跡は深い溝となり、そこに雨水が溜まって川となりました。マレー川、ダーリング川、フィッツロイ川など、オーストラリアの主要な河川は全て、レインボー・サーペントの旅路なのです。
+            </p>
+
+            <p>
+                蛇が休憩のために丸くなった場所は湖となり、彼女が頭を上げた場所は山となりました。彼女が激しく身をくねらせた場所は渓谷となり、ゆったりと移動した場所は広い平原となりました。このようにして、現在のオーストラリアの地形が形作られたのです。
+            </p>
+
+            <div class="water-cycle">
+                <h4>レインボー・サーペントの水の循環</h4>
+                <p>
+                虹の蛇は水の永遠の循環を司る：<br>
+                1. 海から水蒸気を吸い上げ、雲となる<br>
+                2. 雲から雨を降らせ、大地を潤す<br>
+                3. 雨水を川に集め、海へと導く<br>
+                4. 生命あるものすべてに水の恵みを与える
+                </p>
+            </div>
+
+            <h3>動物たちの創造</h3>
+            <p>
+                地形を創造したレインボー・サーペントは、次に生き物を創造しました。彼女は自分の体から様々な動物を生み出しました。彼女の鱗が落ちて魚になり、彼女の息が鳥になり、彼女の涙が両生類になりました。
+            </p>
+
+            <p>
+                特に重要なのは、彼女がカンガルーとエミューを創造した方法です。レインボー・サーペントは粘土で二つの動物の形を作りました。一つは力強く跳ねる動物、もう一つは速く走る鳥です。彼女は雨を降らせてその粘土を濡らし、虹の光を当てて命を吹き込みました。こうして、オーストラリアを代表する動物たちが誕生したのです。
+            </p>
+
+            <h3>最初の人間の誕生</h3>
+            <p>
+                動物たちを創造した後、レインボー・サーペントは人間を創造することにしました。しかし、人間の創造はより複雑でした。なぜなら、人間には動物にはない特別な責任 - 大地を守り、法を守ることが求められたからです。
+            </p>
+
+            <p>
+                レインボー・サーペントは聖なる水場のほとりで、赤い粘土と黄色い粘土を混ぜ合わせました。そして、自分の形に似せて（ただし、もっと小さく、二本の腕と二本の脚を持つように）人間の形を作りました。彼女は雷の息を吹き込んで人間に生命を与えました。
+            </p>
+
+            <p>
+                最初の人間たちが目を覚ますと、レインボー・サーペントは彼らに重要な教えを与えました：「あなたたちは私の子供です。水を大切にし、聖地を守り、動物たちと調和して生きなさい。この教えを守る限り、私はあなたたちを守り、雨を降らせ、豊かな恵みを与えましょう」
+            </p>
+
+            <h3>水の掟と禁忌</h3>
+            <p>
+                レインボー・サーペントは慈愛に満ちた存在でしたが、同時に厳格な法の守護者でもありました。彼女は人間に水に関する様々な掟を与えました。聖なる水場で泳いではいけない、特定の季節には特定の川で漁をしてはいけない、水を汚してはいけない、などの規則です。
+            </p>
+
+            <p>
+                ある部族の伝説では、若い戦士たちが禁忌を破って聖なる水場で遊んだ話があります。レインボー・サーペントは激怒し、大洪水を起こしました。善良な人々は高い岩の上に避難させましたが、掟を破った者たちは洪水に飲み込まれ、蛙やトカゲに変えられてしまいました。
+            </p>
+
+            <p>
+                この出来事の後、レインボー・サーペントは人々に言いました：「私は生命の源です。しかし、生命は責任を伴います。私の教えを忘れた者は、生命の循環から外れることになるでしょう」
+            </p>
+
+            <div class="highlight">
+                レインボー・サーペントの教え：<br>
+                「水は生命の源であり、すべての生き物の共有財産である。一滴の水も無駄にしてはならず、一つの水場も汚してはならない。水の恵みを受ける者は、水を守る責任がある。この約束を破る者は、永遠に渇きに苦しむであろう」
+            </div>
+
+            <h3>季節と儀式の創設</h3>
+            <p>
+                レインボー・サーペントはまた、季節の循環を創造しました。彼女が天高く舞い上がる時期は雨季となり、地中深く潜る時期は乾季となりました。彼女の動きに合わせて、動物たちの繁殖期や植物の開花時期も定められました。
+            </p>
+
+            <p>
+                人間たちは、レインボー・サーペントの恵みに感謝するための儀式を創始しました。雨季の前には雨乞いの儀式を行い、乾季の終わりには感謝の儀式を行います。これらの儀式では、参加者は体に虹色の模様を描き、蛇の動きを模したダンスを踊ります。
+            </p>
+
+            <h3>現代への継承</h3>
+            <p>
+                現在でも、多くの原住民コミュニティでレインボー・サーペントへの信仰は生きています。特に、水資源の管理や環境保護の分野で、古代の知恵が活用されています。原住民の水場管理技術は、現代の持続可能な水資源管理のモデルとして注目されています。
+            </p>
+
+            <p>
+                また、レインボー・サーペントの物語は、現代のアボリジニ・アートの重要なモチーフとなっています。点描画法（ドット・ペインティング）で描かれる虹色の蛇は、単なる装飾ではなく、水の循環、生命の連続性、そして人間と自然の調和を表現した深い精神性を持つ作品なのです。
+            </p>
+
+            <p>
+                近年の気候変動や環境破壊の問題に直面する現代社会において、レインボー・サーペントの教えは新たな意味を持っています。水の重要性、自然との調和、そして次世代への責任という普遍的なメッセージは、時代を超えて人類に重要な示唆を与え続けています。
+            </p>
+
+            <div class="highlight">
+                レインボー・サーペント伝説が現代に伝えること：<br>
+                自然は征服すべき対象ではなく、共生すべきパートナーである。水は単なる資源ではなく、生命そのものである。美しさと恐ろしさは表裏一体であり、自然への敬意を忘れてはならない。真の豊かさは物質的な蓄積ではなく、自然の恵みを分かち合うことにある。そして過去から受け継いだ恵みを、未来の世代に責任を持って引き継がなければならない。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 虹の蛇の恵みに感謝しましょう。</p>
+    </footer>
+
+    <script>
+        // 水滴エフェクト
+        function createWaterDrops() {
+            const container = document.getElementById('waterDrops');
+            const drops = ['💧', '🌊', '💎', '✨'];
+            
+            function addWaterDrop() {
+                const drop = document.createElement('div');
+                drop.className = 'water-drop';
+                drop.innerHTML = drops[Math.floor(Math.random() * drops.length)];
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDelay = Math.random() * 3 + 's';
+                drop.style.animationDuration = (6 + Math.random() * 4) + 's';
+                drop.style.fontSize = (1.5 + Math.random()) + 'rem';
+                container.appendChild(drop);
+                
+                setTimeout(() => {
+                    if (container.contains(drop)) {
+                        container.removeChild(drop);
+                    }
+                }, 8000);
+            }
+            
+            // 定期的に水滴を追加
+            setInterval(addWaterDrop, 1500);
+            
+            // 初期の水滴を追加
+            for (let i = 0; i < 8; i++) {
+                setTimeout(addWaterDrop, i * 800);
+            }
+        }
+        
+        createWaterDrops();
+    </script>
+</body>
+</html>

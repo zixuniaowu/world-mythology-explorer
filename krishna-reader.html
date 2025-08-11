@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クリシュナ神話 - 愛と叡智の神の生涯</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #000080 0%, #4169E1 30%, #00CED1 70%, #20B2AA 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 孔雀の羽エフェクト */
+        .peacock-feathers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .peacock-feather {
+            position: absolute;
+            color: rgba(32, 178, 170, 0.6);
+            font-size: 3em;
+            animation: feather-dance linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes feather-dance {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(180deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 神聖な輪 */
+        .divine-chakra {
+            position: fixed;
+            top: 15%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(255, 215, 0, 0.8);
+            border-radius: 50%;
+            z-index: 2;
+            animation: chakra-spin 10s linear infinite;
+            opacity: 0.7;
+        }
+        
+        .divine-chakra::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes chakra-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 笛の音符 */
+        .musical-notes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .musical-note {
+            position: absolute;
+            color: rgba(255, 215, 0, 0.8);
+            font-size: 2em;
+            animation: note-float linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes note-float {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            80% {
+                opacity: 0.8;
+                transform: scale(0.8);
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px) scale(0.3);
+                opacity: 0;
+            }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(0, 0, 128, 0.9) 0%, rgba(65, 105, 225, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #20B2AA;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #20B2AA;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(32, 178, 170, 0.8), 0 0 50px rgba(0, 206, 209, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: krishna-glow 5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes krishna-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(32, 178, 170, 0.8), 0 0 30px rgba(0, 206, 209, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(32, 178, 170, 1), 0 0 60px rgba(0, 206, 209, 0.8), 0 0 80px rgba(65, 105, 225, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #E0FFFF;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(32, 178, 170, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #20B2AA;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #20B2AA, transparent);
+        }
+        
+        /* ライフステージカード */
+        .life-stage-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .life-stage-card {
+            background: linear-gradient(135deg, rgba(32, 178, 170, 0.1) 0%, rgba(65, 105, 225, 0.1) 100%);
+            border: 2px solid rgba(32, 178, 170, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .life-stage-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #20B2AA, #4169E1, #20B2AA);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .life-stage-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .life-stage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(32, 178, 170, 0.4);
+        }
+        
+        .stage-period {
+            display: inline-block;
+            background: #4169E1;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .stage-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #20B2AA;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stage-icon {
+            font-size: 1.5em;
+        }
+        
+        .stage-content {
+            color: #E0FFFF;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 教えセクション */
+        .teaching-section {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .teaching-icon {
+            font-size: 6em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #FFD700);
+            animation: wisdom-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes wisdom-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .teaching-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #E0FFFF;
+        }
+        
+        .teaching-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(32, 178, 170, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(32, 178, 170, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #20B2AA;
+            box-shadow: 0 15px 40px rgba(32, 178, 170, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #20B2AA;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #E0FFFF;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(0, 0, 128, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(32, 178, 170, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #E0FFFF;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .divine-chakra {
+                width: 70px;
+                height: 70px;
+                top: 12%;
+                left: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 孔雀の羽 -->
+    <div class="peacock-feathers" id="peacockFeathers"></div>
+    
+    <!-- 音符 -->
+    <div class="musical-notes" id="musicalNotes"></div>
+    
+    <!-- 神聖な輪 -->
+    <div class="divine-chakra"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="indian-mythology-index.html" class="logo">インド神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="indian-mythology-index.html">インド神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">クリシュナ神話</h1>
+            <p class="story-subtitle">愛と叡智、遊戯と神性を体現した至高神の生涯</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">クリシュナの生涯</h2>
+            <div class="life-stage-grid">
+                <div class="life-stage-card">
+                    <span class="stage-period">誕生と幼年期</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">👶</span>
+                        神の化身として誕生
+                    </h3>
+                    <div class="stage-content">
+                        クリシュナはヴィシュヌ神の第8の化身として、マトゥラーの牢獄で生まれました。
+                        暴君カンサ王から逃れるため、父ヴァスデーヴァは生まれたばかりのクリシュナを
+                        ヤムナー川を渡ってゴクラ村の養父母ナンダとヤショーダーの元に預けました。
+                        幼いクリシュナは村で愛され、数々の奇跡を起こしながら成長しました。
+                        バター泥棒として有名で、いたずら好きながらも神性を垣間見せる可愛らしい子供でした。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">少年期</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">🐄</span>
+                        牛飼いの少年
+                    </h3>
+                    <div class="stage-content">
+                        ヴリンダーヴァンで牛飼いの少年として過ごしたクリシュナは、
+                        美しい笛の音色で牛や村人たちを魅了しました。この時期の彼は理想的な遊び相手であり、
+                        友達との冒険や悪戯に満ちた日々を送りました。しかし、カンサ王が送り込んだ
+                        悪魔たちを次々と退治し、その神性を示しました。プータナー、トリナーヴァルタ、
+                        バカースラなどの怪物を倒し、村人たちを守り続けました。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">青年期</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">💃</span>
+                        ゴーピーたちとの愛
+                    </h3>
+                    <div class="stage-content">
+                        青年となったクリシュナは、その美しさと魅力で村の牛飼い娘たち（ゴーピー）の心を奪いました。
+                        特にラーダーとの純粋で神聖な愛は、後に神への献身の象徴とされました。
+                        月夜に行われる「ラーサ・リーラー」（円舞）では、クリシュナは同時に
+                        すべてのゴーピーと踊り、それぞれが自分だけがクリシュナと踊っていると感じました。
+                        これは神の遍在性と個々の魂への愛を表現する美しい象徴です。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">成人期</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">⚔️</span>
+                        暴君カンサの討伐
+                    </h3>
+                    <div class="stage-content">
+                        成人したクリシュナは、ついに生まれ故郷マトゥラーに戻り、
+                        暴君カンサ王と対決しました。カンサはクリシュナを殺すため、
+                        巨大な象クヴァラヤーピーダや最強の戦士チャーヌーラとムシュティカを送りましたが、
+                        クリシュナとバララーマ兄弟がすべてを倒しました。最終的にクリシュナは
+                        カンサを殺し、正当な王ウグラセーナを王位に復帰させました。
+                        この勝利により、長年の恐怖政治から人々を解放しました。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">クルクシェートラ戦争</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">🏹</span>
+                        アルジュナへの教え
+                    </h3>
+                    <div class="stage-content">
+                        マハーバーラタ戦争では、クリシュナはパーンダヴァ側の御者として参戦しました。
+                        戦争直前、戦うことを躊躇するアルジュナに対して、クリシュナは
+                        人生の意味、義務（ダルマ）、そして解脱への道について説きました。
+                        この教えが「バガヴァッド・ギーター」として記録され、
+                        ヒンドゥー教の最も重要な聖典の一つとなりました。
+                        クリシュナは行為の結果への執着を捨て、純粋な献身で行動することの大切さを教えました。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">ドヴァーラカー王国</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">🏰</span>
+                        理想的な統治者
+                    </h3>
+                    <div class="stage-content">
+                        戦争後、クリシュナはドヴァーラカー王国を建設し、理想的な統治者として君臨しました。
+                        海中の黄金都市ドヴァーラカーは、正義と繁栄に満ちた理想郷でした。
+                        クリシュナは16,108人の妃を持ちましたが、これは彼が悪魔ナラカスラから解放した
+                        女性たちを保護するためでした。主妃ルクミニーとの愛は深く、
+                        彼女との間に生まれた息子プラディユムナは愛の神カーマの化身とされました。
+                    </div>
+                </div>
+                
+                <div class="life-stage-card">
+                    <span class="stage-period">この世を去る</span>
+                    <h3 class="stage-title">
+                        <span class="stage-icon">🌅</span>
+                        神の世界への帰還
+                    </h3>
+                    <div class="stage-content">
+                        125歳になったクリシュナは、森で瞑想していた時、
+                        猟師ジャラーに足を射られて命を落としました。これは偶然の事故ではなく、
+                        クリシュナ自身が選んだ人間界からの退場でした。彼の死により、
+                        ドヴァーラカー王国は海に沈み、ドヴァパラ・ユガ（青銅時代）が終わり、
+                        カリ・ユガ（暗黒時代）が始まったとされています。
+                        しかし、クリシュナの教えと愛は永遠に続き、信者たちの心に生き続けています。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 教えと智慧 -->
+        <section class="teaching-section">
+            <h2 class="section-title">クリシュナの教え</h2>
+            <div class="teaching-icon">📖</div>
+            <div class="teaching-content">
+                <h3>バガヴァッド・ギーターの智慧</h3>
+                <p>
+                    「行為の結果に執着することなく、義務を果たせ」。
+                    クリシュナのこの教えは、現代でも多くの人々の指針となっています。
+                    真の自由とは、行為の結果への不安や期待から解放されることにあります。
+                </p>
+                
+                <h3>愛と献身（バクティ）</h3>
+                <p>
+                    クリシュナは、神への純粋な愛と献身こそが最高の修行であると説きました。
+                    知識や苦行よりも、心からの愛と信頼が神に近づく最も確実な道なのです。
+                    ゴーピーたちの愛は、このような無条件の献身の理想的な例とされています。
+                </p>
+                
+                <h3>リーラー（神の遊戯）</h3>
+                <p>
+                    クリシュナの人生は「リーラー」（神の遊戯）として理解されます。
+                    これは、神が喜びと愛のために宇宙を創造し、その中で様々な役割を演じているという概念です。
+                    人生の困難も喜びも、すべて神の壮大な遊戯の一部なのです。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🎵</span>
+                    <h3 class="character-name">クリシュナ</h3>
+                    <p class="character-description">
+                        ヴィシュヌ神の第8化身。
+                        愛と叡智、遊戯の神として崇拝される。
+                        美しい笛の音色で知られ、
+                        バガヴァッド・ギーターの説者。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌹</span>
+                    <h3 class="character-name">ラーダー</h3>
+                    <p class="character-description">
+                        クリシュナの最愛の人。
+                        神への純粋な献身と愛の象徴。
+                        彼女とクリシュナの愛は
+                        霊的な結合を表現している。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👹</span>
+                    <h3 class="character-name">カンサ王</h3>
+                    <p class="character-description">
+                        マトゥラーの暴君。
+                        クリシュナの叔父だが、
+                        予言を恐れて甥を殺そうとした。
+                        悪政の象徴として描かれる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">ルクミニー</h3>
+                    <p class="character-description">
+                        クリシュナの主妃。
+                        ラクシュミー女神の化身とされ、
+                        美と富、そして献身的な愛の
+                        象徴として描かれる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🏹</span>
+                    <h3 class="character-name">アルジュナ</h3>
+                    <p class="character-description">
+                        パーンダヴァ五兄弟の三男。
+                        クリシュナの親友で弟子。
+                        バガヴァッド・ギーターで
+                        クリシュナの教えを受けた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">💪</span>
+                    <h3 class="character-name">バララーマ</h3>
+                    <p class="character-description">
+                        クリシュナの兄。
+                        シェーシャ・ナーガの化身で、
+                        農業と力の象徴。
+                        弟と共に多くの冒険を共にした。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">クリシュナ神話 - 愛と叡智に満ちた神の生涯と教え</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 孔雀の羽を生成
+        function createPeacockFeathers() {
+            const feathersContainer = document.getElementById('peacockFeathers');
+            const numberOfFeathers = 10;
+            
+            for (let i = 0; i < numberOfFeathers; i++) {
+                const feather = document.createElement('div');
+                feather.className = 'peacock-feather';
+                feather.innerHTML = '🪶';
+                
+                // ランダムな位置とアニメーション
+                feather.style.left = Math.random() * 100 + '%';
+                feather.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                feather.style.animationDelay = Math.random() * 15 + 's';
+                
+                feathersContainer.appendChild(feather);
+            }
+        }
+        
+        // 音符を生成
+        function createMusicalNotes() {
+            const notesContainer = document.getElementById('musicalNotes');
+            const numberOfNotes = 15;
+            const notes = ['♪', '♫', '♬', '🎵', '🎶'];
+            
+            for (let i = 0; i < numberOfNotes; i++) {
+                const note = document.createElement('div');
+                note.className = 'musical-note';
+                note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+                
+                // ランダムな位置とアニメーション
+                note.style.left = Math.random() * 100 + '%';
+                note.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                note.style.animationDelay = Math.random() * 10 + 's';
+                
+                notesContainer.appendChild(note);
+            }
+        }
+        
+        // ページ読み込み時にエフェクトを生成
+        window.addEventListener('load', () => {
+            createPeacockFeathers();
+            createMusicalNotes();
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.life-stage-card, .character-card, .teaching-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.life-stage-content, .teaching-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スラブ神話大全 - 東欧の森と精霊の神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 雪の結晶パーティクル */
+        .snow-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .snow-particle {
+            position: absolute;
+            color: rgba(173, 216, 230, 0.8);
+            font-size: 16px;
+            animation: snow-fall linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes snow-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* スラブの太陽のシンボル */
+        .slavic-sun {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            width: 120px;
+            height: 120px;
+            border: 4px solid rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            z-index: 2;
+            animation: sun-rotate 15s linear infinite;
+        }
+        
+        .slavic-sun::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(255, 69, 0, 0.7);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .slavic-sun::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        @keyframes sun-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(26, 26, 46, 0.9) 0%, rgba(15, 52, 96, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-menu a:hover {
+            color: #ADD8E6;
+            transform: translateY(-2px);
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ADD8E6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #ADD8E6;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(173, 216, 230, 0.6);
+            animation: title-frost 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes title-frost {
+            from { 
+                text-shadow: 0 0 30px rgba(173, 216, 230, 0.6);
+                color: #ADD8E6;
+            }
+            to { 
+                text-shadow: 0 0 50px rgba(173, 216, 230, 0.9), 0 0 70px rgba(255, 255, 255, 0.4);
+                color: #E6F3FF;
+            }
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-description {
+            max-width: 800px;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #E0E0E0;
+            margin-bottom: 50px;
+        }
+        
+        /* 神話カテゴリーグリッド */
+        .mythology-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .mythology-card {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(15, 52, 96, 0.6) 100%);
+            border: 2px solid rgba(173, 216, 230, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .mythology-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(173, 216, 230, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .mythology-card:hover::before {
+            left: 100%;
+        }
+        
+        .mythology-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #ADD8E6;
+            box-shadow: 0 20px 40px rgba(173, 216, 230, 0.3);
+        }
+        
+        .card-icon {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .card-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #ADD8E6;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-description {
+            color: #E0E0E0;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .card-features li {
+            color: #B0B0B0;
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .card-features li::before {
+            content: '❄️';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* 氷の結晶エフェクト */
+        .frost-border {
+            position: relative;
+        }
+        
+        .frost-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ADD8E6, #87CEEB, #B0E0E6, #ADD8E6);
+            border-radius: 22px;
+            z-index: -1;
+            animation: frost-glow 5s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .mythology-card:hover .frost-border::after {
+            opacity: 1;
+        }
+        
+        @keyframes frost-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(26, 26, 46, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(173, 216, 230, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #B0B0B0;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .mythology-grid {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+            }
+            
+            .mythology-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 雪のパーティクル -->
+    <div class="snow-particles" id="snowParticles"></div>
+    
+    <!-- スラブの太陽シンボル -->
+    <div class="slavic-sun"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">スラブ神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">メインマップ</a></li>
+                    <li><a href="celtic-mythology-index.html">ケルト神話</a></li>
+                    <li><a href="norse-mythology-index.html">北欧神話</a></li>
+                    <li><a href="chinese-mythology-index.html">中華神話</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <h1 class="hero-title">スラブ神話の世界</h1>
+        <p class="hero-subtitle">東欧の森と精霊の古い伝承</p>
+        <div class="hero-description">
+            東欧から北欧にかけて広がるスラブ民族の神話は、厳しい自然環境と深い森林に育まれた独特の世界観を持っています。
+            太陽神、森の精霊、水の女神、そして邪悪な魔女や竜との戦いの物語。
+            火と氷、光と闇の対立を描いた、力強く神秘的な伝承の世界をご案内します。
+        </div>
+    </section>
+    
+    <!-- 神話カテゴリー -->
+    <section class="mythology-grid">
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">☀️</div>
+            <h2 class="card-title">太陽神と光の神々</h2>
+            <p class="card-description">
+                スヴァログ、ダジボーグなど、光と火を司る
+                スラブ神話の主要な神々。
+            </p>
+            <ul class="card-features">
+                <li>スヴァログ - 天空と鍛冶の神</li>
+                <li>ダジボーグ - 太陽神、豊穣の神</li>
+                <li>フヴォルス - 火と光明の神</li>
+                <li>ヤリロ - 春と生命力の神</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">🌊</div>
+            <h2 class="card-title">水の精霊と女神</h2>
+            <p class="card-description">
+                川、湖、海に住む美しくも危険な
+                水の精霊たちの物語。
+            </p>
+            <ul class="card-features">
+                <li>ルサルカ - 水の精霊、人魚</li>
+                <li>ヴォジャノイ - 川の主</li>
+                <li>モコシ - 大地母神、豊穣の女神</li>
+                <li>レシー - 森の守護神</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">🌲</div>
+            <h2 class="card-title">森の精霊と守護者</h2>
+            <p class="card-description">
+                深い森に住む様々な精霊たちと
+                人間との交流の物語。
+            </p>
+            <ul class="card-features">
+                <li>レシー - 森の王、道案内</li>
+                <li>ドモヴォイ - 家の守護精霊</li>
+                <li>キキモラ - 沼地の魔女</li>
+                <li>バーバ・ヤガー - 森の魔女</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">⚡</div>
+            <h2 class="card-title">雷神と戦いの神</h2>
+            <p class="card-description">
+                ペルーンを筆頭とする戦いと嵐を司る
+                力強い戦神たちの伝説。
+            </p>
+            <ul class="card-features">
+                <li>ペルーン - 雷神、戦いの神</li>
+                <li>ヴェレス - 家畜と商業の神</li>
+                <li>ストリボーグ - 風の神</li>
+                <li>マルス - 戦争の神</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">🏰</div>
+            <h2 class="card-title">英雄と王の物語</h2>
+            <p class="card-description">
+                勇敢な王子、賢い王、そして邪悪な敵との
+                戦いを描いた英雄叙事詩。
+            </p>
+            <ul class="card-features">
+                <li>イワン王子 - 勇敢な王子</li>
+                <li>火の鳥の物語</li>
+                <li>コシチェイ不死身との戦い</li>
+                <li>灰かぶり姫の原型</li>
+            </ul>
+        </div>
+        
+        <div class="mythology-card frost-border" onclick="location.href='#'">
+            <div class="card-icon">❄️</div>
+            <h2 class="card-title">冬と死の神話</h2>
+            <p class="card-description">
+                厳しい冬の寒さと死を司る神々、
+                そして春の復活の物語。
+            </p>
+            <ul class="card-features">
+                <li>モラナ - 冬と死の女神</li>
+                <li>カラチューン - 冬至の祭り</li>
+                <li>マースレニツァ - 春の祭り</li>
+                <li>生と死の循環神話</li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">スラブ神話 - 東欧の森と精霊が織りなす神秘の世界</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 雪のパーティクルを生成
+        function createSnowParticles() {
+            const snowContainer = document.getElementById('snowParticles');
+            const numberOfParticles = 30;
+            const snowflakes = ['❄️', '❅', '❆', '✻', '✼'];
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'snow-particle';
+                particle.innerHTML = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                
+                // ランダムな位置とアニメーション
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.fontSize = (Math.random() * 10 + 12) + 'px';
+                
+                snowContainer.appendChild(particle);
+            }
+        }
+        
+        // カードのホバーエフェクト
+        document.querySelectorAll('.mythology-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // ページ読み込み時の初期化
+        window.addEventListener('load', () => {
+            createSnowParticles();
+            
+            // フェードインアニメーション
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // カードにフェードインを適用
+            document.querySelectorAll('.mythology-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(card);
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

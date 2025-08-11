@@ -433,6 +433,9 @@
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
         .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+        .stagger-7 { animation-delay: 0.7s; }
     </style>
 </head>
 <body>
@@ -543,6 +546,43 @@
                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(139,69,19,0.3)'">
                         🔥 火柴人
                     </a>
+                </div>
+            </div>
+            
+            <!-- 新しい神話の追加 -->
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-4" onclick="openMythology('xiyouji')">
+                    <div class="volume-icon">🐵</div>
+                    <h3 class="volume-title">西遊記</h3>
+                    <p class="volume-subtitle">孫悟空の大冒険</p>
+                    <p class="volume-chapters">100回 • 孫悟空、三蔵法師、天竺</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-5" onclick="openMythology('baishe')">
+                    <div class="volume-icon">🐍</div>
+                    <h3 class="volume-title">白蛇傳</h3>
+                    <p class="volume-subtitle">愛と執念の物語</p>
+                    <p class="volume-chapters">永遠の愛 • 白娘子、許仙、法海</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-6" onclick="openMythology('niulang')">
+                    <div class="volume-icon">⭐</div>
+                    <h3 class="volume-title">牛郎織女</h3>
+                    <p class="volume-subtitle">七夕の愛の物語</p>
+                    <p class="volume-chapters">天の川 • 織姫、彦星、カササギの橋</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <div class="volume-card fade-in stagger-7" onclick="openMythology('houyi')">
+                    <div class="volume-icon">🏹</div>
+                    <h3 class="volume-title">后羿射日</h3>
+                    <p class="volume-subtitle">十の太陽を射落とす英雄</p>
+                    <p class="volume-chapters">古代神話 • 后羿、嫦娥、太陽</p>
                 </div>
             </div>
         </div>

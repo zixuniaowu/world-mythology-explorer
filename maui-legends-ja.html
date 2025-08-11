@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マウイの伝説 - ポリネシア神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0066CC 50%, #FFD700 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 南太平洋の海と太陽 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(0, 102, 204, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FFD700 0%, #0066CC 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🏝️ 🎣 ☀️ 🌊';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FFD700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FFD700;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 102, 204, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FFD700;
+        }
+
+        .trickster-wisdom {
+            background: rgba(0, 102, 204, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(0, 102, 204, 0.3);
+        }
+
+        .trickster-wisdom h4 {
+            color: #0066CC;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* マウイのフック */
+        .maui-hook {
+            position: fixed;
+            top: 30%;
+            right: 30px;
+            font-size: 5rem;
+            opacity: 0.12;
+            z-index: 1;
+            animation: hookSwing 15s infinite;
+        }
+
+        @keyframes hookSwing {
+            0%, 100% { transform: rotate(-10deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(0.9); }
+            75% { transform: rotate(-5deg) scale(1.05); }
+        }
+
+        .island-chain {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .ocean-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .wave-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: waveFlow 20s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes waveFlow {
+            0% {
+                transform: translateX(-100px) translateY(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateX(100vw) translateY(20px);
+                opacity: 0;
+            }
+        }
+
+        .sun-lasso {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: sunPulse 12s infinite;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.1; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.3; }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- マウイのフック -->
+    <div class="maui-hook">🎣</div>
+    
+    <!-- 太陽の投げ縄 -->
+    <div class="sun-lasso">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- 太陽 -->
+            <circle cx="75" cy="75" r="30" fill="rgba(255, 215, 0, 0.3)"/>
+            <g stroke="rgba(255, 215, 0, 0.3)" stroke-width="2">
+                <line x1="75" y1="25" x2="75" y2="35"/>
+                <line x1="105" y1="45" x2="95" y2="55"/>
+                <line x1="125" y1="75" x2="115" y2="75"/>
+                <line x1="105" y1="105" x2="95" y2="95"/>
+                <line x1="75" y1="125" x2="75" y2="115"/>
+                <line x1="45" y1="105" x2="55" y2="95"/>
+                <line x1="25" y1="75" x2="35" y2="75"/>
+                <line x1="45" y1="45" x2="55" y2="55"/>
+            </g>
+            <!-- 投げ縄 -->
+            <path d="M75,105 Q60,120 45,135" stroke="rgba(255, 215, 0, 0.2)" stroke-width="3" fill="none"/>
+        </svg>
+    </div>
+    
+    <!-- 海の波 -->
+    <div class="ocean-waves" id="oceanWaves"></div>
+    
+    <!-- 島々 -->
+    <div class="island-chain">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- ハワイの島々 -->
+            <ellipse cx="15" cy="70" rx="8" ry="4" fill="rgba(255, 215, 0, 0.2)"/>
+            <ellipse cx="30" cy="65" rx="10" ry="6" fill="rgba(255, 215, 0, 0.2)"/>
+            <ellipse cx="50" cy="75" rx="12" ry="7" fill="rgba(255, 215, 0, 0.2)"/>
+            <ellipse cx="70" cy="68" rx="9" ry="5" fill="rgba(255, 215, 0, 0.2)"/>
+            <ellipse cx="85" cy="72" rx="7" ry="4" fill="rgba(255, 215, 0, 0.2)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>マウイの伝説</h1>
+            <p>Maui Legends - トリックスター英雄の冒険譚</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FFD700; text-decoration: none; font-size: 1.5rem;">🏝️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="polynesian-mythology-index-ja.html">ポリネシア神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>半神のトリックスター</h2>
+            
+            <p>
+                マウイ（Māui）は、ポリネシア全域で愛され続けている半神の英雄です。彼はトリックスター、発明家、文化的英雄として、ハワイ、ニュージーランド、タヒチ、サモア、フィジーなど、広大な太平洋の島々で語り継がれています。小さな体に大きな知恵と勇気を宿し、人類のために数々の偉業を成し遂げました。マウイの物語は、知恵が力に勝り、小さな者でも世界を変えることができるという希望に満ちたメッセージを伝えています。
+            </p>
+
+            <h3>奇跡の誕生</h3>
+            <p>
+                マウイの誕生は奇跡に満ちていました。母タランガは彼を早産で産み、あまりにも小さく弱々しかったため、生き残ることはできないと判断されました。悲しんだ母は、マウイを髪の房で包み、海に流しました。しかし、天空神タンガロア（地域によってはカナロア）が赤子を救い上げ、神々の力で育てました。
+            </p>
+
+            <p>
+                マウイが人間界に戻ってきた時、彼は4人の兄たちよりもずっと小さく見えました。しかし、その体には神々の力が宿っており、並外れた知恵と魔法の能力を持っていました。兄たちは最初、この小さな弟を軽んじましたが、やがてマウイの真の力を知ることになります。
+            </p>
+
+            <div class="trickster-wisdom">
+                <h4>マウイの特徴</h4>
+                <p>
+                小さな体格だが大きな知恵<br>
+                神々の血を引く半神<br>
+                魔法の釣り針を持つ<br>
+                変身能力を持つ<br>
+                好奇心と勇気に満ちている<br>
+                人類の福祉を第一に考える
+                </p>
+            </div>
+
+            <h3>島々を釣り上げる</h3>
+            <p>
+                マウイの最も有名な偉業の一つが、海から島々を釣り上げたことです。この物語はポリネシア全域で語られており、各地域の島々の形成神話として受け継がれています。
+            </p>
+
+            <p>
+                ある日、マウイは4人の兄たちと漁に出かけました。しかし、兄たちは彼を邪魔者扱いし、「お前は小さすぎて役に立たない」と言いました。マウイは悔しく思いましたが、秘策がありました。彼は祖母から譲り受けた魔法の釣り針を持っていたのです。
+            </p>
+
+            <p>
+                兄たちが普通の魚を釣っている間、マウイは自分の血を餌にして、特別に深い海に釣り糸を垂らしました。すると、今まで感じたことのない重い手応えがありました。マウイが力を込めて引き上げると、海底から巨大な土地が現れました。これがニュージーランドの北島（ハワイでは大島）だったのです。
+            </p>
+
+            <p>
+                驚いた兄たちが興奮して釣り上げられた土地を切り分けようとしたため、土地は割れて山や谷ができました。もしマウイの言う通りに待っていれば、完全に平らな美しい土地になったはずでした。しかし、この「失敗」こそが、現在の美しく変化に富んだ地形を作り出したのです。
+            </p>
+
+            <h3>太陽を捕らえる</h3>
+            <p>
+                マウイのもう一つの偉大な冒険は、太陽を捕らえて一日を長くしたことです。当時、太陽は毎日あまりにも早く空を横切るため、人々は仕事を完成させる時間がありませんでした。タパ布を作る時間も、漁に出る時間も、農作業をする時間も足りませんでした。
+            </p>
+
+            <p>
+                マウイは母親に相談しました：「お母さん、太陽が早すぎて、あなたのタパ布が乾く時間がない」母タランガは答えました：「そうね、でも誰が太陽を止められるの？」マウイは決意しました：「僕がやってみる」
+            </p>
+
+            <p>
+                マウイは兄たちと一緒に太陽が昇る東の果てに向かいました。道中、彼は強いロープを編み、罠を作りました。太陽が地平線から昇ってくると、マウイは勇敢にも太陽に投げ縄をかけ、捕らえました。
+            </p>
+
+            <div class="highlight">
+                太陽との交渉：<br>
+                マウイ：「太陽よ、あなたは速すぎる。人々が困っている」<br>
+                太陽：「私は決められた道を行くだけだ」<br>
+                マウイ：「では約束しよう。夏はゆっくり、冬は普通の速さで」<br>
+                太陽：「分かった。その代わり私を解放してくれ」
+            </div>
+
+            <p>
+                この交渉により、季節による昼の長さの違いが生まれました。夏には太陽がゆっくりと空を横切り、冬には速く移動するようになったのです。マウイの勇敢な行動により、人々は十分な時間を得ることができました。
+            </p>
+
+            <h3>火を盗む</h3>
+            <p>
+                人類がまだ火を知らなかった時代、マウイは地下世界の女王マフイケ（地域によってはペレ）から火を盗みました。マフイケは指の爪に火を宿しており、それが世界で唯一の火でした。
+            </p>
+
+            <p>
+                マウイは小さな鳥に変身し、地下世界に潜り込みました。マフイケに「火を分けてください」と頼むと、女王は親切に自分の指の爪の一つを抜いて火を与えました。しかし、マウイは一つだけでは足りないと考え、すぐに川でその火を消してしまいました。
+            </p>
+
+            <p>
+                「火が消えてしまいました」とマウイが言うと、マフイケは再び指の爪を与えました。これを何度も繰り返すうちに、マフイケはマウイの策略に気づき、激怒しました。彼女は最後の火を投げつけてマウイを燃やそうとしましたが、マウイは素早く逃げ、その火は木々に移りました。
+            </p>
+
+            <p>
+                こうして、カウリ、サンダルウッド、マヒ木など、火を宿す木々が生まれました。人々はこれらの木をこすり合わせて火を起こす方法を学び、マウイの知恵により人類は火を手に入れたのです。
+            </p>
+
+            <h3>風を捕らえる</h3>
+            <p>
+                マウイは風の神ラ・マオマオの洞窟を発見し、8つの風を捕らえました。それまで風は自由に吹き、時には嵐となって人々を困らせていました。マウイは巧妙な罠を使って風を捕らえ、ココナッツの殻に閉じ込めました。
+            </p>
+
+            <p>
+                各方角の風（北風、南風、東風、西風と、それらの中間の風）をそれぞれ別の殻に入れ、必要な時にだけ解放するようにしました。これにより、航海者は風向きを予測でき、農民は作物に適した風を得ることができるようになりました。
+            </p>
+
+            <h3>死への挑戦と最期</h3>
+            <p>
+                マウイの最後の、そして最も危険な冒険は、死の女神ヒネ・ヌイ・テ・ポ（Hine-nui-te-pō）に挑戦することでした。マウイは人類のために不死を獲得しようと考えました。
+            </p>
+
+            <p>
+                死の女神は地下世界で眠っており、その体は巨大でした。マウイは小さな虫に変身し、女神の口から入って心臓を通り抜け、反対側から出ることで、死に勝利しようと計画しました。
+            </p>
+
+            <p>
+                マウイは仲間の鳥たちに「絶対に笑ってはいけない」と警告しました。しかし、マウイが女神の体内に入っている滑稽な様子を見て、ファンテール（扇尾鳥）が笑ってしまいました。その笑い声で女神が目を覚まし、マウイは体内で押しつぶされて死んでしまいました。
+            </p>
+
+            <p>
+                こうして、人類は不死を得ることはできませんでした。しかし、マウイの勇敢な挑戦により、死は自然の摂理として受け入れられるものとなり、生命の価値がより高く評価されるようになりました。
+            </p>
+
+            <h3>現代への遺産</h3>
+            <p>
+                マウイの物語は現代でも生きています。ハワイでは毎年マウイを讃える祭りが開催され、ニュージーランドのマオリ族は彼を文化的英雄として尊敬しています。近年では、ディズニー映画「モアナ」により、世界中の人々がマウイの魅力を知ることになりました。
+            </p>
+
+            <p>
+                また、マウイの冒険精神と問題解決能力は、現代の起業家や発明家のインスピレーションとなっています。「小さくても知恵があれば世界を変えられる」という彼のメッセージは、時代を超えて人々に勇気を与え続けています。
+            </p>
+
+            <div class="highlight">
+                マウイの伝説が現代に伝えること：<br>
+                真の力は身体的な大きさではなく、知恵と勇気にある。失敗を恐れず挑戦することで、予想外の素晴らしい結果が生まれることもある。個人の利益よりも共同体の幸福を優先する心が真の英雄を作る。自然の力を理解し、それと協調することで真の進歩が得られる。そして完璧を求めすぎず、「美しい失敗」も受け入れることが人生を豊かにする。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. マウイの冒険心に学びましょう。</p>
+    </footer>
+
+    <script>
+        // 海の波エフェクト
+        function createOceanWaves() {
+            const container = document.getElementById('oceanWaves');
+            const waves = ['🌊', '💧', '🐠', '🌴', '⭐'];
+            
+            function addWave() {
+                const wave = document.createElement('div');
+                wave.className = 'wave-particle';
+                wave.innerHTML = waves[Math.floor(Math.random() * waves.length)];
+                wave.style.top = Math.random() * 100 + '%';
+                wave.style.animationDelay = Math.random() * 5 + 's';
+                wave.style.animationDuration = (15 + Math.random() * 15) + 's';
+                container.appendChild(wave);
+                
+                setTimeout(() => {
+                    if (container.contains(wave)) {
+                        container.removeChild(wave);
+                    }
+                }, 20000);
+            }
+            
+            // 定期的に波を追加
+            setInterval(addWave, 4000);
+            
+            // 初期の波を追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addWave, i * 2000);
+            }
+        }
+        
+        createOceanWaves();
+    </script>
+</body>
+</html>

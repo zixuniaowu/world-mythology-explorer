@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラー神の太陽の旅 - 永遠に続く光の航海</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(180deg, #FF4500 0%, #FFD700 30%, #FFA500 70%, #8B4513 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 太陽の光線エフェクト */
+        .sun-rays-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .sun-ray {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 200px;
+            background: linear-gradient(to bottom, rgba(255, 215, 0, 0.8), transparent);
+            transform-origin: center bottom;
+            animation: rotate-rays 20s linear infinite;
+        }
+        
+        @keyframes rotate-rays {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* 太陽のメインディスク */
+        .sun-disk {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF4500 100%);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), 0 0 200px rgba(255, 165, 0, 0.4);
+            animation: sun-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes sun-pulse {
+            0%, 100% { 
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 0 100px rgba(255, 215, 0, 0.8), 0 0 200px rgba(255, 165, 0, 0.4);
+            }
+            50% { 
+                transform: translateX(-50%) scale(1.1);
+                box-shadow: 0 0 120px rgba(255, 215, 0, 1), 0 0 240px rgba(255, 165, 0, 0.6);
+            }
+        }
+        
+        /* ヒエログリフスクロール */
+        .hieroglyph-scroll {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.8), transparent);
+            border-top: 2px solid #DAA520;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #DAA520;
+            animation: scroll-hieroglyphs 15s linear infinite;
+        }
+        
+        @keyframes scroll-hieroglyphs {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(255, 69, 0, 0.9) 0%, rgba(255, 215, 0, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #8B4513;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #8B4513;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #8B4513;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.3);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+            animation: title-glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes title-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            to { 
+                text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 165, 0, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #FFFFFF;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        /* 時間帯カード */
+        .journey-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .journey-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .journey-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .journey-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .journey-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+        
+        .time-period {
+            display: inline-block;
+            background: #FF4500;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .journey-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .journey-icon {
+            font-size: 1.5em;
+        }
+        
+        .journey-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 太陽船セクション */
+        .solar-boat-section {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .boat-icon {
+            font-size: 6em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #FFD700);
+            animation: boat-float 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes boat-float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        .boat-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #F5E6D3;
+        }
+        
+        .boat-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(139, 69, 19, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sun-disk {
+                width: 100px;
+                height: 100px;
+                top: 15%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 太陽の光線 -->
+    <div class="sun-rays-container" id="sunRaysContainer"></div>
+    
+    <!-- 太陽のディスク -->
+    <div class="sun-disk"></div>
+    
+    <!-- ヒエログリフスクロール -->
+    <div class="hieroglyph-scroll">
+        𓇳 𓈖 𓇯 𓅃 𓊪 𓏏 𓇯 𓈖 𓇳
+    </div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="egyptian-mythology-index.html" class="logo">エジプト神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="egyptian-mythology-index.html">エジプト神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#journey">太陽の旅</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">ラー神の太陽の旅</h1>
+            <p class="story-subtitle">永遠に続く光の航海と闇との戦い</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 太陽の旅程 -->
+        <section id="journey" class="story-section">
+            <h2 class="section-title">太陽神の一日の旅路</h2>
+            <div class="journey-grid">
+                <div class="journey-card">
+                    <span class="time-period">夜明け前</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🌅</span>
+                        東の地平線からの誕生
+                    </h3>
+                    <div class="journey-content">
+                        毎朝、太陽神ラーは東の地平線から「ケプリ」（朝の太陽）として誕生します。
+                        黄金の太陽船「マンデト」に乗り、スカラベ（フンコロガシ）の姿で現れることもあります。
+                        この瞬間、世界に光がもたらされ、新しい一日が始まります。
+                        朝の光は希望と再生の象徴として、古代エジプト人に崇拝されていました。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">午前</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">☀️</span>
+                        空の航海
+                    </h3>
+                    <div class="journey-content">
+                        ラーは「マンデト船」で青い空を航海し、地上に光と温もりをもたらします。
+                        太陽が昇るにつれて、ラーの力は強くなり、隼の頭を持つ姿で描かれることが多くなります。
+                        この時間帯、ラーは最も活動的で、人間世界を見守り、正義を司ります。
+                        農民たちは畑で働き、職人たちは神殿を建設します。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">正午</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🔥</span>
+                        天頂での最強の力
+                    </h3>
+                    <div class="journey-content">
+                        正午にラーは天の最高点に達し、最も強力な姿「ラー・ホルアクティ」として現れます。
+                        この時、太陽の熱と光は最も強烈で、砂漠でも生命力を与えます。
+                        ファラオはこの時間に重要な儀式を行い、ラーの力を借りて国を統治しました。
+                        しかし、この強大な力は同時に破壊的でもあり、人々は日陰を求めました。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">午後</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🌇</span>
+                        西への下降
+                    </h3>
+                    <div class="journey-content">
+                        午後になると、ラーは徐々に力を失い始め、西へ向かって下降します。
+                        この時期のラーは「アトゥム」（夕方の太陽）として知られ、老人の姿で描かれることがあります。
+                        夕日の赤い光は、ラーが一日の労働を終えて休息に向かう合図です。
+                        人々も一日の仕事を終え、家族と共に夕食の時間を迎えます。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">日没</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🌆</span>
+                        冥界への入口
+                    </h3>
+                    <div class="journey-content">
+                        西の地平線でラーは冥界への扉を開き、「メセクテト船」（夜の船）に乗り換えます。
+                        この瞬間、昼の世界から夜の世界への転換が起こります。
+                        ラーは死者たちの領域に入り、そこで様々な試練と冒険を経験することになります。
+                        日没は死の象徴でもありますが、同時に再生への第一歩でもあります。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">夜中</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🐍</span>
+                        アポピスとの戦い
+                    </h3>
+                    <div class="journey-content">
+                        冥界の最も危険な時刻、ラーは混沌の蛇神アポピス（アペプ）との戦いに臨みます。
+                        アポピスは太陽を飲み込もうとし、世界を永遠の闇に陥れようとします。
+                        しかし、ラーは魔術と戦士たちの助けを借りて、毎夜この脅威を退けます。
+                        この戦いは善と悪、秩序と混沌の永遠の対立を象徴しています。
+                    </div>
+                </div>
+                
+                <div class="journey-card">
+                    <span class="time-period">夜明け前</span>
+                    <h3 class="journey-title">
+                        <span class="journey-icon">🔄</span>
+                        再生と復活
+                    </h3>
+                    <div class="journey-content">
+                        アポピスを打ち破ったラーは、冥界の最深部で再生の儀式を受けます。
+                        死者たちの魂とオシリスの祝福により、ラーは若々しい力を取り戻します。
+                        そして再び東の地平線に向かい、新しい一日の始まりを告げる準備をします。
+                        この循環は永遠に続き、宇宙の秩序を維持するのです。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 太陽船セクション -->
+        <section class="solar-boat-section">
+            <h2 class="section-title">太陽船マンデトとメセクテト</h2>
+            <div class="boat-icon">⛵</div>
+            <div class="boat-content">
+                <h3>昼の船「マンデト」</h3>
+                <p>
+                    昼間、ラーは「マンデト」という黄金の船に乗って空を航海します。
+                    この船は太陽光そのもので作られており、神々や精霊たちが乗組員として仕えています。
+                    船首には太陽のディスクが輝き、船尾からは光の尾を引いて天空を進みます。
+                </p>
+                
+                <h3>夜の船「メセクテト」</h3>
+                <p>
+                    夜になると、ラーは「メセクテト」という夜の船に乗り換えます。
+                    この船は冥界の川を航行し、死者たちの魂を導きながら、
+                    数々の危険と試練を乗り越えて再生の地へ向かいます。
+                    船には魔術的な防御が施され、アポピスの攻撃から太陽神を守ります。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">太陽の旅路の登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">☀️</span>
+                    <h3 class="character-name">ラー</h3>
+                    <p class="character-description">
+                        太陽の主神。昼はマンデト船、夜はメセクテト船で
+                        永遠の航海を続ける。時間帯により
+                        ケプリ、ラー・ホルアクティ、アトゥムの姿を取る。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐍</span>
+                    <h3 class="character-name">アポピス（アペプ）</h3>
+                    <p class="character-description">
+                        混沌と闇の巨大な蛇神。毎夜ラーの船を
+                        攻撃し、太陽を飲み込んで世界を
+                        永遠の闇に陥れようとする。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐺</span>
+                    <h3 class="character-name">ウプウアウト</h3>
+                    <p class="character-description">
+                        「道を開く者」として知られるジャッカル神。
+                        ラーの船の先導役を務め、冥界の
+                        危険な航路を案内する。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🔱</span>
+                    <h3 class="character-name">セト</h3>
+                    <p class="character-description">
+                        オシリス神話では悪役だが、太陽の旅では
+                        ラーの守護者として船首に立ち、
+                        槍でアポピスと戦う戦士の役割を果たす。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🪶</span>
+                    <h3 class="character-name">トト</h3>
+                    <p class="character-description">
+                        知恵と月の神。太陽船の記録係として
+                        旅路の出来事を記録し、魔術で
+                        船を守る呪文を唱える。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🏺</span>
+                    <h3 class="character-name">フー（フ）</h3>
+                    <p class="character-description">
+                        権威と権力の神格化。ラーの
+                        太陽船の重要な乗組員として、
+                        神の権威を象徴し、秩序を維持する。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">ラー神の太陽の旅 - 古代エジプトの宇宙観を表す永遠の航海</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 太陽の光線を生成
+        function createSunRays() {
+            const raysContainer = document.getElementById('sunRaysContainer');
+            const numberOfRays = 12;
+            
+            for (let i = 0; i < numberOfRays; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'sun-ray';
+                
+                // 放射状に配置
+                const angle = (360 / numberOfRays) * i;
+                ray.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                ray.style.animationDelay = (i * 0.1) + 's';
+                
+                raysContainer.appendChild(ray);
+            }
+        }
+        
+        // 太陽の位置を時間に応じて変更
+        function updateSunPosition() {
+            const sunDisk = document.querySelector('.sun-disk');
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const totalMinutes = hours * 60 + minutes;
+            
+            // 6:00 AM to 6:00 PM を太陽の軌道とする
+            const sunriseMinutes = 6 * 60; // 6:00 AM
+            const sunsetMinutes = 18 * 60; // 6:00 PM
+            
+            if (totalMinutes >= sunriseMinutes && totalMinutes <= sunsetMinutes) {
+                // 昼間：左から右への軌道
+                const progress = (totalMinutes - sunriseMinutes) / (sunsetMinutes - sunriseMinutes);
+                const leftPercent = 10 + (progress * 80); // 10% to 90%
+                const topPercent = 10 + Math.sin(progress * Math.PI) * 20; // 放物線軌道
+                
+                sunDisk.style.left = leftPercent + '%';
+                sunDisk.style.top = topPercent + '%';
+            } else {
+                // 夜間：見えない位置に
+                sunDisk.style.left = '50%';
+                sunDisk.style.top = '120%'; // 画面外
+            }
+        }
+        
+        // ページ読み込み時に初期化
+        window.addEventListener('load', () => {
+            createSunRays();
+            updateSunPosition();
+            // 1分ごとに太陽の位置を更新
+            setInterval(updateSunPosition, 60000);
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.journey-card, .character-card, .boat-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.journey-content, .boat-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

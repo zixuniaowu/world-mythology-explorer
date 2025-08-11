@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラーマーヤナ - 愛と正義の壮大な叙事詩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #FF8C00 0%, #FF6347 30%, #DC143C 70%, #8B0000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 蓮の花びらエフェクト */
+        .lotus-petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .lotus-petal {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.8);
+            font-size: 2em;
+            animation: petal-fall linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes petal-fall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* サンスクリット文字の背景 */
+        .sanskrit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 120px,
+                rgba(255, 215, 0, 0.1) 120px,
+                rgba(255, 215, 0, 0.1) 140px
+            );
+            z-index: 0;
+            animation: sanskrit-scroll 40s linear infinite;
+        }
+        
+        @keyframes sanskrit-scroll {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(140px) translateY(140px); }
+        }
+        
+        /* 神聖な光 */
+        .divine-light {
+            position: fixed;
+            top: 20%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 140, 0, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            z-index: 2;
+            animation: divine-pulse 6s ease-in-out infinite;
+        }
+        
+        @keyframes divine-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(255, 140, 0, 0.9) 0%, rgba(255, 99, 71, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #8B0000;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 140, 0, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: divine-glow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes divine-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 140, 0, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 140, 0, 0.8), 0 0 80px rgba(255, 99, 71, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #FFF8DC;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        /* 章カード */
+        .chapter-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .chapter-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 99, 71, 0.1) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #FF6347, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .chapter-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+        }
+        
+        .chapter-number {
+            display: inline-block;
+            background: #DC143C;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .chapter-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chapter-icon {
+            font-size: 1.5em;
+        }
+        
+        .chapter-content {
+            color: #FFF8DC;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 愛の試練セクション */
+        .love-trial-section {
+            background: rgba(220, 20, 60, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .trial-icon {
+            font-size: 6em;
+            color: #DC143C;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #DC143C);
+            animation: heart-beat 3s ease-in-out infinite;
+        }
+        
+        @keyframes heart-beat {
+            0%, 100% { 
+                transform: scale(1);
+            }
+            50% { 
+                transform: scale(1.1);
+            }
+        }
+        
+        .trial-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #FFF8DC;
+        }
+        
+        .trial-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #DC143C;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #FFF8DC;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(139, 0, 0, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #FFF8DC;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .divine-light {
+                width: 80px;
+                height: 80px;
+                top: 15%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 蓮の花びら -->
+    <div class="lotus-petals" id="lotusPetals"></div>
+    
+    <!-- サンスクリット背景 -->
+    <div class="sanskrit-bg"></div>
+    
+    <!-- 神聖な光 -->
+    <div class="divine-light"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="indian-mythology-index.html" class="logo">インド神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="indian-mythology-index.html">インド神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">ラーマーヤナ</h1>
+            <p class="story-subtitle">愛と義務、正義と忠誠を描いた不朽の叙事詩</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">叙事詩の七章</h2>
+            <div class="chapter-grid">
+                <div class="chapter-card">
+                    <span class="chapter-number">第一章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">🏹</span>
+                        ラーマの誕生と成長
+                    </h3>
+                    <div class="chapter-content">
+                        コーサラ国の王ダシャラタには三人の妻がいましたが、なかなか子宝に恵まれませんでした。
+                        王は子供を授かるため「プトラカーメシュティ」という犠牲祭を行いました。
+                        その結果、長男ラーマ、次男バラタ、三男ラクシュマナ、四男シャトルグナが生まれました。
+                        ラーマは理想的な王子として成長し、弓術に優れ、徳に満ちた青年となりました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第二章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">💍</span>
+                        シーターとの結婚
+                    </h3>
+                    <div class="chapter-content">
+                        ミティラー国の王ジャナカは、娘シーターの結婚相手を決めるため、
+                        シヴァ神の弓を引ける者との結婚を約束しました。多くの王子が挑戦しましたが、
+                        誰も弓を動かすことすらできませんでした。しかし、ラーマはその弓を軽々と引き、
+                        弦を張ろうとした瞬間に弓が真っ二つに折れてしまいました。
+                        こうしてラーマとシーターは結ばれ、理想的な夫婦となりました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第三章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">👑</span>
+                        王位継承と追放
+                    </h3>
+                    <div class="chapter-content">
+                        年老いたダシャラタ王はラーマを王位継承者に指名しました。しかし、
+                        第二妃カイケーイは、かつて王が約束した二つの願いを持ち出し、
+                        自分の息子バラタを王にし、ラーマを14年間森に追放することを要求しました。
+                        義務を重んじるラーマは父の言葉に従い、妻シーターと弟ラクシュマナと共に
+                        森への流浪の旅に出発しました。バラタは兄の代理として統治しましたが、
+                        ラーマの帰還を待ち続けました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第四章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">🌿</span>
+                        森での生活と試練
+                    </h3>
+                    <div class="chapter-content">
+                        森でのラーマ一家は質素ながらも幸せな生活を送っていました。
+                        しかし、魔王ラーヴァナの妹シュールパナカーがラーマに求愛し、
+                        断られると怒って襲いかかりました。ラクシュマナが彼女の鼻と耳を切り落とし、
+                        これがきっかけでラーヴァナとの対立が始まりました。
+                        ラーヴァナは復讐のため、黄金の鹿に化けた魔物でラーマを騙し、
+                        その隙にシーターを誘拐してランカー島に連れ去りました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第五章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">🐒</span>
+                        ハヌマーンとの出会い
+                    </h3>
+                    <div class="chapter-content">
+                        シーターを探すラーマは、猿の王国キシュキンダーでハヌマーンと出会いました。
+                        ハヌマーンは風神の息子で、計り知れない力と忠誠心を持っていました。
+                        ラーマは猿の王スグリーヴァを王位に復帰させる手助けをし、
+                        その見返りとしてスグリーヴァは猿の軍団でシーター探しを手伝うことを約束しました。
+                        ハヌマーンは海を飛び越えてランカー島に渡り、捕らわれているシーターを発見し、
+                        ラーマからの指輪を渡して希望を与えました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第六章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">⚔️</span>
+                        ランカー大戦
+                    </h3>
+                    <div class="chapter-content">
+                        ラーマは猿の軍団と共にランカー島に向かいました。海を渡るため、
+                        猿たちは海神の協力を得て橋を架けました。ランカーでは壮絶な戦いが繰り広げられ、
+                        ラーヴァナの息子インドラジットや弟クンバカルナなど強敵との戦いが続きました。
+                        最終的にラーマは神々から授かった武器でラーヴァナを倒し、シーターを救出しました。
+                        しかし、ラーマは他の男に触れられたシーターの純潔を疑い、彼女に火の試練を課しました。
+                        火の神アグニがシーターの潔白を証明し、夫婦は再会を果たしました。
+                    </div>
+                </div>
+                
+                <div class="chapter-card">
+                    <span class="chapter-number">第七章</span>
+                    <h3 class="chapter-title">
+                        <span class="chapter-icon">🏰</span>
+                        帰還と統治
+                    </h3>
+                    <div class="chapter-content">
+                        14年の流浪を終えて故郷に帰ったラーマは、待ち続けていた弟バラタから王位を受け継ぎました。
+                        ラーマの帰還は「ディーワーリー」（光の祭り）として祝われ、今でもヒンドゥー教徒の重要な祭日です。
+                        しかし、国民の間でシーターの純潔を疑う声が上がると、ラーマは苦悩の末、
+                        妊娠中のシーターを森に送りました。シーターは聖仙ヴァールミーキの庵で双子の息子を産み育てました。
+                        最終的に家族は再会しますが、シーターは大地の母神に呼ばれて地中に消え、
+                        ラーマも後に神の世界へと旅立ちました。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 愛の試練 -->
+        <section class="love-trial-section">
+            <h2 class="section-title">愛と義務の葛藤</h2>
+            <div class="trial-icon">💕</div>
+            <div class="trial-content">
+                <h3>理想と現実の狭間</h3>
+                <p>
+                    ラーマーヤナは理想的な愛を描くと同時に、社会的な義務との葛藤を深く掘り下げています。
+                    ラーマとシーターの愛は純粋で深いものでしたが、王としての責任と社会の期待が
+                    個人の幸福を上回る場面が描かれています。
+                </p>
+                
+                <h3>永遠の愛の象徴</h3>
+                <p>
+                    困難に直面しても変わらない愛、忠誠、そして最終的な再会は、
+                    真の愛が時間と試練を超越することを示しています。
+                    ラーマとシーターの物語は、インド文化における理想的な夫婦関係の模範とされています。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🏹</span>
+                    <h3 class="character-name">ラーマ</h3>
+                    <p class="character-description">
+                        ヴィシュヌ神の化身、理想的な王子。
+                        正義感が強く、義務を重んじる。
+                        優れた弓術の技を持ち、
+                        ダルマ（正法）の体現者。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌸</span>
+                    <h3 class="character-name">シーター</h3>
+                    <p class="character-description">
+                        大地の女神の娘、理想的な妻。
+                        純潔で献身的、強い意志を持つ。
+                        ラーマへの愛と忠誠を
+                        最後まで貫いた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👹</span>
+                    <h3 class="character-name">ラーヴァナ</h3>
+                    <p class="character-description">
+                        ランカー島の魔王、十の頭を持つ。
+                        偉大な学者でもあったが、
+                        傲慢さと欲望により
+                        滅亡への道を歩んだ。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐒</span>
+                    <h3 class="character-name">ハヌマーン</h3>
+                    <p class="character-description">
+                        風神の息子、猿の戦士。
+                        超人的な力と空を飛ぶ能力を持つ。
+                        ラーマへの絶対的忠誠で知られ、
+                        勇敢で知恵に満ちている。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">⚔️</span>
+                    <h3 class="character-name">ラクシュマナ</h3>
+                    <p class="character-description">
+                        ラーマの弟、忠実な従者。
+                        兄への献身的な愛情を示し、
+                        14年間の流浪を共にした
+                        勇敢な戦士。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">バラタ</h3>
+                    <p class="character-description">
+                        ラーマの弟、代理統治者。
+                        王位を与えられたが、
+                        兄の帰還まで代理として統治し、
+                        兄弟愛の模範を示した。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">ラーマーヤナ - 愛と義務、正義と忠誠を描いた永遠の叙事詩</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 蓮の花びらを生成
+        function createLotusPetals() {
+            const petalsContainer = document.getElementById('lotusPetals');
+            const numberOfPetals = 20;
+            
+            for (let i = 0; i < numberOfPetals; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'lotus-petal';
+                petal.innerHTML = '🌸';
+                
+                // ランダムな位置とアニメーション
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                petal.style.animationDelay = Math.random() * 10 + 's';
+                
+                petalsContainer.appendChild(petal);
+            }
+        }
+        
+        // ページ読み込み時に花びらを生成
+        window.addEventListener('load', createLotusPetals);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.chapter-card, .character-card, .trial-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.chapter-content, .trial-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

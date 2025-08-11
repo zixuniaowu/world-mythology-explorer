@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エヌマ・エリシュ - バビロニア創世神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #000080 0%, #191970 30%, #483D8B 70%, #6A5ACD 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 宇宙の星々エフェクト */
+        .cosmic-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: star-twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        /* 原初の水エフェクト */
+        .primordial-waters {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(to top, rgba(0, 0, 139, 0.8) 0%, rgba(72, 61, 139, 0.6) 50%, transparent 100%);
+            z-index: 0;
+            animation: water-flow 15s ease-in-out infinite;
+        }
+        
+        @keyframes water-flow {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+        }
+        
+        /* マルドゥク神の象徴 */
+        .marduk-symbol {
+            position: fixed;
+            top: 20%;
+            left: 15%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #FFD700 30%, #FFA500 60%, transparent 80%);
+            border-radius: 50%;
+            z-index: 2;
+            animation: divine-power 10s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+        }
+        
+        .marduk-symbol::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #FFD700, #FF6347);
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+        
+        @keyframes divine-power {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+        }
+        
+        /* 混沌の渦 */
+        .chaos-vortex {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            border: 3px solid rgba(106, 90, 205, 0.8);
+            border-radius: 50%;
+            z-index: 2;
+            animation: chaos-spin 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        .chaos-vortex::before, .chaos-vortex::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(106, 90, 205, 0.6);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .chaos-vortex::after {
+            width: 30px;
+            height: 30px;
+            border-color: rgba(106, 90, 205, 0.4);
+        }
+        
+        @keyframes chaos-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(0, 0, 128, 0.9) 0%, rgba(25, 25, 112, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #6A5ACD;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #E6E6FA;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-menu a:hover {
+            color: #6A5ACD;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #6A5ACD;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(106, 90, 205, 0.8), 0 0 50px rgba(72, 61, 139, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: creation-glow 6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes creation-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(106, 90, 205, 0.8), 0 0 30px rgba(72, 61, 139, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(106, 90, 205, 1), 0 0 60px rgba(72, 61, 139, 0.8), 0 0 80px rgba(25, 25, 112, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #E6E6FA;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(106, 90, 205, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #6A5ACD;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #6A5ACD, transparent);
+        }
+        
+        /* 創世段階カード */
+        .creation-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .creation-card {
+            background: linear-gradient(135deg, rgba(106, 90, 205, 0.1) 0%, rgba(72, 61, 139, 0.1) 100%);
+            border: 2px solid rgba(106, 90, 205, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .creation-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #6A5ACD, #483D8B, #6A5ACD);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .creation-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .creation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(106, 90, 205, 0.4);
+        }
+        
+        .day-number {
+            display: inline-block;
+            background: #191970;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .creation-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #6A5ACD;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .creation-icon {
+            font-size: 1.5em;
+        }
+        
+        .creation-content {
+            color: #E6E6FA;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* 神々の戦いセクション */
+        .divine-war-section {
+            background: rgba(220, 20, 60, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .war-icon {
+            font-size: 6em;
+            color: #DC143C;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #DC143C);
+            animation: war-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes war-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .war-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #E6E6FA;
+        }
+        
+        .war-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #DC143C;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(106, 90, 205, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(106, 90, 205, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #6A5ACD;
+            box-shadow: 0 15px 40px rgba(106, 90, 205, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #6A5ACD;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #E6E6FA;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(0, 0, 128, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(106, 90, 205, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #E6E6FA;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .marduk-symbol {
+                width: 60px;
+                height: 60px;
+                top: 15%;
+                left: 5%;
+            }
+            
+            .chaos-vortex {
+                width: 70px;
+                height: 70px;
+                top: 8%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 宇宙の星々 -->
+    <div class="cosmic-stars" id="cosmicStars"></div>
+    
+    <!-- 原初の水 -->
+    <div class="primordial-waters"></div>
+    
+    <!-- マルドゥク神の象徴 -->
+    <div class="marduk-symbol"></div>
+    
+    <!-- 混沌の渦 -->
+    <div class="chaos-vortex"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="mesopotamian-mythology-index.html" class="logo">メソポタミア神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="mesopotamian-mythology-index.html">メソポタミア神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#story">物語</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">エヌマ・エリシュ</h1>
+            <p class="story-subtitle">バビロニア創世神話 - 混沌から秩序への壮大な宇宙創造</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="story" class="story-section">
+            <h2 class="section-title">宇宙創造の七つの段階</h2>
+            <div class="creation-grid">
+                <div class="creation-card">
+                    <span class="day-number">第一段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">🌊</span>
+                        原初の混沌
+                    </h3>
+                    <div class="creation-content">
+                        「天が上になく、地が下になかった時」、宇宙には何も存在しませんでした。
+                        ただ原初の水アプスー（淡水の神）とティアマト（塩水の女神）だけが存在し、
+                        二つの水が混じり合う境界には、霧のムンム（混沌の神）がいました。
+                        この三者が宇宙の最初の存在でした。長い時が過ぎ、
+                        アプスーとティアマトの結合から最初の神々が生まれ始めました。
+                        しかし、この静寂は永遠には続きませんでした。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第二段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">👥</span>
+                        神々の誕生と世代交代
+                    </h3>
+                    <div class="creation-content">
+                        最初に生まれたのは神々の夫婦ラフムとラハムでした。
+                        彼らからアンシャルとキシャルが生まれ、さらにアヌ神（天の神）が誕生しました。
+                        アヌからはエア神（水と知恵の神）が生まれました。
+                        新しい世代の神々は、古い世代よりもさらに強力で知恵に満ちていました。
+                        しかし、若い神々の活発な活動は、静寂を愛する原初の神々を悩ませることになりました。
+                        世代間の対立が次第に深刻化していきました。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第三段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">⚔️</span>
+                        アプスーの反乱と死
+                    </h3>
+                    <div class="creation-content">
+                        若い神々の騒音に我慢できなくなったアプスーは、ムンムと共に彼らを滅ぼす計画を立てました。
+                        しかし、ティアマトは自分の子孫を殺すことに反対しました。
+                        この計画を知った知恵の神エアは、魔法の呪文でアプスーを眠らせ、殺害しました。
+                        エアはアプスーの死体の上に自分の宮殿を建て、そこで妻ダムキナとの間に
+                        息子マルドゥクを授かりました。マルドゥクは四つの目と四つの耳を持つ、
+                        特別な力を備えた神として生まれました。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第四段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">🐉</span>
+                        ティアマトの復讐準備
+                    </h3>
+                    <div class="creation-content">
+                        夫アプスーの死を知ったティアマトは、ついに怒りを爆発させました。
+                        彼女は復讐のため、恐ろしい怪物軍団を創造しました。
+                        毒蛇、ドラゴン、嵐の悪魔、魚人、サソリ男など、11体の恐怖の怪物を生み出しました。
+                        そして新しい夫キングーに「運命の書板」を与え、怪物軍団の総司令官に任命しました。
+                        この書板は宇宙の運命を決定する力を持つ神器でした。
+                        ティアマト軍は神々の世界への総攻撃を開始しました。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第五段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">👑</span>
+                        マルドゥクの王位継承
+                    </h3>
+                    <div class="creation-content">
+                        ティアマトの脅威に直面した神々は恐怖に震えました。
+                        アヌ神もエア神も、ティアマトに立ち向かうことができませんでした。
+                        そこで神々は集会を開き、誰がティアマトと戦うかを話し合いました。
+                        若いマルドゥクが立ち上がり、戦うことを申し出ましたが、
+                        条件として神々の王になることを要求しました。
+                        神々は話し合いの末、マルドゥクの条件を受け入れ、
+                        彼を神々の王として戴冠しました。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第六段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">⚡</span>
+                        マルドゥクとティアマトの決戦
+                    </h3>
+                    <div class="creation-content">
+                        マルドゥクは神々から贈られた武器と力を身につけて戦いに向かいました。
+                        稲妻を矢とし、嵐を味方につけ、四方の風を支配しました。
+                        ティアマトとの一騎打ちで、マルドゥクは巨大な網でティアマトを捕らえ、
+                        口から強風を送り込んで身体を膨らませました。
+                        そして矢でティアマトの心臓を射抜き、ついに原初の混沌の女神を倒しました。
+                        怪物軍団は散り散りになり、キングーは捕らえられ、「運命の書板」はマルドゥクの手に渡りました。
+                    </div>
+                </div>
+                
+                <div class="creation-card">
+                    <span class="day-number">第七段階</span>
+                    <h3 class="creation-title">
+                        <span class="creation-icon">🌍</span>
+                        世界の創造と人間の誕生
+                    </h3>
+                    <div class="creation-content">
+                        勝利したマルドゥクは、ティアマトの巨大な死体を二つに切り分けました。
+                        上半身から天を作り、下半身から大地を作りました。
+                        天には星座を配置し、月と太陽の軌道を定めました。
+                        大地には山や川、海を配置しました。最後に、神々に仕えるため、
+                        キングーの血から人間を創造しました。神々は喜び、
+                        マルドゥクの栄光を讃えてバビロンに壮大な神殿「エサギラ」を建設しました。
+                        こうして秩序ある宇宙が完成したのです。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 神々の戦い -->
+        <section class="divine-war-section">
+            <h2 class="section-title">混沌対秩序の戦い</h2>
+            <div class="war-icon">⚔️</div>
+            <div class="war-content">
+                <h3>世代間の対立</h3>
+                <p>
+                    エヌマ・エリシュは、古い世代の神々（混沌）と新しい世代の神々（秩序）の対立を描いています。
+                    これは自然界の無秩序な力と、文明がもたらす秩序との戦いを象徴しています。
+                    マルドゥクの勝利は、理性と文明の勝利を表現しています。
+                </p>
+                
+                <h3>王権の正当性</h3>
+                <p>
+                    この神話は、バビロニア王の権力の神聖性を正当化する役割も持っていました。
+                    地上の王は天の王マルドゥクの代理人として統治する権利を持つとされ、
+                    新年祭ではこの神話が朗読されて王権の更新が行われました。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🌟</span>
+                    <h3 class="character-name">マルドゥク</h3>
+                    <p class="character-description">
+                        バビロンの守護神、神々の王。
+                        四つの目と四つの耳を持つ最強の神。
+                        ティアマトを倒して宇宙を創造し、
+                        秩序をもたらした英雄神。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐉</span>
+                    <h3 class="character-name">ティアマト</h3>
+                    <p class="character-description">
+                        原初の塩水の女神、混沌の象徴。
+                        巨大なドラゴンの姿で描かれ、
+                        怪物軍団を率いて神々と戦った
+                        混沌の母なる存在。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">💧</span>
+                    <h3 class="character-name">アプスー</h3>
+                    <p class="character-description">
+                        原初の淡水の神、地下水の支配者。
+                        ティアマトの最初の夫で、
+                        若い神々を滅ぼそうとしたが
+                        エアに殺された。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🧠</span>
+                    <h3 class="character-name">エア</h3>
+                    <p class="character-description">
+                        知恵と水の神、マルドゥクの父。
+                        魔法と策略の達人で、
+                        アプスーを倒し、息子に
+                        王になる道を開いた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">📜</span>
+                    <h3 class="character-name">キングー</h3>
+                    <p class="character-description">
+                        ティアマトの二番目の夫。
+                        「運命の書板」を与えられて
+                        怪物軍団の司令官となったが、
+                        敗北後、人間創造の材料となった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌤️</span>
+                    <h3 class="character-name">アヌ</h3>
+                    <p class="character-description">
+                        天空の神、神々の父。
+                        最高神の地位にあったが、
+                        ティアマトとの戦いを避け、
+                        王位をマルドゥクに譲った。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">エヌマ・エリシュ - 混沌から秩序へ、宇宙創造の壮大な神話</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 宇宙の星々を生成
+        function createCosmicStars() {
+            const starsContainer = document.getElementById('cosmicStars');
+            const numberOfStars = 200;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // ランダムな位置とアニメーション
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                // ランダムなサイズ
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // ページ読み込み時に星々を生成
+        window.addEventListener('load', createCosmicStars);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメ...
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.creation-card, .character-card, .war-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.creation-content, .war-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

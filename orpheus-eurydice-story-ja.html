@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オルフェウスとエウリュディケー - ギリシャ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #6c5ce7 50%, #a29bfe 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* 冥界の霧 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(162, 155, 254, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🎵 💔 🌸 💀';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #dfe6e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #6c5ce7;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #6c5ce7;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #6c5ce7;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(162, 155, 254, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #6c5ce7;
+        }
+
+        .orpheus-song {
+            background: rgba(162, 155, 254, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(162, 155, 254, 0.3);
+            font-style: italic;
+        }
+
+        .orpheus-song h4 {
+            color: #a29bfe;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* リラの音符エフェクト */
+        .musical-notes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .note {
+            position: absolute;
+            font-size: 2rem;
+            animation: noteFloat 15s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes noteFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .lyre-constellation {
+            position: fixed;
+            top: 20%;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.15;
+            z-index: 1;
+            animation: lyreGlow 20s infinite;
+        }
+
+        @keyframes lyreGlow {
+            0%, 100% { opacity: 0.1; transform: rotate(-5deg); }
+            25% { opacity: 0.2; transform: rotate(5deg); }
+            50% { opacity: 0.15; transform: rotate(0deg); }
+            75% { opacity: 0.25; transform: rotate(-3deg); }
+        }
+
+        .underworld-river {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to top, rgba(108, 92, 231, 0.2), transparent);
+            z-index: 1;
+            animation: riverFlow 30s linear infinite;
+        }
+
+        @keyframes riverFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 0; }
+        }
+
+        .eurydice-spirit {
+            position: fixed;
+            bottom: 30%;
+            left: 50px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: spiritFade 25s infinite;
+        }
+
+        @keyframes spiritFade {
+            0%, 100% { opacity: 0.05; transform: translateY(0); }
+            50% { opacity: 0.15; transform: translateY(-20px); }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 音符エフェクト -->
+    <div class="musical-notes" id="musicalNotes"></div>
+    
+    <!-- リラ座 -->
+    <div class="lyre-constellation">
+        <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- リラの弦 -->
+            <line x1="40" y1="30" x2="40" y2="120" stroke="rgba(162, 155, 254, 0.4)" stroke-width="2"/>
+            <line x1="60" y1="25" x2="60" y2="125" stroke="rgba(162, 155, 254, 0.4)" stroke-width="2"/>
+            <line x1="75" y1="20" x2="75" y2="130" stroke="rgba(162, 155, 254, 0.4)" stroke-width="2"/>
+            <line x1="90" y1="25" x2="90" y2="125" stroke="rgba(162, 155, 254, 0.4)" stroke-width="2"/>
+            <line x1="110" y1="30" x2="110" y2="120" stroke="rgba(162, 155, 254, 0.4)" stroke-width="2"/>
+            <!-- リラの枠 -->
+            <path d="M30,40 Q75,10 120,40 L120,110 Q75,140 30,110 Z" 
+                  fill="none" stroke="rgba(162, 155, 254, 0.3)" stroke-width="3"/>
+            <!-- 装飾 -->
+            <circle cx="75" cy="75" r="5" fill="rgba(162, 155, 254, 0.5)"/>
+        </svg>
+    </div>
+    
+    <!-- 冥界の川 -->
+    <div class="underworld-river"></div>
+    
+    <!-- エウリュディケーの霊 -->
+    <div class="eurydice-spirit">👻</div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>オルフェウスとエウリュディケー</h1>
+            <p>Orpheus and Eurydice - 愛と喪失の悲歌</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #6c5ce7; text-decoration: none; font-size: 1.5rem;">🎵 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="greek-mythology-index-ja.html">ギリシャ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>音楽が開いた冥界への道</h2>
+            
+            <p>
+                オルフェウスとエウリュディケーの物語は、ギリシャ神話の中でも最も心を打つ愛の悲劇です。この物語は、愛の力と限界、芸術の超越的な力、そして人間の弱さについて深い洞察を与えています。音楽の神アポロンの息子として生まれたオルフェウスの竪琴は、死者さえも涙を流させるほどの力を持っていましたが、それでも運命を完全に覆すことはできませんでした。
+            </p>
+
+            <h3>神々に愛された音楽家</h3>
+            <p>
+                オルフェウスは、音楽と詩の神アポロンと、美しい声を持つミューズの一人カリオペーの間に生まれました。幼い頃から、彼の音楽の才能は神々をも驚かせるものでした。アポロン自らが息子に黄金の竪琴（リラ）を与え、音楽の奥義を教えました。
+            </p>
+
+            <p>
+                オルフェウスが竪琴を奏でると、野生の獣は穏やかになり、木々は枝を傾けて聴き入り、岩でさえ涙を流したと言われています。川は流れを止め、風は息を潜め、全ての自然が彼の音楽に魅了されました。彼の歌声は、怒りを鎮め、悲しみを慰め、喜びを倍増させる不思議な力を持っていました。
+            </p>
+
+            <p>
+                若きオルフェウスは、英雄イアソンと共にアルゴ号の冒険にも参加しました。彼の音楽は、船員たちの士気を高め、危険な海のセイレーンたちの歌声を打ち負かし、仲間たちを救いました。しかし、彼の人生を真に変えたのは、美しいニンフ、エウリュディケーとの出会いでした。
+            </p>
+
+            <div class="orpheus-song">
+                <h4>オルフェウスの愛の歌</h4>
+                <p>
+                「太陽よりも明るく、月よりも優しい<br>
+                あなたの瞳は星座よりも美しい<br>
+                風は私の愛を運び、大地は私の誓いを聞く<br>
+                エウリュディケー、永遠にあなたと共に」
+                </p>
+            </div>
+
+            <h3>短すぎた幸福</h3>
+            <p>
+                エウリュディケーは森の木のニンフで、その美しさと優しさで知られていました。オルフェウスとエウリュディケーが出会った瞬間、二人は深く愛し合うようになりました。オルフェウスの求愛の歌は、エウリュディケーの心を完全に捉え、彼女も同じように彼を愛しました。
+            </p>
+
+            <p>
+                二人の結婚式は、神々と人間が共に祝福する素晴らしいものでした。しかし、結婚の神ヒュメナイオスの松明が煙を上げて涙を誘ったことは、不吉な前兆でした。それでも、新婚の二人は幸せに満ちていて、暗い影に気づきませんでした。
+            </p>
+
+            <p>
+                悲劇は結婚してまもなく訪れました。エウリュディケーが友人のニンフたちと草原で花を摘んでいる時、養蜂家のアリスタイオスが彼女の美しさに魅了され、追いかけてきました。エウリュディケーは逃げましたが、草の中に隠れていた毒蛇に足を噛まれてしまいました。
+            </p>
+
+            <p>
+                毒は瞬く間に彼女の体を巡り、エウリュディケーは夫の名を呼びながら息を引き取りました。オルフェウスが駆けつけた時には、既に彼女の魂は冥界へと旅立った後でした。美しい花嫁は、冷たく動かない体となって横たわっていました。
+            </p>
+
+            <h3>嘆きの歌</h3>
+            <p>
+                エウリュディケーを失ったオルフェウスの悲しみは、言葉では表現できないほど深いものでした。彼は七日七晩、食べることも飲むこともせず、ただ竪琴を抱いて嘆きの歌を歌い続けました。その歌は聞く者すべての心を打ち、神々でさえ涙を流しました。
+            </p>
+
+            <p>
+                彼の悲しみの歌は、山々にこだまし、森を震わせ、川を逆流させました。野獣たちは彼のそばに集まり、共に嘆きました。木々は葉を落とし、花は枯れ、全ての自然が彼の悲しみを共有しました。しかし、どんなに美しく悲しい歌を歌っても、エウリュディケーは戻ってきませんでした。
+            </p>
+
+            <p>
+                ついにオルフェウスは決心しました。生きている者には禁じられている冥界へ下り、直接ハデスとペルセポネに懇願して、愛する妻を取り戻そうと。これは前代未聞の試みでした。しかし、愛は彼にその勇気を与えました。
+            </p>
+
+            <h3>冥界への旅</h3>
+            <p>
+                オルフェウスは、タイナロン岬にある冥界への入り口を見つけました。竪琴を携えて、彼は生者として初めて自らの意志で冥界へと降りていきました。門番の三頭犬ケルベロスは、彼の音楽に魅了されて道を開きました。
+            </p>
+
+            <p>
+                冥界の川ステュクスでは、渡し守カロンが最初は生者を乗せることを拒みました。しかし、オルフェウスが竪琴を奏でると、何千年も感情を失っていたカロンの目から涙がこぼれ、彼を対岸へと運びました。
+            </p>
+
+            <p>
+                オルフェウスは冥界の審判者たち、苦しむ罪人たち、そして無数の死者の魂の間を通り過ぎました。彼の音楽は、永遠の罰を受けているタンタロスやシーシュポスの苦痛を一時的に和らげました。復讐の女神エリーニュスたちでさえ、初めて涙を流したと言われています。
+            </p>
+
+            <div class="highlight">
+                冥界での奇跡：<br>
+                オルフェウスの音楽が冥界に響くと、永遠の沈黙が破られました。イクシオンの火の車輪は回転を止め、タンタロスは喉の渇きを忘れ、シーシュポスは岩の上に座って聴き入りました。死者たちの魂は、生前の記憶を思い出し、失った感情を取り戻したかのようでした。
+            </div>
+
+            <h3>ハデスへの嘆願</h3>
+            <p>
+                ついにオルフェウスは、冥界の王ハデスと王妃ペルセポネの玉座の前に立ちました。彼は竪琴を奏で、心の底からの歌を歌いました。エウリュディケーへの愛、失った悲しみ、そして彼女なしでは生きていけないという思いを込めて。
+            </p>
+
+            <p>
+                「偉大なる冥界の王よ、全ての生者がいずれ訪れるこの国の支配者よ、私の願いを聞いてください。私は好奇心や虚栄心からここに来たのではありません。愛する妻を取り戻すためにのみ、この暗い道を降りてきたのです。蛇の毒が彼女の若い命を奪いました。私は地上で耐えようとしましたが、愛が私を打ち負かしました。」
+            </p>
+
+            <p>
+                オルフェウスの歌は、冷酷で知られるハデスの心をも動かしました。ペルセポネは自身の体験（ハデスに攫われて冥界の王妃となった）を思い出し、涙を流しました。冥界始まって以来初めて、死の国に慈悲の光が差し込みました。
+            </p>
+
+            <p>
+                ハデスは深いため息をつき、言いました：「オルフェウスよ、お前の音楽と愛に免じて、特別にエウリュディケーを返そう。しかし、一つ条件がある。地上に出るまで、決して振り返って彼女を見てはならない。もし振り返れば、彼女は永遠に失われる」
+            </p>
+
+            <h3>運命の振り返り</h3>
+            <p>
+                エウリュディケーの魂が呼び出され、オルフェウスの後ろに従うことを許されました。二人は長い道のりを登り始めました。オルフェウスは前を向いて歩き、竪琴を奏でながら、愛する人を導きました。
+            </p>
+
+            <p>
+                最初は、彼女の足音が聞こえることで満足していました。しかし、道が進むにつれて、疑いが心に忍び込んできました。本当に彼女はついてきているのか？ハデスは約束を守ったのか？彼女の足音が聞こえなくなったような気がしました。
+            </p>
+
+            <p>
+                ついに、地上の光が見え始めました。出口はもうすぐそこでした。しかし、その瞬間、オルフェウスは抑えきれない不安に襲われました。もし彼女がいなかったら？もし全てが冥界の王の残酷な冗談だったら？
+            </p>
+
+            <p>
+                愛と不安に駆られて、オルフェウスは振り返ってしまいました。そこには確かにエウリュディケーがいました。しかし、彼女はまだ冥界の影の中にいたのです。彼女の美しい顔に一瞬喜びが浮かびましたが、すぐに絶望に変わりました。
+            </p>
+
+            <p>
+                「さようなら」という言葉を残して、エウリュディケーは煙のように消えていきました。オルフェウスは必死に手を伸ばしましたが、つかめたのは空気だけでした。彼女は永遠に失われてしまったのです。
+            </p>
+
+            <div class="orpheus-song">
+                <h4>最後の別れ</h4>
+                <p>
+                「愛しい人よ、なぜ振り返ったの？<br>
+                あと一歩で、再び太陽の下で抱き合えたのに<br>
+                でも責めはしない、それも愛ゆえ<br>
+                いつかまた、時が来たら会いましょう」
+                </p>
+            </div>
+
+            <h3>終わりなき悲嘆</h3>
+            <p>
+                オルフェウスは再び冥界に入ろうとしましたが、今度は入ることを許されませんでした。七日間、彼は冥界の入り口で嘆願しましたが、無駄でした。神々の慈悲は一度きりでした。
+            </p>
+
+            <p>
+                地上に戻ったオルフェウスは、人里離れた場所で隠遁生活を送りました。彼は二度と恋をすることはなく、ただエウリュディケーへの愛と悲しみの歌を歌い続けました。多くの女性が彼に求愛しましたが、全て拒絶しました。
+            </p>
+
+            <p>
+                最期は、酒神ディオニュソスの熱狂的な女性信者たち（マイナデス）によって訪れました。オルフェウスが自分たちの愛を拒絶したことに怒った彼女たちは、彼を八つ裂きにしてしまいました。しかし、不思議なことに、彼の頭と竪琴は海に流され、レスボス島に流れ着き、そこで神託を告げ続けたと言われています。
+            </p>
+
+            <p>
+                神々は哀れに思い、オルフェウスの竪琴を天に上げて琴座としました。そして彼の魂は、ついに冥界でエウリュディケーと再会し、永遠に共にいることができました。今度は振り返ることを恐れる必要もなく、二人は幸せに過ごしています。
+            </p>
+
+            <h3>永遠の教訓</h3>
+            <p>
+                オルフェウスとエウリュディケーの物語は、多くの芸術家にインスピレーションを与え続けています。オペラ、絵画、詩、現代の映画に至るまで、この悲劇的な愛の物語は様々な形で再話されています。
+            </p>
+
+            <p>
+                この物語が教えてくれるのは、愛の力の偉大さと限界です。愛は死をも超越する力を持ちますが、同時に疑いと不安という人間の弱さも含んでいます。また、芸術の力—音楽や詩が持つ、心を動かし、不可能を可能にする力も示しています。
+            </p>
+
+            <div class="highlight">
+                オルフェウスの物語が現代に伝えること：<br>
+                真の愛は死をも恐れない。しかし、愛は同時に疑いと不安の源でもある。信頼は愛の最も重要な要素であり、一瞬の疑いが永遠の後悔を生むことがある。芸術は現実を超越する力を持つが、それでも人間の限界を完全に克服することはできない。そして最も重要なのは、失ったものを受け入れ、前に進む勇気を持つことである。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 永遠の愛の調べに耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // 音符エフェクト
+        function createMusicalNotes() {
+            const container = document.getElementById('musicalNotes');
+            const notes = ['♪', '♫', '♬', '♩'];
+            
+            function addNote() {
+                const note = document.createElement('div');
+                note.className = 'note';
+                note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+                note.style.left = Math.random() * 100 + '%';
+                note.style.animationDelay = Math.random() * 5 + 's';
+                note.style.animationDuration = (12 + Math.random() * 8) + 's';
+                note.style.fontSize = (1.5 + Math.random()) + 'rem';
+                container.appendChild(note);
+                
+                setTimeout(() => {
+                    if (container.contains(note)) {
+                        container.removeChild(note);
+                    }
+                }, 15000);
+            }
+            
+            // 定期的に音符を追加
+            setInterval(addNote, 2000);
+            
+            // 初期の音符を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addNote, i * 1000);
+            }
+        }
+        
+        createMusicalNotes();
+    </script>
+</body>
+</html>

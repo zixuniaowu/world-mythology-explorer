@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>トロイア戦争 - 神々と英雄の壮大な戦い</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(95, 39, 205, 0.9) 0%, rgba(118, 75, 162, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(95, 39, 205, 0.2) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            border: 1px solid rgba(95, 39, 205, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .story-text {
+            font-size: 1.1em;
+            line-height: 2;
+            color: #F5E6D3;
+        }
+        
+        .story-text h3 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin: 30px 0 20px;
+        }
+        
+        .story-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* キャラクターグリッド */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .character-card {
+            background: rgba(95, 39, 205, 0.1);
+            border: 2px solid rgba(95, 39, 205, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+            box-shadow: 0 10px 30px rgba(95, 39, 205, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.5em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* エピソードカード */
+        .episode-card {
+            background: linear-gradient(135deg, rgba(95, 39, 205, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(95, 39, 205, 0.3);
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .episode-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #1a1a2e;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(95, 39, 205, 0.3);
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="greek-mythology-index.html" class="logo">ギリシャ神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="greek-mythology-index.html">ギリシャ神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                    <li><a href="#episodes">主要エピソード</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">トロイア戦争</h1>
+            <p class="story-subtitle">最も美しい女性をめぐる十年の戦い</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリー詳細 -->
+        <section class="story-section">
+            <h2 class="section-title">物語のあらすじ</h2>
+            <div class="story-text">
+                <h3>金のリンゴと美の審判</h3>
+                <p>
+                    すべては海の女神テティスと人間の英雄ペレウスの結婚式から始まりました。
+                    不和の女神エリスは招待されなかったことに腹を立て、「最も美しい女神へ」と刻まれた金のリンゴを宴席に投げ込みました。
+                    ヘラ、アテナ、アフロディーテの三女神がそれを巡って争い、トロイアの王子パリスに審判を委ねることになりました。
+                </p>
+                
+                <h3>パリスの審判</h3>
+                <p>
+                    三女神はそれぞれパリスに賄賂を提示しました。ヘラは権力を、アテナは戦いでの勝利を、
+                    アフロディーテは世界一美しい女性ヘレネーを約束しました。
+                    パリスはアフロディーテを選び、スパルタ王メネラオスの妻ヘレネーを奪ってトロイアへ連れ帰りました。
+                </p>
+                
+                <h3>ギリシャ連合軍の結成</h3>
+                <p>
+                    激怒したメネラオスは兄アガメムノンと共に、ギリシャ全土の王たちに呼びかけ、
+                    千隻の船でトロイアへ向かいました。アキレウス、オデュッセウス、大アイアスなど、
+                    名だたる英雄たちが集結しました。
+                </p>
+                
+                <h3>十年の包囲戦</h3>
+                <p>
+                    トロイアの城壁は堅固で、戦いは十年に及びました。
+                    アキレウスとアガメムノンの対立、パトロクロスの死、ヘクトルとアキレウスの一騎打ちなど、
+                    数々の悲劇が繰り広げられました。
+                </p>
+                
+                <h3>トロイの木馬</h3>
+                <p>
+                    最後に、オデュッセウスの策略により巨大な木馬が作られました。
+                    ギリシャ軍は撤退を装い、木馬を残して去りました。
+                    トロイア人は勝利の証として木馬を城内に引き入れましたが、
+                    夜になると中に隠れていたギリシャ兵が出てきて城門を開き、
+                    トロイアは陥落しました。
+                </p>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">⚔️</span>
+                    <h3 class="character-name">アキレウス</h3>
+                    <p class="character-description">
+                        ギリシャ最強の戦士。不死身の体を持つが、かかとだけが弱点。
+                        親友パトロクロスの死により怒り狂い、ヘクトルを討つ。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🛡️</span>
+                    <h3 class="character-name">ヘクトル</h3>
+                    <p class="character-description">
+                        トロイアの王子で最高の戦士。高潔で勇敢な英雄。
+                        トロイアを守るため戦い、アキレウスに討たれる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">ヘレネー</h3>
+                    <p class="character-description">
+                        世界一の美女。スパルタの王妃だったが、パリスと恋に落ちる。
+                        戦争の原因となったが、その美しさゆえに憎まれることはなかった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🏹</span>
+                    <h3 class="character-name">パリス</h3>
+                    <p class="character-description">
+                        トロイアの王子。美男子だが戦士としては弱い。
+                        ヘレネーを奪い戦争の引き金を引く。アキレウスのかかとを射る。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🧠</span>
+                    <h3 class="character-name">オデュッセウス</h3>
+                    <p class="character-description">
+                        イタケーの王。知恵者として知られ、トロイの木馬を考案。
+                        戦後、故郷への長い旅（オデュッセイア）を経験する。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">カッサンドラ</h3>
+                    <p class="character-description">
+                        トロイアの王女で予言者。真実を語るが誰も信じない呪いを受ける。
+                        木馬の危険を警告したが聞き入れられなかった。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 戦争の起源 -->
+        <section class="story-section">
+            <h2 class="section-title">戦争の始まり</h2>
+            <div class="story-text">
+                <div class="episode-card">
+                    <h3 class="episode-title">黄金の林檎 - 不和の女神エリスの策略</h3>
+                    <div class="episode-content">
+                        海の女神テティスと人間の英雄ペレウスの結婚式に、不和の女神エリスは招待されませんでした。
+                        怒ったエリスは「最も美しい女神へ」と書かれた黄金の林檎を宴席に投げ込みます。
+                        ヘラ、アテナ、アフロディーテの三女神がその林檎を巡って争い始め、
+                        ゼウスは判定をトロイアの王子パリスに委ねることにしました。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">パリスの審判</h3>
+                    <div class="episode-content">
+                        三女神はそれぞれパリスに賄賂を提示しました。
+                        ヘラは「アジアの支配権」を、アテナは「戦いでの勝利と知恵」を約束しました。
+                        しかしアフロディーテが「世界一美しい女性の愛」を提示すると、
+                        パリスは迷わずアフロディーテを選びました。
+                        その美女とは、スパルタ王メネラオスの妻、ヘレネでした。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <h3 class="episode-title">ヘレネの略奪</h3>
+                    <div class="episode-content">
+                        パリスはスパルタを訪れ、メネラオスの不在中にヘレネと恋に落ちます。
+                        アフロディーテの助けを借りて、パリスはヘレネをトロイアへ連れ去りました。
+                        激怒したメネラオスは兄のアガメムノンと共に、かつてヘレネの求婚者だった
+                        ギリシャ中の王や英雄たちに援軍を求め、大軍を編成してトロイアへ向かいました。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要エピソード -->
+        <section id="episodes" class="story-section">
+            <h2 class="section-title">戦争の名場面</h2>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">アキレウスの参戦</h3>
+                <div class="episode-content">
+                    無敵の戦士アキレウスは、母テティスから「トロイア戦争に参加すれば
+                    偉大な名声を得るが若くして死ぬ」という予言を受けていました。
+                    それでも彼は不滅の名声を選び、親友パトロクロスと共に参戦します。
+                    彼の存在はギリシャ軍の士気を大いに高め、トロイア軍を恐怖に陥れました。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">アキレウスの怒り</h3>
+                <div class="episode-content">
+                    戦争9年目、総大将アガメムノンは戦利品の女性を巡ってアキレウスと対立し、
+                    彼の愛するブリセイスを奪います。激怒したアキレウスは戦線から離脱を宣言。
+                    アキレウスを失ったギリシャ軍は苦戦を強いられ、トロイア軍の反撃により
+                    陣地まで押し戻される危機に陥ります。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">パトロクロスの死</h3>
+                <div class="episode-content">
+                    ギリシャ軍の窮地を見かねたパトロクロスは、アキレウスの鎧を借りて出陣します。
+                    当初はアキレウスと見間違えたトロイア軍は恐れをなして後退しますが、
+                    トロイアの英雄ヘクトルは正体を見破り、激戦の末パトロクロスを討ち取ります。
+                    親友の死を知ったアキレウスは深い悲しみと怒りに包まれました。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">アキレウスの復讐</h3>
+                <div class="episode-content">
+                    親友の仇を討つため、アキレウスは戦場に復帰します。
+                    神々から新しい武具を授かった彼は、まるで戦神のようにトロイア軍を蹴散らし、
+                    多くの戦士を討ち取りました。その怒りは凄まじく、
+                    川の神スカマンドロスさえも彼を止めようとしたほどでした。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">ヘクトルとアキレウスの決闘</h3>
+                <div class="episode-content">
+                    ついにアキレウスはヘクトルと対峙します。トロイアの城壁の前で、
+                    両軍が見守る中、運命の一騎打ちが始まりました。
+                    ヘクトルは勇敢に戦いますが、神々に愛されたアキレウスの前に力尽き、
+                    喉を槍で貫かれて倒れます。アキレウスは怒りのあまり、
+                    ヘクトルの遺体を戦車につないで引きずり回しました。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">プリアモスの嘆願</h3>
+                <div class="episode-content">
+                    息子の遺体が辱められるのを見て、老王プリアモスは神々の助けを借りて
+                    夜中にアキレウスの天幕を訪れます。
+                    老王は涙ながらに息子の遺体の返還を懇願し、アキレウスも父を思い出して心を動かされます。
+                    二人は共に涙を流し、アキレウスはヘクトルの遺体を返還しました。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">アキレウスの最期</h3>
+                <div class="episode-content">
+                    ヘクトルの葬儀の後も戦いは続き、アキレウスは多くの戦功を挙げました。
+                    しかし、運命の時が訪れます。パリスの放った矢が、アポロンの導きにより
+                    アキレウスの唯一の弱点である踵を貫きました。
+                    不死身の英雄も、ついに予言通り若くして命を落としたのです。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">トロイの木馬</h3>
+                <div class="episode-content">
+                    10年に及ぶ戦いに疲弊したギリシャ軍に、知将オデュッセウスが奇策を提案します。
+                    巨大な木馬を建造し、その中に精鋭の兵士を隠すというものでした。
+                    ギリシャ軍は撤退を装い、木馬だけを残して姿を消しました。
+                    トロイア人は勝利を確信し、警告を無視して木馬を城内に引き入れます。
+                </div>
+            </div>
+            
+            <div class="episode-card">
+                <h3 class="episode-title">トロイアの陥落</h3>
+                <div class="episode-content">
+                    夜、トロイア人が勝利の宴で眠りについた頃、木馬から兵士たちが這い出しました。
+                    彼らは城門を開き、密かに戻っていたギリシャ軍を城内に引き入れます。
+                    トロイアは炎に包まれ、男たちは殺され、女性と子供は奴隷にされました。
+                    プリアモス王も祭壇で殺され、栄華を誇ったトロイアは一夜にして滅亡したのです。
+                </div>
+            </div>
+        </section>
+        
+        <!-- 戦争の意味 -->
+        <section class="story-section">
+            <h2 class="section-title">トロイア戦争の教訓</h2>
+            <div class="story-text">
+                <h3>名誉と栄光</h3>
+                <p>
+                    トロイア戦争は、古代ギリシャの価値観である「クレオス」（不滅の名声）を
+                    追求する英雄たちの物語です。アキレウスは短い生涯と引き換えに永遠の名声を選び、
+                    ヘクトルは祖国と家族を守るために命を捧げました。
+                </p>
+                
+                <h3>運命と自由意志</h3>
+                <p>
+                    神々の意志と人間の選択が複雑に絡み合うこの物語は、
+                    運命に抗いながらも、最終的にはそれに従わざるを得ない人間の姿を描いています。
+                    しかし、その運命の中でどう生きるかは、個人の選択に委ねられているのです。
+                </p>
+                
+                <h3>戦争の悲劇</h3>
+                <p>
+                    勝者も敗者も大きな犠牲を払ったこの戦争は、戦争の虚しさと悲惨さを伝えています。
+                    トロイアは滅び、ギリシャの英雄たちの多くも命を落とし、
+                    生き残った者たちも長い苦難の帰路を辿ることになりました。
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">トロイア戦争 - ホメロスの『イリアス』に描かれた永遠の叙事詩</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.episode-content, .story-text p').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "world-mythology-explorer",
+  "version": "1.0.0",
+  "description": "Interactive world mythology map explorer with E2E testing",
+  "main": "index.html",
+  "scripts": {
+    "test:mobile": "node e2e-mobile-test.js",
+    "test:content": "node run-mythology-tests.js",
+    "test:all": "npm run test:mobile && npm run test:content",
+    "serve": "python3 -m http.server 8000",
+    "install-deps": "npm install puppeteer"
+  },
+  "dependencies": {
+    "puppeteer": "^21.11.0"
+  },
+  "keywords": [
+    "mythology",
+    "interactive",
+    "map",
+    "e2e",
+    "testing",
+    "puppeteer"
+  ],
+  "author": "World Mythology Explorer Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zixuniaowu/world-mythology-explorer.git"
+  },
+  "homepage": "https://world-mythology-explorer.pages.dev"
+}

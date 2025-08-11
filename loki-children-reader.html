@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ロキの子供たち - トリックスターの呪われた子孫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2C1810 0%, #8B008B 30%, #4B0082 70%, #191970 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 暗闇の粒子エフェクト */
+        .dark-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .dark-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, #8B008B, #4B0082);
+            border-radius: 50%;
+            animation: dark-float 12s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes dark-float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 影のオーラ */
+        .shadow-aura {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(75, 0, 130, 0.3) 70%, rgba(44, 24, 16, 0.5) 100%);
+            z-index: 0;
+            animation: aura-pulse 8s ease-in-out infinite;
+        }
+        
+        @keyframes aura-pulse {
+            0%, 100% { 
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.9;
+                transform: scale(1.05);
+            }
+        }
+        
+        /* 呪文のルーン */
+        .runes-circle {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            z-index: 0;
+            animation: rune-rotate 60s linear infinite;
+        }
+        
+        @keyframes rune-rotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(44, 24, 16, 0.9) 0%, rgba(139, 0, 139, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #8B008B;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #E8E8E8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #9370DB;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            color: #9370DB;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(147, 112, 219, 0.8), 0 0 50px rgba(139, 0, 139, 0.4);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: cursed-glow 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes cursed-glow {
+            from { 
+                text-shadow: 0 0 20px rgba(147, 112, 219, 0.8), 0 0 30px rgba(139, 0, 139, 0.4);
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(147, 112, 219, 1), 0 0 60px rgba(139, 0, 139, 0.8), 0 0 80px rgba(75, 0, 130, 0.6);
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #E8E8E8;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147, 112, 219, 0.3);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #9370DB;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #9370DB, transparent);
+        }
+        
+        /* 子供カード */
+        .children-grid {
+            display: grid;
+            gap: 40px;
+        }
+        
+        .child-card {
+            background: linear-gradient(135deg, rgba(147, 112, 219, 0.1) 0%, rgba(75, 0, 130, 0.1) 100%);
+            border: 2px solid rgba(147, 112, 219, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .child-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #9370DB, #8B008B, #9370DB);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .child-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .child-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(147, 112, 219, 0.4);
+        }
+        
+        .child-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .child-icon {
+            font-size: 4em;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+        
+        .child-info h3 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.2em;
+            color: #9370DB;
+            margin-bottom: 5px;
+        }
+        
+        .child-subtitle {
+            color: #B8B8B8;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+        
+        .child-content {
+            color: #E8E8E8;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        
+        .child-content h4 {
+            color: #9370DB;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+        
+        /* 運命セクション */
+        .fate-section {
+            background: rgba(139, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .fate-icon {
+            font-size: 6em;
+            color: #DC143C;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #DC143C);
+            animation: fate-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes fate-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .fate-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #E8E8E8;
+        }
+        
+        .fate-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #DC143C;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* 象徴セクション */
+        .symbolism-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .symbol-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(147, 112, 219, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        
+        .symbol-card:hover {
+            border-color: #9370DB;
+            box-shadow: 0 10px 30px rgba(147, 112, 219, 0.3);
+        }
+        
+        .symbol-card h4 {
+            color: #9370DB;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .symbol-card p {
+            color: #C8C8C8;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(44, 24, 16, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(147, 112, 219, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #E8E8E8;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .child-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .symbolism-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 暗闇の粒子 -->
+    <div class="dark-particles" id="darkParticles"></div>
+    
+    <!-- 影のオーラ -->
+    <div class="shadow-aura"></div>
+    
+    <!-- ルーンの円 -->
+    <div class="runes-circle">
+        <svg width="400" height="400" viewBox="0 0 400 400">
+            <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(147, 112, 219, 0.3)" stroke-width="2" stroke-dasharray="10,5"/>
+            <text x="200" y="50" text-anchor="middle" fill="rgba(147, 112, 219, 0.5)" font-size="24">ᚠᛖᚾᚱᛁᚱ</text>
+            <text x="350" y="210" text-anchor="middle" fill="rgba(147, 112, 219, 0.5)" font-size="24">ᛃᚩᚱᛗᚢᚾᚷᚨᚾᛞ</text>
+            <text x="200" y="370" text-anchor="middle" fill="rgba(147, 112, 219, 0.5)" font-size="24">ᚺᛖᛚ</text>
+            <text x="50" y="210" text-anchor="middle" fill="rgba(147, 112, 219, 0.5)" font-size="24">ᛊᛚᛖᛁᛈᚾᛁᚱ</text>
+        </svg>
+    </div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="norse-mythology-index.html" class="logo">北欧神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="norse-mythology-index.html">北欧神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#children">ロキの子供たち</a></li>
+                    <li><a href="#fate">運命</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">ロキの子供たち</h1>
+            <p class="story-subtitle">トリックスターの血を引く三人の怪物とその悲劇的運命</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ロキの子供たち -->
+        <section id="children" class="story-section">
+            <h2 class="section-title">三人の呪われし子供たち</h2>
+            <div class="children-grid">
+                <div class="child-card">
+                    <div class="child-header">
+                        <span class="child-icon">🐺</span>
+                        <div class="child-info">
+                            <h3>フェンリル</h3>
+                            <p class="child-subtitle">世界を滅ぼす巨狼</p>
+                        </div>
+                    </div>
+                    <div class="child-content">
+                        <p>
+                            ロキと巨人女性アングルボザの間に生まれた長男。巨大な狼の姿をしており、
+                            生まれたときから恐ろしい力を持っていました。神々は彼の将来を恐れ、
+                            アスガルドで育てることにしましたが、フェンリルはどんどん大きくなっていきました。
+                        </p>
+                        
+                        <h4>神々の恐怖と裏切り</h4>
+                        <p>
+                            ティール神だけがフェンリルに餌を与える勇気を持っていました。
+                            しかし、予言によってフェンリルがオーディンを殺すことを知った神々は、
+                            彼を魔法の鎖「グレイプニル」で縛ることにしました。フェンリルは力試しだと信じて
+                            鎖に縛られることを承諾しましたが、保証として誰かの手を自分の口に入れることを要求しました。
+                        </p>
+                        
+                        <h4>ティールの犠牲</h4>
+                        <p>
+                            勇敢なティール神が右手をフェンリルの口に入れました。
+                            鎖が外れないことを悟ったフェンリルは激怒し、ティールの右手を噛み切りました。
+                            その後、フェンリルは岩に縛り付けられ、ラグナロクまで幽閉されることになりました。
+                            最終戦争では復讐としてオーディンを飲み込みます。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="child-card">
+                    <div class="child-header">
+                        <span class="child-icon">🐍</span>
+                        <div class="child-info">
+                            <h3>ヨルムンガンド</h3>
+                            <p class="child-subtitle">世界を取り囲む蛇</p>
+                        </div>
+                    </div>
+                    <div class="child-content">
+                        <p>
+                            ロキの次男で、巨大な蛇の姿をしています。「ミッドガルドの蛇」とも呼ばれ、
+                            オーディンによって海に投げ込まれました。海で成長し続け、
+                            ついには世界全体を取り囲み、自分の尻尾を口にくわえるほど巨大になりました。
+                        </p>
+                        
+                        <h4>トールとの宿命</h4>
+                        <p>
+                            雷神トールとは宿敵の関係にあります。二人は何度も遭遇し、
+                            互いの力を試しましたが、決着はつきませんでした。
+                            トールがヨルムンガンドを釣り上げた話や、巨人の城で猫に変装した
+                            ヨルムンガンドをトールが持ち上げようとした話は有名です。
+                        </p>
+                        
+                        <h4>最終戦争での相討ち</h4>
+                        <p>
+                            ラグナロクでヨルムンガンドは海から立ち上がり、毒の息で空を汚染します。
+                            トールとの最終決戦では、トールがミョルニルでヨルムンガンドを倒しますが、
+                            直後に蛇の毒によってトール自身も死んでしまいます。
+                            二人の宿敵は相討ちという形で決着をつけました。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="child-card">
+                    <div class="child-header">
+                        <span class="child-icon">💀</span>
+                        <div class="child-info">
+                            <h3>ヘル</h3>
+                            <p class="child-subtitle">死者の国の女王</p>
+                        </div>
+                    </div>
+                    <div class="child-content">
+                        <p>
+                            ロキの娘で、体の半分は美しい女性、もう半分は腐敗した死体という恐ろしい姿をしています。
+                            オーディンによって冥界に追放され、ニフルヘルム（霧の世界）の女王となりました。
+                            病気や老衰で死んだ者たちの魂を支配しています。
+                        </p>
+                        
+                        <h4>死者の国の統治者</h4>
+                        <p>
+                            ヘルは死者の国で絶対的な権力を持っています。彼女の宮殿は「エーリューズニル」（悲惨）と呼ばれ、
+                            皿は「ハングル」（飢え）、ナイフは「スルト」（欠乏）、ベッドは「ケル」（病床）、
+                            カーテンは「ブリキンダ・ボル」（輝く災い）という名前が付けられています。
+                        </p>
+                        
+                        <h4>バルドルの運命を決する</h4>
+                        <p>
+                            光の神バルドルがロキの策略で死んだとき、神々はヘルにバルドルの蘇生を懇願しました。
+                            ヘルは「全ての存在がバルドルのために泣けば蘇らせてあげる」と条件を出しました。
+                            世界中のものが泣きましたが、老婆に変装したロキだけが泣くことを拒否したため、
+                            バルドルは冥界に留まることになりました。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 運命と予言 -->
+        <section id="fate" class="fate-section">
+            <h2 class="section-title">呪われた運命</h2>
+            <div class="fate-icon">🔮</div>
+            <div class="fate-content">
+                <h3>予言の重さ</h3>
+                <p>
+                    ロキの三人の子供たちは、いずれも神々の滅亡に関わる予言に縛られていました。
+                    フェンリルはオーディンを殺し、ヨルムンガンドはトールと相討ち、
+                    ヘルは死者の魂を握って神々を困らせると予言されていました。
+                </p>
+                
+                <h3>自己成就する予言</h3>
+                <p>
+                    皮肉なことに、神々が予言を恐れて取った行動こそが、
+                    その予言を現実のものにしてしまいました。フェンリルを騙して縛ったことで彼の憎悪を招き、
+                    ヨルムンガンドを海に捨てたことで巨大化を促し、ヘルを追放したことで
+                    死者の国の支配権を与えてしまったのです。
+                </p>
+            </div>
+            
+            <div class="symbolism-grid">
+                <div class="symbol-card">
+                    <h4>🔄 運命の皮肉</h4>
+                    <p>
+                        予言を避けようとする行為が、かえって予言を実現させてしまう
+                        運命の皮肉を表現しています。
+                    </p>
+                </div>
+                
+                <div class="symbol-card">
+                    <h4>👨‍👩‍👧‍👦 家族の複雑さ</h4>
+                    <p>
+                        ロキは神でありながら敵でもあり、その子供たちも
+                        神々にとって脅威となる複雑な関係性を描いています。
+                    </p>
+                </div>
+                
+                <div class="symbol-card">
+                    <h4>⚖️ 正義と復讐</h4>
+                    <p>
+                        神々の予防的な行動と、それに対する子供たちの復讐は、
+                        正義の概念の複雑さを示しています。
+                    </p>
+                </div>
+                
+                <div class="symbol-card">
+                    <h4>🌅 破壊と再生</h4>
+                    <p>
+                        三人の子供たちによる破壊は、古い世界の終焉と
+                        新しい世界の始まりを象徴しています。
+                    </p>
+                </div>
+                
+                <div class="symbol-card">
+                    <h4>🎭 善悪の相対性</h4>
+                    <p>
+                        神々を「善」、ロキの子供たちを「悪」と単純に分けることの
+                        困難さを表現しています。
+                    </p>
+                </div>
+                
+                <div class="symbol-card">
+                    <h4>🌟 個と運命</h4>
+                    <p>
+                        個人の選択と宇宙的な運命の関係、
+                        そして両者の間の緊張関係を探求しています。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">ロキの子供たち - 運命に翻弄された家族の悲劇</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 暗闇の粒子を生成
+        function createDarkParticles() {
+            const particlesContainer = document.getElementById('darkParticles');
+            const numberOfParticles = 40;
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'dark-particle';
+                
+                // ランダムな位置とアニメーション
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 12 + 8) + 's';
+                particle.style.animationDelay = Math.random() * 12 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // ページ読み込み時に粒子を生成
+        window.addEventListener('load', createDarkParticles);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.child-card, .symbol-card, .fate-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.child-content, .symbol-content, .fate-content').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

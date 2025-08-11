@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドリームタイムの創造物語 - オーストラリア原住民神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #8B4513 50%, #FF6347 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* アウトバックの風景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 20%, rgba(255, 99, 71, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FF6347 0%, #8B4513 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 99, 71, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '🌅 🦘 🎨 🪃';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FF6347;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 99, 71, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FF6347;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FF6347;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 99, 71, 0.2), rgba(139, 69, 19, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FF6347;
+        }
+
+        .ancestor-spirits {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(139, 69, 19, 0.3);
+        }
+
+        .ancestor-spirits h4 {
+            color: #8B4513;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* レインボー蛇エフェクト */
+        .rainbow-serpent {
+            position: fixed;
+            top: 30%;
+            right: 20px;
+            font-size: 5rem;
+            opacity: 0.12;
+            z-index: 1;
+            animation: serpentMove 20s infinite;
+        }
+
+        @keyframes serpentMove {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(30px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .uluru-rock {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .songlines {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 500px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: songlinesFlow 60s linear infinite;
+        }
+
+        @keyframes songlinesFlow {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .dreaming-spirits {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spirit-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: spiritDance 25s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes spiritDance {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- レインボー蛇 -->
+    <div class="rainbow-serpent">🐍</div>
+    
+    <!-- ドリーミングスピリッツ -->
+    <div class="dreaming-spirits" id="dreamingSpirits"></div>
+    
+    <!-- ソングライン -->
+    <div class="songlines">
+        <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <!-- ソングラインのパス -->
+            <g stroke="rgba(255, 99, 71, 0.3)" stroke-width="2" fill="none">
+                <path d="M50,250 Q150,150 250,250 Q350,350 450,250"/>
+                <path d="M250,50 Q350,150 250,250 Q150,350 250,450"/>
+                <path d="M100,100 Q200,200 300,300 Q400,400 500,500"/>
+                <path d="M400,100 Q300,200 200,300 Q100,400 0,500"/>
+                <circle cx="250" cy="250" r="80" stroke-width="3"/>
+                <circle cx="250" cy="250" r="40" stroke-width="2"/>
+            </g>
+            <!-- 聖地のマーク -->
+            <g fill="rgba(139, 69, 19, 0.3)">
+                <circle cx="150" cy="150" r="8"/>
+                <circle cx="350" cy="150" r="8"/>
+                <circle cx="150" cy="350" r="8"/>
+                <circle cx="350" cy="350" r="8"/>
+            </g>
+        </svg>
+    </div>
+    
+    <!-- ウルルの岩 -->
+    <div class="uluru-rock">
+        <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,120 Q20,80 30,70 Q50,50 70,70 Q80,80 90,120 Z" 
+                  fill="rgba(139, 69, 19, 0.2)"/>
+            <path d="M15,120 Q25,85 35,75 Q50,60 65,75 Q75,85 85,120 Z" 
+                  fill="rgba(255, 99, 71, 0.1)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ドリームタイムの創造物語</h1>
+            <p>Dreamtime Creation Story - 祖先霊の時代</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FF6347; text-decoration: none; font-size: 1.5rem;">🌅 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="aboriginal-mythology-index-ja.html">オーストラリア原住民神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>時の始まりの物語</h2>
+            
+            <p>
+                ドリームタイム（Dreamtime）は、オーストラリア原住民アボリジニの世界観の中心となる神聖な時代です。この時代は「夢見の時」とも呼ばれ、創造祖先霊たちが大地を形作り、生命を創造し、法と秩序を定めた時代とされています。ドリームタイムは過去の出来事でありながら、現在も続いている永遠の時間であり、未来にも続いていく時空を超越した概念です。
+            </p>
+
+            <h3>大地が生まれる前の世界</h3>
+            <p>
+                はじめ、世界は平らな大地でした。山も川も、動物も植物も、人間もまだ存在していませんでした。その時代、強大な祖先霊たちが地下の深い場所で眠っていました。彼らは様々な姿を持っていました：レインボー・サーペント（虹の蛇）、カンガルー、エミュー、ワニ、イーグル、そして最初の人間の形をした霊たちもいました。
+            </p>
+
+            <p>
+                ある時、これらの祖先霊たちが目を覚ましました。彼らは地下から立ち上がり、大地の表面に現れました。それぞれの霊は特別な力を持っており、歩いた場所、踊った場所、座った場所、戦った場所には、その力の痕跡が残りました。
+            </p>
+
+            <div class="ancestor-spirits">
+                <h4>主要な創造祖先霊</h4>
+                <p>
+                <strong>レインボー・サーペント</strong>：虹の大蛇。川を創造し、雨を降らせる力を持つ<br>
+                <strong>ワンジナ</strong>：雲と雨の精霊。岩絵として姿を残す<br>
+                <strong>ハニー・アント・ドリーミング</strong>：蜜蟻の祖先霊。砂漠地帯の創造者<br>
+                <strong>カンガルー・ドリーミング</strong>：カンガルーの祖先霊。草原と水場の創造者<br>
+                </p>
+            </div>
+
+            <h3>レインボー・サーペントの大いなる旅</h3>
+            <p>
+                最も重要な創造祖先霊の一つが、レインボー・サーペント（虹の蛇）です。この巨大な蛇は、オーストラリア大陸を蛇行しながら移動し、その通った跡が川となりました。マレー川、ダーリング川、そして無数の小川や水場は、すべてレインボー・サーペントの旅路なのです。
+            </p>
+
+            <p>
+                レインボー・サーペントは単に水を創造しただけではありませんでした。彼女（多くの部族でレインボー・サーペントは女性とされます）は生命の源でもありました。彼女の体から落ちた鱗が魚になり、彼女の息が風になり、彼女の涙が雨になりました。しかし、レインボー・サーペントは慈愛に満ちた存在であると同時に、恐ろしい存在でもありました。
+            </p>
+
+            <p>
+                ある時、人々が水を汚したり、聖地を冒涜したりすると、レインボー・サーペントは激怒しました。彼女は大洪水を起こし、悪い人々を飲み込んでしまいました。そして、善い人々だけを高い岩の上に避難させました。この洪水の後、現在の地形が完成したのです。
+            </p>
+
+            <h3>動物と人間の創造</h3>
+            <p>
+                祖先霊たちは、それぞれが旅をしながら様々な生き物を創造しました。カンガルーの祖先霊は、自分に似た子供たちを大地に残し、それが現在のカンガルーになりました。エミューの祖先霊も同様に、エミューの種族を残しました。
+            </p>
+
+            <p>
+                人間の創造は特別でした。多くの部族の伝説では、祖先霊が粘土や木から人間を作ったとされています。中央オーストラリアのアランダ族の伝説では、祖先霊が聖なる場所チュリンガに人間の魂を隠し、適当な時期が来ると、その魂が女性の胎内に入って新しい生命として生まれてくるとされています。
+            </p>
+
+            <h3>ソングラインの誕生</h3>
+            <p>
+                祖先霊たちの旅路は、「ソングライン」（歌の道）として現在まで受け継がれています。これは、祖先霊が歩いた道筋を歌によって記録したもので、オーストラリア大陸全体に張り巡らされた見えない道路網のようなものです。
+            </p>
+
+            <p>
+                各部族は、自分たちの土地を通るソングラインを守り、歌い継ぐ責任があります。これらの歌は単なる神話ではなく、実用的な地図でもあります。水場の位置、食べられる植物の在り処、危険な場所、聖地の位置など、生存に必要な全ての情報がソングラインに込められています。
+            </p>
+
+            <div class="highlight">
+                ソングラインの教え：<br>
+                「大地は歌でできている。すべての岩、すべての木、すべての水場には歌がある。その歌を知る者は道に迷わず、その歌を忘れた者は魂を失う。祖先霊の歌を歌い継ぐことで、我々は大地とつながり続けるのだ」
+            </div>
+
+            <h3>聖地と法の確立</h3>
+            <p>
+                祖先霊たちは旅の途中で休憩し、儀式を行い、重要な出来事を体験しました。これらの場所は聖地となり、現在でも特別な意味を持ちます。ウルル（エアーズロック）、カカドゥ、フリンダーズ山脈など、オーストラリアの象徴的な場所の多くは、ドリームタイムの物語と深く結びついています。
+            </p>
+
+            <p>
+                祖先霊たちはまた、人間が従うべき法（Law）を定めました。これは単なる規則ではなく、宇宙の調和を維持するための神聖な秩序です。親族関係、結婚のルール、儀式の方法、土地の管理、動物の狩猟方法など、生活のあらゆる側面がこの法によって定められています。
+            </p>
+
+            <h3>ドリームタイムの終わりと継続</h3>
+            <p>
+                創造の仕事を終えた祖先霊たちは、様々な形で大地に留まりました。ある者は山となり、ある者は岩となり、ある者は木となりました。ある者は動物の姿のまま子孫を残し、ある者は星座となって空から見守っています。
+            </p>
+
+            <p>
+                しかし、ドリームタイムは終わった過去の時代ではありません。それは「永遠の今」と呼ばれる時間概念で、適切な儀式を行うことで、現在でもドリームタイムの力にアクセスすることができます。年長者が若者に伝承を教えるとき、芸術家が岩絵を描くとき、ダンサーが祖先霊の踊りを踊るとき、その瞬間にドリームタイムが現在に蘇るのです。
+            </p>
+
+            <h3>現代への継承</h3>
+            <p>
+                現在でも、多くのアボリジニの人々にとって、ドリームタイムの物語は生きた現実です。彼らは祖先霊の子孫として自分たちを理解し、大地を守り、伝統を継承する責任を感じています。近年、これらの古代の知恵は、環境保護や持続可能な生活の方法として、世界中から注目を集めています。
+            </p>
+
+            <p>
+                アボリジニのアートやダンス、音楽は、ドリームタイムの物語を視覚的、聴覚的に表現したものです。点描画法、ディジュリドゥの音色、コロボリー（儀式的ダンス）などを通じて、六万年以上続く人類最古の文化的伝統が現代に息づいています。
+            </p>
+
+            <div class="highlight">
+                ドリームタイムが現代に伝えること：<br>
+                時間は直線的ではなく循環的である。過去、現在、未来は分離されておらず、すべてが相互に関連している。人間は自然の支配者ではなく、自然の一部である。知識は個人の所有物ではなく、共同体で共有し継承すべき宝である。真の豊かさは物質的な蓄積ではなく、精神的なつながりと調和にある。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. ドリームタイムの歌声に耳を傾けましょう。</p>
+    </footer>
+
+    <script>
+        // ドリーミングスピリッツエフェクト
+        function createDreamingSpirits() {
+            const container = document.getElementById('dreamingSpirits');
+            const spirits = ['🦘', '🐍', '🦅', '🕷️', '🦎', '✨'];
+            
+            function addSpirit() {
+                const spirit = document.createElement('div');
+                spirit.className = 'spirit-particle';
+                spirit.innerHTML = spirits[Math.floor(Math.random() * spirits.length)];
+                spirit.style.left = Math.random() * 100 + '%';
+                spirit.style.animationDelay = Math.random() * 10 + 's';
+                spirit.style.animationDuration = (20 + Math.random() * 15) + 's';
+                container.appendChild(spirit);
+                
+                setTimeout(() => {
+                    if (container.contains(spirit)) {
+                        container.removeChild(spirit);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的にスピリッツを追加
+            setInterval(addSpirit, 3000);
+            
+            // 初期のスピリッツを追加
+            for (let i = 0; i < 5; i++) {
+                setTimeout(addSpirit, i * 2000);
+            }
+        }
+        
+        createDreamingSpirits();
+    </script>
+</body>
+</html>

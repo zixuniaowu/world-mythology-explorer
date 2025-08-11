@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八岐大蛇退治 - 須佐之男命の英雄譚</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family+Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #2d1b69 0%, #0f0618 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 霧のエフェクト */
+        .mist-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .mist {
+            position: absolute;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: drift 20s linear infinite;
+        }
+        
+        @keyframes drift {
+            0% {
+                transform: translateX(-100px) translateY(0);
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(100vw) translateY(-50px);
+                opacity: 0;
+            }
+        }
+        
+        /* 稲妻エフェクト */
+        .lightning-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .lightning {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, #fff, #a0a0ff);
+            opacity: 0;
+            animation: flash 3s infinite;
+        }
+        
+        @keyframes flash {
+            0%, 90%, 100% { opacity: 0; }
+            5%, 10% { opacity: 1; }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(45, 27, 105, 0.9) 0%, rgba(15, 6, 24, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #FFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            background: radial-gradient(ellipse at center, rgba(45, 27, 105, 0.3) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { 
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            }
+            to { 
+                text-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.6);
+                filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.8));
+            }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #FFF;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(45, 27, 105, 0.5);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+        }
+        
+        /* バトルフェーズカード */
+        .battle-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .battle-card {
+            background: linear-gradient(135deg, rgba(45, 27, 105, 0.2) 0%, rgba(15, 6, 24, 0.2) 100%);
+            border: 2px solid rgba(45, 27, 105, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .battle-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FFD700, #8B00FF, #FFD700);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .battle-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .battle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(45, 27, 105, 0.5);
+        }
+        
+        .battle-phase {
+            display: inline-block;
+            background: #8B00FF;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .battle-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .battle-icon {
+            font-size: 1.2em;
+        }
+        
+        .battle-content {
+            color: #FFF;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(45, 27, 105, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .character-card:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-description {
+            color: #FFF;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 宝剣セクション */
+        .sword-section {
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        
+        .sword-icon {
+            font-size: 6em;
+            color: #FFD700;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #FFD700);
+            animation: sword-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes sword-glow {
+            from { filter: drop-shadow(0 0 20px #FFD700); }
+            to { filter: drop-shadow(0 0 30px #FFD700) drop-shadow(0 0 40px #FFA500); }
+        }
+        
+        .sword-content {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #FFF;
+        }
+        
+        .sword-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: rgba(15, 6, 24, 0.9);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(45, 27, 105, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #FFF;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 2.5em;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 霧エフェクト -->
+    <div class="mist-container" id="mistContainer"></div>
+    
+    <!-- 稲妻エフェクト -->
+    <div class="lightning-container" id="lightningContainer"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="japanese-mythology-index.html" class="logo">日本神話</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="japanese-mythology-index.html">日本神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#battle">戦い</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">八岐大蛇退治</h1>
+            <p class="story-subtitle">須佐之男命が八つの頭と八つの尻尾を持つ大蛇を倒した英雄譚</p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- 物語の詳細 -->
+        <section id="battle" class="story-section">
+            <h2 class="section-title">英雄の戦い</h2>
+            <div class="battle-grid">
+                <div class="battle-card">
+                    <span class="battle-phase">序章</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">⬇️</span>
+                        出雲への降臨
+                    </h3>
+                    <div class="battle-content">
+                        天岩戸の一件で高天原から追放された須佐之男命は、出雲国の肥河（ひのかわ）上流に降り立ちました。
+                        川を流れてきた箸を見つけて川上に向かうと、老夫婦が美しい娘を間に挟んで泣いているのを発見しました。
+                        須佐之男命は「なぜ泣いているのか」と尋ねました。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">出会い</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">👨‍👩‍👧</span>
+                        足名椎・手名椎夫婦の嘆き
+                    </h3>
+                    <div class="battle-content">
+                        老夫婦は足名椎（あしなづち）・手名椎（てなづち）といい、娘は櫛名田比売（くしなだひめ）と名乗りました。
+                        彼らには八人の娘がいましたが、毎年八岐大蛇（やまたのおろち）がやってきて娘を一人ずつ食べてしまい、
+                        今年もまた大蛇がやってくる時期になったため、最後の娘である櫛名田比売も食べられてしまうと嘆いていました。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">調査</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">🐍</span>
+                        八岐大蛇の正体
+                    </h3>
+                    <div class="battle-content">
+                        須佐之男命が大蛇について詳しく聞くと、その大きさは八つの谷と八つの丘にまたがるほど巨大で、
+                        八つの頭と八つの尻尾を持ち、目は赤く如何にも恐ろしい姿だということでした。
+                        背中には苔や檜・杉が生えており、腹は常に血で真っ赤に染まっているという恐るべき化け物でした。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">契約</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">💍</span>
+                        結婚の約束
+                    </h3>
+                    <div class="battle-content">
+                        須佐之男命は「その娘を私の妻として差し出すなら、大蛇を退治しよう」と提案しました。
+                        夫婦は喜んで承諾し、須佐之男命は櫛名田比売を櫛に変えて自分の髪に挿し、安全な場所に隠しました。
+                        そして、大蛇退治の準備を始めました。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">準備</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">🍶</span>
+                        八塩折之酒の準備
+                    </h3>
+                    <div class="battle-content">
+                        須佐之男命は足名椎夫婦に、強い酒「八塩折之酒（やしおりのさけ）」を八つの桶に用意させました。
+                        さらに、垣根を八つの門に分けて作り、それぞれの門に酒桶を置きました。
+                        大蛇の八つの頭がそれぞれ酒を飲めるように準備を整えたのです。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">決戦</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">⚔️</span>
+                        八岐大蛇との戦い
+                    </h3>
+                    <div class="battle-content">
+                        やがて八岐大蛇が現れました。巨大な体で八つの頭をそれぞれの酒桶に突っ込み、
+                        酒を飲み干すと酔っ払って眠ってしまいました。須佐之男命はこの機会を逃さず、
+                        十握剣（とつかのつるぎ）を抜いて大蛇を切りつけました。肥河は大蛇の血で真っ赤に染まりました。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">発見</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">⚔️</span>
+                        草薙剣の発見
+                    </h3>
+                    <div class="battle-content">
+                        大蛇の尻尾を切った時、須佐之男命の剣の刃が欠けました。不思議に思って尻尾を切り開いてみると、
+                        中から美しい剣が出てきました。これが後に「草薙剣（くさなぎのつるぎ）」と呼ばれる神剣で、
+                        須佐之男命は姉の天照大神に献上しました。この剣は三種の神器の一つとなりました。
+                    </div>
+                </div>
+                
+                <div class="battle-card">
+                    <span class="battle-phase">結末</span>
+                    <h3 class="battle-title">
+                        <span class="battle-icon">🏰</span>
+                        須賀の宮殿
+                    </h3>
+                    <div class="battle-content">
+                        大蛇を退治した須佐之男命は、櫛名田比売と結婚し、出雲国の須賀の地に宮殿を建てました。
+                        その時、「八雲立つ 出雲八重垣 妻籠みに 八重垣作る その八重垣を」という歌を詠みました。
+                        これが日本最初の和歌とされています。こうして須佐之男命は英雄として出雲に定住したのです。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要人物 -->
+        <section id="characters" class="characters-section story-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">⚡</span>
+                    <h3 class="character-name">須佐之男命</h3>
+                    <p class="character-description">
+                        嵐と海を司る神。天照大神の弟。
+                        乱暴者として高天原から追放されたが、
+                        出雲で英雄となり、妻を得て定住した。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🐍</span>
+                    <h3 class="character-name">八岐大蛇</h3>
+                    <p class="character-description">
+                        八つの頭と八つの尻尾を持つ巨大な蛇。
+                        体は八つの谷と八つの丘にまたがるほど大きく、
+                        毎年美女を食べる恐ろしい化け物。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👸</span>
+                    <h3 class="character-name">櫛名田比売</h3>
+                    <p class="character-description">
+                        足名椎・手名椎夫婦の美しい娘。
+                        八岐大蛇に食べられる運命だったが、
+                        須佐之男命に救われ、その妻となった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👨</span>
+                    <h3 class="character-name">足名椎</h3>
+                    <p class="character-description">
+                        櫛名田比売の父。大山津見神の子。
+                        七人の娘を八岐大蛇に食べられ、
+                        最後の娘も失うことを嘆いていた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👩</span>
+                    <h3 class="character-name">手名椎</h3>
+                    <p class="character-description">
+                        櫛名田比売の母。足名椎の妻。
+                        夫と共に娘の運命を嘆き、
+                        須佐之男命の申し出を受け入れた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">☀️</span>
+                    <h3 class="character-name">天照大神</h3>
+                    <p class="character-description">
+                        須佐之男命の姉。太陽の女神。
+                        弟が献上した草薙剣を受け取り、
+                        後に孫の邇邇芸命に授けた。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 草薙剣 -->
+        <section class="sword-section">
+            <h2 class="section-title">三種の神器 - 草薙剣</h2>
+            <div class="sword-icon">⚔️</div>
+            <div class="sword-content">
+                <h3>天叢雲剣から草薙剣へ</h3>
+                <p>
+                    八岐大蛇の尻尾から出現したこの神剣は、当初「天叢雲剣（あめのむらくものつるぎ）」と呼ばれていました。
+                    後に日本武尊が東征の際、駿河で野火に囲まれた時、この剣で草を薙いで脱出したことから
+                    「草薙剣」の名前で知られるようになりました。
+                </p>
+                
+                <p>
+                    この剣は八咫鏡、八尺瓊勾玉と共に三種の神器の一つとなり、
+                    天皇の象徴として現在まで受け継がれています。
+                    須佐之男命の英雄的行為が、日本の皇室の象徴につながる神話的な意味を持っています。
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">八岐大蛇退治 - 古事記に記された須佐之男命の英雄譚</p>
+            <p class="footer-text">© 2024 World Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 霧エフェクトを生成
+        function createMist() {
+            const mistContainer = document.getElementById('mistContainer');
+            const numberOfMists = 8;
+            
+            for (let i = 0; i < numberOfMists; i++) {
+                const mist = document.createElement('div');
+                mist.className = 'mist';
+                
+                // ランダムなサイズと位置
+                const size = Math.random() * 200 + 100;
+                mist.style.width = size + 'px';
+                mist.style.height = size / 2 + 'px';
+                mist.style.top = Math.random() * 100 + '%';
+                mist.style.animationDelay = Math.random() * 20 + 's';
+                mist.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                
+                mistContainer.appendChild(mist);
+            }
+        }
+        
+        // 稲妻エフェクトを生成
+        function createLightning() {
+            const lightningContainer = document.getElementById('lightningContainer');
+            const numberOfLightning = 3;
+            
+            for (let i = 0; i < numberOfLightning; i++) {
+                const lightning = document.createElement('div');
+                lightning.className = 'lightning';
+                
+                lightning.style.left = Math.random() * 100 + '%';
+                lightning.style.height = Math.random() * 300 + 100 + 'px';
+                lightning.style.animationDelay = Math.random() * 3 + 's';
+                
+                lightningContainer.appendChild(lightning);
+            }
+        }
+        
+        // ページ読み込み時にエフェクトを生成
+        window.addEventListener('load', () => {
+            createMist();
+            createLightning();
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.battle-card, .character-card, .sword-content').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- Reader Enhancements -->
+    <script src="reader-enhancements.js"></script>
+    <script>
+        // Reader enhancementsが読み込まれた後の追加設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // 読み上げ対象要素に追加のスタイリング
+            document.querySelectorAll('.battle-content, .sword-content, .character-description').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (!window.readerEnhancements || !window.readerEnhancements.isReading) {
+                        this.style.backgroundColor = 'rgba(255, 215, 0, 0.1)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (!this.classList.contains('reading-highlight')) {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

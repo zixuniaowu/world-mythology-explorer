@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インド神話 - 世界神話探索者</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* インド風装飾 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル - インド風 */
+        .header {
+            background: linear-gradient(135deg, #4ecdc4 0%, #ff6b6b 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(78, 205, 196, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        /* サンスクリット装飾 */
+        .header::before {
+            content: 'ॐ श्री गणेशाय नमः';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            opacity: 0.1;
+            font-family: 'Noto Serif JP', serif;
+            letter-spacing: 1rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .sanskrit {
+            font-size: 1.5rem;
+            color: #ffeaa7;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーションバー */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #4ecdc4;
+        }
+
+        /* メインコンテナ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* イントロセクション */
+        .intro {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(78, 205, 196, 0.2);
+        }
+
+        .intro h2 {
+            color: #4ecdc4;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .intro p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* 書籍グリッド */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #4ecdc4, #ff6b6b, #4ecdc4);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .book-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+        }
+
+        .book-card h3 {
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .book-info {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .book-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .book-link {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #4ecdc4 0%, #ff6b6b 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .book-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        /* 特徴セクション */
+        .features {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .features h2 {
+            color: #4ecdc4;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(78, 205, 196, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            background: rgba(78, 205, 196, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 関連物語 */
+        .related-works {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+        }
+
+        .related-works h2 {
+            color: #4ecdc4;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .story-card {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-card:hover {
+            transform: translateY(-3px);
+            background: rgba(78, 205, 196, 0.2);
+        }
+
+        .story-card h4 {
+            color: #4ecdc4;
+            margin-bottom: 0.5rem;
+        }
+
+        .story-card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #888;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* アニメーション効果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* 曼荼羅エフェクト */
+        .mandala {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* 花びらエフェクト */
+        .petals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.6) 0%, transparent 70%);
+            border-radius: 0 100% 0 100%;
+            animation: fall 15s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 曼荼羅背景 -->
+    <div class="mandala">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(78, 205, 196, 0.3)" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(255, 107, 107, 0.3)" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="40" fill="none" stroke="rgba(78, 205, 196, 0.3)" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="20" fill="none" stroke="rgba(255, 107, 107, 0.3)" stroke-width="0.5"/>
+        </svg>
+    </div>
+
+    <!-- 花びらエフェクト -->
+    <div class="petals" id="petals"></div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <div class="sanskrit">ॐ नमः शिवाय</div>
+            <h1>インド神話</h1>
+            <p>ヴェーダから叙事詩まで、永遠なるダルマの物語</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーションバー -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #4ecdc4; text-decoration: none; font-size: 1.5rem;">🕉️ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="#intro">はじめに</a></li>
+                <li><a href="#books">代表作品</a></li>
+                <li><a href="#features">神話の特徴</a></li>
+                <li><a href="#stories">物語一覧</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <!-- 紹介 -->
+        <section class="intro fade-in" id="intro">
+            <h2>インド神話について</h2>
+            <p>
+                インド神話は、世界最古の文明の一つから生まれた、深遠で複雑な神話体系です。ヴェーダ時代の自然神崇拝から始まり、ヒンドゥー教、仏教、ジャイナ教など、多様な宗教伝統の中で発展してきました。これらの神話は、宇宙の創造と破壊、輪廻転生、ダルマ（法・義務）、カルマ（業）、モクシャ（解脱）など、人生と宇宙の根本的な問いに答えようとしています。
+            </p>
+            <p>
+                『マハーバーラタ』や『ラーマーヤナ』などの大叙事詩、プラーナ文献、ヴェーダの讃歌など、膨大な文献に記された物語は、単なる神話ではなく、哲学、倫理、精神性の教えでもあります。ヴィシュヌの化身、シヴァの舞踊、デーヴィーの力など、インド神話は多面的で豊かな象徴性を持ち、現代においても生きた宗教として信仰されています。
+            </p>
+        </section>
+
+        <!-- 代表作品 -->
+        <section id="books">
+            <h2 style="text-align: center; color: #4ecdc4; margin-bottom: 2rem; font-size: 2.5rem;">代表的な作品</h2>
+            <div class="books-grid">
+                <!-- マハーバーラタ -->
+                <div class="book-card fade-in">
+                    <h3>『マハーバーラタ』</h3>
+                    <div class="book-info">成立時期：紀元前4世紀〜紀元後4世紀</div>
+                    <div class="book-description">
+                        世界最長の叙事詩で、10万詩節以上から成る壮大な物語。パーンダヴァとカウラヴァの従兄弟同士の戦いを軸に、ダルマ、正義、人生の意味について深く探求。クリシュナの教え『バガヴァッド・ギーター』も含まれています。
+                    </div>
+                    <div class="book-links">
+                        <a href="krishna-reader.html" class="book-link">📖 クリシュナの物語を読む</a>
+                        <a href="#" class="book-link">📝 作品解説</a>
+                    </div>
+                </div>
+
+                <!-- ラーマーヤナ -->
+                <div class="book-card fade-in">
+                    <h3>『ラーマーヤナ』</h3>
+                    <div class="book-info">作者：ヴァールミーキ | 紀元前5〜4世紀</div>
+                    <div class="book-description">
+                        理想の王子ラーマの冒険を描く古代インドの大叙事詩。悪魔王ラーヴァナにさらわれた妻シーターを救うため、猿の神ハヌマーンと共に戦う物語。理想的な人間関係と義務の遂行を描いています。
+                    </div>
+                    <div class="book-links">
+                        <a href="ramayana-reader.html" class="book-link">📖 ラーマーヤナを読む</a>
+                        <a href="#" class="book-link">📝 作品解説</a>
+                    </div>
+                </div>
+
+                <!-- リグ・ヴェーダ -->
+                <div class="book-card fade-in">
+                    <h3>『リグ・ヴェーダ』</h3>
+                    <div class="book-info">成立時期：紀元前1500〜1000年</div>
+                    <div class="book-description">
+                        インド最古の聖典で、1028の讃歌から成る。インドラ、アグニ、ヴァルナなどの自然神への賛美、宇宙創造の神話、哲学的思索が含まれる。有名な「ナーサディーヤ・スークタ」は宇宙の起源について深遠な問いを投げかけています。
+                    </div>
+                    <div class="book-links">
+                        <a href="#" class="book-link">📖 オンライン読書</a>
+                        <a href="#" class="book-link">📝 作品解説</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特徴 -->
+        <section class="features" id="features">
+            <h2>インド神話の特徴</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h3>輪廻転生とカルマ</h3>
+                    <p>行為の結果が来世に影響を与える因果応報の法則。魂の永遠の旅</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🕉️</div>
+                    <h3>三神一体（トリムルティ）</h3>
+                    <p>創造のブラフマー、維持のヴィシュヌ、破壊のシヴァによる宇宙の循環</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👥</div>
+                    <h3>アヴァターラ（化身）</h3>
+                    <p>神が人間や動物の姿で地上に現れ、ダルマを守る</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💫</div>
+                    <h3>ヨーガと瞑想</h3>
+                    <p>精神的修行を通じた解脱への道。身体と心の統合</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 関連物語 -->
+        <section class="related-works" id="stories">
+            <h2>主要な神話物語</h2>
+            <div class="story-grid">
+                <div class="story-card" onclick="location.href='krishna-story-ja.html'">
+                    <h4>クリシュナの物語</h4>
+                    <p>愛と知恵の化身</p>
+                </div>
+                <div class="story-card" onclick="location.href='ramayana-story-ja.html'">
+                    <h4>ラーマーヤナの物語</h4>
+                    <p>理想の王と永遠の愛</p>
+                </div>
+                <div class="story-card" onclick="location.href='shiva-parvati-story-ja.html'">
+                    <h4>シヴァとパールヴァティー</h4>
+                    <p>破壊と創造の愛</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. 永遠なるダルマの道を探求しましょう。</p>
+    </footer>
+
+    <script>
+        // 花びらエフェクト
+        function createPetals() {
+            const container = document.getElementById('petals');
+            
+            for (let i = 0; i < 20; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.width = Math.random() * 15 + 10 + 'px';
+                petal.style.height = petal.style.width;
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDelay = Math.random() * 15 + 's';
+                petal.style.animationDuration = Math.random() * 10 + 15 + 's';
+                container.appendChild(petal);
+            }
+        }
+        
+        createPetals();
+
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

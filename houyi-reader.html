@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后羿射日 - 英雄が十の太陽を射落とす</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2a1810 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 太陽のアニメーション背景 */
+        .sun-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .sun {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FFA500, #FF6347);
+            box-shadow: 0 0 50px #FFA500, 0 0 100px #FF6347;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* ヘッダー */
+        .main-header {
+            background: linear-gradient(to bottom, rgba(26, 15, 10, 0.9) 0%, rgba(42, 24, 16, 0.8) 100%);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2em;
+            color: #FFD700;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-menu a {
+            color: #F5E6D3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: #FFD700;
+        }
+        
+        /* ヒーローセクション */
+        .hero-section {
+            margin-top: 80px;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(255, 165, 0, 0.1) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 0 20px;
+            max-width: 900px;
+        }
+        
+        .story-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 4.5em;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.5));
+            animation: flame 3s ease-in-out infinite;
+        }
+        
+        @keyframes flame {
+            0%, 100% { filter: drop-shadow(0 0 30px rgba(255, 165, 0, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 99, 71, 0.8)); }
+        }
+        
+        .story-subtitle {
+            font-size: 1.5em;
+            color: #F5E6D3;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .hero-description {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #E0E0E0;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* メインコンテンツ */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        /* ストーリーセクション */
+        .story-section {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 2.5em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FFA500, transparent);
+        }
+        
+        /* エピソードカード */
+        .episode-grid {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .episode-card {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(255, 99, 71, 0.05) 100%);
+            border: 2px solid rgba(255, 165, 0, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 165, 0, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .episode-card:hover::before {
+            left: 100%;
+        }
+        
+        .episode-card:hover {
+            border-color: #FFA500;
+            box-shadow: 0 10px 30px rgba(255, 165, 0, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .episode-number {
+            display: inline-block;
+            background: #FFA500;
+            color: #1a0f0a;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .episode-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.8em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .episode-content {
+            color: #F5E6D3;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        /* キャラクターセクション */
+        .characters-section {
+            margin-bottom: 60px;
+        }
+        
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .character-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            border-color: #FFD700;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .character-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.6em;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .character-role {
+            color: #FFA500;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .character-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* 武器と道具 */
+        .weapons-section {
+            background: rgba(255, 165, 0, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .weapons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .weapon-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .weapon-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 165, 0, 0.2);
+        }
+        
+        .weapon-icon {
+            font-size: 3em;
+            color: #FFA500;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .weapon-name {
+            font-size: 1.4em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .weapon-description {
+            color: #F5E6D3;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* 影響と遺産 */
+        .legacy-section {
+            margin-bottom: 60px;
+        }
+        
+        .legacy-content {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            line-height: 1.8;
+            color: #F5E6D3;
+        }
+        
+        .legacy-content h3 {
+            font-family: 'Noto Serif JP', serif;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .legacy-content p {
+            margin-bottom: 20px;
+        }
+        
+        /* フッター */
+        .main-footer {
+            background: #1a0f0a;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 165, 0, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            color: #F5E6D3;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+        
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .story-title {
+                font-size: 3em;
+            }
+            
+            .story-subtitle {
+                font-size: 1.2em;
+            }
+            
+            .story-section {
+                padding: 30px 20px;
+            }
+            
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .weapons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 太陽の背景 -->
+    <div class="sun-container" id="sunContainer"></div>
+    
+    <!-- ヘッダー -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="chinese-mythology-index.html" class="logo">中華神話大全</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="chinese-mythology-index.html">中華神話ホーム</a></li>
+                    <li><a href="index.html">トップページ</a></li>
+                    <li><a href="#characters">登場人物</a></li>
+                    <li><a href="#weapons">神器</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="story-title">后羿射日</h1>
+            <p class="story-subtitle">十の太陽を射落とした英雄の伝説</p>
+            <p class="hero-description">
+                太古の昔、十個の太陽が同時に空に昇り、大地を焼き尽くそうとした時、
+                一人の英雄が立ち上がった。神弓を手に、九つの太陽を射落とし、
+                世界を救った后羿の壮大な物語。
+            </p>
+        </div>
+    </section>
+    
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ストーリー詳細 -->
+        <section class="story-section">
+            <h2 class="section-title">物語の展開</h2>
+            <div class="episode-grid">
+                <div class="episode-card">
+                    <span class="episode-number">第一章</span>
+                    <h3 class="episode-title">十の太陽の誕生</h3>
+                    <div class="episode-content">
+                        東海の彼方、扶桑の神木には、天帝・帝俊と羲和の間に生まれた十羽の金烏（三本足の烏）が住んでいました。
+                        彼らは太陽の化身で、毎日一羽ずつ交代で天を巡り、世界に光と温もりをもたらしていました。
+                        しかし、ある日、十羽全てが退屈を感じ、一緒に空へ飛び立ってしまったのです。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="episode-number">第二章</span>
+                    <h3 class="episode-title">大地の災厄</h3>
+                    <div class="episode-content">
+                        十個の太陽が同時に輝き始めると、地上は灼熱地獄と化しました。
+                        河川は干上がり、草木は枯れ、岩石は溶け始めました。
+                        人々は洞窟に隠れ、動物たちは次々と倒れていきました。
+                        堯帝は天帝に助けを求めましたが、天帝も自分の息子たちを制御できませんでした。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="episode-number">第三章</span>
+                    <h3 class="episode-title">英雄の登場</h3>
+                    <div class="episode-content">
+                        この時、天界から一人の神が降りてきました。その名は后羿。
+                        彼は天下無双の弓の名手で、天帝から授かった赤い神弓と白羽の矢を携えていました。
+                        后羿は崑崙山の頂に立ち、空を見上げて十の太陽を見据えました。
+                        「人々を救うため、私は九つの太陽を射落とさねばならない」
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="episode-number">第四章</span>
+                    <h3 class="episode-title">九つの太陽を射る</h3>
+                    <div class="episode-content">
+                        后羿は神弓を引き絞り、最初の矢を放ちました。矢は真っ直ぐに飛び、一つ目の太陽を貫きました。
+                        金烏は悲鳴を上げて落下し、大地に激突して炎となって消えました。
+                        后羿は続けて八本の矢を放ち、次々と太陽を射落としていきました。
+                        最後の一つを残したのは、世界には光が必要だと知っていたからです。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="episode-number">第五章</span>
+                    <h3 class="episode-title">世界の救済</h3>
+                    <div class="episode-content">
+                        九つの太陽が落ちると、灼熱は収まり、涼しい風が吹き始めました。
+                        生き残った最後の太陽は、恐れをなして正しい軌道を巡るようになりました。
+                        人々は洞窟から出て、后羿を英雄として称えました。
+                        大地には再び緑が芽吹き、川には水が戻り、世界は平和を取り戻したのです。
+                    </div>
+                </div>
+                
+                <div class="episode-card">
+                    <span class="episode-number">第六章</span>
+                    <h3 class="episode-title">その後の后羿</h3>
+                    <div class="episode-content">
+                        しかし、天帝は息子たちを殺した后羿を許すことができませんでした。
+                        后羿は天界から追放され、妻の嫦娥と共に地上で暮らすことになりました。
+                        後に西王母から不死の薬を授かりますが、それはまた別の悲劇の始まりでした。
+                        それでも后羿の名は、人類を救った英雄として永遠に語り継がれています。
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- キャラクター紹介 -->
+        <section id="characters" class="characters-section">
+            <h2 class="section-title">主要登場人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <span class="character-icon">🏹</span>
+                    <h3 class="character-name">后羿</h3>
+                    <p class="character-role">天下無双の弓の名手</p>
+                    <p class="character-description">
+                        元は天界の神将。弓術において右に出る者はいない。
+                        正義感が強く、人々の苦しみを見過ごせない英雄。
+                        九つの太陽を射落とした功績により永遠に語り継がれる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">☀️</span>
+                    <h3 class="character-name">十の金烏</h3>
+                    <p class="character-role">太陽の化身</p>
+                    <p class="character-description">
+                        天帝の息子たち。三本足の神鳥の姿をしており、
+                        その体は太陽の炎で構成されている。
+                        若く無邪気で、自分たちの力の恐ろしさを理解していなかった。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">👑</span>
+                    <h3 class="character-name">堯帝</h3>
+                    <p class="character-role">伝説の聖帝</p>
+                    <p class="character-description">
+                        古代中国の伝説的な皇帝。仁徳に優れ、人民を深く愛した。
+                        十の太陽による災厄に心を痛め、
+                        天帝に救済を求めた。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">⚡</span>
+                    <h3 class="character-name">帝俊（天帝）</h3>
+                    <p class="character-role">天界の支配者</p>
+                    <p class="character-description">
+                        十の太陽の父。息子たちの暴走を止められず、
+                        后羿に頼らざるを得なかった。
+                        後に息子たちを失った悲しみから后羿を天界から追放する。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌙</span>
+                    <h3 class="character-name">嫦娥</h3>
+                    <p class="character-role">后羿の妻</p>
+                    <p class="character-description">
+                        絶世の美女で后羿を深く愛していた。
+                        后羿と共に地上に追放され、
+                        後に不死の薬を巡る悲劇の主人公となる。
+                    </p>
+                </div>
+                
+                <div class="character-card">
+                    <span class="character-icon">🌸</span>
+                    <h3 class="character-name">羲和</h3>
+                    <p class="character-role">太陽の母</p>
+                    <p class="character-description">
+                        十の太陽の母であり、太陽の運行を司る女神。
+                        毎日息子たちを湯谷で沐浴させ、
+                        順番に天を巡らせていた。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 武器と道具 -->
+        <section id="weapons" class="weapons-section">
+            <h2 class="section-title">神器と聖地</h2>
+            <div class="weapons-grid">
+                <div class="weapon-item">
+                    <span class="weapon-icon">🏹</span>
+                    <h3 class="weapon-name">赤い神弓</h3>
+                    <p class="weapon-description">
+                        天帝から授かった神器。扶桑の神木から作られ、
+                        龍の筋を弦としている。その威力は山をも貫き、
+                        星をも射落とすことができると言われる。
+                    </p>
+                </div>
+                
+                <div class="weapon-item">
+                    <span class="weapon-icon">➡️</span>
+                    <h3 class="weapon-name">白羽の神矢</h3>
+                    <p class="weapon-description">
+                        鳳凰の羽から作られた矢。決して的を外すことがなく、
+                        一度放たれれば必ず目標を貫く。
+                        太陽の炎にも耐える唯一の矢。
+                    </p>
+                </div>
+                
+                <div class="weapon-item">
+                    <span class="weapon-icon">🌳</span>
+                    <h3 class="weapon-name">扶桑の神木</h3>
+                    <p class="weapon-description">
+                        東海の果てに生える巨大な桑の木。
+                        十の太陽が住む場所であり、
+                        高さは数千里に及ぶと言われる。
+                    </p>
+                </div>
+                
+                <div class="weapon-item">
+                    <span class="weapon-icon">🏔️</span>
+                    <h3 class="weapon-name">崑崙山</h3>
+                    <p class="weapon-description">
+                        后羿が太陽を射た聖地。天に最も近い山で、
+                        神々の住まう場所。西王母の宮殿もここにある。
+                    </p>
+                </div>
+                
+                <div class="weapon-item">
+                    <span class="weapon-icon">💊</span>
+                    <h3 class="weapon-name">不死の薬</h3>
+                    <p class="weapon-description">
+                        西王母が后羿に与えた霊薬。
+                        服用すれば不老不死となり天に昇ることができる。
+                        後に嫦娥が服用し月へ昇ることになる。
+                    </p>
+                </div>
+                
+                <div class="weapon-item">
+                    <span class="weapon-icon">🌊</span>
+                    <h3 class="weapon-name">湯谷</h3>
+                    <p class="weapon-description">
+                        太陽たちが毎朝沐浴する聖なる谷。
+                        羲和が息子たちを清める場所で、
+                        ここから一日の旅が始まる。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 影響と遺産 -->
+        <section class="legacy-section">
+            <h2 class="section-title">文化的影響と象徴</h2>
+            <div class="legacy-content">
+                <h3>英雄神話の原型</h3>
+                <p>
+                    后羿射日の物語は、人類と自然の闘い、そして調和を描いた原初的な神話です。
+                    一人の英雄が圧倒的な力に立ち向かい、知恵と勇気で世界を救うという構造は、
+                    世界中の英雄神話に共通する要素を持っています。
+                </p>
+                
+                <h3>太陽崇拝と自然観</h3>
+                <p>
+                    この神話は古代中国人の太陽に対する畏敬の念を表しています。
+                    太陽は生命の源であると同時に、制御を失えば破壊をもたらす存在でもある。
+                    一つだけ残したという結末は、自然との共生の知恵を示しています。
+                </p>
+                
+                <h3>芸術と文学への影響</h3>
+                <p>
+                    詩歌、絵画、彫刻など、様々な芸術作品の題材となってきました。
+                    特に「后羿射日図」は中国美術の重要なモチーフの一つです。
+                    現代でも映画、アニメ、ゲームなどで新しい解釈が生まれ続けています。
+                </p>
+                
+                <h3>道徳的教訓</h3>
+                <p>
+                    権力の濫用がもたらす災い、犠牲を伴う英雄的行為、
+                    そして行き過ぎた行動への戒めなど、多くの教訓を含んでいます。
+                    后羿が天界から追放されるという結末は、英雄の悲劇性も描いています。
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- フッター -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p class="footer-text">后羿射日 - 人類を救った英雄の永遠なる伝説</p>
+            <p class="footer-text">© 2024 Chinese Mythology Collection. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 太陽を生成
+        function createSuns() {
+            const sunContainer = document.getElementById('sunContainer');
+            const numberOfSuns = 10;
+            
+            for (let i = 0; i < numberOfSuns; i++) {
+                const sun = document.createElement('div');
+                sun.className = 'sun';
+                
+                // ランダムな位置とサイズ
+                const size = Math.random() * 50 + 30;
+                sun.style.width = size + 'px';
+                sun.style.height = size + 'px';
+                sun.style.left = Math.random() * 100 + '%';
+                sun.style.top = Math.random() * 100 + '%';
+                
+                // ランダムなアニメーション遅延
+                sun.style.animationDelay = Math.random() * 20 + 's';
+                sun.style.opacity = '0.1';
+                
+                sunContainer.appendChild(sun);
+            }
+        }
+        
+        // ページ読み込み時に太陽を生成
+        window.addEventListener('load', createSuns);
+        
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // フェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 要素にフェードインを適用
+        document.querySelectorAll('.episode-card, .character-card, .weapon-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

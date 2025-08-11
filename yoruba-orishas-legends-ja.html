@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヨルバのオリシャ伝説 - 西アフリカ神話</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4B0082 50%, #FFD700 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        /* オリシャの力 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(75, 0, 130, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background: linear-gradient(135deg, #FFD700 0%, #4B0082 100%);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '⚡ 🌊 🔥 🌪️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8rem;
+            opacity: 0.1;
+            letter-spacing: 2rem;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #f0e68c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* ナビゲーション */
+        .nav {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        /* メインコンテンツ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            line-height: 2;
+            font-size: 1.1rem;
+        }
+
+        .story-content h2 {
+            color: #FFD700;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content h3 {
+            color: #FFD700;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.5rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .story-content .highlight {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(75, 0, 130, 0.2));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid #FFD700;
+        }
+
+        .orisha-pantheon {
+            background: rgba(75, 0, 130, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid rgba(75, 0, 130, 0.3);
+        }
+
+        .orisha-pantheon h4 {
+            color: #4B0082;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* 雷のエフェクト */
+        .lightning-bolt {
+            position: fixed;
+            top: 10%;
+            right: 30px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 1;
+            animation: lightningFlash 6s infinite;
+        }
+
+        @keyframes lightningFlash {
+            0%, 90%, 100% { opacity: 0.1; transform: scale(1); }
+            5%, 15% { opacity: 0.6; transform: scale(1.2); }
+            10% { opacity: 0.3; transform: scale(1.1); }
+        }
+
+        .sacred-drums {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .yoruba-symbols {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            opacity: 0.05;
+            z-index: 0;
+            animation: symbolsRotate 40s linear infinite;
+        }
+
+        @keyframes symbolsRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .river-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .water-particle {
+            position: absolute;
+            background: rgba(75, 0, 130, 0.1);
+            border-radius: 50%;
+            animation: riverFlow 25s linear infinite;
+        }
+
+        @keyframes riverFlow {
+            0% {
+                transform: translateX(-100px) translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateX(100px) translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* フッター */
+        .footer {
+            background: rgba(15, 15, 30, 0.95);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .story-content { padding: 2rem; font-size: 1rem; }
+            .nav-container { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 雷 -->
+    <div class="lightning-bolt">⚡</div>
+    
+    <!-- 川の流れ -->
+    <div class="river-flow" id="riverFlow"></div>
+    
+    <!-- ヨルバのシンボル -->
+    <div class="yoruba-symbols">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- オリシャのシンボル -->
+            <circle cx="150" cy="150" r="120" fill="none" stroke="rgba(255, 215, 0, 0.3)" stroke-width="3"/>
+            <circle cx="150" cy="150" r="80" fill="none" stroke="rgba(75, 0, 130, 0.3)" stroke-width="2"/>
+            <circle cx="150" cy="150" r="40" fill="none" stroke="rgba(255, 215, 0, 0.3)" stroke-width="2"/>
+            <!-- 8つの方向（オリシャたち） -->
+            <g stroke="rgba(255, 215, 0, 0.2)" stroke-width="2">
+                <line x1="150" y1="30" x2="150" y2="70"/>
+                <line x1="220" y1="70" x2="190" y2="100"/>
+                <line x1="270" y1="150" x2="230" y2="150"/>
+                <line x1="220" y1="230" x2="190" y2="200"/>
+                <line x1="150" y1="270" x2="150" y2="230"/>
+                <line x1="80" y1="230" x2="110" y2="200"/>
+                <line x1="30" y1="150" x2="70" y2="150"/>
+                <line x1="80" y1="70" x2="110" y2="100"/>
+            </g>
+        </svg>
+    </div>
+    
+    <!-- 聖なるドラム -->
+    <div class="sacred-drums">
+        <svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+            <!-- ドラムの形 -->
+            <ellipse cx="25" cy="60" rx="15" ry="8" fill="rgba(255, 215, 0, 0.1)"/>
+            <ellipse cx="50" cy="55" rx="18" ry="10" fill="rgba(255, 215, 0, 0.1)"/>
+            <ellipse cx="75" cy="62" rx="12" ry="6" fill="rgba(255, 215, 0, 0.1)"/>
+        </svg>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-content">
+            <h1>ヨルバのオリシャ伝説</h1>
+            <p>Yoruba Orishas Legends - 神々の王国</p>
+        </div>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="color: #FFD700; text-decoration: none; font-size: 1.5rem;">⚡ 世界神話探索者</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="west-african-mythology-index-ja.html">西アフリカ神話</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        <div class="story-content">
+            <h2>神々が地上に降りた時代</h2>
+            
+            <p>
+                ヨルバ神話は、西アフリカのヨルバ族に伝わる豊かな神話体系で、現在のナイジェリア、ベナン、トーゴを中心に信仰されています。この神話の中心となるのは「オリシャ」と呼ばれる神々で、彼らは自然の力を司り、人間の生活に直接関わる存在として崇敬されています。オリシャたちの物語は、人間性に満ちた複雑な個性と、宇宙の調和を維持する神聖な役割を併せ持っています。
+            </p>
+
+            <h3>オロドゥマレと天地創造</h3>
+            <p>
+                全ての始まりには、至高神オロドゥマレ（Olodumare）がいました。オロドゥマレは全ての存在の源であり、創造者でありながら、直接人間界に関与しない遠い存在でした。世界の創造を実行するため、オロドゥマレは多くのオリシャたちを生み出しました。
+            </p>
+
+            <p>
+                最初に地上を創造する任務を与えられたのは、オバタラ（Obatala、白い布の主）でした。しかし、天界から地上に降りる途中で、オバタラは椰子酒に酔ってしまいました。その隙に、弟のオドゥドゥア（Oduduwa）が創造の道具を奪い、先に地上に降りて世界を創造してしまいました。
+            </p>
+
+            <div class="orisha-pantheon">
+                <h4>主要なオリシャたち</h4>
+                <p>
+                <strong>シャンゴ（Shango）</strong>：雷と火の神、正義と王権の象徴<br>
+                <strong>イェマヤ（Yemoja）</strong>：海と母性の女神、全ての河川の母<br>
+                <strong>オシュン（Oshun）</strong>：川と愛の女神、美と豊穣の守護者<br>
+                <strong>オグン（Ogun）</strong>：鉄と戦争の神、技術と労働の庇護者<br>
+                <strong>エシュ（Eshu）</strong>：道の神、メッセンジャーとして神々と人間を仲介<br>
+                </p>
+            </div>
+
+            <h3>雷神シャンゴの物語</h3>
+            <p>
+                シャンゴはヨルバ神話で最も人気の高いオリシャの一人です。元々は古代オヨ王国の第四代王でしたが、死後神格化されました。シャンゴは激情的で正義感が強く、雷を武器として悪を裁く神として恐れられ、同時に愛されています。
+            </p>
+
+            <p>
+                伝説によると、シャンゴは魔法の力で火と雷を口から吐く能力を持っていました。しかし、その力をコントロールできず、誤って自分の宮殿を燃やし、愛する妻子を失ってしまいました。深い悲しみに包まれたシャンゴは王座を捨て、森の奥深くに姿を消しました。
+            </p>
+
+            <p>
+                人々はシャンゴが死んだと思いましたが、実際には彼は天に昇り、雷神として生まれ変わったのです。今でも激しい雷雨の時、人々は「オバ・コソ」（王は首を吊らなかった）と叫び、シャンゴが生きていることを証明します。
+            </p>
+
+            <h3>川の女神オシュンの愛</h3>
+            <p>
+                オシュンは川、愛、美、豊穣を司る女神で、ヨルバの女性たちに特に愛されています。金色の肌と長い髪を持つ美しい女神で、真鍮の腕輪と鏡を身につけています。オシュンはまた、蜂蜜の甘さと川の流れの両方を象徴し、優しさと激流の両面を持っています。
+            </p>
+
+            <p>
+                オシュンとシャンゴの恋愛物語は、ヨルバ神話で最も美しい話の一つです。二人は激しく愛し合いましたが、シャンゴの激情とオシュンの誇り高さのために、激しい喧嘩を繰り返しました。ある時、シャンゴの雷がオシュンの聖なる川を汚してしまい、オシュンは怒って彼を見捨てました。
+            </p>
+
+            <p>
+                オシュンを失ったシャンゴは深く後悔し、彼女を取り戻すために様々な贈り物をしました。最後に彼が贈ったのは、天界で最も美しいとされる黄金の冠でした。オシュンはこの誠意に心を動かされ、二人は和解しました。現在でも、雷雨の後に美しい川が流れるのは、この二人の愛の証とされています。
+            </p>
+
+            <h3>道の神エシュの役割</h3>
+            <p>
+                エシュ（エレグア）は最も重要でありながら、最も誤解されやすいオリシャです。彼は十字路を司り、神々と人間の間のメッセンジャーとして機能します。エシュは善でも悪でもなく、ただ変化と可能性を表す存在です。
+            </p>
+
+            <p>
+                エシュは試練を通じて人々を成長させる役割を持っています。彼は時に困難をもたらしますが、それは人々が学び、強くなるためです。エシュに敬意を払わない者には混乱をもたらし、敬う者には道を開きます。
+            </p>
+
+            <div class="highlight">
+                エシュの教え：<br>
+                「私は始まりであり終わりである。私は扉を開く者であり閉じる者である。私を軽んじる者は迷い、私を敬う者は道を見つける。善悪はお前たちが決めることだ。私はただ可能性を提示するのみ」
+            </div>
+
+            <h3>海の母イェマヤ</h3>
+            <p>
+                イェマヤは全ての水の源である海を司る偉大な母神です。彼女は全ての生命の母であり、特に女性と子供たちの守護者として崇敬されています。イェマヤの体から流れ出た水が世界中の河川となり、その中でオシュンをはじめとする川の女神たちが生まれました。
+            </p>
+
+            <p>
+                イェマヤは慈愛に満ちた母性を持つ一方で、怒った時の海の恐ろしさも表現します。彼女は船乗りたちを守護しますが、海を汚したり、海の生き物を無駄に殺したりする者には厳しい罰を与えます。現代でも、アフリカ系の人々は新年に白い花を海に投げ、イェマヤに祈りを捧げる伝統を持っています。
+            </p>
+
+            <h3>現代への影響</h3>
+            <p>
+                ヨルバのオリシャ信仰は、奴隷貿易により新大陸に運ばれ、サンテリア（キューバ）、カンドンブレ（ブラジル）、ブードゥー教（ハイチ）などの形で現在も生きています。これらの宗教では、オリシャたちはキリスト教の聖人と習合し、独特の発展を遂げました。
+            </p>
+
+            <p>
+                現代のアフリカ系アメリカ人の文化運動においても、オリシャたちは重要な精神的支柱となっています。彼らは自然との調和、共同体の絆、祖先への敬意など、失われがちな価値観を思い出させてくれる存在として再評価されています。
+            </p>
+
+            <div class="highlight">
+                ヨルバ神話が現代に伝えること：<br>
+                神性は遠い存在ではなく、日常生活に密接に関わるもの。自然の力を恐れ敬うことで、真の調和が生まれる。完璧な神はおらず、欠点を持つ神々の物語こそが人間の心に響く。愛と情熱は時に破壊をもたらすが、それもまた成長の機会である。そして真の知恵は、多様性の中にこそ見出される。
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <p>&copy; 2024 世界神話探索者. オリシャたちの恩恵を受けましょう。</p>
+    </footer>
+
+    <script>
+        // 川の流れエフェクト
+        function createRiverFlow() {
+            const container = document.getElementById('riverFlow');
+            
+            function addWaterParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'water-particle';
+                particle.style.width = (15 + Math.random() * 30) + 'px';
+                particle.style.height = (15 + Math.random() * 30) + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (20 + Math.random() * 15) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (container.contains(particle)) {
+                        container.removeChild(particle);
+                    }
+                }, 25000);
+            }
+            
+            // 定期的に水の粒子を追加
+            setInterval(addWaterParticle, 1500);
+            
+            // 初期の粒子を追加
+            for (let i = 0; i < 6; i++) {
+                setTimeout(addWaterParticle, i * 1000);
+            }
+        }
+        
+        createRiverFlow();
+    </script>
+</body>
+</html>
