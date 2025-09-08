@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神話教育アニメーション - 火柴人で学ぶ世界の神話</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .header p {
+            color: #F5E6D3;
+            font-size: 1.1em;
+        }
+
+        /* メインコンテナ */
+        .main-container {
+            flex: 1;
+            display: flex;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* アニメーションステージ */
+        .animation-stage {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stage-title {
+            font-size: 1.5em;
+            color: #4ecdc4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scene-number {
+            background: #4ecdc4;
+            color: #1a1a2e;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        /* Canvas */
+        .canvas-container {
+            position: relative;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        #animationCanvas {
+            display: block;
+            width: 100%;
+            height: 400px;
+        }
+
+        /* テキスト説明エリア */
+        .text-description {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .text-description h3 {
+            color: #4ecdc4;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .text-description p {
+            line-height: 1.8;
+            color: #F5E6D3;
+        }
+
+        /* コントロールパネル */
+        .control-panel {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 再生コントロール */
+        .playback-controls {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .controls-title {
+            font-size: 1.2em;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        /* プログレスバー */
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecdc4 0%, #44a08d 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* シーン選択 */
+        .scene-selector {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .scene-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .scene-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .scene-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #4ecdc4;
+        }
+
+        .scene-item.active {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+        }
+
+        .scene-item-title {
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        .scene-item-description {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        /* 設定パネル */
+        .settings-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .speed-control {
+            margin-top: 15px;
+        }
+
+        .speed-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-bottom: 8px;
+        }
+
+        .speed-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .speed-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* チェックボックス */
+        .checkbox-group {
+            margin-top: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            color: #F5E6D3;
+        }
+
+        /* 戻るボタン */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .control-panel {
+                width: 100%;
+            }
+
+            #animationCanvas {
+                height: 300px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* ローディング */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #4ecdc4;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← ホームに戻る</a>
+
+    <header class="header">
+        <h1>🎭 神話教育アニメーション</h1>
+        <p>火柴人で学ぶ世界の神話物語</p>
+    </header>
+
+    <div class="main-container">
+        <div class="animation-stage">
+            <h2 class="stage-title">
+                <span class="scene-number">第1幕</span>
+                <span id="sceneTitle">哪吒誕生 - 蓮の花から生まれた神童</span>
+            </h2>
+
+            <div class="canvas-container">
+                <canvas id="animationCanvas"></canvas>
+            </div>
+
+            <div class="text-description">
+                <h3>場面説明</h3>
+                <p id="sceneDescription">
+                    陳塘関の総兵・李靖の家に、三年六ヶ月の妊娠期間を経て、不思議な子供が生まれました。
+                    その子は蓮の花の中から現れ、生まれながらにして神通力を持っていました。
+                    太乙真人がこの子に「哪吒」という名前を授け、乾坤圏と混天綾という二つの宝物を与えました。
+                </p>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <!-- 再生コントロール -->
+            <div class="playback-controls">
+                <h3 class="controls-title">再生コントロール</h3>
+                
+                <div class="control-buttons">
+                    <button class="control-btn" id="playBtn" onclick="togglePlay()">
+                        <span>▶</span>
+                        <span>再生</span>
+                    </button>
+                    <button class="control-btn" id="pauseBtn" onclick="pauseAnimation()">
+                        <span>⏸</span>
+                        <span>一時停止</span>
+                    </button>
+                    <button class="control-btn" id="resetBtn" onclick="resetAnimation()">
+                        <span>⏮</span>
+                        <span>最初から</span>
+                    </button>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>進行状況</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="progress-bar" onclick="seekAnimation(event)">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- シーン選択 -->
+            <div class="scene-selector">
+                <h3 class="controls-title">シーン選択</h3>
+                <div class="scene-list">
+                    <div class="scene-item active" onclick="selectScene(0)">
+                        <div class="scene-item-title">第1幕：哪吒誕生</div>
+                        <div class="scene-item-description">蓮の花から生まれた神童</div>
+                    </div>
+                    <div class="scene-item" onclick="selectScene(1)">
+                        <div class="scene-item-title">第2幕：海で遊ぶ</div>
+                        <div class="scene-item-description">混天綾で海を揺らす</div>
+                    </div>
+                    <div class="scene-item" onclick="selectScene(2)">
+                        <div class="scene-item-title">第3幕：龍宮の怒り</div>
+                        <div class="scene-item-description">龍王の三太子・敖丙登場</div>
+                    </div>
+                    <div class="scene-item" onclick="selectScene(3)">
+                        <div class="scene-item-title">第4幕：戦闘</div>
+                        <div class="scene-item-description">哪吒と敖丙の対決</div>
+                    </div>
+                    <div class="scene-item" onclick="selectScene(4)">
+                        <div class="scene-item-title">第5幕：龍筋を抜く</div>
+                        <div class="scene-item-description">敖丙の最期</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 設定 -->
+            <div class="settings-panel">
+                <h3 class="controls-title">設定</h3>
+                
+                <div class="speed-control">
+                    <div class="speed-label">
+                        アニメーション速度: <span id="speedValue">1.0x</span>
+                    </div>
+                    <input type="range" class="speed-slider" id="speedSlider" 
+                           min="0.5" max="2" step="0.1" value="1" 
+                           oninput="updateSpeed(this.value)">
+                </div>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showNarration" checked>
+                        <label for="showNarration">ナレーション表示</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="autoPlay" checked>
+                        <label for="autoPlay">自動次幕再生</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showEffects" checked>
+                        <label for="showEffects">特殊効果表示</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas設定
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Canvas サイズ設定
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = 400;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // アニメーション状態
+        let isPlaying = false;
+        let currentScene = 0;
+        let animationProgress = 0;
+        let animationSpeed = 1.0;
+        let animationFrame = 0;
+
+        // シーンデータ
+        const scenes = [
+            {
+                title: "哪吒誕生 - 蓮の花から生まれた神童",
+                description: "陳塘関の総兵・李靖の家に、三年六ヶ月の妊娠期間を経て、不思議な子供が生まれました。その子は蓮の花の中から現れ、生まれながらにして神通力を持っていました。",
+                duration: 5000,
+                frames: []
+            },
+            {
+                title: "海で遊ぶ - 混天綾で海を揺らす",
+                description: "七歳になった哪吒は、暑い夏の日に海辺で水浴びをしていました。彼が混天綾を水中で振ると、その神通力により海全体が激しく揺れ、龍宮まで震動が伝わりました。",
+                duration: 5000,
+                frames: []
+            },
+            {
+                title: "龍宮の怒り - 龍王の三太子・敖丙登場",
+                description: "海の揺れに怒った東海龍王は、三太子の敖丙を派遣して原因を調査させました。敖丙は水面に現れ、哪吒を見つけて激しく叱責しました。",
+                duration: 5000,
+                frames: []
+            },
+            {
+                title: "戦闘 - 哪吒と敖丙の対決",
+                description: "若い哪吒は敖丙の傲慢な態度に腹を立て、二人の間で激しい戦いが始まりました。哪吒は乾坤圏と混天綾を使い、敖丙は龍の姿に変身して戦いました。",
+                duration: 6000,
+                frames: []
+            },
+            {
+                title: "龍筋を抜く - 敖丙の最期",
+                description: "戦いの末、哪吒は敖丙を打ち倒し、その龍筋を抜き取りました。これが後の大きな騒動の始まりとなり、哪吒の運命を大きく変えることになります。",
+                duration: 5000,
+                frames: []
+            }
+        ];
+
+        // Stickman クラス
+        class Stickman {
+            constructor(x, y, color = '#000') {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.scale = 1;
+                this.rotation = 0;
+                this.limbAngles = {
+                    leftArm: 0,
+                    rightArm: 0,
+                    leftLeg: 0,
+                    rightLeg: 0
+                };
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.scale(this.scale, this.scale);
+                
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                // 頭
+                ctx.beginPath();
+                ctx.arc(0, -30, 15, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 体
+                ctx.beginPath();
+                ctx.moveTo(0, -15);
+                ctx.lineTo(0, 20);
+                ctx.stroke();
+
+                // 左腕
+                ctx.save();
+                ctx.translate(0, -5);
+                ctx.rotate(this.limbAngles.leftArm);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-20, 15);
+                ctx.stroke();
+                ctx.restore();
+
+                // 右腕
+                ctx.save();
+                ctx.translate(0, -5);
+                ctx.rotate(this.limbAngles.rightArm);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(20, 15);
+                ctx.stroke();
+                ctx.restore();
+
+                // 左脚
+                ctx.save();
+                ctx.translate(0, 20);
+                ctx.rotate(this.limbAngles.leftLeg);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-15, 25);
+                ctx.stroke();
+                ctx.restore();
+
+                // 右脚
+                ctx.save();
+                ctx.translate(0, 20);
+                ctx.rotate(this.limbAngles.rightLeg);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(15, 25);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // アニメーションメソッド
+            walk(frame) {
+                const cycle = frame * 0.1;
+                this.limbAngles.leftArm = Math.sin(cycle) * 0.5;
+                this.limbAngles.rightArm = -Math.sin(cycle) * 0.5;
+                this.limbAngles.leftLeg = -Math.sin(cycle) * 0.3;
+                this.limbAngles.rightLeg = Math.sin(cycle) * 0.3;
+            }
+
+            fight(frame) {
+                const cycle = frame * 0.15;
+                this.limbAngles.leftArm = -Math.PI/4 + Math.sin(cycle) * 0.3;
+                this.limbAngles.rightArm = Math.PI/3 + Math.cos(cycle) * 0.4;
+                this.limbAngles.leftLeg = -0.2;
+                this.limbAngles.rightLeg = 0.2;
+            }
+
+            idle() {
+                this.limbAngles.leftArm = 0.2;
+                this.limbAngles.rightArm = -0.2;
+                this.limbAngles.leftLeg = 0;
+                this.limbAngles.rightLeg = 0;
+            }
+        }
+
+        // 背景描画
+        function drawBackground(sceneType) {
+            // グラデーション背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            
+            switch(sceneType) {
+                case 'birth':
+                    gradient.addColorStop(0, '#FFE4E1');
+                    gradient.addColorStop(1, '#FFC0CB');
+                    break;
+                case 'ocean':
+                    gradient.addColorStop(0, '#87CEEB');
+                    gradient.addColorStop(1, '#4682B4');
+                    break;
+                case 'battle':
+                    gradient.addColorStop(0, '#FF6B6B');
+                    gradient.addColorStop(1, '#8B0000');
+                    break;
+                default:
+                    gradient.addColorStop(0, '#E6F3FF');
+                    gradient.addColorStop(1, '#B0D4FF');
+            }
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 蓮の花を描画
+        function drawLotus(x, y, size, bloom) {
+            ctx.save();
+            ctx.translate(x, y);
+            
+            // 花びら
+            const petalCount = 8;
+            for (let i = 0; i < petalCount; i++) {
+                ctx.save();
+                ctx.rotate((Math.PI * 2 / petalCount) * i);
+                ctx.fillStyle = `rgba(255, 182, 193, ${0.7 * bloom})`;
+                ctx.beginPath();
+                ctx.ellipse(0, -size * 0.5 * bloom, size * 0.3, size * 0.6 * bloom, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            }
+            
+            // 中心
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        // 海の波を描画
+        function drawWaves(frame) {
+            ctx.strokeStyle = '#4682B4';
+            ctx.lineWidth = 2;
+            
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                const y = canvas.height - 50 - i * 20;
+                for (let x = 0; x <= canvas.width; x += 10) {
+                    const waveY = y + Math.sin((x + frame * 2) * 0.02) * 10;
+                    if (x === 0) {
+                        ctx.moveTo(x, waveY);
+                    } else {
+                        ctx.lineTo(x, waveY);
+                    }
+                }
+                ctx.stroke();
+            }
+        }
+
+        // テキストオーバーレイ
+        function drawTextOverlay(text, x, y) {
+            if (!document.getElementById('showNarration').checked) return;
+            
+            ctx.save();
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(x - 150, y - 30, 300, 60);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = '16px Noto Sans JP';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, x, y);
+            ctx.restore();
+        }
+
+        // シーン1: 哪吒誕生
+        function animateScene1(progress) {
+            drawBackground('birth');
+            
+            const lotusX = canvas.width / 2;
+            const lotusY = canvas.height / 2;
+            const bloom = Math.min(progress / 50, 1);
+            
+            drawLotus(lotusX, lotusY, 100, bloom);
+            
+            if (progress > 50) {
+                const nezha = new Stickman(lotusX, lotusY);
+                nezha.scale = 0.5 + (progress - 50) / 100;
+                nezha.color = '#FFD700';
+                nezha.idle();
+                nezha.draw(ctx);
+            }
+            
+            if (progress > 30 && progress < 70) {
+                drawTextOverlay("蓮の花から神童が誕生", canvas.width / 2, canvas.height - 50);
+            }
+        }
+
+        // シーン2: 海で遊ぶ
+        function animateScene2(progress) {
+            drawBackground('ocean');
+            drawWaves(animationFrame);
+            
+            const nezha = new Stickman(canvas.width / 3, canvas.height / 2);
+            nezha.color = '#FFD700';
+            nezha.walk(animationFrame);
+            nezha.x += progress * 2;
+            nezha.draw(ctx);
+            
+            // 混天綾を描画
+            if (progress > 30) {
+                ctx.strokeStyle = '#FF69B4';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                const ribbonX = nezha.x + 20;
+                const ribbonY = nezha.y - 10;
+                ctx.moveTo(ribbonX, ribbonY);
+                for (let i = 0; i < 100; i++) {
+                    const x = ribbonX + i;
+                    const y = ribbonY + Math.sin((i + animationFrame) * 0.1) * 20;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+            
+            if (progress > 40 && progress < 80) {
+                drawTextOverlay("混天綾が海を揺らす", canvas.width / 2, 50);
+            }
+        }
+
+        // シーン3: 龍王登場
+        function animateScene3(progress) {
+            drawBackground('ocean');
+            drawWaves(animationFrame);
+            
+            const nezha = new Stickman(canvas.width / 3, canvas.height / 2);
+            nezha.color = '#FFD700';
+            nezha.idle();
+            nezha.draw(ctx);
+            
+            if (progress > 30) {
+                const aobing = new Stickman(canvas.width * 2 / 3, canvas.height / 2);
+                aobing.color = '#4169E1';
+                aobing.scale = 1.2;
+                aobing.idle();
+                aobing.draw(ctx);
+                
+                // 龍の角を追加
+                ctx.strokeStyle = '#4169E1';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(aobing.x - 5, aobing.y - 45);
+                ctx.lineTo(aobing.x - 10, aobing.y - 55);
+                ctx.moveTo(aobing.x + 5, aobing.y - 45);
+                ctx.lineTo(aobing.x + 10, aobing.y - 55);
+                ctx.stroke();
+            }
+            
+            if (progress > 40 && progress < 80) {
+                drawTextOverlay("龍王の三太子・敖丙が現れる", canvas.width / 2, 50);
+            }
+        }
+
+        // シーン4: 戦闘
+        function animateScene4(progress) {
+            drawBackground('battle');
+            
+            const nezha = new Stickman(canvas.width / 3, canvas.height / 2);
+            nezha.color = '#FFD700';
+            nezha.fight(animationFrame);
+            nezha.draw(ctx);
+            
+            const aobing = new Stickman(canvas.width * 2 / 3, canvas.height / 2);
+            aobing.color = '#4169E1';
+            aobing.scale = 1.2;
+            aobing.fight(animationFrame + 10);
+            aobing.draw(ctx);
+            
+            // 戦闘エフェクト
+            if (document.getElementById('showEffects').checked) {
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    const angle = (animationFrame * 0.1 + i * Math.PI / 2.5);
+                    const x = canvas.width / 2 + Math.cos(angle) * 50;
+                    const y = canvas.height / 2 + Math.sin(angle) * 50;
+                    ctx.arc(x, y, 10, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+            
+            if (progress > 30 && progress < 70) {
+                drawTextOverlay("激しい戦いが始まる", canvas.width / 2, canvas.height - 50);
+            }
+        }
+
+        // シーン5: 結末
+        function animateScene5(progress) {
+            drawBackground('battle');
+            
+            const nezha = new Stickman(canvas.width / 2 - 50, canvas.height / 2);
+            nezha.color = '#FFD700';
+            nezha.idle();
+            nezha.draw(ctx);
+            
+            if (progress < 50) {
+                const aobing = new Stickman(canvas.width / 2 + 50, canvas.height / 2 + 30);
+                aobing.color = '#4169E1';
+                aobing.scale = 1.2;
+                aobing.rotation = Math.PI / 4;
+                aobing.draw(ctx);
+            }
+            
+            if (progress > 60) {
+                // 龍筋を描画
+                ctx.strokeStyle = '#4169E1';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(nezha.x + 20, nezha.y);
+                ctx.lineTo(nezha.x + 80, nezha.y - 20);
+                ctx.stroke();
+            }
+            
+            if (progress > 40 && progress < 80) {
+                drawTextOverlay("哪吒が勝利を収める", canvas.width / 2, 50);
+            }
+        }
+
+        // メインアニメーションループ
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const currentSceneData = scenes[currentScene];
+            const progress = (animationProgress / currentSceneData.duration) * 100;
+            
+            // 現在のシーンを描画
+            switch(currentScene) {
+                case 0:
+                    animateScene1(progress);
+                    break;
+                case 1:
+                    animateScene2(progress);
+                    break;
+                case 2:
+                    animateScene3(progress);
+                    break;
+                case 3:
+                    animateScene4(progress);
+                    break;
+                case 4:
+                    animateScene5(progress);
+                    break;
+            }
+            
+            if (isPlaying) {
+                animationProgress += 16 * animationSpeed; // 約60fps
+                animationFrame++;
+                
+                // プログレスバー更新
+                updateProgressBar(progress);
+                
+                // シーン終了チェック
+                if (animationProgress >= currentSceneData.duration) {
+                    if (document.getElementById('autoPlay').checked && currentScene < scenes.length - 1) {
+                        selectScene(currentScene + 1);
+                    } else {
+                        pauseAnimation();
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+        }
+
+        // コントロール関数
+        function togglePlay() {
+            if (isPlaying) {
+                pauseAnimation();
+            } else {
+                isPlaying = true;
+                document.getElementById('playBtn').classList.add('active');
+                animate();
+            }
+        }
+
+        function pauseAnimation() {
+            isPlaying = false;
+            document.getElementById('playBtn').classList.remove('active');
+        }
+
+        function resetAnimation() {
+            animationProgress = 0;
+            animationFrame = 0;
+            pauseAnimation();
+            animate();
+            updateProgressBar(0);
+        }
+
+        function selectScene(sceneIndex) {
+            currentScene = sceneIndex;
+            animationProgress = 0;
+            animationFrame = 0;
+            
+            // UI更新
+            document.getElementById('sceneTitle').textContent = scenes[sceneIndex].title;
+            document.getElementById('sceneDescription').textContent = scenes[sceneIndex].description;
+            
+            // シーンアイテムのアクティブ状態更新
+            document.querySelectorAll('.scene-item').forEach((item, index) => {
+                item.classList.toggle('active', index === sceneIndex);
+            });
+            
+            // シーン番号更新
+            document.querySelector('.scene-number').textContent = `第${sceneIndex + 1}幕`;
+            
+            animate();
+        }
+
+        function updateSpeed(value) {
+            animationSpeed = parseFloat(value);
+            document.getElementById('speedValue').textContent = value + 'x';
+        }
+
+        function updateProgressBar(progress) {
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        function seekAnimation(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const percentage = (x / rect.width) * 100;
+            
+            animationProgress = (percentage / 100) * scenes[currentScene].duration;
+            animationFrame = Math.floor(animationProgress / 16);
+            updateProgressBar(percentage);
+            animate();
+        }
+
+        // 初期化
+        animate();
+    </script>
+</body>
+</html>

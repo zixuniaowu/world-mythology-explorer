@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI動力動畫生成系統 - 次世代文字轉動畫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .ai-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ai-badge {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            font-size: 0.9em;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-badge.active {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .left-panel {
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .story-textarea {
+            width: 100%;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .story-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ai-config {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .config-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .config-label {
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .config-select, .config-input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+        }
+
+        .config-select option {
+            background: #333;
+            color: white;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+            border: none;
+            border-radius: 10px;
+            color: #333;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .ai-analysis {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .analysis-section {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .analysis-title {
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .analysis-content {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .canvas-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .canvas-title {
+            font-size: 1.8em;
+            color: #ffd700;
+        }
+
+        .playback-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #ffd700;
+        }
+
+        .control-btn.active {
+            background: #ffd700;
+            color: #333;
+            border-color: #ffd700;
+        }
+
+        .animation-canvas {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        canvas {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #F0E68C 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-insights {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .insights-title {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insights-content {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #f0f0f0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .ai-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffd700;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff4444;
+            color: #ffaaaa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .example-prompts {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .example-prompt {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .example-prompt:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffd700;
+            transform: translateX(5px);
+        }
+
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffb347 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                width: 100%;
+            }
+            
+            .ai-config {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 AI動力動畫生成系統</h1>
+        <p class="subtitle">次世代文字轉火柴人動畫技術</p>
+        <div class="ai-badges">
+            <span class="ai-badge active" data-model="gpt">GPT-4 Turbo</span>
+            <span class="ai-badge" data-model="gemini">Gemini Pro</span>
+            <span class="ai-badge" data-model="claude">Claude 3</span>
+            <span class="ai-badge" data-model="local">本地LLM</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <!-- AI設定面板 -->
+            <div class="panel">
+                <h3 class="panel-title">
+                    <span>🧠</span>
+                    <span>AI引擎設定</span>
+                </h3>
+
+                <div class="ai-config">
+                    <div class="config-item">
+                        <label class="config-label">AI模型</label>
+                        <select class="config-select" id="aiModel">
+                            <option value="demo">Demo模式 (智能規則)</option>
+                            <option value="qwen2" selected>🔥 本地Qwen2 (最佳中文)</option>
+                            <option value="llama2">✅ 本地Llama2 (英文較佳)</option>
+                            <option value="gpt-3.5">GPT-3.5 Turbo (需要API Key)</option>
+                            <option value="gpt-4">GPT-4 (需要API Key)</option>
+                            <option value="gemini">Gemini Pro (需要API Key)</option>
+                            <option value="claude">Claude 3 (需要API Key)</option>
+                        </select>
+                    </div>
+
+                    <div class="config-item">
+                        <label class="config-label">創造力</label>
+                        <select class="config-select" id="creativity">
+                            <option value="0.3">保守 (0.3)</option>
+                            <option value="0.7" selected>平衡 (0.7)</option>
+                            <option value="1.0">創新 (1.0)</option>
+                        </select>
+                    </div>
+
+                    <div class="config-item">
+                        <label class="config-label">動畫風格</label>
+                        <select class="config-select" id="animationStyle">
+                            <option value="traditional">傳統神話</option>
+                            <option value="modern" selected>現代演繹</option>
+                            <option value="cartoon">卡通風格</option>
+                            <option value="realistic">寫實風格</option>
+                        </select>
+                    </div>
+
+                    <div class="config-item">
+                        <label class="config-label">API Key</label>
+                        <input type="password" class="config-input" id="apiKey" 
+                               placeholder="輸入API Key (可選)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 故事輸入面板 -->
+            <div class="panel">
+                <h3 class="panel-title">
+                    <span>📝</span>
+                    <span>故事文本輸入</span>
+                </h3>
+
+                <div class="example-prompts">
+                    <div class="example-prompt" onclick="loadExample(this)">
+                        🐉 夸父追日：夸父決心追上太陽，跑過高山和大河...
+                    </div>
+                    <div class="example-prompt" onclick="loadExample(this)">
+                        ⚔️ 素戔嗚尊：勇敢的神靈面對八頭八尾的巨蛇...
+                    </div>
+                    <div class="example-prompt" onclick="loadExample(this)">
+                        🌙 嫦娥奔月：美麗的嫦娥偷吃了不死藥，飛向月宮...
+                    </div>
+                </div>
+
+                <textarea class="story-textarea" id="storyInput" placeholder="請輸入您的神話故事...
+
+示例：
+夸父決心追上太陽，他邁開巨大的步伐開始奔跑。跨越高山，穿過森林，越過大河，但太陽始終在前方。終於，夸父因為渴望而倒下，他的手杖化作桃林，為後來的旅人提供陰涼。
+
+或者：
+素戔嗚尊聽說八岐大蛇正在威脅人間，他勇敢地提起神劍，來到大蛇的巢穴。八個頭顱同時咆哮，但英雄毫不畏懼，揮劍斬向怪物..."></textarea>
+
+                <button class="generate-btn" id="generateBtn" onclick="generateWithAI()">
+                    <span>🚀 AI生成動畫</span>
+                </button>
+
+                <div class="loading" id="loading">
+                    <div class="ai-spinner"></div>
+                    <div>AI正在分析故事並生成動畫...</div>
+                    <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">
+                        這可能需要10-30秒時間
+                    </div>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+
+            <!-- AI分析結果 -->
+            <div class="panel">
+                <h3 class="panel-title">
+                    <span>🔍</span>
+                    <span>AI深度分析</span>
+                </h3>
+
+                <div class="ai-analysis" id="aiAnalysis">
+                    <div style="text-align: center; color: #999; padding: 20px;">
+                        輸入故事後，AI將在此顯示詳細分析結果
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <!-- 畫布控制 -->
+            <div class="canvas-controls">
+                <h2 class="canvas-title">🎬 智能動畫生成</h2>
+                <div class="playback-controls">
+                    <button class="control-btn" id="playBtn" onclick="togglePlay()">
+                        ▶ 播放
+                    </button>
+                    <button class="control-btn" onclick="restartAnimation()">
+                        ⏮ 重新開始
+                    </button>
+                    <button class="control-btn" onclick="exportAnimation()">
+                        💾 導出
+                    </button>
+                </div>
+            </div>
+
+            <!-- 動畫畫布 -->
+            <div class="animation-canvas">
+                <canvas id="animationCanvas"></canvas>
+                
+                <div class="progress-section">
+                    <div class="progress-text">
+                        <span>動畫進度</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="ai-insights">
+                    <div class="insights-title">
+                        <span>🧠</span>
+                        <span>AI導演洞察</span>
+                    </div>
+                    <div class="insights-content" id="insightsContent">
+                        AI將根據您的故事提供專業的動畫導演建議和情感分析
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AI集成系統 ====================
+        
+        class AIAnimationEngine {
+            constructor() {
+                this.currentModel = 'demo';
+                this.apiKey = '';
+                this.creativity = 0.7;
+                this.animationStyle = 'modern';
+                this.setupCanvas();
+                this.setupEventListeners();
+            }
+            
+            setupCanvas() {
+                this.canvas = document.getElementById('animationCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = 500;
+                this.isPlaying = false;
+                this.currentScene = 0;
+                this.animationData = null;
+            }
+            
+            setupEventListeners() {
+                // AI模型切換
+                document.querySelectorAll('.ai-badge').forEach(badge => {
+                    badge.addEventListener('click', () => {
+                        document.querySelectorAll('.ai-badge').forEach(b => b.classList.remove('active'));
+                        badge.classList.add('active');
+                        this.currentModel = badge.dataset.model;
+                    });
+                });
+                
+                // 參數更新
+                document.getElementById('aiModel').addEventListener('change', (e) => {
+                    this.currentModel = e.target.value;
+                });
+                
+                document.getElementById('creativity').addEventListener('change', (e) => {
+                    this.creativity = parseFloat(e.target.value);
+                });
+                
+                document.getElementById('animationStyle').addEventListener('change', (e) => {
+                    this.animationStyle = e.target.value;
+                });
+                
+                document.getElementById('apiKey').addEventListener('input', (e) => {
+                    this.apiKey = e.target.value;
+                });
+            }
+            
+            async generateAnimation(storyText) {
+                this.showLoading(true);
+                this.clearError();
+                
+                try {
+                    let analysisResult;
+                    
+                    switch(this.currentModel) {
+                        case 'gpt-3.5':
+                        case 'gpt-4':
+                            analysisResult = await this.analyzeWithGPT(storyText);
+                            break;
+                        case 'gemini':
+                            analysisResult = await this.analyzeWithGemini(storyText);
+                            break;
+                        case 'claude':
+                            analysisResult = await this.analyzeWithClaude(storyText);
+                            break;
+                        case 'qwen2':
+                            analysisResult = await this.analyzeWithLocal(storyText, 'qwen2:7b');
+                            break;
+                        case 'llama2':
+                            analysisResult = await this.analyzeWithLocal(storyText, 'llama2');
+                            break;
+                        case 'local':
+                            analysisResult = await this.analyzeWithLocal(storyText, 'qwen2:7b');
+                            break;
+                        default:
+                            analysisResult = await this.generateDemoAnalysis(storyText);
+                    }
+                    
+                    this.displayAnalysis(analysisResult);
+                    this.loadAnimation(analysisResult);
+                    this.showInsights(analysisResult.insights);
+                    
+                } catch (error) {
+                    this.showError(`AI分析失敗: ${error.message}`);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+            
+            async analyzeWithGPT(storyText) {
+                if (!this.apiKey) {
+                    throw new Error('請提供OpenAI API Key');
+                }
+                
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${this.apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: this.currentModel === 'gpt-4' ? "gpt-4" : "gpt-3.5-turbo",
+                        messages: [{
+                            role: "system",
+                            content: `你是世界頂級的動畫導演和故事分析師。請將輸入的神話故事轉換為詳細的火柴人動畫腳本。
+                            
+                            返回JSON格式，必須包含：
+                            {
+                                "title": "故事標題",
+                                "style": "視覺風格描述",
+                                "characters": [
+                                    {
+                                        "name": "角色名稱",
+                                        "type": "角色類型",
+                                        "personality": "性格特點",
+                                        "color": "代表顏色",
+                                        "scale": 0.8-1.5,
+                                        "special_features": "特殊特徵"
+                                    }
+                                ],
+                                "scenes": [
+                                    {
+                                        "id": 1,
+                                        "description": "場景描述",
+                                        "background": "背景類型",
+                                        "duration": 5000,
+                                        "camera": "攝影機角度",
+                                        "mood": "情感氛圍",
+                                        "characters_actions": [
+                                            {
+                                                "character": "角色名稱",
+                                                "action": "具體動作",
+                                                "intensity": 1.0,
+                                                "start_time": 0,
+                                                "duration": 2000,
+                                                "emotion": "情感狀態"
+                                            }
+                                        ],
+                                        "props": ["道具1", "道具2"],
+                                        "effects": ["特效1", "特效2"]
+                                    }
+                                ],
+                                "insights": "導演分析和建議",
+                                "theme": "故事主題",
+                                "emotional_arc": "情感弧線描述"
+                            }`
+                        }, {
+                            role: "user",
+                            content: storyText
+                        }],
+                        temperature: this.creativity,
+                        max_tokens: 2000
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`OpenAI API錯誤: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const content = data.choices[0].message.content;
+                
+                try {
+                    return JSON.parse(content);
+                } catch (e) {
+                    // 如果不是純JSON，嘗試提取JSON部分
+                    const jsonMatch = content.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        return JSON.parse(jsonMatch[0]);
+                    }
+                    throw new Error('無法解析AI返回的內容');
+                }
+            }
+            
+            async analyzeWithGemini(storyText) {
+                if (!this.apiKey) {
+                    throw new Error('請提供Google Gemini API Key');
+                }
+                
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${this.apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `作為專業動畫導演，請分析以下神話故事並生成火柴人動畫腳本：\n\n${storyText}\n\n請返回詳細的JSON格式動畫數據，包含角色、場景、動作序列、情感分析等。`
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: this.creativity,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 1024
+                        }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Gemini API錯誤: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const content = data.candidates[0].content.parts[0].text;
+                
+                // 解析內容並提取JSON
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    return JSON.parse(jsonMatch[0]);
+                }
+                
+                throw new Error('無法從Gemini響應中提取有效數據');
+            }
+            
+            async analyzeWithLocal(storyText, modelName = 'qwen2:7b') {
+                // 根據模型調整prompt語言
+                const isQwen = modelName.includes('qwen');
+                
+                const prompt = isQwen ? 
+                    `作為專業動畫導演，請分析以下神話故事並生成詳細的火柴人動畫腳本。
+
+故事：${storyText}
+
+請用JSON格式回復，包含：
+{
+    "title": "故事標題",
+    "style": "動畫風格",
+    "characters": [{"name": "角色名稱", "type": "角色類型", "color": "#顏色", "scale": 1.0, "personality": "性格特徵", "special_features": "特殊特徵"}],
+    "scenes": [{"id": 1, "description": "場景描述", "background": "背景類型", "duration": 5000, "mood": "情感氛圍", "characters_actions": [{"character": "角色名稱", "action": "動作類型", "intensity": 1.0, "emotion": "情感狀態"}], "props": ["道具1"], "effects": ["特效1"]}],
+    "insights": "導演分析和建議",
+    "theme": "故事主題",
+    "emotional_arc": "情感弧線"
+}` :
+                    `As a professional animation director, analyze this mythology story and create a detailed animation script in JSON format.
+
+Story: ${storyText}
+
+Please respond with a JSON object containing:
+{
+    "title": "Story title",
+    "style": "Animation style", 
+    "characters": [{"name": "Character name", "type": "character type", "color": "#color", "scale": 1.0, "personality": "traits", "special_features": "special features"}],
+    "scenes": [{"id": 1, "description": "Scene description", "background": "background type", "duration": 5000, "mood": "emotional tone", "characters_actions": [{"character": "name", "action": "action type", "intensity": 1.0, "emotion": "emotion"}], "props": ["prop1"], "effects": ["effect1"]}],
+    "insights": "Director's analysis and recommendations",
+    "theme": "Story theme",
+    "emotional_arc": "Emotional progression"
+}`;
+
+                const response = await fetch('http://localhost:11434/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: modelName,
+                        prompt: prompt,
+                        stream: false,
+                        options: {
+                            temperature: this.creativity,
+                            top_p: 0.9,
+                            num_predict: 2000
+                        }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`本地LLM連接失敗: ${response.status}。請確保${modelName}模型已安裝並且Ollama正在運行。`);
+                }
+                
+                const data = await response.json();
+                console.log(`${modelName} response:`, data.response);
+                
+                // 嘗試提取JSON
+                const jsonMatches = data.response.match(/\{[\s\S]*?\}/g);
+                
+                if (jsonMatches) {
+                    // 嘗試解析每個可能的JSON
+                    for (const jsonStr of jsonMatches) {
+                        try {
+                            const parsed = JSON.parse(jsonStr);
+                            // 驗證必需的字段
+                            if (parsed.title && parsed.characters && parsed.scenes) {
+                                return parsed;
+                            }
+                        } catch (e) {
+                            console.warn('JSON解析失敗，嘗試下一個');
+                        }
+                    }
+                }
+                
+                // 如果無法解析JSON，使用智能解析
+                console.warn('使用備用解析方案');
+                return this.parseLocalLLMResponse(data.response, storyText);
+            }
+            
+            parseLocalLLMResponse(response, originalText) {
+                // 當本地LLM無法返回標準JSON時的備用解析
+                console.log('使用備用解析方案');
+                
+                const characters = this.extractCharacters(originalText);
+                const scenes = this.generateScenes(originalText, characters);
+                
+                return {
+                    title: "本地AI解析的神話故事",
+                    style: this.animationStyle,
+                    characters: characters,
+                    scenes: scenes,
+                    insights: `本地Llama2分析: ${response.substring(0, 200)}...`,
+                    theme: this.getStoryGenre(originalText),
+                    emotional_arc: "開始 → 發展 → 高潮 → 結局"
+                };
+            }
+            
+            async generateDemoAnalysis(storyText) {
+                // Demo模式：智能解析文本生成結構化數據
+                await new Promise(resolve => setTimeout(resolve, 2000)); // 模擬API延遲
+                
+                const characters = this.extractCharacters(storyText);
+                const scenes = this.generateScenes(storyText, characters);
+                
+                return {
+                    title: "智能解析的神話故事",
+                    style: this.animationStyle,
+                    characters: characters,
+                    scenes: scenes,
+                    insights: `根據文本分析，這是一個${this.getStoryGenre(storyText)}的故事。情感強度較${this.getEmotionalIntensity(storyText)}，適合用${this.animationStyle}風格表現。建議重點突出${this.getKeyThemes(storyText)}的主題。`,
+                    theme: this.getStoryGenre(storyText),
+                    emotional_arc: "開始平靜 → 衝突升級 → 高潮 → 結局"
+                };
+            }
+            
+            extractCharacters(text) {
+                // 智能角色提取
+                const characterKeywords = {
+                    '夸父': { type: 'giant', color: '#ff6b6b', scale: 1.3, personality: '堅毅不屈' },
+                    '哪吒': { type: 'divine_child', color: '#ffd700', scale: 0.8, personality: '勇敢頑皮' },
+                    '敖丙': { type: 'dragon_prince', color: '#4169e1', scale: 1.1, personality: '高傲威嚴' },
+                    '素戔嗚尊': { type: 'storm_god', color: '#8b00ff', scale: 1.2, personality: '勇猛無畏' },
+                    '八岐大蛇': { type: 'serpent', color: '#228b22', scale: 2.0, personality: '凶惡恐怖' },
+                    '嫦娥': { type: 'moon_goddess', color: '#c0c0c0', scale: 0.9, personality: '優雅神秘' }
+                };
+                
+                const foundCharacters = [];
+                for (const [name, data] of Object.entries(characterKeywords)) {
+                    if (text.includes(name)) {
+                        foundCharacters.push({
+                            name,
+                            ...data,
+                            special_features: this.getSpecialFeatures(name)
+                        });
+                    }
+                }
+                
+                // 如果沒有識別到角色，創建通用角色
+                if (foundCharacters.length === 0) {
+                    foundCharacters.push({
+                        name: '主角',
+                        type: 'hero',
+                        color: '#ff6b6b',
+                        scale: 1.0,
+                        personality: '英勇',
+                        special_features: '發光的眼睛'
+                    });
+                }
+                
+                return foundCharacters;
+            }
+            
+            generateScenes(text, characters) {
+                // 智能場景分割
+                const sentences = text.split(/[。．.!！?？\n]/).filter(s => s.trim().length > 5);
+                const scenes = [];
+                
+                sentences.forEach((sentence, index) => {
+                    const actions = this.extractActions(sentence);
+                    const background = this.detectBackground(sentence);
+                    
+                    scenes.push({
+                        id: index + 1,
+                        description: sentence,
+                        background: background,
+                        duration: Math.max(3000, sentence.length * 100),
+                        camera: index === 0 ? 'wide' : (index === sentences.length - 1 ? 'close' : 'medium'),
+                        mood: this.detectMood(sentence),
+                        characters_actions: this.generateCharacterActions(sentence, characters, actions),
+                        props: this.extractProps(sentence),
+                        effects: this.suggestEffects(sentence)
+                    });
+                });
+                
+                return scenes;
+            }
+            
+            extractActions(text) {
+                const actionKeywords = {
+                    '跑': 'run', '追': 'chase', '飛': 'fly', '戰': 'fight', 
+                    '倒': 'fall', '站': 'stand', '坐': 'sit', '跳': 'jump',
+                    '攻擊': 'attack', '防禦': 'defend', '逃跑': 'flee'
+                };
+                
+                const actions = [];
+                for (const [keyword, action] of Object.entries(actionKeywords)) {
+                    if (text.includes(keyword)) {
+                        actions.push(action);
+                    }
+                }
+                
+                return actions.length > 0 ? actions : ['idle'];
+            }
+            
+            detectBackground(text) {
+                const backgrounds = {
+                    '山': 'mountain', '海': 'ocean', '天': 'sky', '森林': 'forest',
+                    '宮殿': 'palace', '沙漠': 'desert', '月': 'moon', '雲': 'clouds'
+                };
+                
+                for (const [keyword, bg] of Object.entries(backgrounds)) {
+                    if (text.includes(keyword)) {
+                        return bg;
+                    }
+                }
+                
+                return 'default';
+            }
+            
+            detectMood(text) {
+                if (text.includes('怒') || text.includes('憤')) return 'angry';
+                if (text.includes('悲') || text.includes('傷')) return 'sad';
+                if (text.includes('喜') || text.includes('樂')) return 'happy';
+                if (text.includes('恐') || text.includes('怖')) return 'fearful';
+                if (text.includes('戰') || text.includes('鬥')) return 'intense';
+                return 'neutral';
+            }
+            
+            generateCharacterActions(sentence, characters, actions) {
+                return characters.map((char, index) => ({
+                    character: char.name,
+                    action: actions[index % actions.length],
+                    intensity: this.calculateIntensity(sentence),
+                    start_time: 0,
+                    duration: 2000,
+                    emotion: this.detectMood(sentence)
+                }));
+            }
+            
+            calculateIntensity(text) {
+                let intensity = 0.5;
+                if (text.includes('激烈') || text.includes('猛烈')) intensity += 0.4;
+                if (text.includes('輕') || text.includes('慢')) intensity -= 0.3;
+                if (text.includes('快') || text.includes('急')) intensity += 0.3;
+                return Math.max(0.1, Math.min(1.5, intensity));
+            }
+            
+            extractProps(text) {
+                const props = [];
+                if (text.includes('太陽')) props.push('sun');
+                if (text.includes('月')) props.push('moon');
+                if (text.includes('劍')) props.push('sword');
+                if (text.includes('弓')) props.push('bow');
+                if (text.includes('混天綾')) props.push('magic_cloth');
+                return props;
+            }
+            
+            suggestEffects(text) {
+                const effects = [];
+                if (text.includes('火') || text.includes('燃燒')) effects.push('fire');
+                if (text.includes('水') || text.includes('波浪')) effects.push('water');
+                if (text.includes('雷') || text.includes('電')) effects.push('lightning');
+                if (text.includes('風') || text.includes('颱風')) effects.push('wind');
+                return effects;
+            }
+            
+            getSpecialFeatures(characterName) {
+                const features = {
+                    '夸父': '發光的巨大身軀',
+                    '哪吒': '蓮花裝飾和三頭六臂',
+                    '敖丙': '龍鱗和龍角',
+                    '素戔嗚尊': '雷電環繞',
+                    '嫦娥': '月光光輝'
+                };
+                return features[characterName] || '特殊光效';
+            }
+            
+            getStoryGenre(text) {
+                if (text.includes('戰') || text.includes('鬥')) return '英雄冒險';
+                if (text.includes('愛') || text.includes('情')) return '浪漫愛情';
+                if (text.includes('犧牲') || text.includes('死')) return '悲劇史詩';
+                return '神話傳說';
+            }
+            
+            getEmotionalIntensity(text) {
+                const intensityWords = ['激烈', '猛烈', '狂暴', '溫和', '平靜', '輕柔'];
+                let intensity = '中等';
+                
+                if (text.includes('激烈') || text.includes('猛烈')) intensity = '高';
+                if (text.includes('平靜') || text.includes('溫和')) intensity = '低';
+                
+                return intensity;
+            }
+            
+            getKeyThemes(text) {
+                const themes = [];
+                if (text.includes('追') || text.includes('夢想')) themes.push('追求理想');
+                if (text.includes('犧牲')) themes.push('英勇犧牲');
+                if (text.includes('愛')) themes.push('愛與奉獻');
+                if (text.includes('正義')) themes.push('正義戰勝邪惡');
+                return themes.length > 0 ? themes.join('、') : '勇氣與成長';
+            }
+            
+            displayAnalysis(analysis) {
+                const container = document.getElementById('aiAnalysis');
+                
+                if (!analysis) {
+                    container.innerHTML = '<div style="color: #ff6b6b;">分析數據無效</div>';
+                    return;
+                }
+                
+                // 確保所有必需的屬性存在
+                const title = analysis.title || '未知標題';
+                const theme = analysis.theme || '未知主題';
+                const style = analysis.style || '預設風格';
+                const characters = analysis.characters || [];
+                const scenes = analysis.scenes || [];
+                const emotional_arc = analysis.emotional_arc || '未定義';
+                
+                container.innerHTML = `
+                    <div class="analysis-section">
+                        <div class="analysis-title">📖 故事概述</div>
+                        <div class="analysis-content">
+                            <strong>標題:</strong> ${title}<br>
+                            <strong>主題:</strong> ${theme}<br>
+                            <strong>風格:</strong> ${style}
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-section">
+                        <div class="analysis-title">👥 角色分析</div>
+                        <div class="analysis-content">
+                            ${characters.length > 0 ? characters.map(char => 
+                                `<div style="margin-bottom: 8px;">
+                                    <strong>${char.name || '未知角色'}</strong> (${char.type || '未知類型'})<br>
+                                    <small>性格: ${char.personality || '未知'} | 特徵: ${char.special_features || '無特殊特徵'}</small>
+                                </div>`
+                            ).join('') : '暫無角色信息'}
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-section">
+                        <div class="analysis-title">🎬 場景規劃</div>
+                        <div class="analysis-content">
+                            共 ${scenes.length} 個場景<br>
+                            總時長: ${scenes.length > 0 ? Math.round(scenes.reduce((sum, scene) => sum + (scene.duration || 3000), 0) / 1000) : 0} 秒<br>
+                            情感弧線: ${emotional_arc}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            loadAnimation(data) {
+                this.animationData = data;
+                this.currentScene = 0;
+                this.renderCurrentScene();
+            }
+            
+            renderCurrentScene() {
+                if (!this.animationData) return;
+                
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // 簡化的渲染系統
+                const scene = this.animationData.scenes[this.currentScene];
+                if (!scene) return;
+                
+                // 繪製背景
+                this.drawBackground(scene.background);
+                
+                // 繪製角色
+                scene.characters_actions.forEach((action, index) => {
+                    this.drawCharacter(action, index);
+                });
+                
+                // 繪製道具和特效
+                scene.props.forEach(prop => this.drawProp(prop));
+                scene.effects.forEach(effect => this.drawEffect(effect));
+            }
+            
+            drawBackground(backgroundType) {
+                let gradient;
+                
+                switch(backgroundType) {
+                    case 'mountain':
+                        gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                        gradient.addColorStop(0, '#87CEEB');
+                        gradient.addColorStop(1, '#228B22');
+                        break;
+                    case 'ocean':
+                        gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                        gradient.addColorStop(0, '#87CEEB');
+                        gradient.addColorStop(1, '#4682B4');
+                        break;
+                    case 'sky':
+                        gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                        gradient.addColorStop(0, '#FFD700');
+                        gradient.addColorStop(1, '#87CEEB');
+                        break;
+                    default:
+                        gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+                        gradient.addColorStop(0, '#98FB98');
+                        gradient.addColorStop(1, '#90EE90');
+                }
+                
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+            
+            drawCharacter(actionData, index) {
+                const x = (this.canvas.width / (this.animationData.characters.length + 1)) * (index + 1);
+                const y = this.canvas.height * 0.6;
+                const character = this.animationData.characters.find(c => c.name === actionData.character);
+                
+                if (!character) return;
+                
+                this.ctx.save();
+                this.ctx.translate(x, y);
+                this.ctx.scale(character.scale, character.scale);
+                
+                // 根據動作調整姿態
+                let rotation = 0;
+                if (actionData.action === 'run') rotation = Math.sin(Date.now() * 0.01) * 0.1;
+                if (actionData.action === 'fall') rotation = Math.PI / 4;
+                
+                this.ctx.rotate(rotation);
+                
+                this.ctx.strokeStyle = character.color;
+                this.ctx.lineWidth = 4;
+                this.ctx.lineCap = 'round';
+                
+                // 簡化的火柴人繪製
+                // 頭部
+                this.ctx.beginPath();
+                this.ctx.arc(0, -60, 18, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                // 身體
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -42);
+                this.ctx.lineTo(0, 20);
+                this.ctx.stroke();
+                
+                // 根據動作繪製四肢
+                this.drawLimbs(actionData.action, actionData.intensity);
+                
+                // 繪製特殊特徵
+                this.drawSpecialFeatures(character);
+                
+                this.ctx.restore();
+            }
+            
+            drawLimbs(action, intensity) {
+                const time = Date.now() * 0.01;
+                let armAngle = 0;
+                let legAngle = 0;
+                
+                switch(action) {
+                    case 'run':
+                        armAngle = Math.sin(time) * 0.8 * intensity;
+                        legAngle = Math.sin(time) * 0.6 * intensity;
+                        break;
+                    case 'fight':
+                        armAngle = -Math.PI/3 + Math.sin(time * 2) * 0.5;
+                        legAngle = 0.2;
+                        break;
+                    case 'fall':
+                        armAngle = 1.2;
+                        legAngle = 0.5;
+                        break;
+                    default:
+                        armAngle = 0.2;
+                        legAngle = 0;
+                }
+                
+                // 左臂
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -20);
+                this.ctx.lineTo(-25 * Math.cos(armAngle), -20 + 25 * Math.sin(armAngle));
+                this.ctx.stroke();
+                
+                // 右臂
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -20);
+                this.ctx.lineTo(25 * Math.cos(-armAngle), -20 + 25 * Math.sin(-armAngle));
+                this.ctx.stroke();
+                
+                // 左腿
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 20);
+                this.ctx.lineTo(-20 * Math.cos(legAngle), 20 + 30 * Math.sin(legAngle) + 30);
+                this.ctx.stroke();
+                
+                // 右腿
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 20);
+                this.ctx.lineTo(20 * Math.cos(-legAngle), 20 + 30 * Math.sin(-legAngle) + 30);
+                this.ctx.stroke();
+            }
+            
+            drawSpecialFeatures(character) {
+                // 根據角色類型繪製特殊特徵
+                if (character.name === '哪吒') {
+                    // 蓮花裝飾
+                    this.ctx.strokeStyle = '#ff69b4';
+                    this.ctx.lineWidth = 2;
+                    for (let i = 0; i < 6; i++) {
+                        const angle = (Math.PI * 2 / 6) * i;
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(0, -60);
+                        this.ctx.lineTo(Math.cos(angle) * 25, -60 + Math.sin(angle) * 25);
+                        this.ctx.stroke();
+                    }
+                }
+            }
+            
+            drawProp(prop) {
+                switch(prop) {
+                    case 'sun':
+                        this.ctx.fillStyle = '#FFD700';
+                        this.ctx.beginPath();
+                        this.ctx.arc(this.canvas.width - 100, 80, 30, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        break;
+                    case 'moon':
+                        this.ctx.fillStyle = '#C0C0C0';
+                        this.ctx.beginPath();
+                        this.ctx.arc(100, 80, 25, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        break;
+                }
+            }
+            
+            drawEffect(effect) {
+                // 簡化的特效繪製
+                if (effect === 'fire') {
+                    this.ctx.fillStyle = `rgba(255, ${100 + Math.sin(Date.now() * 0.01) * 50}, 0, 0.7)`;
+                    for (let i = 0; i < 5; i++) {
+                        this.ctx.beginPath();
+                        this.ctx.arc(
+                            this.canvas.width * 0.5 + Math.random() * 100 - 50,
+                            this.canvas.height * 0.8 + Math.random() * 50,
+                            Math.random() * 10 + 5,
+                            0, Math.PI * 2
+                        );
+                        this.ctx.fill();
+                    }
+                }
+            }
+            
+            showInsights(insights) {
+                document.getElementById('insightsContent').textContent = insights;
+            }
+            
+            showLoading(show) {
+                const loading = document.getElementById('loading');
+                const btn = document.getElementById('generateBtn');
+                
+                if (show) {
+                    loading.classList.add('show');
+                    btn.disabled = true;
+                    btn.innerHTML = '<span>🤖 AI分析中...</span>';
+                } else {
+                    loading.classList.remove('show');
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>🚀 AI生成動畫</span>';
+                }
+            }
+            
+            showError(message) {
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+            
+            clearError() {
+                document.getElementById('errorMessage').style.display = 'none';
+            }
+            
+            play() {
+                this.isPlaying = true;
+                document.getElementById('playBtn').innerHTML = '⏸ 暫停';
+                document.getElementById('playBtn').classList.add('active');
+                this.animate();
+            }
+            
+            pause() {
+                this.isPlaying = false;
+                document.getElementById('playBtn').innerHTML = '▶ 播放';
+                document.getElementById('playBtn').classList.remove('active');
+            }
+            
+            animate() {
+                if (!this.isPlaying || !this.animationData) return;
+                
+                this.renderCurrentScene();
+                
+                // 簡單的場景切換邏輯
+                if (Math.random() < 0.01) {
+                    this.currentScene = (this.currentScene + 1) % this.animationData.scenes.length;
+                }
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // ==================== 全局函數 ====================
+        
+        let aiEngine;
+        
+        function initializeSystem() {
+            aiEngine = new AIAnimationEngine();
+            
+            // 載入示例
+            setTimeout(() => {
+                loadExample(document.querySelector('.example-prompt'));
+            }, 1000);
+        }
+        
+        function loadExample(element) {
+            const examples = {
+                '夸父追日': `夸父決心追上太陽，他邁開巨大的步伐開始奔跑。跨越高山，穿過森林，越過大河，但太陽始終在前方。渴望讓他停下來喝光了黃河和渭水，但仍然不夠。他繼續向北方的大澤奔去，但終於體力不支倒下。夸父死後，他的手杖化作了一片茂密的桃林，為後來的旅人提供陰涼和甘甜的果實。`,
+                
+                '素戔嗚尊': `素戔嗚尊聽說八岐大蛇正在威脅人間，他毅然決定前往討伐。來到大蛇的巢穴，只見八個如山般巨大的頭顱，八條長尾橫掃天地。素戔嗚尊毫不畏懼，先用美酒讓大蛇醉倒，然後抽出神劍草薙劍，與怪物展開激烈的戰鬥。經過一番惡戰，他終於斬殺了八岐大蛇，並在蛇尾中發現了珍貴的草薙劍，後來將其獻給了姐姐天照大神。`,
+                
+                '嫦娥奔月': `后羿射下九個太陽後，西王母賜給他不死藥作為獎賞。后羿將藥交給妻子嫦娥保管。某日，后羿外出狩獵，嫦娥獨自在家，好奇心驅使她打開了藥瓶。藥香撲鼻，她忍不住品嚐了一口，隨即感到身體輕飄飄的，不由自主地飛向天空。她越飛越高，最終落在了月宮中，從此與后羿天各一方，只能在每個月圓之夜遙遙相望。`
+            };
+            
+            const text = element.textContent;
+            for (const [key, value] of Object.entries(examples)) {
+                if (text.includes(key)) {
+                    document.getElementById('storyInput').value = value;
+                    break;
+                }
+            }
+        }
+        
+        async function generateWithAI() {
+            const storyText = document.getElementById('storyInput').value.trim();
+            if (!storyText) {
+                alert('請輸入故事文本');
+                return;
+            }
+            
+            await aiEngine.generateAnimation(storyText);
+        }
+        
+        function togglePlay() {
+            if (aiEngine.isPlaying) {
+                aiEngine.pause();
+            } else {
+                aiEngine.play();
+            }
+        }
+        
+        function restartAnimation() {
+            aiEngine.currentScene = 0;
+            aiEngine.pause();
+            aiEngine.renderCurrentScene();
+        }
+        
+        function exportAnimation() {
+            alert('導出功能開發中...');
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', initializeSystem);
+    </script>
+</body>
+</html>

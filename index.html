@@ -78,38 +78,6 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Language Selector */
-        .language-selector {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px;
-            border-radius: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .lang-btn.active {
-            background: rgba(102, 126, 234, 0.8);
-            color: #fff;
-        }
-
-        .lang-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
 
         /* Main Container */
         .main-container {
@@ -376,6 +344,32 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             user-select: none;
+            position: relative;
+        }
+
+        /* Tooltip for legend items */
+        .legend-item::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            margin-bottom: 5px;
+            z-index: 1000;
+        }
+
+        .legend-item:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
         }
 
         .legend-item:hover {
@@ -399,6 +393,19 @@
         .filter-controls {
             margin-top: 20px;
             text-align: center;
+        }
+
+        /* Filter instructions */
+        .filter-instructions {
+            text-align: center;
+            margin: 15px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .filter-instructions i {
+            color: #667eea;
+            margin-right: 5px;
         }
 
         .filter-btn {
@@ -585,11 +592,6 @@
                 <input type="text" class="search-input" id="searchInput" placeholder="神話を検索...">
                 <span class="search-icon">🔍</span>
             </div>
-            <div class="language-selector">
-                <button class="lang-btn active" data-lang="ja" onclick="changeLanguage('ja')">日本語</button>
-                <button class="lang-btn" data-lang="zh" onclick="changeLanguage('zh')">中文</button>
-                <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">English</button>
-            </div>
         </div>
     </header>
 
@@ -613,33 +615,38 @@
             <div class="tooltip" id="tooltip"></div>
         </div>
 
+        <!-- Filter Instructions -->
+        <div class="filter-instructions">
+            <i>🎯</i> <span>地域をクリックして、その地域の神話のみを表示できます</span>
+        </div>
+
         <!-- Legend -->
         <div class="legend" id="legendFilter">
-            <div class="legend-item" data-region="east-asia" onclick="toggleFilter('east-asia')">
+            <div class="legend-item" data-region="east-asia" data-tooltip="中国と日本の神話を表示" onclick="toggleFilter('east-asia')">
                 <div class="legend-color" style="background: #ff6b6b;"></div>
                 <span class="legend-text">東アジア神話</span>
             </div>
-            <div class="legend-item" data-region="south-asia" onclick="toggleFilter('south-asia')">
+            <div class="legend-item" data-region="south-asia" data-tooltip="インドの神話を表示" onclick="toggleFilter('south-asia')">
                 <div class="legend-color" style="background: #4ecdc4;"></div>
                 <span class="legend-text">南アジア神話</span>
             </div>
-            <div class="legend-item" data-region="middle-east" onclick="toggleFilter('middle-east')">
+            <div class="legend-item" data-region="middle-east" data-tooltip="メソポタミアの神話を表示" onclick="toggleFilter('middle-east')">
                 <div class="legend-color" style="background: #f7b731;"></div>
                 <span class="legend-text">中東神話</span>
             </div>
-            <div class="legend-item" data-region="europe" onclick="toggleFilter('europe')">
+            <div class="legend-item" data-region="europe" data-tooltip="ギリシャ、北欧、ケルトの神話を表示" onclick="toggleFilter('europe')">
                 <div class="legend-color" style="background: #5f27cd;"></div>
                 <span class="legend-text">ヨーロッパ神話</span>
             </div>
-            <div class="legend-item" data-region="africa" onclick="toggleFilter('africa')">
+            <div class="legend-item" data-region="africa" data-tooltip="エジプトと西アフリカの神話を表示" onclick="toggleFilter('africa')">
                 <div class="legend-color" style="background: #ee5a6f;"></div>
                 <span class="legend-text">アフリカ神話</span>
             </div>
-            <div class="legend-item" data-region="americas" onclick="toggleFilter('americas')">
+            <div class="legend-item" data-region="americas" data-tooltip="アステカ・マヤと北米先住民の神話を表示" onclick="toggleFilter('americas')">
                 <div class="legend-color" style="background: #00d2d3;"></div>
                 <span class="legend-text">アメリカ神話</span>
             </div>
-            <div class="legend-item" data-region="oceania" onclick="toggleFilter('oceania')">
+            <div class="legend-item" data-region="oceania" data-tooltip="オーストラリアとポリネシアの神話を表示" onclick="toggleFilter('oceania')">
                 <div class="legend-color" style="background: #22a6b3;"></div>
                 <span class="legend-text">オセアニア神話</span>
             </div>
@@ -647,8 +654,8 @@
         
         <!-- Filter Controls -->
         <div class="filter-controls">
-            <button class="filter-btn" onclick="showAllRegions()">すべて表示</button>
-            <button class="filter-btn" onclick="clearFilters()">フィルタークリア</button>
+            <button class="filter-btn" onclick="showAllRegions()" title="すべての地域の神話を表示します">🌍 すべて表示</button>
+            <button class="filter-btn" onclick="clearFilters()" title="選択したフィルターを解除します">✖ フィルタークリア</button>
         </div>
 
         <!-- About Section -->
@@ -669,8 +676,8 @@
     <!-- Canvas Performance Optimization -->
     <script src="canvas-performance-optimizations.js"></script>
     <script>
-        // Current language state
-        let currentLanguage = localStorage.getItem('preferredLanguage') || 'ja';
+        // Language fixed to Japanese
+        const currentLanguage = 'ja';
         
         // Language data for UI elements
         const translations = {
@@ -742,22 +749,6 @@
             }
         };
         
-        // Change language function
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            
-            // Update language buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-            });
-            
-            // Update UI text
-            updateUILanguage();
-            
-            // Update markers
-            createMythologyMarkers();
-        }
         
         // Update UI text based on current language
         function updateUILanguage() {
@@ -1492,9 +1483,10 @@
 
 
 
-        // Initialize language on page load
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
-            changeLanguage(currentLanguage);
+            updateUILanguage();
+            createMythologyMarkers();
         });
 
         // Search functionality
@@ -1622,12 +1614,12 @@
         // Explore mythology function
         function exploreMythology(region) {
             const mythologyPages = {
-                china: 'chinese-mythology-index.html',
+                china: 'chinese-mythology-index.html',  // 保持中文版
                 greece: 'greek-mythology-index-ja.html',
                 norse: 'norse-mythology-index-ja.html',
                 egypt: 'egyptian-mythology-index-ja.html',
                 india: 'indian-mythology-index-ja.html',
-                japan: 'japanese-mythology-index.html',
+                japan: 'japanese-mythology-index.html',  // 保持日文版
                 mesopotamia: 'mesopotamian-mythology-index-ja.html',
                 celtic: 'celtic-mythology-index-ja.html',
                 nativeAmerican: 'native-american-mythology-index-ja.html',

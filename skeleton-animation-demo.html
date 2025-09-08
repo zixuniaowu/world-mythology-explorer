@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>骨骼動畫系統デモ - プロフェッショナル火柴人アニメーション</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .canvas-section {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .canvas-title {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        canvas {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f8f8;
+        }
+
+        .controls {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .control-section {
+            margin-bottom: 25px;
+        }
+
+        .control-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .animation-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn.active {
+            background: #ffd700;
+            color: #333;
+            border-color: #ffd700;
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #ffd700;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .info-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .info-label {
+            opacity: 0.8;
+        }
+
+        .info-value {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .comparison-note {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .comparison-note h3 {
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .comparison-note ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .comparison-note li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-note li::before {
+            content: "✓";
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .controls {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦴 骨骼動畫系統デモ</h1>
+        <p>プロフェッショナルな火柴人アニメーションシステム</p>
+    </div>
+
+    <div class="main-container">
+        <div class="canvas-section">
+            <h2 class="canvas-title">簡化版骨骼系統</h2>
+            <canvas id="skeletonCanvas"></canvas>
+        </div>
+
+        <div class="canvas-section">
+            <h2 class="canvas-title">傳統Canvas火柴人</h2>
+            <canvas id="simpleCanvas"></canvas>
+        </div>
+
+        <div class="controls">
+            <div class="control-section">
+                <h3 class="control-title">
+                    <span>🎬</span>
+                    <span>動畫控制</span>
+                </h3>
+                <div class="animation-buttons">
+                    <button class="btn" onclick="playAnimation('idle')">待機</button>
+                    <button class="btn" onclick="playAnimation('walk')">步行</button>
+                    <button class="btn" onclick="playAnimation('run')">跑步</button>
+                    <button class="btn" onclick="playAnimation('jump')">跳躍</button>
+                    <button class="btn" onclick="playAnimation('attack')">攻擊</button>
+                    <button class="btn" onclick="playAnimation('defend')">防禦</button>
+                    <button class="btn" onclick="playAnimation('special')">必殺技</button>
+                    <button class="btn" onclick="playAnimation('dance')">舞蹈</button>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3 class="control-title">
+                    <span>⚙️</span>
+                    <span>參數調整</span>
+                </h3>
+                
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>動畫速度</span>
+                        <span id="speedValue">1.0x</span>
+                    </div>
+                    <input type="range" class="slider" id="speedSlider" 
+                           min="0.1" max="3" step="0.1" value="1">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>動畫混合</span>
+                        <span id="blendValue">0%</span>
+                    </div>
+                    <input type="range" class="slider" id="blendSlider" 
+                           min="0" max="100" step="1" value="0">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>IK目標X</span>
+                        <span id="ikXValue">0</span>
+                    </div>
+                    <input type="range" class="slider" id="ikXSlider" 
+                           min="-200" max="200" step="1" value="0">
+                </div>
+
+                <div class="slider-group">
+                    <div class="slider-label">
+                        <span>IK目標Y</span>
+                        <span id="ikYValue">0</span>
+                    </div>
+                    <input type="range" class="slider" id="ikYSlider" 
+                           min="-200" max="200" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3 class="control-title">
+                    <span>👁️</span>
+                    <span>顯示選項</span>
+                </h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showBones" checked>
+                        <label for="showBones">顯示骨骼</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showMesh" checked>
+                        <label for="showMesh">顯示蒙皮</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showJoints" checked>
+                        <label for="showJoints">顯示關節</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="showIK">
+                        <label for="showIK">顯示IK目標</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="enablePhysics">
+                        <label for="enablePhysics">啟用物理模擬</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-item">
+                    <span class="info-label">當前動畫:</span>
+                    <span class="info-value" id="currentAnim">idle</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">骨骼數量:</span>
+                    <span class="info-value" id="boneCount">15</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">FPS:</span>
+                    <span class="info-value" id="fpsValue">60</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">動畫幀:</span>
+                    <span class="info-value" id="frameValue">0</span>
+                </div>
+            </div>
+
+            <div class="comparison-note">
+                <h3>骨骼系統優勢</h3>
+                <ul>
+                    <li>流暢的關節運動</li>
+                    <li>動畫混合與過渡</li>
+                    <li>反向動力學(IK)</li>
+                    <li>物理模擬支持</li>
+                    <li>更小的文件體積</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 骨骼動畫系統 ====================
+        
+        // 向量類
+        class Vec2 {
+            constructor(x = 0, y = 0) {
+                this.x = x;
+                this.y = y;
+            }
+            
+            add(v) {
+                return new Vec2(this.x + v.x, this.y + v.y);
+            }
+            
+            sub(v) {
+                return new Vec2(this.x - v.x, this.y - v.y);
+            }
+            
+            mult(s) {
+                return new Vec2(this.x * s, this.y * s);
+            }
+            
+            length() {
+                return Math.sqrt(this.x * this.x + this.y * this.y);
+            }
+            
+            normalize() {
+                const len = this.length();
+                if (len > 0) {
+                    return new Vec2(this.x / len, this.y / len);
+                }
+                return new Vec2(0, 0);
+            }
+            
+            rotate(angle) {
+                const cos = Math.cos(angle);
+                const sin = Math.sin(angle);
+                return new Vec2(
+                    this.x * cos - this.y * sin,
+                    this.x * sin + this.y * cos
+                );
+            }
+            
+            static lerp(a, b, t) {
+                return new Vec2(
+                    a.x + (b.x - a.x) * t,
+                    a.y + (b.y - a.y) * t
+                );
+            }
+        }
+
+        // 骨骼類
+        class Bone {
+            constructor(name, length, angle = 0, parent = null) {
+                this.name = name;
+                this.length = length;
+                this.angle = angle;
+                this.parent = parent;
+                this.children = [];
+                this.worldPos = new Vec2();
+                this.worldAngle = 0;
+                this.constraints = {
+                    minAngle: -Math.PI,
+                    maxAngle: Math.PI
+                };
+                
+                if (parent) {
+                    parent.children.push(this);
+                }
+            }
+            
+            updateWorldTransform() {
+                if (this.parent) {
+                    this.worldAngle = this.parent.worldAngle + this.angle;
+                    const dir = new Vec2(
+                        Math.cos(this.parent.worldAngle),
+                        Math.sin(this.parent.worldAngle)
+                    );
+                    this.worldPos = this.parent.worldPos.add(
+                        dir.mult(this.parent.length)
+                    );
+                } else {
+                    this.worldAngle = this.angle;
+                    this.worldPos = new Vec2(0, 0);
+                }
+                
+                // 更新子骨骼
+                this.children.forEach(child => child.updateWorldTransform());
+            }
+            
+            getEndPos() {
+                const dir = new Vec2(
+                    Math.cos(this.worldAngle),
+                    Math.sin(this.worldAngle)
+                );
+                return this.worldPos.add(dir.mult(this.length));
+            }
+        }
+
+        // 骨架類
+        class Skeleton {
+            constructor() {
+                this.bones = new Map();
+                this.root = null;
+                this.setupNezha();
+            }
+            
+            setupNezha() {
+                // 創建哪吒的骨架結構
+                // 根骨骼
+                this.root = new Bone("root", 0);
+                this.bones.set("root", this.root);
+                
+                // 脊椎
+                const pelvis = new Bone("pelvis", 20, -Math.PI/2, this.root);
+                const spine1 = new Bone("spine1", 25, 0, pelvis);
+                const spine2 = new Bone("spine2", 25, 0, spine1);
+                const chest = new Bone("chest", 20, 0, spine2);
+                
+                // 頭部
+                const neck = new Bone("neck", 15, 0, chest);
+                const head = new Bone("head", 25, 0, neck);
+                
+                // 左臂
+                const leftShoulder = new Bone("leftShoulder", 30, Math.PI * 0.7, chest);
+                const leftElbow = new Bone("leftElbow", 25, 0.3, leftShoulder);
+                const leftHand = new Bone("leftHand", 15, 0, leftElbow);
+                
+                // 右臂
+                const rightShoulder = new Bone("rightShoulder", 30, -Math.PI * 0.7, chest);
+                const rightElbow = new Bone("rightElbow", 25, -0.3, rightShoulder);
+                const rightHand = new Bone("rightHand", 15, 0, rightElbow);
+                
+                // 左腿
+                const leftHip = new Bone("leftHip", 35, Math.PI * 0.1, pelvis);
+                const leftKnee = new Bone("leftKnee", 30, -0.1, leftHip);
+                const leftFoot = new Bone("leftFoot", 15, Math.PI/2, leftKnee);
+                
+                // 右腿
+                const rightHip = new Bone("rightHip", 35, -Math.PI * 0.1, pelvis);
+                const rightKnee = new Bone("rightKnee", 30, 0.1, rightHip);
+                const rightFoot = new Bone("rightFoot", 15, Math.PI/2, rightKnee);
+                
+                // 添加到骨骼映射
+                [pelvis, spine1, spine2, chest, neck, head,
+                 leftShoulder, leftElbow, leftHand,
+                 rightShoulder, rightElbow, rightHand,
+                 leftHip, leftKnee, leftFoot,
+                 rightHip, rightKnee, rightFoot].forEach(bone => {
+                    this.bones.set(bone.name, bone);
+                });
+                
+                // 設置約束
+                leftShoulder.constraints = { minAngle: -Math.PI, maxAngle: Math.PI/2 };
+                rightShoulder.constraints = { minAngle: -Math.PI/2, maxAngle: Math.PI };
+                leftElbow.constraints = { minAngle: -Math.PI*0.8, maxAngle: 0 };
+                rightElbow.constraints = { minAngle: 0, maxAngle: Math.PI*0.8 };
+                leftKnee.constraints = { minAngle: 0, maxAngle: Math.PI*0.8 };
+                rightKnee.constraints = { minAngle: 0, maxAngle: Math.PI*0.8 };
+            }
+            
+            update() {
+                this.root.updateWorldTransform();
+            }
+            
+            getBone(name) {
+                return this.bones.get(name);
+            }
+        }
+
+        // 動畫類
+        class Animation {
+            constructor(name, keyframes) {
+                this.name = name;
+                this.keyframes = keyframes;
+                this.duration = keyframes[keyframes.length - 1].time;
+            }
+            
+            evaluate(time) {
+                const t = time % this.duration;
+                
+                // 找到當前幀
+                let prevFrame = this.keyframes[0];
+                let nextFrame = this.keyframes[1];
+                
+                for (let i = 0; i < this.keyframes.length - 1; i++) {
+                    if (t >= this.keyframes[i].time && t <= this.keyframes[i + 1].time) {
+                        prevFrame = this.keyframes[i];
+                        nextFrame = this.keyframes[i + 1];
+                        break;
+                    }
+                }
+                
+                // 插值計算
+                const frameDuration = nextFrame.time - prevFrame.time;
+                const frameProgress = (t - prevFrame.time) / frameDuration;
+                
+                const result = {};
+                for (const boneName in prevFrame.bones) {
+                    const prevBone = prevFrame.bones[boneName];
+                    const nextBone = nextFrame.bones[boneName];
+                    
+                    result[boneName] = {
+                        angle: this.lerpAngle(prevBone.angle, nextBone.angle, frameProgress),
+                        scale: prevBone.scale + (nextBone.scale - prevBone.scale) * frameProgress
+                    };
+                }
+                
+                return result;
+            }
+            
+            lerpAngle(a, b, t) {
+                let diff = b - a;
+                while (diff > Math.PI) diff -= Math.PI * 2;
+                while (diff < -Math.PI) diff += Math.PI * 2;
+                return a + diff * t;
+            }
+        }
+
+        // 動畫管理器
+        class AnimationManager {
+            constructor(skeleton) {
+                this.skeleton = skeleton;
+                this.animations = new Map();
+                this.currentAnimation = null;
+                this.currentTime = 0;
+                this.speed = 1;
+                this.setupAnimations();
+            }
+            
+            setupAnimations() {
+                // 待機動畫
+                this.animations.set("idle", new Animation("idle", [
+                    {
+                        time: 0,
+                        bones: {
+                            chest: { angle: 0, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.7, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.7, scale: 1 },
+                            leftElbow: { angle: 0.2, scale: 1 },
+                            rightElbow: { angle: -0.2, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 1000,
+                        bones: {
+                            chest: { angle: 0.05, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.65, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.65, scale: 1 },
+                            leftElbow: { angle: 0.25, scale: 1 },
+                            rightElbow: { angle: -0.25, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 2000,
+                        bones: {
+                            chest: { angle: 0, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.7, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.7, scale: 1 },
+                            leftElbow: { angle: 0.2, scale: 1 },
+                            rightElbow: { angle: -0.2, scale: 1 }
+                        }
+                    }
+                ]));
+                
+                // 步行動畫
+                this.animations.set("walk", new Animation("walk", [
+                    {
+                        time: 0,
+                        bones: {
+                            leftHip: { angle: 0.3, scale: 1 },
+                            rightHip: { angle: -0.3, scale: 1 },
+                            leftKnee: { angle: 0.2, scale: 1 },
+                            rightKnee: { angle: 0.4, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.6, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.8, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 500,
+                        bones: {
+                            leftHip: { angle: -0.3, scale: 1 },
+                            rightHip: { angle: 0.3, scale: 1 },
+                            leftKnee: { angle: 0.4, scale: 1 },
+                            rightKnee: { angle: 0.2, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.8, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.6, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 1000,
+                        bones: {
+                            leftHip: { angle: 0.3, scale: 1 },
+                            rightHip: { angle: -0.3, scale: 1 },
+                            leftKnee: { angle: 0.2, scale: 1 },
+                            rightKnee: { angle: 0.4, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.6, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.8, scale: 1 }
+                        }
+                    }
+                ]));
+                
+                // 攻擊動畫
+                this.animations.set("attack", new Animation("attack", [
+                    {
+                        time: 0,
+                        bones: {
+                            chest: { angle: -0.2, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.3, scale: 1 },
+                            rightElbow: { angle: -0.8, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.9, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 300,
+                        bones: {
+                            chest: { angle: 0.3, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 1.2, scale: 1 },
+                            rightElbow: { angle: 0.2, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.4, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 600,
+                        bones: {
+                            chest: { angle: 0, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.7, scale: 1 },
+                            rightElbow: { angle: -0.2, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.7, scale: 1 }
+                        }
+                    }
+                ]));
+                
+                // 跳躍動畫
+                this.animations.set("jump", new Animation("jump", [
+                    {
+                        time: 0,
+                        bones: {
+                            pelvis: { angle: -Math.PI/2 + 0.2, scale: 1 },
+                            leftHip: { angle: -0.5, scale: 1 },
+                            rightHip: { angle: -0.5, scale: 1 },
+                            leftKnee: { angle: 0.8, scale: 1 },
+                            rightKnee: { angle: 0.8, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.3, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.3, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 400,
+                        bones: {
+                            pelvis: { angle: -Math.PI/2 - 0.1, scale: 1 },
+                            leftHip: { angle: 0.3, scale: 1 },
+                            rightHip: { angle: 0.3, scale: 1 },
+                            leftKnee: { angle: 0.1, scale: 1 },
+                            rightKnee: { angle: 0.1, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 1.2, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 1.2, scale: 1 }
+                        }
+                    },
+                    {
+                        time: 800,
+                        bones: {
+                            pelvis: { angle: -Math.PI/2, scale: 1 },
+                            leftHip: { angle: 0.1, scale: 1 },
+                            rightHip: { angle: -0.1, scale: 1 },
+                            leftKnee: { angle: 0.1, scale: 1 },
+                            rightKnee: { angle: 0.1, scale: 1 },
+                            leftShoulder: { angle: Math.PI * 0.7, scale: 1 },
+                            rightShoulder: { angle: -Math.PI * 0.7, scale: 1 }
+                        }
+                    }
+                ]));
+                
+                // 設置默認動畫
+                this.currentAnimation = this.animations.get("idle");
+            }
+            
+            play(animationName) {
+                const anim = this.animations.get(animationName);
+                if (anim) {
+                    this.currentAnimation = anim;
+                    this.currentTime = 0;
+                    document.getElementById('currentAnim').textContent = animationName;
+                }
+            }
+            
+            update(deltaTime) {
+                if (!this.currentAnimation) return;
+                
+                this.currentTime += deltaTime * this.speed;
+                const pose = this.currentAnimation.evaluate(this.currentTime);
+                
+                // 應用動畫到骨骼
+                for (const boneName in pose) {
+                    const bone = this.skeleton.getBone(boneName);
+                    if (bone) {
+                        bone.angle = pose[boneName].angle;
+                    }
+                }
+                
+                this.skeleton.update();
+            }
+        }
+
+        // IK求解器
+        class IKSolver {
+            constructor(skeleton) {
+                this.skeleton = skeleton;
+                this.target = new Vec2(0, 0);
+                this.enabled = false;
+            }
+            
+            solve(chainNames, target, iterations = 10) {
+                if (!this.enabled) return;
+                
+                const chain = chainNames.map(name => this.skeleton.getBone(name));
+                if (chain.length < 2) return;
+                
+                // FABRIK算法
+                for (let iter = 0; iter < iterations; iter++) {
+                    // 反向傳播
+                    let currentTarget = target;
+                    for (let i = chain.length - 1; i >= 0; i--) {
+                        const bone = chain[i];
+                        const startPos = bone.worldPos;
+                        const toTarget = currentTarget.sub(startPos);
+                        const targetAngle = Math.atan2(toTarget.y, toTarget.x);
+                        
+                        // 應用約束
+                        let constrainedAngle = targetAngle;
+                        if (bone.parent) {
+                            const parentAngle = bone.parent.worldAngle;
+                            let localAngle = targetAngle - parentAngle;
+                            while (localAngle > Math.PI) localAngle -= Math.PI * 2;
+                            while (localAngle < -Math.PI) localAngle += Math.PI * 2;
+                            
+                            localAngle = Math.max(bone.constraints.minAngle,
+                                                 Math.min(bone.constraints.maxAngle, localAngle));
+                            constrainedAngle = parentAngle + localAngle;
+                        }
+                        
+                        bone.angle = constrainedAngle - (bone.parent ? bone.parent.worldAngle : 0);
+                        bone.updateWorldTransform();
+                        
+                        currentTarget = bone.worldPos;
+                    }
+                    
+                    this.skeleton.update();
+                }
+            }
+        }
+
+        // 渲染器
+        class SkeletonRenderer {
+            constructor(canvas, skeleton) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.skeleton = skeleton;
+                this.centerX = canvas.width / 2;
+                this.centerY = canvas.height / 2 + 50;
+                
+                // 渲染選項
+                this.showBones = true;
+                this.showMesh = true;
+                this.showJoints = true;
+                this.showIK = false;
+            }
+            
+            render(ikTarget = null) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // 繪製地面
+                this.drawGround();
+                
+                // 繪製角色
+                this.ctx.save();
+                this.ctx.translate(this.centerX, this.centerY);
+                
+                // 繪製蒙皮（簡化版本）
+                if (this.showMesh) {
+                    this.drawCharacterMesh();
+                }
+                
+                // 繪製骨骼
+                if (this.showBones) {
+                    this.drawBone(this.skeleton.root);
+                }
+                
+                // 繪製IK目標
+                if (this.showIK && ikTarget) {
+                    this.ctx.fillStyle = '#ff0000';
+                    this.ctx.beginPath();
+                    this.ctx.arc(ikTarget.x, ikTarget.y, 8, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                this.ctx.restore();
+            }
+            
+            drawGround() {
+                const groundY = this.centerY + 150;
+                this.ctx.strokeStyle = '#666';
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, groundY);
+                this.ctx.lineTo(this.canvas.width, groundY);
+                this.ctx.stroke();
+                
+                // 網格
+                this.ctx.strokeStyle = '#ddd';
+                this.ctx.lineWidth = 0.5;
+                for (let x = 0; x < this.canvas.width; x += 50) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, groundY);
+                    this.ctx.lineTo(x, groundY + 20);
+                    this.ctx.stroke();
+                }
+            }
+            
+            drawBone(bone) {
+                if (!bone) return;
+                
+                const startX = bone.worldPos.x;
+                const startY = bone.worldPos.y;
+                const endPos = bone.getEndPos();
+                const endX = endPos.x;
+                const endY = endPos.y;
+                
+                // 繪製骨骼線
+                this.ctx.strokeStyle = '#4a90e2';
+                this.ctx.lineWidth = 3;
+                this.ctx.lineCap = 'round';
+                this.ctx.beginPath();
+                this.ctx.moveTo(startX, startY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+                
+                // 繪製關節
+                if (this.showJoints) {
+                    this.ctx.fillStyle = '#2c5aa0';
+                    this.ctx.beginPath();
+                    this.ctx.arc(startX, startY, 5, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                // 遞歸繪製子骨骼
+                bone.children.forEach(child => this.drawBone(child));
+            }
+            
+            drawCharacterMesh() {
+                this.ctx.save();
+                
+                // 設置樣式
+                this.ctx.strokeStyle = '#ff6b6b';
+                this.ctx.lineWidth = 8;
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+                
+                // 獲取骨骼位置
+                const pelvis = this.skeleton.getBone("pelvis");
+                const chest = this.skeleton.getBone("chest");
+                const head = this.skeleton.getBone("head");
+                const leftHand = this.skeleton.getBone("leftHand");
+                const rightHand = this.skeleton.getBone("rightHand");
+                const leftFoot = this.skeleton.getBone("leftFoot");
+                const rightFoot = this.skeleton.getBone("rightFoot");
+                
+                // 繪製身體
+                this.ctx.strokeStyle = '#ff6b6b';
+                this.ctx.beginPath();
+                this.ctx.moveTo(pelvis.worldPos.x, pelvis.worldPos.y);
+                this.ctx.lineTo(chest.getEndPos().x, chest.getEndPos().y);
+                this.ctx.stroke();
+                
+                // 繪製頭部
+                const headEnd = head.getEndPos();
+                this.ctx.fillStyle = '#ffb366';
+                this.ctx.beginPath();
+                this.ctx.arc(headEnd.x, headEnd.y - 10, 20, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#ff6b6b';
+                this.ctx.lineWidth = 3;
+                this.ctx.stroke();
+                
+                // 繪製眼睛
+                this.ctx.fillStyle = '#000';
+                this.ctx.beginPath();
+                this.ctx.arc(headEnd.x - 7, headEnd.y - 12, 3, 0, Math.PI * 2);
+                this.ctx.arc(headEnd.x + 7, headEnd.y - 12, 3, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // 繪製手臂
+                this.ctx.strokeStyle = '#ffb366';
+                this.ctx.lineWidth = 6;
+                
+                // 左臂
+                const leftShoulder = this.skeleton.getBone("leftShoulder");
+                const leftElbow = this.skeleton.getBone("leftElbow");
+                this.ctx.beginPath();
+                this.ctx.moveTo(leftShoulder.worldPos.x, leftShoulder.worldPos.y);
+                this.ctx.lineTo(leftElbow.worldPos.x, leftElbow.worldPos.y);
+                this.ctx.lineTo(leftHand.getEndPos().x, leftHand.getEndPos().y);
+                this.ctx.stroke();
+                
+                // 右臂
+                const rightShoulder = this.skeleton.getBone("rightShoulder");
+                const rightElbow = this.skeleton.getBone("rightElbow");
+                this.ctx.beginPath();
+                this.ctx.moveTo(rightShoulder.worldPos.x, rightShoulder.worldPos.y);
+                this.ctx.lineTo(rightElbow.worldPos.x, rightElbow.worldPos.y);
+                this.ctx.lineTo(rightHand.getEndPos().x, rightHand.getEndPos().y);
+                this.ctx.stroke();
+                
+                // 繪製腿部
+                this.ctx.strokeStyle = '#4169e1';
+                this.ctx.lineWidth = 7;
+                
+                // 左腿
+                const leftHip = this.skeleton.getBone("leftHip");
+                const leftKnee = this.skeleton.getBone("leftKnee");
+                this.ctx.beginPath();
+                this.ctx.moveTo(leftHip.worldPos.x, leftHip.worldPos.y);
+                this.ctx.lineTo(leftKnee.worldPos.x, leftKnee.worldPos.y);
+                this.ctx.lineTo(leftFoot.getEndPos().x, leftFoot.getEndPos().y);
+                this.ctx.stroke();
+                
+                // 右腿
+                const rightHip = this.skeleton.getBone("rightHip");
+                const rightKnee = this.skeleton.getBone("rightKnee");
+                this.ctx.beginPath();
+                this.ctx.moveTo(rightHip.worldPos.x, rightHip.worldPos.y);
+                this.ctx.lineTo(rightKnee.worldPos.x, rightKnee.worldPos.y);
+                this.ctx.lineTo(rightFoot.getEndPos().x, rightFoot.getEndPos().y);
+                this.ctx.stroke();
+                
+                // 繪製裝飾（哪吒的紅綾）
+                if (this.skeleton.getBone("chest")) {
+                    this.ctx.strokeStyle = '#ff1493';
+                    this.ctx.lineWidth = 4;
+                    this.ctx.setLineDash([5, 5]);
+                    this.ctx.beginPath();
+                    const chestPos = chest.getEndPos();
+                    this.ctx.arc(chestPos.x, chestPos.y, 30, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                }
+                
+                this.ctx.restore();
+            }
+        }
+
+        // ==================== 簡單Canvas火柴人（對比用） ====================
+        
+        class SimpleStickman {
+            constructor(ctx, x, y) {
+                this.ctx = ctx;
+                this.x = x;
+                this.y = y;
+                this.frame = 0;
+                this.animation = 'idle';
+            }
+            
+            draw() {
+                this.ctx.save();
+                this.ctx.translate(this.x, this.y);
+                
+                this.ctx.strokeStyle = '#333';
+                this.ctx.lineWidth = 3;
+                this.ctx.lineCap = 'round';
+                
+                // 簡單的動畫
+                let armAngle = 0;
+                let legAngle = 0;
+                
+                if (this.animation === 'walk') {
+                    armAngle = Math.sin(this.frame * 0.1) * 0.5;
+                    legAngle = Math.sin(this.frame * 0.1) * 0.3;
+                } else if (this.animation === 'attack') {
+                    armAngle = -Math.PI/3 + Math.sin(this.frame * 0.2) * 0.3;
+                }
+                
+                // 頭
+                this.ctx.beginPath();
+                this.ctx.arc(0, -60, 15, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                // 身體
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -45);
+                this.ctx.lineTo(0, 0);
+                this.ctx.stroke();
+                
+                // 左臂
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -30);
+                this.ctx.lineTo(-20 * Math.cos(armAngle), -30 + 20 * Math.sin(armAngle));
+                this.ctx.stroke();
+                
+                // 右臂
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, -30);
+                this.ctx.lineTo(20 * Math.cos(-armAngle), -30 + 20 * Math.sin(-armAngle));
+                this.ctx.stroke();
+                
+                // 左腿
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(-15 * Math.cos(legAngle), 30 + 5 * Math.sin(legAngle));
+                this.ctx.stroke();
+                
+                // 右腿
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(15 * Math.cos(-legAngle), 30 + 5 * Math.sin(-legAngle));
+                this.ctx.stroke();
+                
+                this.ctx.restore();
+                
+                this.frame++;
+            }
+            
+            setAnimation(anim) {
+                this.animation = anim;
+                this.frame = 0;
+            }
+        }
+
+        // ==================== 主程序 ====================
+        
+        // 獲取Canvas
+        const skeletonCanvas = document.getElementById('skeletonCanvas');
+        const simpleCanvas = document.getElementById('simpleCanvas');
+        
+        // 設置Canvas大小
+        function resizeCanvases() {
+            [skeletonCanvas, simpleCanvas].forEach(canvas => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = 500;
+            });
+        }
+        resizeCanvases();
+        window.addEventListener('resize', resizeCanvases);
+        
+        // 創建骨骼系統
+        const skeleton = new Skeleton();
+        const animationManager = new AnimationManager(skeleton);
+        const renderer = new SkeletonRenderer(skeletonCanvas, skeleton);
+        const ikSolver = new IKSolver(skeleton);
+        
+        // 創建簡單火柴人
+        const simpleCtx = simpleCanvas.getContext('2d');
+        const simpleStickman = new SimpleStickman(
+            simpleCtx,
+            simpleCanvas.width / 2,
+            simpleCanvas.height / 2 + 50
+        );
+        
+        // 動畫控制
+        function playAnimation(animName) {
+            animationManager.play(animName);
+            simpleStickman.setAnimation(animName);
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // 參數控制
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            animationManager.speed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = e.target.value + 'x';
+        });
+        
+        document.getElementById('blendSlider').addEventListener('input', (e) => {
+            document.getElementById('blendValue').textContent = e.target.value + '%';
+        });
+        
+        document.getElementById('ikXSlider').addEventListener('input', (e) => {
+            ikSolver.target.x = parseFloat(e.target.value);
+            document.getElementById('ikXValue').textContent = e.target.value;
+        });
+        
+        document.getElementById('ikYSlider').addEventListener('input', (e) => {
+            ikSolver.target.y = parseFloat(e.target.value);
+            document.getElementById('ikYValue').textContent = e.target.value;
+        });
+        
+        // 顯示選項
+        document.getElementById('showBones').addEventListener('change', (e) => {
+            renderer.showBones = e.target.checked;
+        });
+        
+        document.getElementById('showMesh').addEventListener('change', (e) => {
+            renderer.showMesh = e.target.checked;
+        });
+        
+        document.getElementById('showJoints').addEventListener('change', (e) => {
+            renderer.showJoints = e.target.checked;
+        });
+        
+        document.getElementById('showIK').addEventListener('change', (e) => {
+            renderer.showIK = e.target.checked;
+            ikSolver.enabled = e.target.checked;
+        });
+        
+        // 性能監控
+        let lastTime = performance.now();
+        let frameCount = 0;
+        let fps = 60;
+        
+        // 主循環
+        function animate() {
+            const currentTime = performance.now();
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            // 更新FPS
+            frameCount++;
+            if (frameCount % 30 === 0) {
+                fps = Math.round(1000 / deltaTime);
+                document.getElementById('fpsValue').textContent = fps;
+                document.getElementById('frameValue').textContent = frameCount;
+            }
+            
+            // 更新動畫
+            animationManager.update(deltaTime);
+            
+            // IK求解
+            if (ikSolver.enabled) {
+                ikSolver.solve(
+                    ["rightShoulder", "rightElbow", "rightHand"],
+                    ikSolver.target,
+                    5
+                );
+            }
+            
+            // 渲染骨骼系統
+            renderer.render(ikSolver.enabled ? ikSolver.target : null);
+            
+            // 渲染簡單火柴人
+            simpleCtx.clearRect(0, 0, simpleCanvas.width, simpleCanvas.height);
+            
+            // 繪製地面
+            simpleCtx.strokeStyle = '#666';
+            simpleCtx.lineWidth = 2;
+            simpleCtx.beginPath();
+            simpleCtx.moveTo(0, simpleCanvas.height / 2 + 200);
+            simpleCtx.lineTo(simpleCanvas.width, simpleCanvas.height / 2 + 200);
+            simpleCtx.stroke();
+            
+            simpleStickman.draw();
+            
+            // 更新骨骼數量
+            document.getElementById('boneCount').textContent = skeleton.bones.size;
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // 開始動畫
+        animate();
+        
+        // 默認播放待機動畫
+        playAnimation('idle');
+    </script>
+</body>
+</html>
